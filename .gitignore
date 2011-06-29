@@ -1,0 +1,7 @@
+*.swp
+*.swo
+*.o
+*.d
+temp.txt
+test.txt
+tags
