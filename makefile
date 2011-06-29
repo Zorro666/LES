@@ -1,19 +1,16 @@
-ZLIB_GZ_SRC:=zlib/gzclose.c zlib/gzlib.c zlib/gzread.c zlib/gzwrite.c
-ZLIB_INFLATE_SRC:=zlib/infback.c zlib/inffast.c zlib/inflate.c zlib/inftrees.c 
-ZLIB_DEFLATE_SRC:=zlib/deflate.c zlib/trees.c
-ZLIB_UTIL_SRC:=zlib/adler32.c zlib/crc32.c zlib/zutil.c
-ZLIB_SRC:=$(ZLIB_GZ_SRC) $(ZLIB_INFLATE_SRC) $(ZLIB_DEFLATE_SRC) $(ZLIB_UTIL_SRC)
-
-VGM_DEPENDS:=lj_vgm.c lj_wav_file.c vgm_test_main.c
-VGM_TEST_DEPENDS:=lj_ym2612.c $(VGM_DEPENDS) $(ZLIB_SRC)
+LES_DEPENDS:=les_psn.cpp 
+LES_TEST_DEPENDS:=les_main.cpp $(LES_DEPENDS) 
 
 PROJECTS:=\
-		  vgm_test\
+		  les_test\
 
 all: $(PROJECTS)
 
 C_COMPILE:=gcc -c
 C_COMPILE_FLAGS:=-g -Wall -Wextra -Wuninitialized -Winit-self -Wstrict-aliasing -Wfloat-equal -Wshadow -Wconversion -Werror -ansi -pedantic-errors
+
+CPP_COMPILE:=gcc -c
+CPP_COMPILE_FLAGS:=-g -Wall -Wextra -Wuninitialized -Winit-self -Wstrict-aliasing -Wfloat-equal -Wshadow -Wconversion -Werror -ansi -pedantic-errors
 
 LINK:=gcc
 LINK_FLAGS:=-g -lm
@@ -29,12 +26,12 @@ $(shell echo $1 | tr [a-z] [A-Z] )
 endef
 
 define PROJECT_template
-$2_SRCFILES += $1.c
+$2_SRCFILES += $1.cpp
 $2_SRCFILES += $($2_DEPENDS)
-$2_DFILES:=$$($2_SRCFILES:.c=.d)
+$2_DFILES:+$$($2_SRCFILES:.cpp=.d)
 
 $2_OBJFILE:=$1.o
-$2_OBJFILES:=$$($2_SRCFILES:.c=.o)
+$2_OBJFILES:=$$($2_SRCFILES:.cpp=.o)
 
 SRCFILES += $$($2_SRCFILES)
 OBJFILES += $$($2_OBJFILES)
@@ -52,6 +49,8 @@ TARGET_EXES := $(foreach target,$(TARGETS),$(target)$(TARGET_EXTENSION))
 test:
 	@echo C_COMPILE=$(C_COMPILE)
 	@echo C_COMPILE_FLAGS=$(C_COMPILE_FLAGS)
+	@echo CPP_COMPILE=$(CPP_COMPILE)
+	@echo CPP_COMPILE_FLAGS=$(CPP_COMPILE_FLAGS)
 	@echo LINK=$(LINK)
 	@echo LINK_FLAGS=$(LINK_FLAGS)
 	@echo PROJECTS=$(PROJECTS)
@@ -59,17 +58,21 @@ test:
 	@echo SRCFILES=$(SRCFILES)
 	@echo OBJFILES=$(OBJFILES)
 	@echo DFILES=$(DFILES)
-	@echo VGM_TEST_SRCFILES=$(VGM_TEST_SRCFILES)
-	@echo VGM_TEST_OBJFILES=$(VGM_TEST_OBJFILES)
-	@echo VGM_TEST_DEPENDS=$(VGM_TEST_DEPENDS)
-	@echo VGM_TEST_DFILES=$(VGM_TEST_DFILES)
-	@echo VGM_TEST_OBJFILE=$(VGM_TEST_OBJFILE)
+	@echo LES_TEST_SRCFILES=$(LES_TEST_SRCFILES)
+	@echo LES_TEST_OBJFILES=$(LES_TEST_OBJFILES)
+	@echo LES_TEST_DEPENDS=$(LES_TEST_DEPENDS)
+	@echo LES_TEST_DFILES=$(LES_TEST_DFILES)
+	@echo LES_TEST_OBJFILE=$(LES_TEST_OBJFILE)
 	@echo TARGET_EXTENSION=$(TARGET_EXTENSION)
 	@echo TARGET_EXES=$(TARGET_EXES)
 
 %.o: %.c
 	@echo Compiling $<
 	@$(C_COMPILE) -MMD $(C_COMPILE_FLAGS) -o $*.o $<
+
+%.o: %.cpp
+	@echo Compiling $<
+	@$(CPP_COMPILE) -MMD $(CPP_COMPILE_FLAGS) -o $*.o $<
 
 %: %.o 
 	@echo Linking $@
