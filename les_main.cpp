@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "les_core.h"
 #include "les_hash.h"
@@ -12,7 +13,7 @@
 	/* Check the input parameter index */ \
 	if (INPUT_NUMBER != __LESfunctionCurrentInputParamIndex__) \
 	{ \
-		/*Throw an ERROR*/ \
+		/* ERROR: input parameter index doesn't match the expected input index */ \
 		fprintf(stderr, "ERROR:function '%s' : Wrong function input param index:%d expected:%d param:'%s'\n", __LESfunctionName__, \
 						__LESfunctionCurrentInputParamIndex__, INPUT_NUMBER, __LESinputName__##INPUT_NUMBER ); \
 		return; \
@@ -21,7 +22,7 @@
 	/* Check the parameter index */ \
 	if (__LESinputParameter__##INPUT_NUMBER->index != __LESfunctionCurrentParamIndex__) \
 	{ \
-		/*Throw an ERROR*/ \
+		/* ERROR: input parameter index doesn't match the value stored in the definition file */ \
 		fprintf(stderr, "ERROR:function '%s' : Wrong function param index:%d expected:%d param:'%s'\n", __LESfunctionName__, \
 						__LESfunctionCurrentParamIndex__, __LESinputParameter__##INPUT_NUMBER->index, __LESinputName__##INPUT_NUMBER ); \
 		return; \
@@ -30,30 +31,62 @@
 	const LES_StringEntry* const __LESinputParameterTypeStringEntry__##INPUT_NUMBER = LES_GetStringEntryForID(__LESinputParameter__##INPUT_NUMBER->typeID); \
 	if (__LESinputParameterTypeStringEntry__##INPUT_NUMBER == LES_NULL) \
 	{ \
-		/*Throw an ERROR*/ \
+		/* ERROR: can't find the input parameter type */ \
 		fprintf(stderr, "ERROR:function '%s' : Can't find input parameter type for ID:%d '%s'\n", __LESfunctionName__, \
 				__LESinputParameter__##INPUT_NUMBER->typeID, __LESinputType__##INPUT_NUMBER); \
 		return; \
 	} \
+	/* Check the input parameter type : hash */ \
 	if (__LESinputTypeHash__##INPUT_NUMBER != __LESinputParameterTypeStringEntry__##INPUT_NUMBER->hash) \
 	{ \
-		/*Throw an ERROR*/ \
+		/* ERROR : input parameter type hash doesn't match */ \
 		fprintf(stderr, "ERROR:function '%s' : input parameter type hash doesn't match for ID:%d 0x%X != 0x%X '%s':'%s'\n", __LESfunctionName__, \
 				__LESinputParameter__##INPUT_NUMBER->typeID, \
 				__LESinputTypeHash__##INPUT_NUMBER, __LESinputParameterTypeStringEntry__##INPUT_NUMBER->hash, \
 				__LESinputType__##INPUT_NUMBER, __LESinputParameterTypeStringEntry__##INPUT_NUMBER->str); \
 		return; \
 	} \
+	/* Check the input parameter type : string */ \
+	if (strcmp(__LESinputType__##INPUT_NUMBER, __LESinputParameterTypeStringEntry__##INPUT_NUMBER->str) != 0) \
+	{ \
+		/* ERROR : input parameter type string doesn't match */ \
+		fprintf(stderr, "ERROR:function '%s' : input parameter type string doesn't match for ID:%d '%s' != '%s' 0x%X : 0x%X\n", __LESfunctionName__, \
+				__LESinputParameter__##INPUT_NUMBER->typeID, \
+				__LESinputType__##INPUT_NUMBER, __LESinputParameterTypeStringEntry__##INPUT_NUMBER->str, \
+				__LESinputTypeHash__##INPUT_NUMBER, __LESinputParameterTypeStringEntry__##INPUT_NUMBER->hash ); \
+		return; \
+	} \
 	/* Check the input parameter name */ \
 	const LES_StringEntry* const __LESinputParameterNameStringEntry__##INPUT_NUMBER = LES_GetStringEntryForID(__LESinputParameter__##INPUT_NUMBER->nameID); \
 	if (__LESinputParameterNameStringEntry__##INPUT_NUMBER == LES_NULL) \
 	{ \
-		/*Throw an ERROR*/ \
+		/* ERROR: can't find the input parameter name */ \
 		fprintf(stderr, "ERROR:function '%s' : Can't find input parameter name for ID:%d '%s'\n", __LESfunctionName__, \
 				__LESinputParameter__##INPUT_NUMBER->nameID, __LESinputName__##INPUT_NUMBER); \
 		return; \
 	} \
-	/*if (__LESinputParameter__##INPUT_NUMBER->index != __LESfunctionCurrentParamIndex__)*/ \
+	/* Check the input parameter name : hash */ \
+	if (__LESinputNameHash__##INPUT_NUMBER != __LESinputParameterNameStringEntry__##INPUT_NUMBER->hash) \
+	{ \
+		/* ERROR : input parameter name hash doesn't match */ \
+		fprintf(stderr, "ERROR:function '%s' : input parameter name hash doesn't match for ID:%d 0x%X != 0x%X '%s':'%s'\n", __LESfunctionName__, \
+				__LESinputParameter__##INPUT_NUMBER->nameID, \
+				__LESinputNameHash__##INPUT_NUMBER, __LESinputParameterNameStringEntry__##INPUT_NUMBER->hash, \
+				__LESinputName__##INPUT_NUMBER, __LESinputParameterNameStringEntry__##INPUT_NUMBER->str); \
+		return; \
+	} \
+	/* Check the input parameter name : string */ \
+	if (strcmp(__LESinputName__##INPUT_NUMBER, __LESinputParameterNameStringEntry__##INPUT_NUMBER->str) != 0) \
+	{ \
+		/* ERROR : input parameter name string doesn't match */ \
+		fprintf(stderr, "ERROR:function '%s' : input parameter name string doesn't match for ID:%d '%s' != '%s' 0x%X : 0x%X\n", __LESfunctionName__, \
+				__LESinputParameter__##INPUT_NUMBER->nameID, \
+				__LESinputName__##INPUT_NUMBER, __LESinputParameterNameStringEntry__##INPUT_NUMBER->str, \
+				__LESinputNameHash__##INPUT_NUMBER, __LESinputParameterNameStringEntry__##INPUT_NUMBER->hash ); \
+		return; \
+	} \
+	/* Store the input parameter value */ \
+
 
 
 #define LES_FUNCTION_ADD_OUTPUT(OUTPUT_NUMBER, OUTPUT_TYPE, OUTPUT_NAME) \
