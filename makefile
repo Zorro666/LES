@@ -11,7 +11,7 @@ C_COMPILE:=gcc -c
 C_COMPILE_FLAGS:=-g -Wall -Wextra -Wuninitialized -Winit-self -Wstrict-aliasing -Wfloat-equal -Wshadow -Wconversion -Werror -ansi -pedantic-errors
 
 CPP_COMPILE:=g++ -c
-CPP_COMPILE_FLAGS:=-g -Wall -Wextra -Wuninitialized -Winit-self -Wstrict-aliasing -Wfloat-equal -Wshadow -Wconversion -Werror 
+CPP_COMPILE_FLAGS:=-g -Wall -Wextra -Wuninitialized -Winit-self -Wstrict-aliasing -Wfloat-equal -Wshadow -Wconversion -Werror -ansi -pedantic-errors
 
 LINK:=g++
 LINK_FLAGS:=-g -lm
@@ -29,7 +29,7 @@ endef
 define PROJECT_template
 $2_SRCFILES += $1.cpp
 $2_SRCFILES += $($2_DEPENDS)
-$2_DFILES:+$$($2_SRCFILES:.cpp=.d)
+$2_DFILES:=$$($2_SRCFILES:.cpp=.d)
 
 $2_OBJFILE:=$1.o
 $2_OBJFILES:=$$($2_SRCFILES:.cpp=.o)
