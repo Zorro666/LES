@@ -25,10 +25,17 @@ struct LES_FunctionDefinition
 	int numOutputs;
 	LES_FunctionParameter* const outputs;
 	LES_FunctionParameter* GetInputParameter(const int index) const;
+	LES_FunctionParameter* GetOutputParameter(const int index) const;
+};
+
+struct LES_FunctionParamData
+{
+	int AddParam(const LES_StringEntry* const typeStringEntry, const void* const paramPtr);
 };
 
 LES_StringEntry* LES_GetStringEntryForID(const int id);
 
 LES_FunctionDefinition* LES_GetFunctionDefinition(const char* const name);
+LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID);
 
 #endif //#ifndef LES_CORE_HH

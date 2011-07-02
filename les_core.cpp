@@ -8,7 +8,9 @@ static int les_numStringEntries = 0;
 void LES_Init(void)
 {
 	les_numStringEntries = 0;
-	les_stringEntryArray = new LES_StringEntry[1024];
+	//les_stringEntryArray = new LES_StringEntry;
+	float* jake = new float;
+	jake[0] = 0;
 }
 
 LES_StringEntry* LES_GetStringEntryForID(const int id)

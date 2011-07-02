@@ -86,6 +86,11 @@
 		return; \
 	} \
 	/* Store the parameter value */ \
+	__LESfunctionParamData->AddParam(__LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER, (void*)&NAME); \
+	\
+	/* Update param indecies */ \
+	__LESfunctionCurrent##PARAM_TYPE##ParamIndex__ += 1; \
+	__LESfunctionCurrentParamIndex__ += 1; \
 
 
 
@@ -101,23 +106,25 @@
 	const LES_FunctionDefinition* const __LESfunctionDefinition = LES_GetFunctionDefinition(__LESfunctionName__); \
 	if (__LESfunctionDefinition == LES_NULL) \
 	{ \
-		/*Throw an ERROR*/ \
+		/* ERROR: function not found */ \
 		fprintf(stderr, "ERROR:function '%s' : Can't find function definition\n", __LESfunctionName__); \
 		return; \
 	} \
 	const LES_StringEntry* const __LESfunctionReturnTypeStringEntry = LES_GetStringEntryForID(__LESfunctionDefinition->returnTypeID); \
 	if (__LESfunctionReturnTypeStringEntry == LES_NULL) \
 	{ \
-		/*Throw an ERROR*/ \
+		/* ERROR: return type not found */ \
 		fprintf(stderr, "ERROR:function '%s' : Can't find function return type for ID:%d '%s'\n", __LESfunctionName__, \
 				__LESfunctionDefinition->returnTypeID, __LESfunctionReturnType__); \
 		return; \
 	} \
+	LES_FunctionParamData* const __LESfunctionParamData = LES_GetFunctionParamData(__LESfunctionDefinition->nameID); \
+	/* Initialise param indecies */ \
 	int __LESfunctionCurrentInputParamIndex__ = 0; \
-	int __LESfunctionCurrentOutpuParamIndex__ = 0; \
+	int __LESfunctionCurrentOutputParamIndex__ = 0; \
 	int __LESfunctionCurrentParamIndex__ = 0; \
 	__LESfunctionCurrentInputParamIndex__ += 0; \
-	__LESfunctionCurrentOutpuParamIndex__ += 0; \
+	__LESfunctionCurrentOutputParamIndex__ += 0; \
 	__LESfunctionCurrentParamIndex__ += 0; \
 
 
@@ -146,6 +153,8 @@ int main(const int argc, const char* const argv[])
 
 void LES_sceNpInit(int a)
 {
+	int r;
 	LES_FUNCTION_START(sceNpInit, void)
 	LES_FUNCTION_INPUTS_1(int, a)
+	LES_FUNCTION_OUTPUTS_1(int, r)
 }
