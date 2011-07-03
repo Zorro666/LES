@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 #include <memory.h>
 
@@ -40,6 +41,69 @@ const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEnt
 	return LES_NULL;
 }
 
+int LES_GetStringEntrySlow(const LES_Hash hash, const char* const str)
+{
+	/* This is horribly slow - need hash lookup table */
+	for (int i=0; i<les_numStringEntries; i++)
+	{
+		const LES_StringEntry* const stringEntryPtr = &les_stringEntryArray[i];
+		if (stringEntryPtr->m_hash == hash)
+		{
+			if (strcmp(stringEntryPtr->m_str, str) == 0)
+			{
+				return i;
+			}
+		}
+	}
+	return -1;
+}
+
+/* str - must not be from the stack, must be global so the ptr can just be copied */
+int LES_AddStringEntry(const LES_Hash hash, const char* const str)
+{
+	int index = LES_GetStringEntrySlow(hash, str);
+	if ((index >= 0) && (index < les_numStringEntries))
+	{
+		return index;
+	}
+
+	/* Not found so add it */
+	index = les_numStringEntries;
+	LES_StringEntry* const stringEntryPtr = &les_stringEntryArray[index];
+	stringEntryPtr->m_hash = hash;
+	stringEntryPtr->m_str = str;
+	les_numStringEntries++;
+
+	return index;
+}
+
+int LES_AddStringEntry(const char* const str)
+{
+	const LES_Hash hash = LES_GenerateHashCaseSensitive(str);
+	return LES_AddStringEntry(hash, str);
+}
+
+void LES_TestSetup(void)
+{
+	LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[les_numFunctionDefinitions];
+	functionDefinitionPtr->m_nameID = LES_AddStringEntry("sceNpInit");
+	functionDefinitionPtr->m_returnTypeID = LES_AddStringEntry("void");
+	functionDefinitionPtr->m_paramDataSize = sizeof(int);
+
+	functionDefinitionPtr->m_numInputs = 1;
+	functionDefinitionPtr->m_inputs = new LES_FunctionParameter[functionDefinitionPtr->m_numInputs];
+
+	LES_FunctionParameter* const functionParameterPtr = (LES_FunctionParameter* const)&functionDefinitionPtr->m_inputs[0];
+	functionParameterPtr->m_index = 0;
+	functionParameterPtr->m_nameID = LES_AddStringEntry("a");
+	functionParameterPtr->m_typeID = LES_AddStringEntry("int");
+
+	functionDefinitionPtr->m_numOutputs = 0;
+	functionDefinitionPtr->m_outputs = LES_NULL;
+
+	les_numFunctionDefinitions++;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // External functions
@@ -56,6 +120,8 @@ void LES_Init(void)
 
 	les_typeEntryArray = new LES_TypeEntry[1024];
 	les_numTypeEntries = 0;
+
+	LES_TestSetup();
 }
 
 void LES_Shutdown(void)

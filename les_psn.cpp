@@ -12,4 +12,5 @@ void LES_sceNpInit(int a)
 	LES_FUNCTION_START(sceNpInit, void)
 	LES_FUNCTION_INPUTS_1(int, a)
 	LES_FUNCTION_OUTPUTS_1(int, r)
+	fprintf(stderr, "END\n");
 }
