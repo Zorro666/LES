@@ -152,12 +152,13 @@ LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID);
 	__LESfunctionCurrentParamIndex__ += 1; \
 
 
-
 #define LES_FUNCTION_ADD_INPUT(INPUT_NUMBER, INPUT_TYPE, INPUT_NAME) \
 	LES_FUNCTION_ADD_PARAM(Input, INPUT_NUMBER, INPUT_TYPE, INPUT_NAME) \
 
+
 #define LES_FUNCTION_ADD_OUTPUT(OUTPUT_NUMBER, OUTPUT_TYPE, OUTPUT_NAME) \
 	LES_FUNCTION_ADD_PARAM(Output, OUTPUT_NUMBER, OUTPUT_TYPE, OUTPUT_NAME) \
+
 
 #define LES_FUNCTION_START(FUNC_NAME, RETURN_TYPE) \
 	const char* const __LESfunctionName__ = #FUNC_NAME; \
