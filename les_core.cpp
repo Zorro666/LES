@@ -103,9 +103,9 @@ void LES_TestSetup(void)
 	functionDefinitionPtr->m_outputs = new LES_FunctionParameter[functionDefinitionPtr->m_numOutputs];
 
 	functionParameterPtr = (LES_FunctionParameter* const)&functionDefinitionPtr->m_outputs[0];
-	functionParameterPtr->m_index = 0;
+	functionParameterPtr->m_index = 1;
 	functionParameterPtr->m_nameID = LES_AddStringEntry("r");
-	functionParameterPtr->m_typeID = LES_AddStringEntry("int");
+	functionParameterPtr->m_typeID = LES_AddStringEntry("short");
 
 	les_numFunctionDefinitions++;
 }

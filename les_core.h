@@ -64,7 +64,7 @@ LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID);
 	if (NUMBER != __LESfunctionCurrent##PARAM_TYPE##ParamIndex__) \
 	{ \
 		/* ERROR: parameter index doesn't match the expected index */ \
-		fprintf(stderr, "LES ERROR: function '%s' : Wrong function " #PARAM_TYPE " parameter index:%d expected:%d parameter:'%s'\n", __LESfunctionName__, \
+		fprintf(stderr, "LES ERROR: function '%s' : Wrong " #PARAM_TYPE " parameter index:%d expected:%d parameter:'%s'\n", __LESfunctionName__, \
 						__LESfunctionCurrent##PARAM_TYPE##ParamIndex__, NUMBER, __LES##PARAM_TYPE##Name__##NUMBER ); \
 		return; \
 	} \
@@ -80,8 +80,8 @@ LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID);
 	if (__LES##PARAM_TYPE##Parameter__##NUMBER->m_index != __LESfunctionCurrentParamIndex__) \
 	{ \
 		/* ERROR: parameter index doesn't match the value stored in the definition file */ \
-		fprintf(stderr, "LES ERROR: function '%s' : Wrong function parameter index:%d expected:%d parameter:'%s'\n", __LESfunctionName__, \
-						__LESfunctionCurrent##PARAM_TYPE##ParamIndex__, __LES##PARAM_TYPE##Parameter__##NUMBER->m_index, __LES##PARAM_TYPE##Name__##NUMBER ); \
+		fprintf(stderr, "LES ERROR: function '%s' : Wrong function parameter index:%d expected:%d " #PARAM_TYPE " parameter:'%s'\n", __LESfunctionName__, \
+						__LESfunctionCurrentParamIndex__, __LES##PARAM_TYPE##Parameter__##NUMBER->m_index, __LES##PARAM_TYPE##Name__##NUMBER ); \
 		return; \
 	} \
 	/* Check the parameter type */ \
@@ -97,7 +97,9 @@ LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID);
 	if (__LES##PARAM_TYPE##TypeHash__##NUMBER != __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER->m_hash) \
 	{ \
 		/* ERROR: parameter type hash doesn't match */ \
-		fprintf(stderr, "LES ERROR: function '%s' : " #PARAM_TYPE " parameter type hash doesn't match for ID:%d 0x%X != 0x%X '%s':'%s'\n", __LESfunctionName__, \
+		fprintf(stderr, "LES ERROR: function '%s' : parameter:%d '%s' (" #PARAM_TYPE ") type hash doesn't match for ID:%d 0x%X != 0x%X Got '%s' Expected '%s'\n", __LESfunctionName__, \
+				__LESfunctionCurrentParamIndex__, \
+				__LES##PARAM_TYPE##Name__##NUMBER, \
 				__LES##PARAM_TYPE##Parameter__##NUMBER->m_typeID, \
 				__LES##PARAM_TYPE##TypeHash__##NUMBER, __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER->m_hash, \
 				__LES##PARAM_TYPE##Type__##NUMBER, __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER->m_str); \
