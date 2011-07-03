@@ -5,6 +5,7 @@
 #include "les_core.h"
 #include "les_hash.h"
 #include "les_stringentry.h"
+#include "les_test.h"
 
 struct LES_TypeEntry
 {
@@ -27,7 +28,7 @@ static int les_numTypeEntries = 0;
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEntry)
+static const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEntry)
 {
 	/* This is horribly slow - need hash lookup table */
 	for (int i=0; i<les_numTypeEntries; i++)
@@ -41,7 +42,7 @@ const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEnt
 	return LES_NULL;
 }
 
-int LES_GetStringEntrySlow(const LES_Hash hash, const char* const str)
+static int LES_GetStringEntrySlow(const LES_Hash hash, const char* const str)
 {
 	/* This is horribly slow - need hash lookup table */
 	for (int i=0; i<les_numStringEntries; i++)
@@ -59,7 +60,7 @@ int LES_GetStringEntrySlow(const LES_Hash hash, const char* const str)
 }
 
 /* str - must not be from the stack, must be global so the ptr can just be copied */
-int LES_AddStringEntry(const LES_Hash hash, const char* const str)
+static int LES_AddStringEntry(const LES_Hash hash, const char* const str)
 {
 	int index = LES_GetStringEntrySlow(hash, str);
 	if ((index >= 0) && (index < les_numStringEntries))
@@ -77,42 +78,29 @@ int LES_AddStringEntry(const LES_Hash hash, const char* const str)
 	return index;
 }
 
-int LES_AddStringEntry(const char* const str)
+static int LES_GetFunctionDefinitionIndex(const char* const name)
 {
-	const LES_Hash hash = LES_GenerateHashCaseSensitive(str);
-	return LES_AddStringEntry(hash, str);
-}
+	const LES_Hash functionNameHash = LES_GenerateHashCaseSensitive(name);
 
-void LES_TestSetup(void)
-{
-	LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[les_numFunctionDefinitions];
-	functionDefinitionPtr->m_nameID = LES_AddStringEntry("sceNpInit");
-	functionDefinitionPtr->m_returnTypeID = LES_AddStringEntry("void");
-	functionDefinitionPtr->m_paramDataSize = sizeof(int);
-
-	functionDefinitionPtr->m_numInputs = 1;
-	functionDefinitionPtr->m_inputs = new LES_FunctionParameter[functionDefinitionPtr->m_numInputs];
-
-	LES_FunctionParameter* functionParameterPtr;
-	functionParameterPtr = (LES_FunctionParameter* const)&functionDefinitionPtr->m_inputs[0];
-	functionParameterPtr->m_index = 0;
-	functionParameterPtr->m_nameID = LES_AddStringEntry("a");
-	functionParameterPtr->m_typeID = LES_AddStringEntry("int");
-
-	functionDefinitionPtr->m_numOutputs = 1;
-	functionDefinitionPtr->m_outputs = new LES_FunctionParameter[functionDefinitionPtr->m_numOutputs];
-
-	functionParameterPtr = (LES_FunctionParameter* const)&functionDefinitionPtr->m_outputs[0];
-	functionParameterPtr->m_index = 1;
-	functionParameterPtr->m_nameID = LES_AddStringEntry("r");
-	functionParameterPtr->m_typeID = LES_AddStringEntry("short");
-
-	les_numFunctionDefinitions++;
+	/* This is horribly slow - need hash lookup table */
+	for (int i=0; i<les_numFunctionDefinitions; i++)
+	{
+		const LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[i];
+		const LES_StringEntry* const functionNameStringEntryPtr = LES_GetStringEntryForID(functionDefinitionPtr->m_nameID);
+		if (functionNameStringEntryPtr->m_hash == functionNameHash)
+		{
+			if (strcmp(functionNameStringEntryPtr->m_str, name) == 0)
+			{
+				return i;
+			}
+		}
+	}
+	return -1;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// External functions
+// Public External functions
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -152,22 +140,13 @@ const LES_StringEntry* LES_GetStringEntryForID(const int id)
 
 const LES_FunctionDefinition* LES_GetFunctionDefinition(const char* const name)
 {
-	const LES_Hash functionNameHash = LES_GenerateHashCaseSensitive(name);
-
-	/* This is horribly slow - need hash lookup table */
-	for (int i=0; i<les_numFunctionDefinitions; i++)
+	const int index = LES_GetFunctionDefinitionIndex(name);
+	if ((index < 0) || (index >= les_numFunctionDefinitions))
 	{
-		const LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[i];
-		const LES_StringEntry* const functionNameStringEntryPtr = LES_GetStringEntryForID(functionDefinitionPtr->m_nameID);
-		if (functionNameStringEntryPtr->m_hash == functionNameHash)
-		{
-			if (strcmp(functionNameStringEntryPtr->m_str, name) == 0)
-			{
-				return functionDefinitionPtr;
-			}
-		}
+		return LES_NULL;
 	}
-	return LES_NULL;
+	const LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[index];
+	return functionDefinitionPtr;
 }
 
 LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID)
@@ -224,3 +203,28 @@ int LES_FunctionParamData::AddParam(const LES_StringEntry* const typeStringEntry
 	return LES_OK;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Private External functions
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+int LES_AddStringEntry(const char* const str)
+{
+	const LES_Hash hash = LES_GenerateHashCaseSensitive(str);
+	return LES_AddStringEntry(hash, str);
+}
+
+int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr)
+{
+	int index = LES_GetFunctionDefinitionIndex(name);
+	if ((index < 0) || (index >= les_numFunctionDefinitions))
+	{
+		/* Not found so add it */
+		index = les_numFunctionDefinitions;
+		les_functionDefinitionArray[index] = *functionDefinitionPtr;
+		les_numFunctionDefinitions++;
+	}
+
+	return index;
+}
