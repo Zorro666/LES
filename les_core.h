@@ -7,24 +7,27 @@ typedef unsigned int LES_uint;
 
 struct LES_StringEntry;
 
+#define LES_OK (1)
+#define LES_ERROR (-1)
+
 struct LES_FunctionParameter
 {
-	int nameID;
-	int typeID;
+	int m_nameID;
+	int m_typeID;
 
-	int index;
+	int m_index;
 };
 
 struct LES_FunctionDefinition
 {
-	int nameID;
-	int returnTypeID;
-	int paramDataSize;
+	int m_nameID;
+	int m_returnTypeID;
+	int m_paramDataSize;
 
-	int numInputs;
-	LES_FunctionParameter* const inputs;
-	int numOutputs;
-	LES_FunctionParameter* const outputs;
+	int m_numInputs;
+	LES_FunctionParameter* const m_inputs;
+	int m_numOutputs;
+	LES_FunctionParameter* const m_outputs;
 
 	const LES_FunctionParameter* GetInputParameter(const int index) const;
 	const LES_FunctionParameter* GetOutputParameter(const int index) const;
@@ -32,12 +35,15 @@ struct LES_FunctionDefinition
 
 struct LES_FunctionParamData
 {
-	char* buffer;
+	char* m_bufferPtr;
+	char* m_currentBufferPtr;
 	int AddParam(const LES_StringEntry* const typeStringEntry, const void* const paramPtr);
 };
 
 const LES_StringEntry* LES_GetStringEntryForID(const int id);
 
+void LES_Init(void);
+void LES_Shutdown(void);
 const LES_FunctionDefinition* LES_GetFunctionDefinition(const char* const name);
 LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID);
 
@@ -62,69 +68,69 @@ LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID);
 	} \
 	const LES_FunctionParameter* const __LES##PARAM_TYPE##Parameter__##NUMBER = __LESfunctionDefinition->Get##PARAM_TYPE##Parameter(NUMBER); \
 	/* Check the parameter index */ \
-	if (__LES##PARAM_TYPE##Parameter__##NUMBER->index != __LESfunctionCurrentParamIndex__) \
+	if (__LES##PARAM_TYPE##Parameter__##NUMBER->m_index != __LESfunctionCurrentParamIndex__) \
 	{ \
 		/* ERROR: parameter index doesn't match the value stored in the definition file */ \
 		fprintf(stderr, "ERROR:function '%s' : Wrong function param index:%d expected:%d param:'%s'\n", __LESfunctionName__, \
-						__LESfunctionCurrent##PARAM_TYPE##ParamIndex__, __LES##PARAM_TYPE##Parameter__##NUMBER->index, __LES##PARAM_TYPE##Name__##NUMBER ); \
+						__LESfunctionCurrent##PARAM_TYPE##ParamIndex__, __LES##PARAM_TYPE##Parameter__##NUMBER->m_index, __LES##PARAM_TYPE##Name__##NUMBER ); \
 		return; \
 	} \
 	/* Check the parameter type */ \
-	const LES_StringEntry* const __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER = LES_GetStringEntryForID(__LES##PARAM_TYPE##Parameter__##NUMBER->typeID); \
+	const LES_StringEntry* const __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER = LES_GetStringEntryForID(__LES##PARAM_TYPE##Parameter__##NUMBER->m_typeID); \
 	if (__LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER == LES_NULL) \
 	{ \
 		/* ERROR: can't find the parameter type */ \
 		fprintf(stderr, "ERROR:function '%s' : Can't find ##PARAM_TYPE parameter type for ID:%d '%s'\n", __LESfunctionName__, \
-				__LES##PARAM_TYPE##Parameter__##NUMBER->typeID, __LES##PARAM_TYPE##Type__##NUMBER); \
+				__LES##PARAM_TYPE##Parameter__##NUMBER->m_typeID, __LES##PARAM_TYPE##Type__##NUMBER); \
 		return; \
 	} \
 	/* Check the parameter type : hash */ \
-	if (__LES##PARAM_TYPE##TypeHash__##NUMBER != __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER->hash) \
+	if (__LES##PARAM_TYPE##TypeHash__##NUMBER != __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER->m_hash) \
 	{ \
 		/* ERROR : parameter type hash doesn't match */ \
 		fprintf(stderr, "ERROR:function '%s' : ##PARAM_TYPE parameter type hash doesn't match for ID:%d 0x%X != 0x%X '%s':'%s'\n", __LESfunctionName__, \
-				__LES##PARAM_TYPE##Parameter__##NUMBER->typeID, \
-				__LES##PARAM_TYPE##TypeHash__##NUMBER, __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER->hash, \
-				__LES##PARAM_TYPE##Type__##NUMBER, __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER->str); \
+				__LES##PARAM_TYPE##Parameter__##NUMBER->m_typeID, \
+				__LES##PARAM_TYPE##TypeHash__##NUMBER, __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER->m_hash, \
+				__LES##PARAM_TYPE##Type__##NUMBER, __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER->m_str); \
 		return; \
 	} \
 	/* Check the parameter type : string */ \
-	if (strcmp(__LES##PARAM_TYPE##Type__##NUMBER, __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER->str) != 0) \
+	if (strcmp(__LES##PARAM_TYPE##Type__##NUMBER, __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER->m_str) != 0) \
 	{ \
 		/* ERROR : parameter type string doesn't match */ \
 		fprintf(stderr, "ERROR:function '%s' : parameter type string doesn't match for ID:%d '%s' != '%s' 0x%X : 0x%X\n", __LESfunctionName__, \
-				__LES##PARAM_TYPE##Parameter__##NUMBER->typeID, \
-				__LES##PARAM_TYPE##Type__##NUMBER, __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER->str, \
-				__LES##PARAM_TYPE##TypeHash__##NUMBER, __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER->hash ); \
+				__LES##PARAM_TYPE##Parameter__##NUMBER->m_typeID, \
+				__LES##PARAM_TYPE##Type__##NUMBER, __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER->m_str, \
+				__LES##PARAM_TYPE##TypeHash__##NUMBER, __LES##PARAM_TYPE##ParameterTypeStringEntry__##NUMBER->m_hash ); \
 		return; \
 	} \
 	/* Check the parameter name */ \
-	const LES_StringEntry* const __LES##PARAM_TYPE##ParameterNameStringEntry__##NUMBER = LES_GetStringEntryForID(__LES##PARAM_TYPE##Parameter__##NUMBER->nameID); \
+	const LES_StringEntry* const __LES##PARAM_TYPE##ParameterNameStringEntry__##NUMBER = LES_GetStringEntryForID(__LES##PARAM_TYPE##Parameter__##NUMBER->m_nameID); \
 	if (__LES##PARAM_TYPE##ParameterNameStringEntry__##NUMBER == LES_NULL) \
 	{ \
 		/* ERROR: can't find the parameter name */ \
 		fprintf(stderr, "ERROR:function '%s' : Can't find parameter name for ID:%d '%s'\n", __LESfunctionName__, \
-				__LES##PARAM_TYPE##Parameter__##NUMBER->nameID, __LES##PARAM_TYPE##Name__##NUMBER); \
+				__LES##PARAM_TYPE##Parameter__##NUMBER->m_nameID, __LES##PARAM_TYPE##Name__##NUMBER); \
 		return; \
 	} \
 	/* Check the parameter name : hash */ \
-	if (__LES##PARAM_TYPE##NameHash__##NUMBER != __LES##PARAM_TYPE##ParameterNameStringEntry__##NUMBER->hash) \
+	if (__LES##PARAM_TYPE##NameHash__##NUMBER != __LES##PARAM_TYPE##ParameterNameStringEntry__##NUMBER->m_hash) \
 	{ \
 		/* ERROR : parameter name hash doesn't match */ \
 		fprintf(stderr, "ERROR:function '%s' : parameter name hash doesn't match for ID:%d 0x%X != 0x%X '%s':'%s'\n", __LESfunctionName__, \
-				__LES##PARAM_TYPE##Parameter__##NUMBER->nameID, \
-				__LES##PARAM_TYPE##NameHash__##NUMBER, __LES##PARAM_TYPE##ParameterNameStringEntry__##NUMBER->hash, \
-				__LES##PARAM_TYPE##Name__##NUMBER, __LES##PARAM_TYPE##ParameterNameStringEntry__##NUMBER->str); \
+				__LES##PARAM_TYPE##Parameter__##NUMBER->m_nameID, \
+				__LES##PARAM_TYPE##NameHash__##NUMBER, __LES##PARAM_TYPE##ParameterNameStringEntry__##NUMBER->m_hash, \
+				__LES##PARAM_TYPE##Name__##NUMBER, __LES##PARAM_TYPE##ParameterNameStringEntry__##NUMBER->m_str); \
 		return; \
 	} \
 	/* Check the parameter name : string */ \
-	if (strcmp(__LES##PARAM_TYPE##Name__##NUMBER, __LES##PARAM_TYPE##ParameterNameStringEntry__##NUMBER->str) != 0) \
+	if (strcmp(__LES##PARAM_TYPE##Name__##NUMBER, __LES##PARAM_TYPE##ParameterNameStringEntry__##NUMBER->m_str) != 0) \
 	{ \
 		/* ERROR : parameter name string doesn't match */ \
 		fprintf(stderr, "ERROR:function '%s' : parameter name string doesn't match for ID:%d '%s' != '%s' 0x%X : 0x%X\n", __LESfunctionName__, \
-				__LES##PARAM_TYPE##Parameter__##NUMBER->nameID, \
-				__LES##PARAM_TYPE##Name__##NUMBER, __LES##PARAM_TYPE##ParameterNameStringEntry__##NUMBER->str, \
-				__LES##PARAM_TYPE##NameHash__##NUMBER, __LES##PARAM_TYPE##ParameterNameStringEntry__##NUMBER->hash ); \
+				__LES##PARAM_TYPE##Parameter__##NUMBER->m_nameID, \
+				__LES##PARAM_TYPE##Name__##NUMBER, __LES##PARAM_TYPE##ParameterNameStringEntry__##NUMBER->m_str, \
+				__LES##PARAM_TYPE##NameHash__##NUMBER, __LES##PARAM_TYPE##ParameterNameStringEntry__##NUMBER->m_hash ); \
 		return; \
 	} \
 	/* Store the parameter value */ \
@@ -152,15 +158,15 @@ LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID);
 		fprintf(stderr, "ERROR:function '%s' : Can't find function definition\n", __LESfunctionName__); \
 		return; \
 	} \
-	const LES_StringEntry* const __LESfunctionReturnTypeStringEntry = LES_GetStringEntryForID(__LESfunctionDefinition->returnTypeID); \
+	const LES_StringEntry* const __LESfunctionReturnTypeStringEntry = LES_GetStringEntryForID(__LESfunctionDefinition->m_returnTypeID); \
 	if (__LESfunctionReturnTypeStringEntry == LES_NULL) \
 	{ \
 		/* ERROR: return type not found */ \
 		fprintf(stderr, "ERROR:function '%s' : Can't find function return type for ID:%d '%s'\n", __LESfunctionName__, \
-				__LESfunctionDefinition->returnTypeID, __LESfunctionReturnType__); \
+				__LESfunctionDefinition->m_returnTypeID, __LESfunctionReturnType__); \
 		return; \
 	} \
-	LES_FunctionParamData* const __LESfunctionParamData = LES_GetFunctionParamData(__LESfunctionDefinition->nameID); \
+	LES_FunctionParamData* const __LESfunctionParamData = LES_GetFunctionParamData(__LESfunctionDefinition->m_nameID); \
 	/* Initialise param indecies */ \
 	int __LESfunctionCurrentInputParamIndex__ = 0; \
 	int __LESfunctionCurrentOutputParamIndex__ = 0; \

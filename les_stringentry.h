@@ -5,8 +5,8 @@
 
 struct LES_StringEntry
 {
-	LES_Hash hash;
-	char* const str;
+	LES_Hash m_hash;
+	char* const m_str;
 };
 
 #endif // #ifndef LES_STRINGENTRY_HH
