@@ -93,13 +93,19 @@ void LES_TestSetup(void)
 	functionDefinitionPtr->m_numInputs = 1;
 	functionDefinitionPtr->m_inputs = new LES_FunctionParameter[functionDefinitionPtr->m_numInputs];
 
-	LES_FunctionParameter* const functionParameterPtr = (LES_FunctionParameter* const)&functionDefinitionPtr->m_inputs[0];
+	LES_FunctionParameter* functionParameterPtr;
+	functionParameterPtr = (LES_FunctionParameter* const)&functionDefinitionPtr->m_inputs[0];
 	functionParameterPtr->m_index = 0;
 	functionParameterPtr->m_nameID = LES_AddStringEntry("a");
 	functionParameterPtr->m_typeID = LES_AddStringEntry("int");
 
-	functionDefinitionPtr->m_numOutputs = 0;
-	functionDefinitionPtr->m_outputs = LES_NULL;
+	functionDefinitionPtr->m_numOutputs = 1;
+	functionDefinitionPtr->m_outputs = new LES_FunctionParameter[functionDefinitionPtr->m_numOutputs];
+
+	functionParameterPtr = (LES_FunctionParameter* const)&functionDefinitionPtr->m_outputs[0];
+	functionParameterPtr->m_index = 0;
+	functionParameterPtr->m_nameID = LES_AddStringEntry("r");
+	functionParameterPtr->m_typeID = LES_AddStringEntry("int");
 
 	les_numFunctionDefinitions++;
 }
