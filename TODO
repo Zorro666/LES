@@ -7,4 +7,6 @@ LES: hash table with binary search
 LES: tests - need tests for each fail case that is tested for
 TODO: need to list the tests need to be added
 LES: need to list the data storage that is required by the global data
-
+LES: need to add fake output
+LES: need to change name to test function with specific settings e.g. input=1, output=1, void
+LES: need to test memcpy of parameter data into buffer
