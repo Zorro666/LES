@@ -1,13 +1,21 @@
+High Priority:
+MACROS: Store the output parameter - memcpy into preallocated buffer
+LES: need to test memcpy of output parameter data into buffer
 TODO: need to list the tests need to be added
+
+Medium Priority:
+LES: need to change name to test function with specific settings e.g. input=1, output=1, void
 MACROS: WORK OUT HOW TO DO THE RETURN VALUE IN MACROS
-INPUT MACRO: WORK OUT HOW TO DO THE ERROR HANDLING 
-INPUT MACRO: Store the input parameter - memcpy into preallocated buffer
+LES: tests - need tests for each fail case that is tested for
+LES: need to add fake output
+LES: tests - test input/output parameter is a ptr (to a structure)
+
+Low Priority:
+LES: how will output parameters work? Do they need to be sent to the server (yes i.e. in/out params)
+MACROS: WORK OUT HOW TO DO THE ERROR HANDLING 
 LES: need common error handling & log system
+LES: need to list the data storage that is required by the global data
+TEST: error handling run out of memory when adding new function or new string e.g. array limit reached
 LES: memory management for input & output parameter blocks per function
 LES: hash table with binary search
-LES: tests - need tests for each fail case that is tested for
-LES: need to list the data storage that is required by the global data
-LES: need to add fake output
-LES: need to change name to test function with specific settings e.g. input=1, output=1, void
-LES: need to test memcpy of parameter data into buffer
-TEST: error handling run out of memory when adding new function or new string e.g. array limit reached
+LES: need good debugging ability for the packets before sent and at server end
