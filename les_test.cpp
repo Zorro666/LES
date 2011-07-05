@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "les_test.h"
 #include "les_core.h"
 
@@ -22,6 +24,12 @@ extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionD
 
 
 #define	LES_TEST_ADD_INPUT(TYPE, NAME) \
+	/* Error if inputParamIndex off the end of the array: >= functionDefinition.m_numInputs */ \
+	if (inputParamIndex >= functionDefinition.m_numInputs) \
+	{ \
+		fprintf(stderr, "LES ERROR: TEST function '%s' : inputParamIndex too big index:%d numInputs:%d parameter:'%s' type:'%s'\n", functionName, \
+				inputParamIndex, functionDefinition.m_numInputs, #NAME, #TYPE); \
+	} \
 	functionParameterPtr = (LES_FunctionParameter* const)&functionDefinition.m_inputs[inputParamIndex]; \
 	functionParameterPtr->m_index = paramIndex; \
 	functionParameterPtr->m_nameID = LES_AddStringEntry(#NAME); \
@@ -31,6 +39,12 @@ extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionD
 
 
 #define	LES_TEST_ADD_OUTPUT(TYPE, NAME) \
+	/* Error if outputParamIndex off the end of the array: >= functionDefinition.m_numOutputs */ \
+	if (outputParamIndex >= functionDefinition.m_numOutputs) \
+	{ \
+		fprintf(stderr, "LES ERROR: TEST function '%s' : outputParamIndex too big index:%d numOutputs:%d parameter:'%s' type:'%s'\n", functionName, \
+				outputParamIndex, functionDefinition.m_numOutputs, #NAME, #TYPE); \
+	} \
 	functionParameterPtr = (LES_FunctionParameter* const)&functionDefinition.m_outputs[outputParamIndex]; \
 	functionParameterPtr->m_index = paramIndex; \
 	functionParameterPtr->m_nameID = LES_AddStringEntry(#NAME); \
@@ -45,10 +59,10 @@ extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionD
 
 void LES_TestSetup(void)
 {
-	LES_TEST_START_FUNCTION(sceNpInit, void, 1, 1);
+	LES_TEST_START_FUNCTION(jakeInit, void, 2, 1);
 	LES_TEST_ADD_INPUT(int, a);
 	LES_TEST_ADD_INPUT(short, b);
-	LES_TEST_ADD_OUTPUT(short, r);
+	LES_TEST_ADD_OUTPUT(float, r);
 	LES_TEST_END_FUNCTION();
 }
 
