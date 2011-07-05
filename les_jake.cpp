@@ -7,7 +7,7 @@
 
 void LES_jakeInit(int a, short b)
 {
-	float r;
+	float r = 456.0f;
 	LES_FUNCTION_START(jakeInit, void);
 	LES_FUNCTION_INPUTS_2(int, a, short, b);
 	LES_FUNCTION_OUTPUTS_1(float, r);
