@@ -2,9 +2,11 @@
 
 #include "les_test.h"
 #include "les_core.h"
+#include "les_hash.h"
 
 extern int LES_AddStringEntry(const char* const str);
 extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr);
+extern int LES_AddType(const char* const type, const int typeDataSize);
 
 #define LES_TEST_START_FUNCTION(NAME, RETURN_TYPE, NUM_INPUTS, NUM_OUTPUTS) \
 	{ \
@@ -57,8 +59,23 @@ extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionD
 	} \
 
 
+#define LES_TEST_ADD_TYPE_EX(TYPE,SIZE) \
+	if (LES_AddType(#TYPE, SIZE) == LES_ERROR) \
+	{\
+		fprintf(stderr, "LES ERROR: TEST AddType '%s' 0x%X failed\n", #TYPE, LES_GenerateHashCaseSensitive(#TYPE)); \
+	}\
+
+
+#define LES_TEST_ADD_TYPE(TYPE) \
+	LES_TEST_ADD_TYPE_EX(TYPE, sizeof(TYPE)) \
+
+
 void LES_TestSetup(void)
 {
+	LES_TEST_ADD_TYPE(int);
+	LES_TEST_ADD_TYPE(short);
+	LES_TEST_ADD_TYPE(float);
+
 	LES_TEST_START_FUNCTION(jakeInit, void, 2, 1);
 	LES_TEST_ADD_INPUT(int, a);
 	LES_TEST_ADD_INPUT(short, b);

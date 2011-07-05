@@ -28,16 +28,28 @@ static int les_numTypeEntries = 0;
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-static const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEntry)
+static int LES_GetTypeEntrySlow(const LES_Hash hash)
 {
 	/* This is horribly slow - need hash lookup table */
 	for (int i=0; i<les_numTypeEntries; i++)
 	{
 		const LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[i];
-		if (typeEntryPtr->m_hash == typeStringEntry->m_hash)
+		if (typeEntryPtr->m_hash == hash)
 		{
-			return typeEntryPtr;
+			return i;
 		}
+	}
+	return -1;
+}
+
+static const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEntry)
+{
+	const LES_Hash hash = typeStringEntry->m_hash;
+	int index = LES_GetTypeEntrySlow(hash);
+	if ((index >= 0) && (index < les_numTypeEntries))
+	{
+		const LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[index];
+		return typeEntryPtr;
 	}
 	return LES_NULL;
 }
@@ -192,14 +204,18 @@ int LES_FunctionParamData::AddParam(const LES_StringEntry* const typeStringEntry
 	const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntry(typeStringEntry);
 	if (typeEntryPtr == NULL)
 	{
+		fprintf(stderr, "LES ERROR: AddParam type:'%s' not found\n", typeStringEntry->m_str);
 		return LES_ERROR;
 	}
 	if (paramPtr == NULL)
 	{
+		fprintf(stderr, "LES ERROR: AddParam type:'%s' paramPtr is NULL\n", typeStringEntry->m_str);
 		return LES_ERROR;
 	}
 	const int paramDataSize = typeEntryPtr->m_typeDataSize;
 	memcpy(m_currentBufferPtr, paramPtr, paramDataSize);
+	m_currentBufferPtr += paramDataSize;
+
 	return LES_OK;
 }
 
@@ -224,6 +240,34 @@ int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefiniti
 		index = les_numFunctionDefinitions;
 		les_functionDefinitionArray[index] = *functionDefinitionPtr;
 		les_numFunctionDefinitions++;
+	}
+
+	return index;
+}
+
+int LES_AddType(const char* const type, const int typeDataSize)
+{
+	const LES_Hash hash = LES_GenerateHashCaseSensitive(type);
+	int index = LES_GetTypeEntrySlow(hash);
+	if ((index < 0) || (index >= les_numTypeEntries))
+	{
+		/* Not found so add it */
+		index = les_numTypeEntries;
+		LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[index];
+		typeEntryPtr->m_hash = hash;
+		typeEntryPtr->m_typeDataSize = typeDataSize;
+		les_numTypeEntries++;
+	}
+	else
+	{
+		/* Check the data size match */
+		LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[index];
+		if (typeEntryPtr->m_typeDataSize != typeDataSize)
+		{
+			fprintf(stderr, "LES ERROR: type hash 0x%X already in list and typeDataSize doesn't match %d != %d\n",
+							hash, typeEntryPtr->m_typeDataSize, typeDataSize);
+			return LES_ERROR;
+		}
 	}
 
 	return index;

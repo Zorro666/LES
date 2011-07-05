@@ -46,6 +46,7 @@ const LES_StringEntry* LES_GetStringEntryForID(const int id);
 
 void LES_Init(void);
 void LES_Shutdown(void);
+
 const LES_FunctionDefinition* LES_GetFunctionDefinition(const char* const name);
 LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID);
 
