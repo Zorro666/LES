@@ -45,36 +45,10 @@ extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionD
 
 void LES_TestSetup(void)
 {
-
 	LES_TEST_START_FUNCTION(sceNpInit, void, 1, 1);
 	LES_TEST_ADD_INPUT(int, a);
 	LES_TEST_ADD_INPUT(short, b);
 	LES_TEST_ADD_OUTPUT(short, r);
 	LES_TEST_END_FUNCTION();
-
-/*
-	functionDefinition.m_nameID = LES_AddStringEntry("sceNpInit");
-	functionDefinition.m_returnTypeID = LES_AddStringEntry("void");
-	functionDefinition.m_numInputs = 1;
-	functionDefinition.m_inputs = new LES_FunctionParameter[functionDefinition.m_numInputs];
-	functionDefinition.m_numOutputs = 1;
-	functionDefinition.m_outputs = new LES_FunctionParameter[functionDefinition.m_numOutputs];
-*/
-/*
-	functionParameterPtr = (LES_FunctionParameter* const)&functionDefinition.m_inputs[0];
-	functionParameterPtr->m_index = 0;
-	functionParameterPtr->m_nameID = LES_AddStringEntry("a");
-	functionParameterPtr->m_typeID = LES_AddStringEntry("int");
-*/
-/*
-	functionParameterPtr = (LES_FunctionParameter* const)&functionDefinition.m_outputs[0];
-	functionParameterPtr->m_index = 1;
-	functionParameterPtr->m_nameID = LES_AddStringEntry("r");
-	functionParameterPtr->m_typeID = LES_AddStringEntry("short");
-*/
-/*
-	functionDefinition.m_paramDataSize = sizeof(int);
-	LES_AddFunctionDefinition("sceNpInit", &functionDefinition);
-*/
 }
 

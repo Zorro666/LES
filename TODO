@@ -1,3 +1,4 @@
+TODO: need to list the tests need to be added
 MACROS: WORK OUT HOW TO DO THE RETURN VALUE IN MACROS
 INPUT MACRO: WORK OUT HOW TO DO THE ERROR HANDLING 
 INPUT MACRO: Store the input parameter - memcpy into preallocated buffer
@@ -5,7 +6,6 @@ LES: need common error handling & log system
 LES: memory management for input & output parameter blocks per function
 LES: hash table with binary search
 LES: tests - need tests for each fail case that is tested for
-TODO: need to list the tests need to be added
 LES: need to list the data storage that is required by the global data
 LES: need to add fake output
 LES: need to change name to test function with specific settings e.g. input=1, output=1, void
