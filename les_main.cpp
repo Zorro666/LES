@@ -2,7 +2,6 @@
 #include <string.h>
 
 #include "les_core.h"
-#include "les_psn.h"
 
 int main(const int argc, const char* const argv[])
 {
@@ -13,8 +12,6 @@ int main(const int argc, const char* const argv[])
 	}
 
 	LES_Init();
-
-	LES_sceNpInit(666);
 
 	LES_Shutdown();
 	return -1;
