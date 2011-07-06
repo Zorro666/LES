@@ -1,9 +1,32 @@
 High Priority:
-MACROS: Store the output parameter - memcpy into preallocated buffer
-LES: need to test memcpy of output parameter data into buffer
-TODO: need to list the tests need to be added
+TEST: return type hash doesn't match stored value
+TEST: return type string doesn't match stored value
+TEST: too many input parameters
+TEST: input parameter index is wrong, input parameters in the wrong order
+TEST: input parameter doesn't exist
+TEST: input parameter global index is wrong, output parameters before input parameters
+TEST: input parameter type not found by ID lookup
+TEST: input parameter type hash doesn't match stored value
+TEST: input parameter type string doesn't match stored value
+TEST: input parameter name not found by ID lookup
+TEST: input parameter name hash doesn't match stored value
+TEST: input parameter name string doesn't match stored value
+TEST: too many output parameters
+TEST: output parameter index is wrong, output parameters in the wrong order
+TEST: output parameter doesn't exist
+TEST: output parameter global index is wrong, input parameters before output parameters
+TEST: output parameter type not found by ID lookup
+TEST: output parameter type hash doesn't match stored value
+TEST: output parameter type string doesn't match stored value
+TEST: output parameter name not found by ID lookup
+TEST: output parameter name hash doesn't match stored value
+TEST: output parameter name string doesn't match stored value
+TEST: build function definition with input & output parameters in mixed order, not 2 clear blocks
+TEST: end function not all input parameters have been stored
+TEST: end function not all output parameters have been stored
 
 Medium Priority:
+MACROS: have generic ADD_INPUT, ADD_OUTPUT without index parameter (auto-computed)
 LES: need to change name to test function with specific settings e.g. input=1, output=1, void
 MACROS: WORK OUT HOW TO DO THE RETURN VALUE IN MACROS
 LES: tests - need tests for each fail case that is tested for
@@ -19,3 +42,5 @@ TEST: error handling run out of memory when adding new function or new string e.
 LES: memory management for input & output parameter blocks per function
 LES: hash table with binary search
 LES: need good debugging ability for the packets before sent and at server end
+LES: send packet data to server?
+LES: server send global test data instead of building it internally?
