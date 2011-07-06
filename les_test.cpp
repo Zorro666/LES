@@ -23,6 +23,10 @@ extern int LES_AddType(const char* const type, const int typeDataSize);
 		functionDefinition.m_inputs = new LES_FunctionParameter[functionDefinition.m_numInputs]; \
 		functionDefinition.m_numOutputs = NUM_OUTPUTS; \
 		functionDefinition.m_outputs = new LES_FunctionParameter[functionDefinition.m_numOutputs]; \
+		paramIndex += 0; \
+		inputParamIndex += 0; \
+		outputParamIndex += 0; \
+		functionParameterPtr = NULL; \
 
 
 #define	LES_TEST_ADD_INPUT(TYPE, NAME) \
@@ -69,17 +73,53 @@ extern int LES_AddType(const char* const type, const int typeDataSize);
 #define LES_TEST_ADD_TYPE(TYPE) \
 	LES_TEST_ADD_TYPE_EX(TYPE, sizeof(TYPE)) \
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Internal test functions
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void LES_Test_FunctionNotUsed(void)
+{
+	LES_FUNCTION_START(LES_Test_FunctionNotFound, void);
+	LES_FUNCTION_END();
+}
+
+void LES_Test_ReturnTypeNotFound(void)
+{
+	LES_FUNCTION_START(LES_Test_ReturnTypeNotFound, jake);
+	LES_FUNCTION_END();
+}
 
 void LES_TestSetup(void)
 {
+	/* Sample test types */
 	LES_TEST_ADD_TYPE(int);
 	LES_TEST_ADD_TYPE(short);
 	LES_TEST_ADD_TYPE(float);
 
+	/* Sample test functions */
 	LES_TEST_START_FUNCTION(jakeInit, void, 2, 1);
 	LES_TEST_ADD_INPUT(int, a);
 	LES_TEST_ADD_INPUT(short, b);
 	LES_TEST_ADD_OUTPUT(float, r);
 	LES_TEST_END_FUNCTION();
+
+	/* Setup test data for specific tests */
+	{
+		LES_FunctionDefinition functionDefinition;
+		functionDefinition.m_nameID = LES_AddStringEntry("LES_Test_ReturnTypeNotFound");
+		functionDefinition.m_returnTypeID = -1;
+		functionDefinition.m_numInputs = 0;
+		functionDefinition.m_inputs = LES_NULL;
+		functionDefinition.m_numOutputs = 0;
+		functionDefinition.m_outputs = LES_NULL;
+		LES_AddFunctionDefinition("LES_Test_ReturnTypeNotFound", &functionDefinition); 
+	}
+
+	/* Run specific tests */
+	LES_Test_FunctionNotUsed();
+	LES_Test_ReturnTypeNotFound();
+
 }
 

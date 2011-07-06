@@ -168,6 +168,7 @@ LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID);
 
 
 #define LES_FUNCTION_START(FUNC_NAME, RETURN_TYPE) \
+{ \
 	const char* const __LESfunctionName__ = #FUNC_NAME; \
 	const char* const __LESfunctionReturnType__ = #RETURN_TYPE; \
 	const LES_FunctionDefinition* const __LESfunctionDefinition = LES_GetFunctionDefinition(__LESfunctionName__); \
@@ -185,6 +186,7 @@ LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID);
 				__LESfunctionDefinition->m_returnTypeID, __LESfunctionReturnType__); \
 		return; \
 	} \
+	fprintf(stderr, "NEED TO TEST THAT RETURN_TYPE MATCHES returnTypeID values\n"); \
 	LES_FunctionParamData* const __LESfunctionParamData = LES_GetFunctionParamData(__LESfunctionDefinition->m_nameID); \
 	/* Cache the number of inputs and number of output parameters */ \
 	const int __LESfunctionNumInputs = __LESfunctionDefinition->m_numInputs; \
@@ -193,13 +195,17 @@ LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID);
 	int __LESfunctionCurrentInputParamIndex__ = 0; \
 	int __LESfunctionCurrentOutputParamIndex__ = 0; \
 	int __LESfunctionCurrentParamIndex__ = 0; \
-	__LESfunctionCurrentInputParamIndex__ += 0; \
-	__LESfunctionCurrentOutputParamIndex__ += 0; \
-	__LESfunctionCurrentParamIndex__ += 0; \
+	__LESfunctionCurrentInputParamIndex__ = __LESfunctionNumInputs; \
+	__LESfunctionCurrentOutputParamIndex__ = __LESfunctionNumOutputs; \
+	__LESfunctionCurrentParamIndex__ = (unsigned int)__LESfunctionParamData; \
+	__LESfunctionCurrentInputParamIndex__ = 0; \
+	__LESfunctionCurrentOutputParamIndex__ = 0; \
+	__LESfunctionCurrentParamIndex__ = 0; \
 
 
 #define LES_FUNCTION_INPUTS_1(INPUT_0_TYPE, INPUT_0_NAME) \
 	LES_FUNCTION_ADD_INPUT(0, INPUT_0_TYPE, INPUT_0_NAME) \
+
 
 #define LES_FUNCTION_INPUTS_2(INPUT_0_TYPE, INPUT_0_NAME, INPUT_1_TYPE, INPUT_1_NAME) \
 	LES_FUNCTION_ADD_INPUT(0, INPUT_0_TYPE, INPUT_0_NAME) \
@@ -211,7 +217,7 @@ LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID);
 
 
 #define LES_FUNCTION_END() \
-	JAKE_WAS_HERE \
+} \
 
 
 #endif //#ifndef LES_CORE_HH
