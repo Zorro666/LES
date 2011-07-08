@@ -56,25 +56,25 @@ LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID);
 //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-extern int LES_FunctionAddParam( const char* const type, const char* const name, const int index, const char* const mode,
-																 const bool isInput,
-												  			 LES_FunctionDefinition* const functionDefinition,
+extern int LES_FunctionAddParam( const char* const type, const char* const name, const int index, 
+																 const char* const mode, const bool isInput, void* const data,
+												  			 const LES_FunctionDefinition* const functionDefinition,
 																 const char* const functionName, const int functionMaxParamTypeIndex,
 																 LES_FunctionParamData* const functionParamData,
 																 int* functionCurrentParamTypeIndexPtr,
 																 int* functionCurrentParamIndexPtr);
 
 #define LES_FUNCTION_ADD_PARAM(PARAM_TYPE, IS_INPUT, NUMBER, TYPE, NAME) \
-	if (LES_FunctionAddParam(#TYPE, #NAME, NUMBER, #PARAM_TYPE, IS_INPUT, \
-													 __LESfunctionDefinton, \
+	if (LES_FunctionAddParam(#TYPE, #NAME, NUMBER, #PARAM_TYPE, IS_INPUT, (void*)&NAME, \
+													 __LESfunctionDefinition, \
 													 __LESfunctionName__, \
-													 __LESfunction__LESfunctionNum##PARAM_TYPE##s, \
+													 __LESfunctionNum##PARAM_TYPE##s, \
 													 __LESfunctionParamData, \
-													 &__LESfunctionCurrent##PARAM_TYPE##ParamIndex__ \
-													 &__LESfunctionCurrent##PARAM_TYPE##ParamIndex__ \
+													 &__LESfunctionCurrent##PARAM_TYPE##ParamIndex__, \
+													 &__LESfunctionCurrentParamIndex__ \
 													 ) == LES_ERROR) \
 	{ \
-		fprintf(stderr, "LES ERROR: function '%s' : Error adding " ##PARAM_TYPE " parameter %d '%s' type:'%s'\n", \
+		fprintf(stderr, "LES ERROR: function '%s' : Error adding " #PARAM_TYPE " parameter %d '%s' type:'%s'\n", \
 						__LESfunctionName__, NUMBER, #NAME, #TYPE); \
 	} \
 

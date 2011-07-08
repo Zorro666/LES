@@ -273,9 +273,9 @@ int LES_AddType(const char* const type, const int typeDataSize)
 	return index;
 }
 
-int LES_FunctionAddParam( const char* const type, const char* const name, const int index, const char* const mode,
-													const bool isInput,
-												  LES_FunctionDefinition* const functionDefinition,
+int LES_FunctionAddParam( const char* const type, const char* const name, const int index,
+												  const char* const mode, const bool isInput, void* const data,
+												  const LES_FunctionDefinition* const functionDefinition,
 													const char* const functionName, const int functionMaxParamTypeIndex,
 													LES_FunctionParamData* const functionParamData,
 													int* functionCurrentParamTypeIndexPtr,
@@ -380,7 +380,7 @@ int LES_FunctionAddParam( const char* const type, const char* const name, const 
 		return LES_ERROR;
 	}
 	/* Store the parameter value */
-	functionParamData->AddParam(parameterTypeStringEntry, (void*)&NAME);
+	functionParamData->AddParam(parameterTypeStringEntry, data);
 
 	/* Update parameter indexes */
 	*functionCurrentParamTypeIndexPtr = functionCurrentParamTypeIndex + 1;
