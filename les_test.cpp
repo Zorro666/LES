@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "les_test.h"
 #include "les_core.h"
 #include "les_hash.h"
+#include "les_stringentry.h"
 
 extern int LES_AddStringEntry(const char* const str);
 extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr);
@@ -73,6 +75,7 @@ extern int LES_AddType(const char* const type, const int typeDataSize);
 #define LES_TEST_ADD_TYPE(TYPE) \
 	LES_TEST_ADD_TYPE_EX(TYPE, sizeof(TYPE)) \
 
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Internal test functions
@@ -91,14 +94,20 @@ void LES_Test_ReturnTypeNotFound(void)
 	LES_FUNCTION_END();
 }
 
+void LES_Test_ReturnTypeHashWrong()
+{
+	LES_FUNCTION_START(LES_Test_ReturnTypeHashWrong, wrongReturnType);
+	LES_FUNCTION_END();
+}
+
 void LES_TestSetup(void)
 {
-	/* Sample test types */
+	/* Sample types for development */
 	LES_TEST_ADD_TYPE(int);
 	LES_TEST_ADD_TYPE(short);
 	LES_TEST_ADD_TYPE(float);
 
-	/* Sample test functions */
+	/* Sample functions for development */
 	LES_TEST_START_FUNCTION(jakeInit, void, 2, 1);
 	LES_TEST_ADD_INPUT(int, a);
 	LES_TEST_ADD_INPUT(short, b);
@@ -117,9 +126,12 @@ void LES_TestSetup(void)
 		LES_AddFunctionDefinition("LES_Test_ReturnTypeNotFound", &functionDefinition); 
 	}
 
+	LES_TEST_START_FUNCTION(LES_Test_ReturnTypeHashWrong, void, 0, 0);
+	LES_TEST_END_FUNCTION();
+
 	/* Run specific tests */
 	LES_Test_FunctionNotUsed();
 	LES_Test_ReturnTypeNotFound();
-
+	LES_Test_ReturnTypeHashWrong();
 }
 
