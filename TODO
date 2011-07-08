@@ -1,4 +1,6 @@
 High Priority:
+MACRO:START_FUNCTION should be a function call with ptr to struct with required data, return error
+MACRO:ADD_PARAM should be a function call with ptr to struct with required data, return error
 TEST: return type hash doesn't match stored value
 TEST: return type string doesn't match stored value
 TEST: too many input parameters
