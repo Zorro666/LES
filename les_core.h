@@ -56,26 +56,46 @@ LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID);
 //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+struct LES_FunctionTempData
+{
+	const char* functionName;
+
+	int functionCurrentParamIndex;
+	int functionCurrentInputIndex;
+	int functionCurrentOutputIndex;
+
+	LES_FunctionParamData* functionParamData;
+};
+
+extern int LES_FunctionStart( const char* const name, const char* const returnType, 
+												  		const LES_FunctionDefinition** functionDefinitionPtr,
+															LES_FunctionTempData* const functionTempData);
+
+#define LES_FUNCTION_START(FUNC_NAME, RETURN_TYPE) \
+{ \
+	const LES_FunctionDefinition* __LESfunctionDefinition = LES_NULL; \
+	LES_FunctionTempData __LESfunctionTempData; \
+	if (LES_FunctionStart(#FUNC_NAME, #RETURN_TYPE, \
+												&__LESfunctionDefinition, \
+												&__LESfunctionTempData) == LES_ERROR) \
+	{ \
+		fprintf(stderr, "LES ERROR: function '%s' : Error during LES_FunctionStart\n", #FUNC_NAME); \
+		return; \
+	} \
+
+
 extern int LES_FunctionAddParam( const char* const type, const char* const name, const int index, 
 																 const char* const mode, const bool isInput, void* const data,
 												  			 const LES_FunctionDefinition* const functionDefinition,
-																 const char* const functionName, const int functionMaxParamTypeIndex,
-																 LES_FunctionParamData* const functionParamData,
-																 int* functionCurrentParamTypeIndexPtr,
-																 int* functionCurrentParamIndexPtr);
+																 LES_FunctionTempData* const functionTempData);
 
 #define LES_FUNCTION_ADD_PARAM(PARAM_TYPE, IS_INPUT, NUMBER, TYPE, NAME) \
 	if (LES_FunctionAddParam(#TYPE, #NAME, NUMBER, #PARAM_TYPE, IS_INPUT, (void*)&NAME, \
-													 __LESfunctionDefinition, \
-													 __LESfunctionName__, \
-													 __LESfunctionNum##PARAM_TYPE##s, \
-													 __LESfunctionParamData, \
-													 &__LESfunctionCurrent##PARAM_TYPE##ParamIndex__, \
-													 &__LESfunctionCurrentParamIndex__ \
-													 ) == LES_ERROR) \
+													 __LESfunctionDefinition, &__LESfunctionTempData) == LES_ERROR) \
 	{ \
 		fprintf(stderr, "LES ERROR: function '%s' : Error adding " #PARAM_TYPE " parameter %d '%s' type:'%s'\n", \
-						__LESfunctionName__, NUMBER, #NAME, #TYPE); \
+						__LESfunctionTempData.functionName, NUMBER, #NAME, #TYPE); \
+		return; \
 	} \
 
 
@@ -85,59 +105,6 @@ extern int LES_FunctionAddParam( const char* const type, const char* const name,
 
 #define LES_FUNCTION_ADD_OUTPUT(OUTPUT_NUMBER, OUTPUT_TYPE, OUTPUT_NAME) \
 	LES_FUNCTION_ADD_PARAM(Output, false, OUTPUT_NUMBER, OUTPUT_TYPE, OUTPUT_NAME) \
-
-
-#define LES_FUNCTION_START(FUNC_NAME, RETURN_TYPE) \
-{ \
-	const char* const __LESfunctionName__ = #FUNC_NAME; \
-	const LES_Hash __LESfunctionReturnTypeTypeHash = LES_GenerateHashCaseSensitive(#RETURN_TYPE); \
-	const LES_FunctionDefinition* const __LESfunctionDefinition = LES_GetFunctionDefinition(__LESfunctionName__); \
-	if (__LESfunctionDefinition == LES_NULL) \
-	{ \
-		/* ERROR: function not found */ \
-		fprintf(stderr, "LES ERROR: function '%s' : Can't find function definition\n", __LESfunctionName__); \
-		return; \
-	} \
-	const LES_StringEntry* const __LESfunctionReturnTypeStringEntry = LES_GetStringEntryForID(__LESfunctionDefinition->m_returnTypeID); \
-	/* Check the return type : exists */ \
-	if (__LESfunctionReturnTypeStringEntry == LES_NULL) \
-	{ \
-		/* ERROR: return type not found */ \
-		fprintf(stderr, "LES ERROR: function '%s' : Can't find function return type for ID:%d '%s'\n", __LESfunctionName__, \
-				__LESfunctionDefinition->m_returnTypeID, #RETURN_TYPE); \
-		return; \
-	} \
-	/* Check the return type : hash */ \
-	if (__LESfunctionReturnTypeTypeHash != __LESfunctionReturnTypeStringEntry->m_hash) \
-	{ \
-		/* ERROR: return type hash doesn't match function definition */ \
-		fprintf(stderr, "LES_ERROR: function '%s' : Return type hash doesn't match function definition 0x%X != 0x%X Got:'%s' Expected:'%s'\n", \
-						__LESfunctionName__, \
-						__LESfunctionReturnTypeTypeHash, __LESfunctionReturnTypeStringEntry->m_hash, \
-						#RETURN_TYPE, __LESfunctionReturnTypeStringEntry->m_str ); \
-	} \
-	/* Check the return type : string */ \
-	if (strcmp(#RETURN_TYPE, __LESfunctionReturnTypeStringEntry->m_str) != 0)\
-	{ \
-		/* ERROR: return type string doesn't match function definition */ \
-		fprintf(stderr, "LES_ERROR: function '%s' : Return type string doesn't match function definition '%s' != '%s'\n", \
-						__LESfunctionName__, \
-						#RETURN_TYPE, __LESfunctionReturnTypeStringEntry->m_str ); \
-	} \
-	LES_FunctionParamData* const __LESfunctionParamData = LES_GetFunctionParamData(__LESfunctionDefinition->m_nameID); \
-	/* Cache the number of inputs and number of output parameters */ \
-	const int __LESfunctionNumInputs = __LESfunctionDefinition->m_numInputs; \
-	const int __LESfunctionNumOutputs = __LESfunctionDefinition->m_numOutputs; \
-	/* Initialise parameter indexes */ \
-	int __LESfunctionCurrentInputParamIndex__ = 0; \
-	int __LESfunctionCurrentOutputParamIndex__ = 0; \
-	int __LESfunctionCurrentParamIndex__ = 0; \
-	__LESfunctionCurrentInputParamIndex__ = __LESfunctionNumInputs; \
-	__LESfunctionCurrentOutputParamIndex__ = __LESfunctionNumOutputs; \
-	__LESfunctionCurrentParamIndex__ = (unsigned int)__LESfunctionParamData; \
-	__LESfunctionCurrentInputParamIndex__ = 0; \
-	__LESfunctionCurrentOutputParamIndex__ = 0; \
-	__LESfunctionCurrentParamIndex__ = 0; \
 
 
 #define LES_FUNCTION_INPUTS_1(INPUT_0_TYPE, INPUT_0_NAME) \
