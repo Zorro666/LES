@@ -181,6 +181,15 @@ static void LES_Test_InputUsedAsOutput(int input_0)
 	LES_FUNCTION_END();
 }
 
+static void LES_Test_InputParamAlreadyUsed(int input_0, int output_0)
+{
+	LES_FUNCTION_START(LES_Test_InputParamAlreadyUsed, void);
+	LES_FUNCTION_ADD_INPUT(0, int, input_0);
+	LES_FUNCTION_ADD_INPUT(1, int, input_0);
+	LES_FUNCTION_ADD_OUTPUT(2, int, output_0);
+	LES_FUNCTION_END();
+}
+
 static void LES_Test_TooManyOutputParameters(int input_0, int output_0, int output_1, int output_2)
 {
 	LES_FUNCTION_START(LES_Test_TooManyOutputParameters, void);
@@ -250,6 +259,15 @@ static void LES_Test_OutputUsedAsInput(int output_0)
 	LES_FUNCTION_END();
 }
 
+static void LES_Test_OutputParamAlreadyUsed(int input_0, int output_0)
+{
+	LES_FUNCTION_START(LES_Test_OutputParamAlreadyUsed, void);
+	LES_FUNCTION_ADD_INPUT(0, int, input_0);
+	LES_FUNCTION_ADD_OUTPUT(0, int, output_0);
+	LES_FUNCTION_ADD_OUTPUT(1, int, output_0);
+	LES_FUNCTION_END();
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // External functions
@@ -283,7 +301,7 @@ void LES_TestSetup(void)
 		LES_AddFunctionDefinition(functionName, &functionDefinition); 
 	}
 
-	LES_TEST_FUNCTION_START(LES_Test_ReturnTypeHashWrong, void, 0, 0);
+	LES_TEST_FUNCTION_START(LES_Test_ReturnTypeHashIsWrong, void, 0, 0);
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_TooManyInputParameters, void, 2, 1);
@@ -363,6 +381,12 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_TEST_FUNCTION_END();
 
+	LES_TEST_FUNCTION_START(LES_Test_InputParamAlreadyUsed, void, 2, 1);
+	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
+	LES_TEST_FUNCTION_ADD_INPUT(int, input_1);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
+	LES_TEST_FUNCTION_END();
+
 	LES_TEST_FUNCTION_START(LES_Test_TooManyOutputParameters, void, 1, 2);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
 	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
@@ -439,6 +463,12 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_TEST_FUNCTION_END();
 
+	LES_TEST_FUNCTION_START(LES_Test_OutputParamAlreadyUsed, void, 1, 2);
+	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_1);
+	LES_TEST_FUNCTION_END();
+
 	/* Run specific tests */
 	/* Function header definition tests */
 	fprintf(stderr, "#### Function header definition tests ####\n");
@@ -458,6 +488,8 @@ void LES_TestSetup(void)
 	LES_Test_InputGlobalIndexIsWrong(1, 2);
 	fprintf(stderr, "\n");
 	LES_Test_InputUsedAsOutput(1);
+	fprintf(stderr, "\n");
+	LES_Test_InputParamAlreadyUsed(1, 2);
 	fprintf(stderr, "\n");
 
 	/* Input name tests */
@@ -485,6 +517,8 @@ void LES_TestSetup(void)
 	LES_Test_OutputGlobalIndexIsWrong(1, 2);
 	fprintf(stderr, "\n");
 	LES_Test_OutputUsedAsInput(1);
+	fprintf(stderr, "\n");
+	LES_Test_OutputParamAlreadyUsed(1, 2);
 	fprintf(stderr, "\n");
 
 	/* Output name tests */
