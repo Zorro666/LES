@@ -1,27 +1,28 @@
 High Priority:
-TEST: tests - need tests for each fail case that is tested for
-
-Medium Priority:
-FUNCTION: function definition does it need input & output parameter array - or a single parameter array?
-FUNCTION: need to add fake output
-
-TEST: build function definition with input & output parameters in mixed order, not 2 clear blocks
-TEST: error handling run out of memory when adding new function or new string e.g. array limit reached
+MACROS: have generic ADD_INPUT, ADD_OUTPUT without index parameter (auto-computed)
 
 TEST: tests - test input/output parameter is a ptr (to a structure)
+TEST: build function definition with input & output parameters in mixed order, not 2 clear blocks
 
-MACROS: have generic ADD_INPUT, ADD_OUTPUT without index parameter (auto-computed)
-MACROS: WORK OUT HOW TO DO THE RETURN VALUE IN MACROS
+Medium Priority:
+FUNCTION: error handling run out of memory when adding new function or new type e.g. array limit reached
+
+CORE: error handling run out of memory when adding new string e.g. array limit reached
+CORE: need common error handling & log system
+
+LES: need good debugging ability for the packets before sent and at server end
+LES: send packet data to server?
 
 Low Priority:
-FUNCTION: how will output parameters work? Do they need to be sent to the server (yes i.e. in/out params)
+MACROS: WORK OUT HOW TO DO THE RETURN VALUE IN MACROS
 MACROS: WORK OUT HOW TO DO THE ERROR HANDLING 
 
-CORE: need common error handling & log system
+FUNCTION: how will output parameters work? Do they need to be sent to the server (yes i.e. in/out params)
+FUNCTION: function definition does it need input & output parameter array - or a single parameter array?
+
 CORE: memory management for input & output parameter blocks per function
 CORE: hash table with binary search
 
 LES: need to list the data storage that is required by the global data
-LES: need good debugging ability for the packets before sent and at server end
-LES: send packet data to server?
 LES: server send global test data instead of building it internally?
+
