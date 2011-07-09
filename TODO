@@ -1,11 +1,12 @@
 High Priority:
-MACROS: have generic ADD_INPUT, ADD_OUTPUT without index parameter (auto-computed)
-
-TEST: tests - test input/output parameter is a ptr (to a structure)
+TEST: tests - test input/output parameter as a ptr (to a structure)
+TEST: tests - test input/output parameter to a structure
 TEST: build function definition with input & output parameters in mixed order, not 2 clear blocks
 
 Medium Priority:
 FUNCTION: error handling run out of memory when adding new function or new type e.g. array limit reached
+FUNCTION: build definition of structs from base types
+FUNCTION: how to declare arrays as inputs/outputs?
 
 CORE: error handling run out of memory when adding new string e.g. array limit reached
 CORE: need common error handling & log system

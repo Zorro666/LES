@@ -279,6 +279,8 @@ int LES_FunctionStart(const char* const name, const char* const returnType,
 	functionTempData->functionCurrentInputIndex = 0;
 	functionTempData->functionCurrentOutputIndex = 0;
 	functionTempData->functionParamData = LES_NULL;
+	functionTempData->functionInputMacroParamIndex = 0;
+	functionTempData->functionOutputMacroParamIndex = 0;
 	memset(functionTempData->paramUsed, 0, sizeof(char)*LES_MAX_NUM_FUNCTION_PARAMS);
 
 	const LES_Hash functionReturnTypeTypeHash = LES_GenerateHashCaseSensitive(returnType);
