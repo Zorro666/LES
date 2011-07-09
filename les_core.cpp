@@ -90,6 +90,20 @@ static int LES_AddStringEntry(const LES_Hash hash, const char* const str)
 	return index;
 }
 
+static int LES_GetFunctionDefinitionIndexByNameID(const int nameID)
+{
+	/* This is horribly slow - need hash lookup table */
+	for (int i=0; i<les_numFunctionDefinitions; i++)
+	{
+		const LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[i];
+		if (functionDefinitionPtr->m_nameID == nameID)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
 static int LES_GetFunctionDefinitionIndex(const char* const name)
 {
 	const LES_Hash functionNameHash = LES_GenerateHashCaseSensitive(name);
@@ -163,11 +177,12 @@ const LES_FunctionDefinition* LES_GetFunctionDefinition(const char* const name)
 
 LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID)
 {
-	if ((functionNameID < 0) || (functionNameID >= les_numFunctionDefinitions))
+	const int index = LES_GetFunctionDefinitionIndexByNameID(functionNameID);
+	if ((index < 0) || (index >= les_numFunctionDefinitions))
 	{
 		return LES_NULL;
 	}
-	const LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[functionNameID];
+	const LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[index];
 	const int paramDataSize = functionDefinitionPtr->m_paramDataSize;
 	char* paramBuffer = new char[paramDataSize];
 	LES_FunctionParamData* paramData = new LES_FunctionParamData;
@@ -298,8 +313,8 @@ int LES_FunctionStart( const char* const name, const char* const returnType,
 	if (functionReturnTypeStringEntry == LES_NULL)
 	{
 		/* ERROR: return type not found */
-		fprintf(stderr, "LES ERROR: function '%s' : Can't find function return type for ID:%d '%s'\n", name,
-				functionDefinition->m_returnTypeID, returnType);
+		fprintf(stderr, "LES ERROR: function '%s' : Can't find function return type for ID:%d '%s'\n", 
+						name, functionDefinition->m_returnTypeID, returnType);
 		return LES_ERROR;
 	}
 	/* Check the return type : hash */
@@ -307,8 +322,7 @@ int LES_FunctionStart( const char* const name, const char* const returnType,
 	{
 		/* ERROR: return type hash doesn't match function definition */
 		fprintf(stderr, "LES_ERROR: function '%s' : Return type hash doesn't match function definition 0x%X != 0x%X Got:'%s' Expected:'%s'\n",
-						name,
-						functionReturnTypeTypeHash, functionReturnTypeStringEntry->m_hash,
+						name, functionReturnTypeTypeHash, functionReturnTypeStringEntry->m_hash,
 						returnType, functionReturnTypeStringEntry->m_str );
 		return LES_ERROR;
 	}
@@ -317,11 +331,20 @@ int LES_FunctionStart( const char* const name, const char* const returnType,
 	{
 		/* ERROR: return type string doesn't match function definition */
 		fprintf(stderr, "LES_ERROR: function '%s' : Return type string doesn't match function definition '%s' != '%s'\n",
-						name,
-						returnType, functionReturnTypeStringEntry->m_str );
+						name, returnType, functionReturnTypeStringEntry->m_str );
 		return LES_ERROR;
 	}
 	LES_FunctionParamData* const functionParamData = LES_GetFunctionParamData(functionDefinition->m_nameID);
+	if (functionParamData == LES_NULL)
+	{
+		/* ERROR: functionParamData should only be LES_NULL if no inputs or outputs */
+		if ((functionDefinition->m_numInputs > 0) || (functionDefinition->m_numOutputs > 0))
+		{
+			fprintf(stderr, "LES_ERROR: function '%s' : functionParamData is NULL numInputs:%d numOutputs:%d nameID:%d\n",
+							name, functionDefinition->m_numInputs,  functionDefinition->m_numOutputs, functionDefinition->m_nameID);
+			return LES_ERROR;
+		}
+	}
 	functionTempData->functionParamData = functionParamData;
 
 	/* Initialise parameter indexes */
@@ -391,19 +414,19 @@ int LES_FunctionAddParam( const char* const type, const char* const name, const 
 	{
 		/* ERROR: parameter type hash doesn't match */
 		fprintf(stderr, "LES ERROR: function '%s' : parameter:%d '%s' (%s) type hash doesn't match for ID:%d 0x%X != 0x%X Got '%s' Expected '%s'\n",
-				functionTempData->functionName, functionCurrentParamIndex, name, mode, functionParameterTypeID,
-				typeHash, parameterTypeStringEntry->m_hash,
-				type, parameterTypeStringEntry->m_str);
+					 functionTempData->functionName, functionCurrentParamIndex, name, mode, functionParameterTypeID,
+					 typeHash, parameterTypeStringEntry->m_hash,
+					 type, parameterTypeStringEntry->m_str);
 		return LES_ERROR;
 	}
 	/* Check the parameter type : string */
 	if (strcmp(type, parameterTypeStringEntry->m_str) != 0)
 	{
 		/* ERROR: parameter type string doesn't match */
-		fprintf(stderr, "LES ERROR: function '%s' : parameter type string doesn't match for ID:%d '%s' != '%s' 0x%X : 0x%X\n",
-				functionTempData->functionName, functionParameterTypeID,
-				type, parameterTypeStringEntry->m_str,
-				typeHash, parameterTypeStringEntry->m_hash);
+		fprintf(stderr, "LES ERROR: function '%s' : Adding parameter '%s' type string doesn't match for ID:%d '%s' != '%s' 0x%X : 0x%X\n",
+						functionTempData->functionName, name, functionParameterTypeID,
+						type, parameterTypeStringEntry->m_str,
+						typeHash, parameterTypeStringEntry->m_hash);
 		return LES_ERROR;
 	}
 	/* Check the parameter name */
@@ -420,8 +443,8 @@ int LES_FunctionAddParam( const char* const type, const char* const name, const 
 	if (nameHash != parameterNameStringEntry->m_hash)
 	{
 		/* ERROR: parameter name hash doesn't match */
-		fprintf(stderr, "LES ERROR: function '%s' : parameter name hash doesn't match for ID:%d 0x%X != 0x%X '%s':'%s'\n",
-						functionTempData->functionName, functionParameterNameID,
+		fprintf(stderr, "LES ERROR: function '%s' : Adding parameter '%s' name hash doesn't match for ID:%d 0x%X != 0x%X Got:'%s' Expected:'%s'\n",
+						functionTempData->functionName, name, functionParameterNameID,
 						nameHash, parameterNameStringEntry->m_hash,
 						name, parameterNameStringEntry->m_str);
 		return LES_ERROR;
@@ -430,8 +453,8 @@ int LES_FunctionAddParam( const char* const type, const char* const name, const 
 	if (strcmp(name, parameterNameStringEntry->m_str) != 0)
 	{
 		/* ERROR: parameter name string doesn't match */
-		fprintf(stderr, "LES ERROR: function '%s' : parameter name string doesn't match for ID:%d '%s' != '%s' 0x%X : 0x%X\n", 
-						functionTempData->functionName, functionParameterNameID,
+		fprintf(stderr, "LES ERROR: function '%s' : Adding parameter '%s' name string doesn't match for ID:%d '%s' != '%s' 0x%X : 0x%X\n", 
+						functionTempData->functionName, name, functionParameterNameID,
 						name, parameterNameStringEntry->m_str,
 						nameHash, parameterNameStringEntry->m_hash);
 		return LES_ERROR;

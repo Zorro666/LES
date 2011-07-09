@@ -1,17 +1,13 @@
 High Priority:
-MACRO:START_FUNCTION should be a function call with ptr to struct with required data, return error
-MACRO:ADD_PARAM should be a function call with ptr to struct with required data, return error
-TEST: return type hash doesn't match stored value
 TEST: return type string doesn't match stored value
-TEST: too many input parameters
-TEST: input parameter index is wrong, input parameters in the wrong order
+TEST: input parameter name repeated
+TEST: output parameter name repeated
 TEST: input parameter doesn't exist
 TEST: input parameter global index is wrong, output parameters before input parameters
 TEST: input parameter type not found by ID lookup
 TEST: input parameter type hash doesn't match stored value
 TEST: input parameter type string doesn't match stored value
 TEST: input parameter name not found by ID lookup
-TEST: input parameter name hash doesn't match stored value
 TEST: input parameter name string doesn't match stored value
 TEST: too many output parameters
 TEST: output parameter index is wrong, output parameters in the wrong order
@@ -26,6 +22,7 @@ TEST: output parameter name string doesn't match stored value
 TEST: build function definition with input & output parameters in mixed order, not 2 clear blocks
 TEST: end function not all input parameters have been stored
 TEST: end function not all output parameters have been stored
+MACROS: TEST macros will crash if run off end of input or output arrays - need to handle case not just print message
 
 Medium Priority:
 MACROS: have generic ADD_INPUT, ADD_OUTPUT without index parameter (auto-computed)

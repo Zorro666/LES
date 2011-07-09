@@ -72,15 +72,20 @@ extern int LES_FunctionStart( const char* const name, const char* const returnTy
 															LES_FunctionTempData* const functionTempData);
 
 #define LES_FUNCTION_START(FUNC_NAME, RETURN_TYPE) \
-{ \
-	const LES_FunctionDefinition* __LESfunctionDefinition = LES_NULL; \
-	LES_FunctionTempData __LESfunctionTempData; \
-	if (LES_FunctionStart(#FUNC_NAME, #RETURN_TYPE, \
-												&__LESfunctionDefinition, \
-												&__LESfunctionTempData) == LES_ERROR) \
 	{ \
-		fprintf(stderr, "LES ERROR: function '%s' : Error during LES_FunctionStart\n", #FUNC_NAME); \
-		return; \
+		bool __LES_ok = true; \
+		const LES_FunctionDefinition* __LESfunctionDefinition = LES_NULL; \
+		LES_FunctionTempData __LESfunctionTempData; \
+		if (LES_FunctionStart(#FUNC_NAME, #RETURN_TYPE, \
+													&__LESfunctionDefinition, \
+													&__LESfunctionTempData) == LES_ERROR) \
+		{ \
+			fprintf(stderr, "LES ERROR: function '%s' : Error during LES_FunctionStart\n", #FUNC_NAME); \
+			__LES_ok = false; \
+		} \
+
+
+#define LES_FUNCTION_END() \
 	} \
 
 
@@ -90,12 +95,15 @@ extern int LES_FunctionAddParam( const char* const type, const char* const name,
 																 LES_FunctionTempData* const functionTempData);
 
 #define LES_FUNCTION_ADD_PARAM(PARAM_TYPE, IS_INPUT, NUMBER, TYPE, NAME) \
-	if (LES_FunctionAddParam(#TYPE, #NAME, NUMBER, #PARAM_TYPE, IS_INPUT, (void*)&NAME, \
-													 __LESfunctionDefinition, &__LESfunctionTempData) == LES_ERROR) \
+	if (__LES_ok == true) \
 	{ \
-		fprintf(stderr, "LES ERROR: function '%s' : Error adding " #PARAM_TYPE " parameter %d '%s' type:'%s'\n", \
-						__LESfunctionTempData.functionName, NUMBER, #NAME, #TYPE); \
-		return; \
+		if (LES_FunctionAddParam(#TYPE, #NAME, NUMBER, #PARAM_TYPE, IS_INPUT, (void*)&NAME, \
+					__LESfunctionDefinition, &__LESfunctionTempData) == LES_ERROR) \
+		{ \
+			fprintf(stderr, "LES ERROR: function '%s' : Error adding " #PARAM_TYPE " parameter %d '%s' type:'%s'\n", \
+					__LESfunctionTempData.functionName, NUMBER, #NAME, #TYPE); \
+			__LES_ok = false; \
+		} \
 	} \
 
 
@@ -118,10 +126,6 @@ extern int LES_FunctionAddParam( const char* const type, const char* const name,
 
 #define LES_FUNCTION_OUTPUTS_1(OUTPUT_0_TYPE, OUTPUT_0_NAME) \
 	LES_FUNCTION_ADD_OUTPUT(0, OUTPUT_0_TYPE, OUTPUT_0_NAME) \
-
-
-#define LES_FUNCTION_END() \
-} \
 
 
 #endif //#ifndef LES_CORE_HH
