@@ -48,7 +48,7 @@ extern int LES_AddType(const char* const type, const int typeDataSize);
 						functionName, #NAME, #TYPE); \
 		__LES_ok = false; \
 	} \
-	if (__LES_ok == true ) \
+	if (__LES_ok == true) \
 	{ \
 		functionParameterPtr = (LES_FunctionParameter* const)(IS_INPUT ? \
 				&functionDefinition.m_inputs[*paramIndex] : &functionDefinition.m_outputs[*paramIndex]); \
@@ -190,6 +190,14 @@ static void LES_Test_InputParamAlreadyUsed(int input_0, int output_0)
 	LES_FUNCTION_END();
 }
 
+static void LES_Test_InputParamMissing(int input_0, int output_0)
+{
+	LES_FUNCTION_START(LES_Test_InputParamMissing, void);
+	LES_FUNCTION_ADD_OUTPUT(0, int, output_0);
+	LES_FUNCTION_ADD_INPUT(0, int, input_0);
+	LES_FUNCTION_END();
+}
+
 static void LES_Test_TooManyOutputParameters(int input_0, int output_0, int output_1, int output_2)
 {
 	LES_FUNCTION_START(LES_Test_TooManyOutputParameters, void);
@@ -265,6 +273,14 @@ static void LES_Test_OutputParamAlreadyUsed(int input_0, int output_0)
 	LES_FUNCTION_ADD_INPUT(0, int, input_0);
 	LES_FUNCTION_ADD_OUTPUT(0, int, output_0);
 	LES_FUNCTION_ADD_OUTPUT(1, int, output_0);
+	LES_FUNCTION_END();
+}
+
+static void LES_Test_OutputParamMissing(int input_0, int output_0)
+{
+	LES_FUNCTION_START(LES_Test_OutputParamMissing, void);
+	LES_FUNCTION_ADD_INPUT(0, int, input_0);
+	LES_FUNCTION_ADD_OUTPUT(0, int, output_0);
 	LES_FUNCTION_END();
 }
 
@@ -387,6 +403,13 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_TEST_FUNCTION_END();
 
+	LES_TEST_FUNCTION_START(LES_Test_InputParamMissing, void, 3, 1);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
+	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
+	LES_TEST_FUNCTION_ADD_INPUT(int, input_1);
+	LES_TEST_FUNCTION_ADD_INPUT(int, input_2);
+	LES_TEST_FUNCTION_END();
+
 	LES_TEST_FUNCTION_START(LES_Test_TooManyOutputParameters, void, 1, 2);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
 	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
@@ -469,6 +492,12 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_1);
 	LES_TEST_FUNCTION_END();
 
+	LES_TEST_FUNCTION_START(LES_Test_OutputParamMissing, void, 1, 2);
+	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_1);
+	LES_TEST_FUNCTION_END();
+
 	/* Run specific tests */
 	/* Function header definition tests */
 	fprintf(stderr, "#### Function header definition tests ####\n");
@@ -490,6 +519,8 @@ void LES_TestSetup(void)
 	LES_Test_InputUsedAsOutput(1);
 	fprintf(stderr, "\n");
 	LES_Test_InputParamAlreadyUsed(1, 2);
+	fprintf(stderr, "\n");
+	LES_Test_InputParamMissing(1, 2);
 	fprintf(stderr, "\n");
 
 	/* Input name tests */
@@ -519,6 +550,8 @@ void LES_TestSetup(void)
 	LES_Test_OutputUsedAsInput(1);
 	fprintf(stderr, "\n");
 	LES_Test_OutputParamAlreadyUsed(1, 2);
+	fprintf(stderr, "\n");
+	LES_Test_OutputParamMissing(1, 2);
 	fprintf(stderr, "\n");
 
 	/* Output name tests */

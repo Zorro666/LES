@@ -139,6 +139,29 @@ const LES_FunctionParameter* LES_FunctionDefinition::GetParameter(const LES_Hash
 	return LES_NULL;
 }
 
+const LES_FunctionParameter* LES_FunctionDefinition::GetParameterByIndex(const int index) const
+{
+	const int numInputs = m_numInputs;
+	for (int i = 0; i < numInputs; i++)
+	{
+		const LES_FunctionParameter* const paramPtr = &m_inputs[i];
+		if (paramPtr->m_index == index)
+		{
+			return paramPtr;
+		}
+	}
+	const int numOutputs = m_numOutputs;
+	for (int i = 0; i < numOutputs; i++)
+	{
+		const LES_FunctionParameter* const paramPtr = &m_outputs[i];
+		if (paramPtr->m_index == index)
+		{
+			return paramPtr;
+		}
+	}
+	return LES_NULL;
+}
+
 const LES_FunctionParameter* LES_FunctionDefinition::GetInputParameterByIndex(const int index) const
 {
 	if ((index < 0) || (index >= m_numInputs))
@@ -247,9 +270,9 @@ int LES_AddType(const char* const type, const int typeDataSize)
 	return index;
 }
 
-int LES_FunctionStart( const char* const name, const char* const returnType, 
-											 const LES_FunctionDefinition** functionDefinitionPtr,
-											 LES_FunctionTempData* const functionTempData)
+int LES_FunctionStart(const char* const name, const char* const returnType, 
+											const LES_FunctionDefinition** functionDefinitionPtr,
+											LES_FunctionTempData* const functionTempData)
 {
 	functionTempData->functionName = name;
 	functionTempData->functionCurrentParamIndex = 0;
@@ -283,7 +306,7 @@ int LES_FunctionStart( const char* const name, const char* const returnType,
 		/* ERROR: return type hash doesn't match function definition */
 		fprintf(stderr, "LES_ERROR: '%s' : Return type hash doesn't match function definition 0x%X != 0x%X Code:'%s' Definition:'%s'\n",
 						name, functionReturnTypeTypeHash, functionReturnTypeStringEntry->m_hash,
-						returnType, functionReturnTypeStringEntry->m_str );
+						returnType, functionReturnTypeStringEntry->m_str);
 		return LES_ERROR;
 	}
 	/* Check the return type : string */
@@ -291,7 +314,7 @@ int LES_FunctionStart( const char* const name, const char* const returnType,
 	{
 		/* ERROR: return type string doesn't match function definition */
 		fprintf(stderr, "LES_ERROR: '%s' : Return type string doesn't match function definition '%s' != '%s'\n",
-						name, returnType, functionReturnTypeStringEntry->m_str );
+						name, returnType, functionReturnTypeStringEntry->m_str);
 		return LES_ERROR;
 	}
 	LES_FunctionParamData* const functionParamData = LES_GetFunctionParamData(functionDefinition->m_nameID);
@@ -315,10 +338,10 @@ int LES_FunctionStart( const char* const name, const char* const returnType,
 	return LES_OK;
 }
 
-int LES_FunctionAddParam( const char* const type, const char* const name, const int index, 
-													const char* const mode, const bool isInput, void* const data,
-												  const LES_FunctionDefinition* const functionDefinition,
-													LES_FunctionTempData* const functionTempData)
+int LES_FunctionAddParam(const char* const type, const char* const name, const int index, 
+												 const char* const mode, const bool isInput, void* const data,
+												 const LES_FunctionDefinition* const functionDefinition,
+												 LES_FunctionTempData* const functionTempData)
 {
 	const LES_Hash typeHash = LES_GenerateHashCaseSensitive(type);
 	const LES_Hash nameHash = LES_GenerateHashCaseSensitive(name);
@@ -463,3 +486,45 @@ int LES_FunctionAddParam( const char* const type, const char* const name, const 
 	return LES_OK;
 }
 
+int LES_FunctionEnd(const LES_FunctionDefinition* const functionDefinitionPtr, 
+										const LES_FunctionTempData* const functionTempData)
+{
+	const int numInputs = functionDefinitionPtr->m_numInputs;
+	const int numOutputs = functionDefinitionPtr->m_numOutputs;
+	const int numParams = numInputs + numOutputs;
+
+	int numMissing = 0;
+	for (int i = 0; i < numParams; i++)
+	{
+		if (functionTempData->paramUsed[i] == 0)
+		{
+			/* ERROR: not all parameters were set */
+			const LES_FunctionParameter* const functionParameterPtr = functionDefinitionPtr->GetParameterByIndex(i);
+			if (functionParameterPtr != LES_NULL)
+			{
+				const int nameID = functionParameterPtr->m_nameID;
+				const LES_StringEntry* const nameEntryPtr = LES_GetStringEntryForID(nameID);
+				const int typeID = functionParameterPtr->m_typeID;
+				const LES_StringEntry* const typeEntryPtr = LES_GetStringEntryForID(typeID);
+				if (nameEntryPtr && typeEntryPtr)
+				{
+					fprintf(stderr, "LES ERROR: '%s' : parameter index:%d not set mode:'%s' name:'%s' type:'%s'\n", 
+									functionTempData->functionName, i, 
+									((functionParameterPtr->m_mode == LES_PARAM_MODE_INPUT) ? "Input" : "Output"),
+									nameEntryPtr->m_str, typeEntryPtr->m_str);
+				}
+			}
+			else
+			{
+				fprintf(stderr, "LES ERROR: '%s' : parameter index:%d not set\n", functionTempData->functionName, i);
+			}
+			numMissing++;
+		}
+	}
+	if (numMissing > 0)
+	{
+		fprintf(stderr, "LES ERROR: '%s' : not all parameters were set num missing:%d\n", functionTempData->functionName, numMissing);
+		return LES_ERROR;
+	}
+	return LES_OK;
+}

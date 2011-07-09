@@ -1,7 +1,4 @@
 High Priority:
-TEST: end function not all input parameters have been stored
-TEST: end function not all output parameters have been stored
-
 TEST: return type string doesn't match stored value
 TEST: input parameter name string doesn't match stored value
 TEST: input parameter type string doesn't match stored value
