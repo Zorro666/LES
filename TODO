@@ -1,31 +1,35 @@
 High Priority:
+TEST: end function not all input parameters have been stored
+TEST: end function not all output parameters have been stored
+
 TEST: return type string doesn't match stored value
 TEST: input parameter name string doesn't match stored value
 TEST: input parameter type string doesn't match stored value
 TEST: output parameter name string doesn't match stored value
 TEST: output parameter type string doesn't match stored value
 
-TEST: build function definition with input & output parameters in mixed order, not 2 clear blocks
-
-TEST: end function not all input parameters have been stored
-TEST: end function not all output parameters have been stored
+TEST: tests - need tests for each fail case that is tested for
 
 Medium Priority:
+TEST: build function definition with input & output parameters in mixed order, not 2 clear blocks
+TEST: error handling run out of memory when adding new function or new string e.g. array limit reached
+TEST: tests - test input/output parameter is a ptr (to a structure)
+
 FUNCTION: function definition does it need input & output parameter array - or a single parameter array?
+FUNCTION: need to add fake output
+
 MACROS: have generic ADD_INPUT, ADD_OUTPUT without index parameter (auto-computed)
 MACROS: WORK OUT HOW TO DO THE RETURN VALUE IN MACROS
-TEST: tests - need tests for each fail case that is tested for
-FUNCTION: need to add fake output
-TEST: tests - test input/output parameter is a ptr (to a structure)
 
 Low Priority:
 FUNCTION: how will output parameters work? Do they need to be sent to the server (yes i.e. in/out params)
 MACROS: WORK OUT HOW TO DO THE ERROR HANDLING 
+
 CORE: need common error handling & log system
-LES: need to list the data storage that is required by the global data
-TEST: error handling run out of memory when adding new function or new string e.g. array limit reached
 CORE: memory management for input & output parameter blocks per function
 CORE: hash table with binary search
+
+LES: need to list the data storage that is required by the global data
 LES: need good debugging ability for the packets before sent and at server end
 LES: send packet data to server?
 LES: server send global test data instead of building it internally?
