@@ -1,9 +1,6 @@
 High Priority:
 TEST: return type string doesn't match stored value
 TEST: input parameter name string doesn't match stored value
-
-TEST: input parameter type not found by ID lookup
-TEST: input parameter type hash doesn't match stored value
 TEST: input parameter type string doesn't match stored value
 
 TEST: too many output parameters
