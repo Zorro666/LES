@@ -1,4 +1,4 @@
-LES_CORE:= les_core.cpp les_hash.cpp les_test.cpp
+LES_CORE:= les_core.cpp les_hash.cpp les_test.cpp les_function.cpp
 LES_DEPENDS:=$(LES_CORE) les_jake.cpp
 LES_TEST_DEPENDS:=les_main.cpp $(LES_DEPENDS) 
 
