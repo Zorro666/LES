@@ -6,8 +6,10 @@
 #include "les_core.h"
 #include "les_hash.h"
 
-#define LES_PARAM_INPUT (1)
-#define LES_PARAM_OUTPUT (2)
+#define LES_PARAM_MODE_INPUT (1)
+#define LES_PARAM_MODE_OUTPUT (2)
+
+#define LES_MAX_NUM_FUNCTION_PARAMS (32)
 
 struct LES_FunctionParameter
 {
@@ -17,7 +19,7 @@ struct LES_FunctionParameter
 
 	int m_index;
 
-	int m_paramType;
+	int m_mode;
 };
 
 struct LES_FunctionDefinition
@@ -64,6 +66,7 @@ struct LES_FunctionTempData
 	int functionCurrentOutputIndex;
 
 	LES_FunctionParamData* functionParamData;
+	bool paramUsed[LES_MAX_NUM_FUNCTION_PARAMS];
 };
 
 extern int LES_FunctionStart( const char* const name, const char* const returnType, 

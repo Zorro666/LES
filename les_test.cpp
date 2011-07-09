@@ -10,7 +10,7 @@ extern int LES_AddType(const char* const type, const int typeDataSize);
 		LES_FunctionDefinition functionDefinition; \
 		LES_FunctionParameter* functionParameterPtr; \
 		int paramDataSize = 0; \
-		int paramIndex = 0; \
+		int globalParamIndex = 0; \
 		int inputParamIndex = 0; \
 		int outputParamIndex = 0; \
 		const char* const functionName = #NAME; \
@@ -20,44 +20,55 @@ extern int LES_AddType(const char* const type, const int typeDataSize);
 		functionDefinition.m_inputs = new LES_FunctionParameter[functionDefinition.m_numInputs]; \
 		functionDefinition.m_numOutputs = NUM_OUTPUTS; \
 		functionDefinition.m_outputs = new LES_FunctionParameter[functionDefinition.m_numOutputs]; \
-		paramIndex += 0; \
+		globalParamIndex += 0; \
 		inputParamIndex += 0; \
 		outputParamIndex += 0; \
 		functionParameterPtr = NULL; \
 
 
-#define	LES_TEST_FUNCTION_ADD_INPUT(TYPE, NAME) \
-	/* Error if inputParamIndex off the end of the array: >= functionDefinition.m_numInputs */ \
-	if (inputParamIndex >= functionDefinition.m_numInputs) \
+#define	LES_TEST_FUNCTION_ADD_PARAM(IS_INPUT, TYPE, NAME) \
+{ \
+	bool __LES_ok = true; \
+	/* Error if parameter index off the end of the array */ \
+	const int maxNumParam = (IS_INPUT ? functionDefinition.m_numInputs : functionDefinition.m_numOutputs); \
+	int* const paramIndex = (IS_INPUT ? &inputParamIndex : &outputParamIndex); \
+	const char* const paramModeStr = (IS_INPUT ? "Input" : "Output"); \
+	const int paramMode = (IS_INPUT ? LES_PARAM_MODE_INPUT : LES_PARAM_MODE_OUTPUT); \
+	if (*paramIndex >= maxNumParam) \
 	{ \
-		fprintf(stderr, "LES ERROR: TEST function '%s' : inputParamIndex too big index:%d numInputs:%d parameter:'%s' type:'%s'\n", \
-						functionName, inputParamIndex, functionDefinition.m_numInputs, #NAME, #TYPE); \
+		fprintf(stderr, "LES ERROR: TEST function '%s' : %s ParamIndex too big index:%d max:%d parameter:'%s' type:'%s'\n", \
+						functionName, paramModeStr, *paramIndex, maxNumParam, #NAME, #TYPE); \
+		__LES_ok = false; \
 	} \
-	functionParameterPtr = (LES_FunctionParameter* const)&functionDefinition.m_inputs[inputParamIndex]; \
-	functionParameterPtr->m_index = paramIndex; \
-	functionParameterPtr->m_hash = LES_GenerateHashCaseSensitive(#NAME); \
-	functionParameterPtr->m_nameID = LES_AddStringEntry(#NAME); \
-	functionParameterPtr->m_typeID = LES_AddStringEntry(#TYPE); \
-	functionParameterPtr->m_paramType = LES_PARAM_INPUT; \
-	paramIndex++; \
-	inputParamIndex++; \
+	const LES_Hash nameHash = LES_GenerateHashCaseSensitive(#NAME); \
+	/* Test to see if the parameter has already been added */ \
+	if (functionDefinition.GetParameter(nameHash) != LES_NULL) \
+	{ \
+		fprintf(stderr, "LES ERROR: TEST function '%s' : parameter '%s' already exists type:'%s'\n",  \
+						functionName, #NAME, #TYPE); \
+		__LES_ok = false; \
+	} \
+	if (__LES_ok == true ) \
+	{ \
+		functionParameterPtr = (LES_FunctionParameter* const)(IS_INPUT ? \
+				&functionDefinition.m_inputs[*paramIndex] : &functionDefinition.m_outputs[*paramIndex]); \
+		functionParameterPtr->m_index = globalParamIndex; \
+		functionParameterPtr->m_hash = nameHash; \
+		functionParameterPtr->m_nameID = LES_AddStringEntry(#NAME); \
+		functionParameterPtr->m_typeID = LES_AddStringEntry(#TYPE); \
+		functionParameterPtr->m_mode = paramMode; \
+		globalParamIndex++; \
+		*paramIndex = *paramIndex + 1; \
+	} \
+} \
+
+
+#define	LES_TEST_FUNCTION_ADD_INPUT(TYPE, NAME) \
+	LES_TEST_FUNCTION_ADD_PARAM(true, TYPE, NAME) \
 
 
 #define	LES_TEST_FUNCTION_ADD_OUTPUT(TYPE, NAME) \
-	/* Error if outputParamIndex off the end of the array: >= functionDefinition.m_numOutputs */ \
-	if (outputParamIndex >= functionDefinition.m_numOutputs) \
-	{ \
-		fprintf(stderr, "LES ERROR: TEST function '%s' : outputParamIndex too big index:%d numOutputs:%d parameter:'%s' type:'%s'\n", \
-						functionName, outputParamIndex, functionDefinition.m_numOutputs, #NAME, #TYPE); \
-	} \
-	functionParameterPtr = (LES_FunctionParameter* const)&functionDefinition.m_outputs[outputParamIndex]; \
-	functionParameterPtr->m_index = paramIndex; \
-	functionParameterPtr->m_hash = LES_GenerateHashCaseSensitive(#NAME); \
-	functionParameterPtr->m_nameID = LES_AddStringEntry(#NAME); \
-	functionParameterPtr->m_typeID = LES_AddStringEntry(#TYPE); \
-	functionParameterPtr->m_paramType = LES_PARAM_OUTPUT; \
-	paramIndex++; \
-	outputParamIndex++; \
+	LES_TEST_FUNCTION_ADD_PARAM(false, TYPE, NAME) \
 
 
 #define LES_TEST_FUNCTION_END() \
@@ -83,7 +94,7 @@ extern int LES_AddType(const char* const type, const int typeDataSize);
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void LES_Test_FunctionNotUsed(void)
+void LES_Test_FunctionNotFound(void)
 {
 	LES_FUNCTION_START(LES_Test_FunctionNotFound, void);
 	LES_FUNCTION_END();
@@ -95,9 +106,9 @@ void LES_Test_ReturnTypeNotFound(void)
 	LES_FUNCTION_END();
 }
 
-void LES_Test_ReturnTypeHashWrong()
+void LES_Test_ReturnTypeHashIsWrong()
 {
-	LES_FUNCTION_START(LES_Test_ReturnTypeHashWrong, wrongReturnType);
+	LES_FUNCTION_START(LES_Test_ReturnTypeHashIsWrong, wrongReturnType);
 	LES_FUNCTION_END();
 }
 
@@ -111,9 +122,9 @@ void LES_Test_TooManyInputParameters(int input_0, int input_1, int input_2, int 
 	LES_FUNCTION_END();
 }
 
-void LES_Test_InputNameHashIsWrong(int input_0, int input_1, int output_0)
+void LES_Test_InputWrongIndex(int input_0, int input_1, int output_0)
 {
-	LES_FUNCTION_START(LES_Test_InputNameHashIsWrong, void);
+	LES_FUNCTION_START(LES_Test_InputWrongIndex, void);
 	LES_FUNCTION_ADD_INPUT(0, int, input_1);
 	LES_FUNCTION_ADD_INPUT(1, int, input_0);
 	LES_FUNCTION_ADD_OUTPUT(0, int, output_0);
@@ -124,6 +135,20 @@ void LES_Test_InputNameDoesntExist(int inputNotExist)
 {
 	LES_FUNCTION_START(LES_Test_InputNameDoesntExist, void);
 	LES_FUNCTION_ADD_INPUT(0, int, inputNotExist);
+	LES_FUNCTION_END();
+}
+
+void LES_Test_InputNameIDNotFound(int input_0)
+{
+	LES_FUNCTION_START(LES_Test_InputNameIDNotFound, void);
+	LES_FUNCTION_ADD_INPUT(0, int, input_0);
+	LES_FUNCTION_END();
+}
+
+void LES_Test_InputNameHashIsWrong(int input_0)
+{
+	LES_FUNCTION_START(LES_Test_InputNameHashIsWrong, void);
+	LES_FUNCTION_ADD_INPUT(0, int, input_0);
 	LES_FUNCTION_END();
 }
 
@@ -177,29 +202,88 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_TEST_FUNCTION_END();
 
-	LES_TEST_FUNCTION_START(LES_Test_InputNameHashIsWrong, void, 2, 1);
+	LES_TEST_FUNCTION_START(LES_Test_InputWrongIndex, void, 2, 1);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_1);
 	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_TEST_FUNCTION_END();
+
+	{
+		LES_TEST_FUNCTION_START(LES_Test_InputNameIDNotFound, void, 1, 0);
+
+		functionParameterPtr = (LES_FunctionParameter* const)&functionDefinition.m_inputs[0];
+		LES_AddStringEntry("input_0");
+		functionParameterPtr->m_index = 0;
+		functionParameterPtr->m_hash = LES_GenerateHashCaseSensitive("input_0");
+		functionParameterPtr->m_nameID = -1;
+		functionParameterPtr->m_typeID = LES_AddStringEntry("int");
+		functionParameterPtr->m_mode = LES_PARAM_MODE_INPUT;
+
+		LES_TEST_FUNCTION_END();
+	}
 
 	LES_TEST_FUNCTION_START(LES_Test_InputNameDoesntExist, void, 1, 1);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
 	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_TEST_FUNCTION_END();
 
+	{
+		LES_TEST_FUNCTION_START(LES_Test_InputNameHashIsWrong, void, 1, 0);
+		functionParameterPtr = (LES_FunctionParameter* const)&functionDefinition.m_inputs[0];
+		functionParameterPtr->m_index = 0;
+		functionParameterPtr->m_hash = LES_GenerateHashCaseSensitive("input_0");
+		functionParameterPtr->m_nameID = LES_AddStringEntry("wrongHash");
+		functionParameterPtr->m_typeID = LES_AddStringEntry("int");
+		functionParameterPtr->m_mode = LES_PARAM_MODE_INPUT;
+		LES_TEST_FUNCTION_END();
+	}
 	LES_TEST_FUNCTION_START(LES_Test_OutputGlobalIndexIsWrong, void, 1, 1);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
 	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_TEST_FUNCTION_END();
 
 	/* Run specific tests */
-	LES_Test_FunctionNotUsed();
+	LES_Test_FunctionNotFound();
+	fprintf(stderr, "\n");
 	LES_Test_ReturnTypeNotFound();
-	LES_Test_ReturnTypeHashWrong();
+	fprintf(stderr, "\n");
+	LES_Test_ReturnTypeHashIsWrong();
+	fprintf(stderr, "\n");
 	LES_Test_TooManyInputParameters(1, 2, 3, 4);
-	LES_Test_InputNameHashIsWrong(1, 2, 3);
+	fprintf(stderr, "\n");
+
+	LES_Test_InputWrongIndex(1, 2, 3);
+	fprintf(stderr, "\n");
 	LES_Test_InputNameDoesntExist(1);
+	fprintf(stderr, "\n");
+	LES_Test_InputNameIDNotFound(1);
+	fprintf(stderr, "\n");
+	LES_Test_InputNameHashIsWrong(1);
+	fprintf(stderr, "\n");
+
+	LES_TEST_FUNCTION_START(LES_Test_InputParameterAlreadyExists, void, 2, 1);
+	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
+	LES_TEST_FUNCTION_ADD_INPUT(char, input_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
+	LES_TEST_FUNCTION_END();
+	fprintf(stderr, "\n");
+
+	LES_TEST_FUNCTION_START(LES_Test_OutputParameterAlreadyExists, void, 1, 2);
+	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(short, output_0);
+	LES_TEST_FUNCTION_END();
+	fprintf(stderr, "\n");
+
+	LES_TEST_FUNCTION_START(LES_Test_ParameterAlreadyExists, void, 1, 2);
+	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(float, input_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
+	LES_TEST_FUNCTION_END();
+	fprintf(stderr, "\n");
+
 	LES_Test_OutputGlobalIndexIsWrong(1, 2);
+	fprintf(stderr, "\n");
+
 }
 
