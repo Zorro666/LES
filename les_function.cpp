@@ -281,7 +281,7 @@ int LES_FunctionStart( const char* const name, const char* const returnType,
 	if (functionReturnTypeTypeHash != functionReturnTypeStringEntry->m_hash)
 	{
 		/* ERROR: return type hash doesn't match function definition */
-		fprintf(stderr, "LES_ERROR: function '%s' : Return type hash doesn't match function definition 0x%X != 0x%X Got:'%s' Expected:'%s'\n",
+		fprintf(stderr, "LES_ERROR: function '%s' : Return type hash doesn't match function definition 0x%X != 0x%X Code:'%s' Definition:'%s'\n",
 						name, functionReturnTypeTypeHash, functionReturnTypeStringEntry->m_hash,
 						returnType, functionReturnTypeStringEntry->m_str );
 		return LES_ERROR;
@@ -353,8 +353,8 @@ int LES_FunctionAddParam( const char* const type, const char* const name, const 
 	if (functionParameterPtr->m_mode != currentMode)
 	{
 		const char* const foundParamMode = (functionParameterPtr->m_mode == LES_PARAM_MODE_INPUT ? "Input" : "Output");
-		fprintf(stderr, "LES ERROR: function '%s' : %s parameter wrong mode Got:'%s' Expected:'%s'\n",
-						 functionTempData->functionName, name, foundParamMode, mode);
+		fprintf(stderr, "LES ERROR: function '%s' : %s parameter wrong mode Code:'%s' Definition:'%s'\n",
+						 functionTempData->functionName, name, mode, foundParamMode);
 		return LES_ERROR;
 	}
 
@@ -382,7 +382,7 @@ int LES_FunctionAddParam( const char* const type, const char* const name, const 
 	if (typeHash != parameterTypeStringEntry->m_hash)
 	{
 		/* ERROR: parameter type hash doesn't match */
-		fprintf(stderr, "LES ERROR: function '%s' : parameter:%d '%s' (%s) type hash doesn't match for ID:%d 0x%X != 0x%X Got '%s' Expected '%s'\n",
+		fprintf(stderr, "LES ERROR: function '%s' : parameter:%d '%s' (%s) type hash doesn't match for ID:%d 0x%X != 0x%X Code:'%s' Definition:'%s'\n",
 					  functionTempData->functionName, functionCurrentParamIndex, name, mode, functionParameterTypeID,
 					  typeHash, parameterTypeStringEntry->m_hash,
 					  type, parameterTypeStringEntry->m_str);
@@ -412,7 +412,7 @@ int LES_FunctionAddParam( const char* const type, const char* const name, const 
 	if (nameHash != parameterNameStringEntry->m_hash)
 	{
 		/* ERROR: parameter name hash doesn't match */
-		fprintf(stderr, "LES ERROR: function '%s' : Adding parameter '%s' name hash doesn't match for ID:%d 0x%X != 0x%X Got:'%s' Expected:'%s'\n",
+		fprintf(stderr, "LES ERROR: function '%s' : Adding parameter '%s' name hash doesn't match for ID:%d 0x%X != 0x%X Code:'%s' Definition:'%s'\n",
 						functionTempData->functionName, name, functionParameterNameID,
 						nameHash, parameterNameStringEntry->m_hash,
 						name, parameterNameStringEntry->m_str);

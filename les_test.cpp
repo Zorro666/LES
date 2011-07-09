@@ -174,6 +174,13 @@ static void LES_Test_InputGlobalIndexIsWrong(int input_0, int output_0)
 	LES_FUNCTION_END();
 }
 
+static void LES_Test_InputUsedAsOutput(int input_0)
+{
+	LES_FUNCTION_START(LES_Test_InputUsedAsOutput, void);
+	LES_FUNCTION_ADD_OUTPUT(0, int, input_0);
+	LES_FUNCTION_END();
+}
+
 static void LES_Test_TooManyOutputParameters(int input_0, int output_0, int output_1, int output_2)
 {
 	LES_FUNCTION_START(LES_Test_TooManyOutputParameters, void);
@@ -233,6 +240,13 @@ static void LES_Test_OutputGlobalIndexIsWrong(int input_0, int output_0)
 	LES_FUNCTION_START(LES_Test_OutputGlobalIndexIsWrong, void);
 	LES_FUNCTION_ADD_OUTPUT(0, int, output_0);
 	LES_FUNCTION_ADD_INPUT(0, int, input_0);
+	LES_FUNCTION_END();
+}
+
+static void LES_Test_OutputUsedAsInput(int output_0)
+{
+	LES_FUNCTION_START(LES_Test_OutputUsedAsInput, void);
+	LES_FUNCTION_ADD_INPUT(0, int, output_0);
 	LES_FUNCTION_END();
 }
 
@@ -344,6 +358,11 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
 	LES_TEST_FUNCTION_END();
 
+	LES_TEST_FUNCTION_START(LES_Test_InputUsedAsOutput, void, 1, 1);
+	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
+	LES_TEST_FUNCTION_END();
+
 	LES_TEST_FUNCTION_START(LES_Test_TooManyOutputParameters, void, 1, 2);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
 	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
@@ -415,6 +434,11 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_TEST_FUNCTION_END();
 
+	LES_TEST_FUNCTION_START(LES_Test_OutputUsedAsInput, void, 1, 1);
+	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
+	LES_TEST_FUNCTION_END();
+
 	/* Run specific tests */
 	/* Function header definition tests */
 	fprintf(stderr, "#### Function header definition tests ####\n");
@@ -433,6 +457,8 @@ void LES_TestSetup(void)
 	fprintf(stderr, "\n");
 	LES_Test_InputGlobalIndexIsWrong(1, 2);
 	fprintf(stderr, "\n");
+	LES_Test_InputUsedAsOutput(1);
+	fprintf(stderr, "\n");
 
 	/* Input name tests */
 	fprintf(stderr, "#### Input name tests ####\n");
@@ -450,29 +476,6 @@ void LES_TestSetup(void)
 	LES_Test_InputTypeHashIsWrong(1);
 	fprintf(stderr, "\n");
 
-	/* Parameter already exists tests */
-	fprintf(stderr, "#### Parameter already exists tests ####\n");
-	LES_TEST_FUNCTION_START(LES_Test_InputParameterAlreadyExists, void, 2, 1);
-	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
-	LES_TEST_FUNCTION_ADD_INPUT(char, input_0);
-	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
-	LES_TEST_FUNCTION_END();
-	fprintf(stderr, "\n");
-
-	LES_TEST_FUNCTION_START(LES_Test_OutputParameterAlreadyExists, void, 1, 2);
-	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
-	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
-	LES_TEST_FUNCTION_ADD_OUTPUT(short, output_0);
-	LES_TEST_FUNCTION_END();
-	fprintf(stderr, "\n");
-
-	LES_TEST_FUNCTION_START(LES_Test_ParameterAlreadyExists, void, 1, 2);
-	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
-	LES_TEST_FUNCTION_ADD_OUTPUT(float, input_0);
-	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
-	LES_TEST_FUNCTION_END();
-	fprintf(stderr, "\n");
-
 	/* Output parameter tests */
 	fprintf(stderr, "#### Output parameter tests ####\n");
 	LES_Test_TooManyOutputParameters(1, 2, 3, 4);
@@ -480,6 +483,8 @@ void LES_TestSetup(void)
 	LES_Test_OutputWrongIndex(1, 2, 3);
 	fprintf(stderr, "\n");
 	LES_Test_OutputGlobalIndexIsWrong(1, 2);
+	fprintf(stderr, "\n");
+	LES_Test_OutputUsedAsInput(1);
 	fprintf(stderr, "\n");
 
 	/* Output name tests */
