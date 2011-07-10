@@ -1,5 +1,6 @@
 High Priority:
-FUNCTION: decode parameter block, i.e GetParam() instead of AddParam()), one parameter with supplied type at a time
+TEST: test decoding output parameters
+TEST: test decoding mixture of input & output parameters
 
 TEST: test input parameter as a pointer to POD
 TEST: test output parameter as a pointer to POD
@@ -40,4 +41,5 @@ CORE: hash table with binary search
 
 LES: need to list the data storage that is required by the global data
 LES: server send global test data instead of building it internally?
+LES: might want to save ptr values for later instead of taking the value from them?????????????
 

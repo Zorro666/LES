@@ -36,7 +36,7 @@ public:
 	LES_FunctionDefinition(void);
 	LES_FunctionDefinition(const int nameID, const int returnTypeID, const int numInputs, const int numOutputs);
 
-	void SetParamDataSize(const int paramDataSize);
+	void SetParameterDataSize(const int parameterDataSize);
 	void SetReturnTypeID(const int returnTypeID);
 
 	const LES_FunctionParameter* GetParameter(const LES_Hash hash) const;
@@ -46,12 +46,12 @@ public:
 	int GetNumOutputs(void) const;
 	int GetReturnTypeID(void) const;
 	int GetNameID(void) const;
-	int GetParamDataSize(void) const;
+	int GetParameterDataSize(void) const;
 
 private:
 	int m_nameID;
 	int m_returnTypeID;
-	int m_paramDataSize;
+	int m_parameterDataSize;
 
 	int m_numInputs;
 	int m_numOutputs;
@@ -59,14 +59,14 @@ private:
 	const LES_FunctionParameter* m_params;
 };
 
-class LES_FunctionParamData
+class LES_FunctionParameterData
 {
 public:
-	LES_FunctionParamData(char* const bufferPtr);
-	~LES_FunctionParamData();
+	LES_FunctionParameterData(char* const bufferPtr);
+	~LES_FunctionParameterData();
 
-	int AddParamData(const LES_StringEntry* const typeStringEntry, const void* const paramDataPtr, const unsigned int paramMode);
-	int GetParamData(const LES_StringEntry* const typeStringEntry, void* const paramDataPtr, const unsigned int paramMode) const;
+	int Write(const LES_StringEntry* const typeStringEntry, const void* const parameterDataPtr, const unsigned int paramMode);
+	int Read(const LES_StringEntry* const typeStringEntry, void* const parameterDataPtr) const;
 
 private:
 	char* const m_bufferPtr;
@@ -75,7 +75,7 @@ private:
 };
 
 const LES_FunctionDefinition* LES_GetFunctionDefinition(const char* const name);
-LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID);
+LES_FunctionParameterData* LES_GetFunctionParameterData(const int functionNameID);
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -94,7 +94,7 @@ struct LES_FunctionTempData
 	int functionInputMacroParamIndex;
 	int functionOutputMacroParamIndex;
 
-	LES_FunctionParamData* functionParamData;
+	LES_FunctionParameterData* functionParameterData;
 	char paramUsed[LES_MAX_NUM_FUNCTION_PARAMS];
 };
 
@@ -115,6 +115,19 @@ extern int LES_FunctionStart(const char* const name, const char* const returnTyp
 			__LES_ok = false; \
 		} \
 
+
+extern int LES_FunctionGetParameterData(const LES_FunctionTempData* const functionTempData,
+																				LES_FunctionParameterData** const functionParameterDataPtr);
+
+#define LES_FUNCTION_GET_PARAMETER_DATA(PARAMETER_DATA_PTR) \
+		if (__LES_ok == true) \
+		{ \
+			if (LES_FunctionGetParameterData(&__LESfunctionTempData, &PARAMETER_DATA_PTR) == LES_ERROR) \
+			{ \
+				fprintf(stderr, "LES ERROR: '%s' : Error during LES_FunctionGetParameterData\n", __LESfunctionTempData.functionName); \
+				__LES_ok = false; \
+			} \
+		} \
 
 extern int LES_FunctionEnd(const LES_FunctionDefinition* const functionDefinitionPtr,
 													 const LES_FunctionTempData* const functionTempData);

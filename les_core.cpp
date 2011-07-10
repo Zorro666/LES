@@ -95,6 +95,13 @@ const LES_StringEntry* LES_GetStringEntryForID(const int id)
 	return stringEntry;
 }
 
+const LES_StringEntry* LES_GetStringEntry(const char* const str)
+{
+	const LES_Hash hash = LES_GenerateHashCaseSensitive(str);
+	const int index = LES_GetStringEntrySlow(hash, str);
+	return LES_GetStringEntryForID(index);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Private External functions

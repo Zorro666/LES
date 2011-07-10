@@ -100,7 +100,7 @@ const LES_FunctionDefinition* LES_GetFunctionDefinition(const char* const name)
 	return functionDefinitionPtr;
 }
 
-LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID)
+LES_FunctionParameterData* LES_GetFunctionParameterData(const int functionNameID)
 {
 	const int index = LES_GetFunctionDefinitionIndexByNameID(functionNameID);
 	if ((index < 0) || (index >= les_numFunctionDefinitions))
@@ -108,18 +108,18 @@ LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID)
 		return LES_NULL;
 	}
 	const LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[index];
-	const int paramDataSize = functionDefinitionPtr->GetParamDataSize();
-	char* paramBuffer = new char[paramDataSize];
-	LES_FunctionParamData* paramData = new LES_FunctionParamData(paramBuffer);
+	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
+	char* paramBuffer = new char[parameterDataSize];
+	LES_FunctionParameterData* parameterData = new LES_FunctionParameterData(paramBuffer);
 
-	return paramData;
+	return parameterData;
 }
 
 LES_FunctionDefinition::LES_FunctionDefinition(void)
 {
 	m_nameID = -1;
 	m_returnTypeID = -1;
-	m_paramDataSize = 0;
+	m_parameterDataSize = 0;
 
 	m_numInputs = 0;
 	m_numOutputs = 0;
@@ -135,9 +135,9 @@ LES_FunctionDefinition::LES_FunctionDefinition(const int nameID, const int retur
 	m_params = new LES_FunctionParameter[numInputs+numOutputs];
 }
 
-void LES_FunctionDefinition::SetParamDataSize(const int paramDataSize)
+void LES_FunctionDefinition::SetParameterDataSize(const int parameterDataSize)
 {
-	m_paramDataSize = paramDataSize;
+	m_parameterDataSize = parameterDataSize;
 }
 
 void LES_FunctionDefinition::SetReturnTypeID(const int returnTypeID)
@@ -170,9 +170,9 @@ int LES_FunctionDefinition::GetNameID(void) const
 	return m_nameID;
 }
 
-int LES_FunctionDefinition::GetParamDataSize(void) const
+int LES_FunctionDefinition::GetParameterDataSize(void) const
 {
-	return m_paramDataSize;
+	return m_parameterDataSize;
 }
 
 const LES_FunctionParameter* LES_FunctionDefinition::GetParameter(const LES_Hash hash) const
@@ -200,54 +200,86 @@ const LES_FunctionParameter* LES_FunctionDefinition::GetParameterByIndex(const i
 	return LES_NULL;
 }
 
-LES_FunctionParamData::LES_FunctionParamData(char* const bufferPtr) : m_bufferPtr(bufferPtr)
+LES_FunctionParameterData::LES_FunctionParameterData(char* const bufferPtr) : m_bufferPtr(bufferPtr)
 {
 	m_currentWriteBufferPtr = m_bufferPtr;
 	m_currentReadBufferPtr = m_bufferPtr;
 }
 
-LES_FunctionParamData::~LES_FunctionParamData()
+LES_FunctionParameterData::~LES_FunctionParameterData()
 {
 	delete[] m_bufferPtr;
 }
 
-int LES_FunctionParamData::AddParamData(const LES_StringEntry* const typeStringEntry, 
-																				const void* const paramDataPtr, const unsigned int paramMode)
+int LES_FunctionParameterData::Read(const LES_StringEntry* const typeStringEntry, void* const parameterDataPtr ) const
 {
 	const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntry(typeStringEntry);
 	if (typeEntryPtr == NULL)
 	{
-		fprintf(stderr, "LES ERROR: AddParamData type:'%s' not found\n", typeStringEntry->m_str);
+		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Read type:'%s' not found\n", typeStringEntry->m_str);
 		return LES_ERROR;
 	}
-	if (paramDataPtr == NULL)
+	if (parameterDataPtr == NULL)
 	{
-		fprintf(stderr, "LES ERROR: AddParamData type:'%s' paramDataPtr is NULL\n", typeStringEntry->m_str);
+		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Read type:'%s' parameterDataPtr is NULL\n", typeStringEntry->m_str);
+		return LES_ERROR;
+	}
+
+	const void* valueAddress = parameterDataPtr;
+	const unsigned int flags = typeEntryPtr->m_flags;
+	if (flags & LES_TYPE_POINTER)
+	{
+	}
+	if (valueAddress == NULL)
+	{
+		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Read type:'%s' valueAddress is NULL\n", typeStringEntry->m_str);
+		return LES_ERROR;
+	}
+
+	const unsigned int parameterDataSize = typeEntryPtr->m_dataSize;
+	memcpy(parameterDataPtr, m_currentReadBufferPtr, parameterDataSize);
+	m_currentReadBufferPtr += parameterDataSize;
+
+	return LES_OK;
+}
+
+int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntry, 
+																 const void* const parameterDataPtr, const unsigned int paramMode)
+{
+	const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntry(typeStringEntry);
+	if (typeEntryPtr == NULL)
+	{
+		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Write type:'%s' not found\n", typeStringEntry->m_str);
+		return LES_ERROR;
+	}
+	if (parameterDataPtr == NULL)
+	{
+		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Write type:'%s' parameterDataPtr is NULL\n", typeStringEntry->m_str);
 		return LES_ERROR;
 	}
 	const unsigned int flags = typeEntryPtr->m_flags;
 	if ((flags & paramMode) == 0)
 	{
-		fprintf(stderr, "LES ERROR: AddParamData type:'%s' flags incorrect for parameter mode typeFlags:0x%X paramMode:0x%X\n", 
+		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Write type:'%s' flags incorrect for parameter mode typeFlags:0x%X paramMode:0x%X\n", 
 						typeStringEntry->m_str, flags, paramMode);
 		return LES_ERROR;
 	}
 
-	const unsigned int paramDataSize = typeEntryPtr->m_dataSize;
-	const void* valueAddress = paramDataPtr;
+	const unsigned int parameterDataSize = typeEntryPtr->m_dataSize;
+	const void* valueAddress = parameterDataPtr;
 	if (flags & LES_TYPE_POINTER)
 	{
-		const void** pointerAddress = (const void**)paramDataPtr;
+		const void** pointerAddress = (const void**)parameterDataPtr;
 		valueAddress = *pointerAddress;
 	}
 	if (valueAddress == NULL)
 	{
-		fprintf(stderr, "LES ERROR: AddParamData type:'%s' valueAddress is NULL\n", typeStringEntry->m_str);
+		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Write type:'%s' valueAddress is NULL\n", typeStringEntry->m_str);
 		return LES_ERROR;
 	}
 
-	memcpy(m_currentWriteBufferPtr, valueAddress, paramDataSize);
-	m_currentWriteBufferPtr += paramDataSize;
+	memcpy(m_currentWriteBufferPtr, valueAddress, parameterDataSize);
+	m_currentWriteBufferPtr += parameterDataSize;
 
 	return LES_OK;
 }
@@ -334,7 +366,7 @@ int LES_FunctionStart(const char* const name, const char* const returnType,
 	functionTempData->functionCurrentOutputIndex = 0;
 	functionTempData->functionInputMacroParamIndex = 0;
 	functionTempData->functionOutputMacroParamIndex = 0;
-	functionTempData->functionParamData = LES_NULL;
+	functionTempData->functionParameterData = LES_NULL;
 	memset(functionTempData->paramUsed, 0, sizeof(char)*LES_MAX_NUM_FUNCTION_PARAMS);
 
 	const LES_Hash functionReturnTypeTypeHash = LES_GenerateHashCaseSensitive(returnType);
@@ -373,18 +405,18 @@ int LES_FunctionStart(const char* const name, const char* const returnType,
 						name, returnType, functionReturnTypeStringEntry->m_str);
 		return LES_ERROR;
 	}
-	LES_FunctionParamData* const functionParamData = LES_GetFunctionParamData(functionDefinition->GetNameID());
-	if (functionParamData == LES_NULL)
+	LES_FunctionParameterData* const functionParameterData = LES_GetFunctionParameterData(functionDefinition->GetNameID());
+	if (functionParameterData == LES_NULL)
 	{
-		/* ERROR: functionParamData should only be LES_NULL if no inputs or outputs */
+		/* ERROR: functionParameterData should only be LES_NULL if no inputs or outputs */
 		if (functionDefinition->GetNumParameters() > 0)
 		{
-			fprintf(stderr, "LES_ERROR: '%s' : functionParamData is NULL numInputs:%d numOutputs:%d nameID:%d\n",
+			fprintf(stderr, "LES_ERROR: '%s' : functionParameterData is NULL numInputs:%d numOutputs:%d nameID:%d\n",
 							name, functionDefinition->GetNumInputs(),  functionDefinition->GetNumOutputs(), functionDefinition->GetNameID());
 			return LES_ERROR;
 		}
 	}
-	functionTempData->functionParamData = functionParamData;
+	functionTempData->functionParameterData = functionParameterData;
 
 	/* Initialise parameter indexes */
 	functionTempData->functionCurrentParamIndex = 0;
@@ -518,17 +550,17 @@ int LES_FunctionAddParam(const char* const type, const char* const name, const i
 		return LES_ERROR;
 	}
 	/* Store the parameter value */
-	LES_FunctionParamData* const functionParamData = functionTempData->functionParamData;
-	if (functionParamData == LES_NULL)
+	LES_FunctionParameterData* const functionParameterData = functionTempData->functionParameterData;
+	if (functionParameterData == LES_NULL)
 	{
-		/* ERROR: functionParamData is NULL */
-		fprintf(stderr, "LES ERROR: '%s' : functionParamData is NULL\n", functionTempData->functionName);
+		/* ERROR: functionParameterData is NULL */
+		fprintf(stderr, "LES ERROR: '%s' : functionParameterData is NULL\n", functionTempData->functionName);
 		return LES_ERROR;
 	}
-	if (functionParamData->AddParamData(parameterTypeStringEntry, data, functionParameterPtr->m_mode) == LES_ERROR)
+	if (functionParameterData->Write(parameterTypeStringEntry, data, functionParameterPtr->m_mode) == LES_ERROR)
 	{
 		/* ERROR: during AddParam */
-		fprintf(stderr, "LES ERROR: '%s' : AddParam parameter:'%s' type:'%s' failed\n", functionTempData->functionName, name, type);
+		fprintf(stderr, "LES ERROR: '%s' : Write parameter:'%s' type:'%s' failed\n", functionTempData->functionName, name, type);
 		return LES_ERROR;
 	}
 
@@ -585,5 +617,19 @@ int LES_FunctionEnd(const LES_FunctionDefinition* const functionDefinitionPtr,
 		fprintf(stderr, "LES ERROR: '%s' : not all parameters were set num missing:%d\n", functionTempData->functionName, numMissing);
 		return LES_ERROR;
 	}
+	return LES_OK;
+}
+
+int LES_FunctionGetParameterData(const LES_FunctionTempData* const functionTempData,
+																 LES_FunctionParameterData** const functionParameterDataPtr)
+{
+	LES_FunctionParameterData* const functionParameterData = functionTempData->functionParameterData;
+	if (functionParameterData == LES_NULL)
+	{
+		/* ERROR: functionParameterData is NULL */
+		fprintf(stderr, "LES ERROR: '%s' : functionParameterData is NULL\n", functionTempData->functionName);
+		return LES_ERROR;
+	}
+	*functionParameterDataPtr = functionParameterData;
 	return LES_OK;
 }

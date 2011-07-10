@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include "les_test.h"
 #include "les_function.h"
 #include "les_stringentry.h"
@@ -13,7 +15,7 @@ extern int LES_AddType(const char* const name, const unsigned int dataSize, cons
 		const int returnTypeID = LES_AddStringEntry(#RETURN_TYPE); \
 		LES_FunctionDefinition functionDefinition(nameID, returnTypeID, NUM_INPUTS, NUM_OUTPUTS); \
 		LES_FunctionParameter* functionParameterPtr; \
-		int paramDataSize = 0; \
+		int parameterDataSize = 0; \
 		int globalParamIndex = 0; \
 		int inputParamIndex = 0; \
 		int outputParamIndex = 0; \
@@ -68,7 +70,7 @@ extern int LES_AddType(const char* const name, const unsigned int dataSize, cons
 
 
 #define LES_TEST_FUNCTION_END() \
-		functionDefinition.SetParamDataSize(paramDataSize); \
+		functionDefinition.SetParameterDataSize(parameterDataSize); \
 		LES_AddFunctionDefinition(functionName, &functionDefinition); \
 	} \
 
@@ -344,6 +346,97 @@ static void LES_Test_OutputParamUsedAsInput(unsigned int input_0, unsigned short
 	LES_FUNCTION_END();
 }
 
+static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_2, float input_3, int* input_4)
+{
+	LES_FunctionParameterData* parameterData = LES_NULL;
+
+	LES_FUNCTION_START(LES_Test_ReadInputParameters, void);
+	LES_FUNCTION_ADD_INPUT(int, input_0);
+	LES_FUNCTION_ADD_INPUT(short, input_1);
+	LES_FUNCTION_ADD_INPUT(char, input_2);
+	LES_FUNCTION_ADD_INPUT(float, input_3);
+	LES_FUNCTION_ADD_INPUT(int*, input_4);
+	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
+	LES_FUNCTION_END();
+
+	if (parameterData == LES_NULL)
+	{
+		return;
+	}
+	const LES_StringEntry* typeEntry = LES_NULL;
+	int errorCode = LES_OK;
+
+	typeEntry = LES_GetStringEntry("int");
+	int value_0;
+	errorCode = parameterData->Read(typeEntry, (void*)&value_0);
+	if (errorCode == LES_ERROR)
+	{
+		fprintf(stderr,"LES ERROR: LES_Test_ReadInputParameters: Read failed for input_0\n");
+		return;
+	}
+	if (input_0 != value_0)
+	{
+		fprintf(stderr,"LES ERROR: LES_Test_ReadInputParameters: parameter data is wrong input_0:%d value_0:%d\n", input_0, value_0);
+	}
+
+	typeEntry = LES_GetStringEntry("short");
+	short value_1;
+	errorCode = parameterData->Read(typeEntry, (void*)&value_1);
+	if (errorCode == LES_ERROR)
+	{
+		fprintf(stderr,"LES ERROR: LES_Test_ReadInputParameters: Read failed for input_1\n");
+		return;
+	}
+	if (input_1 != value_1)
+	{
+		fprintf(stderr,"LES ERROR: LES_Test_ReadInputParameters: parameter data is wrong input_1:%d value_1:%d\n", input_1, value_1);
+	}
+
+	typeEntry = LES_GetStringEntry("char");
+	char value_2;
+	errorCode = parameterData->Read(typeEntry, (void*)&value_2);
+	if (errorCode == LES_ERROR)
+	{
+		fprintf(stderr,"LES ERROR: LES_Test_ReadInputParameters: Read failed for input_2\n");
+		return;
+	}
+	if (input_2 != value_2)
+	{
+		fprintf(stderr,"LES ERROR: LES_Test_ReadInputParameters: parameter data is wrong input_2:%d value_2:%d\n", input_2, value_2);
+	}
+
+	typeEntry = LES_GetStringEntry("float");
+	float value_3;
+	errorCode = parameterData->Read(typeEntry, (void*)&value_3);
+	if (errorCode == LES_ERROR)
+	{
+		fprintf(stderr,"LES ERROR: LES_Test_ReadInputParameters: Read failed for input_3\n");
+		return;
+	}
+	if (fabsf(input_3-value_3) > 1.0e-6f)
+	{
+		fprintf(stderr,"LES ERROR: LES_Test_ReadInputParameters: parameter data is wrong input_3:%f value_3:%f\n", input_3, value_3);
+	}
+
+	typeEntry = LES_GetStringEntry("int*");
+	int value_4;
+	errorCode = parameterData->Read(typeEntry, (void*)&value_4);
+	if (errorCode == LES_ERROR)
+	{
+		fprintf(stderr,"LES ERROR: LES_Test_ReadInputParameters: Read failed for input_4\n");
+		return;
+	}
+	if (*input_4 != value_4)
+	{
+		fprintf(stderr,"LES ERROR: LES_Test_ReadInputParameters: parameter data is wrong input_4:%d value_4:%d\n", *input_4, value_4);
+	}
+	fprintf(stderr,"LES_Test_ReadInputParameters: input_0:%d value_0:%d\n", input_0, value_0);
+	fprintf(stderr,"LES_Test_ReadInputParameters: input_1:%d value_1:%d\n", input_1, value_1);
+	fprintf(stderr,"LES_Test_ReadInputParameters: input_2:%d value_2:%d\n", input_2, value_2);
+	fprintf(stderr,"LES_Test_ReadInputParameters: input_3:%f value_3:%f\n", input_3, value_3);
+	fprintf(stderr,"LES_Test_ReadInputParameters: input_4:%d value_4:%d\n", *input_4, value_4);
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // External functions
@@ -608,6 +701,14 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_OUTPUT(unsigned short, output_0);
 	LES_TEST_FUNCTION_END();
 
+	LES_TEST_FUNCTION_START(LES_Test_ReadInputParameters, void, 5, 0);
+	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
+	LES_TEST_FUNCTION_ADD_INPUT(short, input_1);
+	LES_TEST_FUNCTION_ADD_INPUT(char, input_2);
+	LES_TEST_FUNCTION_ADD_INPUT(float, input_3);
+	LES_TEST_FUNCTION_ADD_INPUT(int*, input_4);
+	LES_TEST_FUNCTION_END();
+
 	/* Run specific tests */
 	/* Function header definition tests */
 	fprintf(stderr, "#### Function header definition tests ####\n");
@@ -623,6 +724,8 @@ void LES_TestSetup(void)
 	int output_0 = 1;
 	int output_1 = 2;
 	int output_2 = 3;
+	int input_4 = 12345;
+
 	/* Input parameter tests */
 	fprintf(stderr, "#### Input parameter tests ####\n");
 	LES_Test_TooManyInputParameters(1, 2, 3, 4);
@@ -731,6 +834,11 @@ void LES_TestSetup(void)
 	LES_TEST_ADD_TYPE_EX(unsigned char, 2, LES_TYPE_POD|LES_TYPE_INPUT);
 	fprintf(stderr, "\n");
 	LES_TEST_ADD_TYPE_EX(unsigned char, 1, LES_TYPE_POINTER|LES_TYPE_OUTPUT);
+	fprintf(stderr, "\n");
+
+	/* Read Parameter tests */
+	fprintf(stderr, "#### Read Parameter tests ####\n");
+	LES_Test_ReadInputParameters(102, 23453, 110, -4.0332f, &input_4);
 	fprintf(stderr, "\n");
 }
 

@@ -11,6 +11,7 @@ struct LES_StringEntry;
 #define LES_ERROR (-1)
 
 const LES_StringEntry* LES_GetStringEntryForID(const int id);
+const LES_StringEntry* LES_GetStringEntry(const char* const str);
 
 void LES_Init(void);
 void LES_Shutdown(void);
