@@ -142,30 +142,42 @@ const LES_FunctionParameter* LES_FunctionDefinition::GetParameterByIndex(const i
 	return LES_NULL;
 }
 
-int LES_FunctionParamData::AddParam(const LES_StringEntry* const typeStringEntry, 
-																		const void* const paramDataPtr, const unsigned int paramMode)
+int LES_FunctionParamData::AddParamData(const LES_StringEntry* const typeStringEntry, 
+																				const void* const paramDataPtr, const unsigned int paramMode)
 {
 	const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntry(typeStringEntry);
 	if (typeEntryPtr == NULL)
 	{
-		fprintf(stderr, "LES ERROR: AddParam type:'%s' not found\n", typeStringEntry->m_str);
+		fprintf(stderr, "LES ERROR: AddParamData type:'%s' not found\n", typeStringEntry->m_str);
 		return LES_ERROR;
 	}
 	if (paramDataPtr == NULL)
 	{
-		fprintf(stderr, "LES ERROR: AddParam type:'%s' paramPtr is NULL\n", typeStringEntry->m_str);
+		fprintf(stderr, "LES ERROR: AddParamData type:'%s' paramDataPtr is NULL\n", typeStringEntry->m_str);
 		return LES_ERROR;
 	}
 	const unsigned int flags = typeEntryPtr->m_flags;
 	if ((flags & paramMode) == 0)
 	{
-		fprintf(stderr, "LES ERROR: AddParam type:'%s' can't be used for this param mode typeFlags:0x%X paramMode:0x%X\n", 
+		fprintf(stderr, "LES ERROR: AddParamData type:'%s' flags incorrect for parameter mode typeFlags:0x%X paramMode:0x%X\n", 
 						typeStringEntry->m_str, flags, paramMode);
 		return LES_ERROR;
 	}
 
 	const unsigned int paramDataSize = typeEntryPtr->m_dataSize;
-	memcpy(m_currentBufferPtr, paramDataPtr, paramDataSize);
+	const void* valueAddress = paramDataPtr;
+	if (flags & LES_TYPE_POINTER)
+	{
+		const void** pointerAddress = (const void**)paramDataPtr;
+		valueAddress = *pointerAddress;
+	}
+	if (valueAddress == NULL)
+	{
+		fprintf(stderr, "LES ERROR: AddParamData type:'%s' valueAddress is NULL\n", typeStringEntry->m_str);
+		return LES_ERROR;
+	}
+
+	memcpy(m_currentBufferPtr, valueAddress, paramDataSize);
 	m_currentBufferPtr += paramDataSize;
 
 	return LES_OK;
@@ -445,7 +457,7 @@ int LES_FunctionAddParam(const char* const type, const char* const name, const i
 		fprintf(stderr, "LES ERROR: '%s' : functionParamData is NULL\n", functionTempData->functionName);
 		return LES_ERROR;
 	}
-	if (functionParamData->AddParam(parameterTypeStringEntry, data, functionParameterPtr->m_mode) == LES_ERROR)
+	if (functionParamData->AddParamData(parameterTypeStringEntry, data, functionParameterPtr->m_mode) == LES_ERROR)
 	{
 		/* ERROR: during AddParam */
 		fprintf(stderr, "LES ERROR: '%s' : AddParam parameter:'%s' type:'%s' failed\n", functionTempData->functionName, name, type);

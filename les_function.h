@@ -12,6 +12,8 @@
 #define LES_TYPE_INPUT 				(LES_PARAM_MODE_INPUT)
 #define LES_TYPE_OUTPUT 			(LES_PARAM_MODE_OUTPUT)
 #define LES_TYPE_INPUT_OUTPUT (LES_TYPE_INPUT|LES_TYPE_OUTPUT)
+#define LES_TYPE_POD 					(1 << 2)
+#define LES_TYPE_POINTER 			(1 << 3)
 
 #define LES_MAX_NUM_FUNCTION_PARAMS (32)
 
@@ -45,7 +47,7 @@ struct LES_FunctionParamData
 {
 	char* m_bufferPtr;
 	char* m_currentBufferPtr;
-	int AddParam(const LES_StringEntry* const typeStringEntry, const void* const paramDataPtr, const unsigned int paramMode);
+	int AddParamData(const LES_StringEntry* const typeStringEntry, const void* const paramDataPtr, const unsigned int paramMode);
 };
 
 const LES_FunctionDefinition* LES_GetFunctionDefinition(const char* const name);

@@ -1,18 +1,23 @@
 High Priority:
-FUNCTION: need to mark a type as being a pointer, add the value not the pointer
-TEST: test input/output parameter as a pointer to POD
+FUNCTION: decode parameter block, i.e GetParam() instead of AddParam()), one parameter with supplied type at a time
+
+TEST: test input parameter as a pointer to POD
+TEST: test output parameter as a pointer to POD
 
 FUNCTION: build definition of structs from POD types
-TEST: test input/output parameter as a structure
-TEST: test input/output parameter as a pointer to a structure
+TEST: test input parameter as a structure
+TEST: test output parameter as a structure
+TEST: test input parameter as a pointer to a structure
+TEST: test output parameter as a pointer to a structure
 
 FUNCTION: type definition add count e.g. int[3] means int * 3 : wow you can do sizeof(int[3])
-TEST: test input/output parameter as a POD array
-TEST: test input/output parameter as a structure array
+TEST: test input parameter as a POD array
+TEST: test output parameter as a POD array
+TEST: test input parameter as a structure array
+TEST: test output parameter as a structure array
 
-FUNCTION: decoe param block, manually at first (function call and callee passes in the type one call at a time, GetParam() instead of AddParam())
-FUNCTION: decode param block semi-automatic pass in the function name, it does the GetParam() calls
-TEST: adding inputs & outputs to param block and reading it back
+FUNCTION: decode parameter block semi-automatic pass in the function name, it does the GetParam() calls
+TEST: adding inputs & outputs to parameter block and reading it back
 
 Medium Priority:
 FUNCTION: error handling run out of memory when adding new function or new type e.g. array limit reached
@@ -24,6 +29,7 @@ LES: need good debugging ability for the packets before sent and at server end
 LES: send packet data to server?
 
 Low Priority:
+FUNCTION: what about supporting references?
 MACROS: WORK OUT HOW TO DO THE RETURN VALUE IN MACROS
 MACROS: WORK OUT HOW TO DO THE ERROR HANDLING 
 
