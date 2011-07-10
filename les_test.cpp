@@ -329,6 +329,22 @@ static void LES_Test_InputOutputMixture(unsigned int input_0, unsigned short out
 	LES_FUNCTION_END();
 }
 
+static void LES_Test_InputParamUsedAsOutput(unsigned int input_0, unsigned short output_0)
+{
+	LES_FUNCTION_START(LES_Test_InputParamUsedAsOutput, void);
+	LES_FUNCTION_ADD_INPUT(unsigned int, input_0);
+	LES_FUNCTION_ADD_OUTPUT(unsigned short, output_0);
+	LES_FUNCTION_END();
+}
+
+static void LES_Test_OutputParamUsedAsInput(unsigned int input_0, unsigned short output_0)
+{
+	LES_FUNCTION_START(LES_Test_OutputParamUsedAsInput, void);
+	LES_FUNCTION_ADD_INPUT(output_only, input_0);
+	LES_FUNCTION_ADD_OUTPUT(unsigned short, output_0);
+	LES_FUNCTION_END();
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // External functions
@@ -363,6 +379,8 @@ void LES_TestSetup(void)
 
 	LES_TEST_ADD_TYPE(float*, LES_TYPE_INPUT_OUTPUT);
 	LES_TEST_ADD_TYPE(double*, LES_TYPE_INPUT_OUTPUT);
+
+	LES_TEST_ADD_TYPE_EX(output_only, 4, LES_TYPE_OUTPUT);
 
 	/* Sample functions for development */
 	LES_TEST_FUNCTION_START(jakeInit, void, 2, 1);
@@ -581,6 +599,16 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_OUTPUT(float*, output_1);
 	LES_TEST_FUNCTION_END();
 
+	LES_TEST_FUNCTION_START(LES_Test_InputParamUsedAsOutput, void, 1, 1);
+	LES_TEST_FUNCTION_ADD_INPUT(unsigned int, input_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(unsigned short, output_0);
+	LES_TEST_FUNCTION_END();
+
+	LES_TEST_FUNCTION_START(LES_Test_OutputParamUsedAsInput, void, 1, 1);
+	LES_TEST_FUNCTION_ADD_INPUT(output_only, input_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(unsigned short, output_0);
+	LES_TEST_FUNCTION_END();
+
 	/* Run specific tests */
 	/* Function header definition tests */
 	fprintf(stderr, "#### Function header definition tests ####\n");
@@ -690,6 +718,10 @@ void LES_TestSetup(void)
 	fprintf(stderr, "#### Complex Input Output Parameter tests ####\n");
 	LES_Test_InputOutputMixture(1, 2, 3, 4);
 	fprintf(stderr, "LES_Test_InputOutputMixture: success if no error output\n");
+	fprintf(stderr, "\n");
+	LES_Test_InputParamUsedAsOutput(1, 2);
+	fprintf(stderr, "\n");
+	LES_Test_OutputParamUsedAsInput(1, 2);
 	fprintf(stderr, "\n");
 
 	/* Add Type tests */

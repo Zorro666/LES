@@ -1,12 +1,23 @@
 High Priority:
-TEST: tests - test input/output parameter as a ptr (to a structure)
-TEST: tests - test input/output parameter to a structure
-TEST: build function definition with input & output parameters in mixed order, not 2 clear blocks
+FUNCTION: function definition change to a single parameter array (needed to make semi-automatic param decoding sensible)
+
+FUNCTION: need to mark a type as being a pointer, add the value not the pointer
+TEST: test input/output parameter as a pointer to POD
+
+FUNCTION: build definition of structs from POD types
+TEST: test input/output parameter as a structure
+TEST: test input/output parameter as a pointer to a structure
+
+FUNCTION: type definition add count e.g. int[3] means int * 3 : wow you can do sizeof(int[3])
+TEST: test input/output parameter as a POD array
+TEST: test input/output parameter as a structure array
+
+FUNCTION: decoe param block, manually at first (function call and callee passes in the type one call at a time, GetParam() instead of AddParam())
+FUNCTION: decode param block semi-automatic pass in the function name, it does the GetParam() calls
+TEST: adding inputs & outputs to param block and reading it back
 
 Medium Priority:
 FUNCTION: error handling run out of memory when adding new function or new type e.g. array limit reached
-FUNCTION: build definition of structs from base types
-FUNCTION: how to declare arrays as inputs/outputs?
 
 CORE: error handling run out of memory when adding new string e.g. array limit reached
 CORE: need common error handling & log system
@@ -19,7 +30,6 @@ MACROS: WORK OUT HOW TO DO THE RETURN VALUE IN MACROS
 MACROS: WORK OUT HOW TO DO THE ERROR HANDLING 
 
 FUNCTION: how will output parameters work? Do they need to be sent to the server (yes i.e. in/out params)
-FUNCTION: function definition does it need input & output parameter array - or a single parameter array?
 
 CORE: memory management for input & output parameter blocks per function
 CORE: hash table with binary search
