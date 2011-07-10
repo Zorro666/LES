@@ -347,13 +347,13 @@ int LES_FunctionStart(const char* const name, const char* const returnType,
 	}
 	*functionDefinitionPtr = functionDefinition;
 
-	const LES_StringEntry* const functionReturnTypeStringEntry = LES_GetStringEntryForID(functionDefinition->m_returnTypeID);
+	const LES_StringEntry* const functionReturnTypeStringEntry = LES_GetStringEntryForID(functionDefinition->GetReturnTypeID());
 	/* Check the return type : exists */
 	if (functionReturnTypeStringEntry == LES_NULL)
 	{
 		/* ERROR: return type not found */
 		fprintf(stderr, "LES ERROR: '%s' : Can't find function return type for ID:%d '%s'\n", 
-						name, functionDefinition->m_returnTypeID, returnType);
+						name, functionDefinition->GetReturnTypeID(), returnType);
 		return LES_ERROR;
 	}
 	/* Check the return type : hash */
@@ -373,14 +373,14 @@ int LES_FunctionStart(const char* const name, const char* const returnType,
 						name, returnType, functionReturnTypeStringEntry->m_str);
 		return LES_ERROR;
 	}
-	LES_FunctionParamData* const functionParamData = LES_GetFunctionParamData(functionDefinition->m_nameID);
+	LES_FunctionParamData* const functionParamData = LES_GetFunctionParamData(functionDefinition->GetNameID());
 	if (functionParamData == LES_NULL)
 	{
 		/* ERROR: functionParamData should only be LES_NULL if no inputs or outputs */
 		if (functionDefinition->GetNumParameters() > 0)
 		{
 			fprintf(stderr, "LES_ERROR: '%s' : functionParamData is NULL numInputs:%d numOutputs:%d nameID:%d\n",
-							name, functionDefinition->GetNumInputs(),  functionDefinition->GetNumOutputs(), functionDefinition->m_nameID);
+							name, functionDefinition->GetNumInputs(),  functionDefinition->GetNumOutputs(), functionDefinition->GetNameID());
 			return LES_ERROR;
 		}
 	}

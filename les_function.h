@@ -48,10 +48,6 @@ public:
 	int GetNameID(void) const;
 	int GetParamDataSize(void) const;
 
-	friend int LES_FunctionStart(const char* const name, const char* const returnType, 
-															 const LES_FunctionDefinition** functionDefinitionPtr,
-															 LES_FunctionTempData* const functionTempData);
-
 private:
 	int m_nameID;
 	int m_returnTypeID;
