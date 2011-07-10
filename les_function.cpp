@@ -119,19 +119,10 @@ LES_FunctionParamData* LES_GetFunctionParamData(const int functionNameID)
 
 const LES_FunctionParameter* LES_FunctionDefinition::GetParameter(const LES_Hash hash) const
 {
-	const int numInputs = m_numInputs;
-	for (int i = 0; i < numInputs; i++)
+	const int numParams = m_numInputs + m_numOutputs;
+	for (int i = 0; i < numParams; i++)
 	{
-		const LES_FunctionParameter* const paramPtr = &m_inputs[i];
-		if (paramPtr->m_hash == hash)
-		{
-			return paramPtr;
-		}
-	}
-	const int numOutputs = m_numOutputs;
-	for (int i = 0; i < numOutputs; i++)
-	{
-		const LES_FunctionParameter* const paramPtr = &m_outputs[i];
+		const LES_FunctionParameter* const paramPtr = &m_params[i];
 		if (paramPtr->m_hash == hash)
 		{
 			return paramPtr;
@@ -142,47 +133,13 @@ const LES_FunctionParameter* LES_FunctionDefinition::GetParameter(const LES_Hash
 
 const LES_FunctionParameter* LES_FunctionDefinition::GetParameterByIndex(const int index) const
 {
-	const int numInputs = m_numInputs;
-	for (int i = 0; i < numInputs; i++)
+	const int numParams = m_numInputs + m_numOutputs;
+	if ((index >= 0) && (index < numParams))
 	{
-		const LES_FunctionParameter* const paramPtr = &m_inputs[i];
-		if (paramPtr->m_index == index)
-		{
-			return paramPtr;
-		}
-	}
-	const int numOutputs = m_numOutputs;
-	for (int i = 0; i < numOutputs; i++)
-	{
-		const LES_FunctionParameter* const paramPtr = &m_outputs[i];
-		if (paramPtr->m_index == index)
-		{
-			return paramPtr;
-		}
+		const LES_FunctionParameter* const paramPtr = &m_params[index];
+		return paramPtr;
 	}
 	return LES_NULL;
-}
-
-const LES_FunctionParameter* LES_FunctionDefinition::GetInputParameterByIndex(const int index) const
-{
-	if ((index < 0) || (index >= m_numInputs))
-	{
-		return LES_NULL;
-	}
-
-	const LES_FunctionParameter* functionParam = &m_inputs[index];
-	return functionParam;
-}
-
-const LES_FunctionParameter* LES_FunctionDefinition::GetOutputParameterByIndex(const int index) const
-{
-	if ((index < 0) || (index >= m_numOutputs))
-	{
-		return LES_NULL;
-	}
-
-	const LES_FunctionParameter* functionParam = &m_outputs[index];
-	return functionParam;
 }
 
 int LES_FunctionParamData::AddParam(const LES_StringEntry* const typeStringEntry, 
@@ -272,7 +229,7 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[index];
 		if (typeEntryPtr->m_dataSize != dataSize)
 		{
-			fprintf(stderr, "LES ERROR: AddType '%s' hash 0x%X already in list and dataSize do not match Existing:%d New:%d\n",
+			fprintf(stderr, "LES ERROR: AddType '%s' hash 0x%X already in list and dataSize doesn't match Existing:%d New:%d\n",
 							name, hash, typeEntryPtr->m_dataSize, dataSize);
 			return LES_ERROR;
 		}

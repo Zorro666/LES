@@ -1,6 +1,4 @@
 High Priority:
-FUNCTION: function definition change to a single parameter array (needed to make semi-automatic param decoding sensible)
-
 FUNCTION: need to mark a type as being a pointer, add the value not the pointer
 TEST: test input/output parameter as a pointer to POD
 

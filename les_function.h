@@ -33,17 +33,12 @@ struct LES_FunctionDefinition
 	int m_paramDataSize;
 
 	int m_numInputs;
-	//const LES_FunctionParameter* const m_inputs; - FOR NOW DO PROPER ASSIGNMENT IN CONSTRUCTOR OR PLACEMENT NEW
-	const LES_FunctionParameter* m_inputs;
 	int m_numOutputs;
-	//const LES_FunctionParameter* const m_outputs; - FOR NOW DO PROPER ASSIGNMENT IN CONSTRUCTOR OR PLACEMENT NEW
-	const LES_FunctionParameter* m_outputs;
+	//const LES_FunctionParameter* const m_params; - FOR NOW DO PROPER ASSIGNMENT IN CONSTRUCTOR OR PLACEMENT NEW
+	const LES_FunctionParameter* m_params;
 
 	const LES_FunctionParameter* GetParameter(const LES_Hash hash) const;
 	const LES_FunctionParameter* GetParameterByIndex(const int index) const;
-
-	const LES_FunctionParameter* GetInputParameterByIndex(const int index) const;
-	const LES_FunctionParameter* GetOutputParameterByIndex(const int index) const;
 };
 
 struct LES_FunctionParamData
