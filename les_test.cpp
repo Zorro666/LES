@@ -4,7 +4,7 @@
 
 extern int LES_AddStringEntry(const char* const str);
 extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr);
-extern int LES_AddType(const char* const type, const int typeDataSize);
+extern int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags);
 
 #define LES_TEST_FUNCTION_START(NAME, RETURN_TYPE, NUM_INPUTS, NUM_OUTPUTS) \
 	{ \
@@ -78,15 +78,15 @@ extern int LES_AddType(const char* const type, const int typeDataSize);
 	} \
 
 
-#define LES_TEST_ADD_TYPE_EX(TYPE,SIZE) \
-	if (LES_AddType(#TYPE, SIZE) == LES_ERROR) \
+#define LES_TEST_ADD_TYPE_EX(TYPE, SIZE, FLAGS) \
+	if (LES_AddType(#TYPE, SIZE, FLAGS) == LES_ERROR) \
 	{\
 		fprintf(stderr, "LES ERROR: TEST AddType '%s' 0x%X failed\n", #TYPE, LES_GenerateHashCaseSensitive(#TYPE)); \
 	}\
 
 
-#define LES_TEST_ADD_TYPE(TYPE) \
-	LES_TEST_ADD_TYPE_EX(TYPE, sizeof(TYPE)) \
+#define LES_TEST_ADD_TYPE(TYPE, FLAGS) \
+	LES_TEST_ADD_TYPE_EX(TYPE, sizeof(TYPE), FLAGS) \
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -214,7 +214,7 @@ static void LES_Test_InputParamAlreadyUsed(int input_0, int output_0)
 static void LES_Test_InputParamMissing(int input_0, int output_0)
 {
 	LES_FUNCTION_START(LES_Test_InputParamMissing, void);
-	LES_FUNCTION_ADD_OUTPUT(int, output_0);
+	LES_FUNCTION_ADD_OUTPUT(int*, output_0);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_END();
 }
@@ -223,9 +223,9 @@ static void LES_Test_TooManyOutputParameters(int input_0, int output_0, int outp
 {
 	LES_FUNCTION_START(LES_Test_TooManyOutputParameters, void);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
-	LES_FUNCTION_ADD_OUTPUT(int, output_0);
-	LES_FUNCTION_ADD_OUTPUT(int, output_1);
-	LES_FUNCTION_ADD_OUTPUT(int, output_2);
+	LES_FUNCTION_ADD_OUTPUT(int*, output_0);
+	LES_FUNCTION_ADD_OUTPUT(int*, output_1);
+	LES_FUNCTION_ADD_OUTPUT(int*, output_2);
 	LES_FUNCTION_END();
 }
 
@@ -306,8 +306,8 @@ static void LES_Test_OutputParamAlreadyUsed(int input_0, int output_0)
 {
 	LES_FUNCTION_START(LES_Test_OutputParamAlreadyUsed, void);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
-	LES_FUNCTION_ADD_OUTPUT(int, output_0);
-	LES_FUNCTION_ADD_OUTPUT(int, output_0);
+	LES_FUNCTION_ADD_OUTPUT(int*, output_0);
+	LES_FUNCTION_ADD_OUTPUT(int*, output_0);
 	LES_FUNCTION_END();
 }
 
@@ -315,7 +315,17 @@ static void LES_Test_OutputParamMissing(int input_0, int output_0)
 {
 	LES_FUNCTION_START(LES_Test_OutputParamMissing, void);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
-	LES_FUNCTION_ADD_OUTPUT(int, output_0);
+	LES_FUNCTION_ADD_OUTPUT(int*, output_0);
+	LES_FUNCTION_END();
+}
+
+static void LES_Test_InputOutputMixture(unsigned int input_0, unsigned short output_0, unsigned char input_1, float output_1)
+{
+	LES_FUNCTION_START(LES_Test_InputOutputMixture, void);
+	LES_FUNCTION_ADD_INPUT(unsigned int, input_0);
+	LES_FUNCTION_ADD_OUTPUT(unsigned short*, output_0);
+	LES_FUNCTION_ADD_INPUT(unsigned char, input_1);
+	LES_FUNCTION_ADD_OUTPUT(float*, output_1);
 	LES_FUNCTION_END();
 }
 
@@ -328,15 +338,37 @@ static void LES_Test_OutputParamMissing(int input_0, int output_0)
 void LES_TestSetup(void)
 {
 	/* Sample types for development */
-	LES_TEST_ADD_TYPE(int);
-	LES_TEST_ADD_TYPE(short);
-	LES_TEST_ADD_TYPE(float);
+	LES_TEST_ADD_TYPE(unsigned char, LES_TYPE_INPUT);
+	LES_TEST_ADD_TYPE(unsigned short, LES_TYPE_INPUT);
+	LES_TEST_ADD_TYPE(unsigned int, LES_TYPE_INPUT);
+	LES_TEST_ADD_TYPE(unsigned long, LES_TYPE_INPUT);
+
+	LES_TEST_ADD_TYPE(char, LES_TYPE_INPUT);
+	LES_TEST_ADD_TYPE(short, LES_TYPE_INPUT);
+	LES_TEST_ADD_TYPE(int, LES_TYPE_INPUT);
+	LES_TEST_ADD_TYPE(long, LES_TYPE_INPUT);
+
+	LES_TEST_ADD_TYPE(float, LES_TYPE_INPUT);
+	LES_TEST_ADD_TYPE(double, LES_TYPE_INPUT);
+
+	LES_TEST_ADD_TYPE(unsigned char*, LES_TYPE_INPUT_OUTPUT);
+	LES_TEST_ADD_TYPE(unsigned short*, LES_TYPE_INPUT_OUTPUT);
+	LES_TEST_ADD_TYPE(unsigned int*, LES_TYPE_INPUT_OUTPUT);
+	LES_TEST_ADD_TYPE(unsigned long*, LES_TYPE_INPUT_OUTPUT);
+
+	LES_TEST_ADD_TYPE(char*, LES_TYPE_INPUT_OUTPUT);
+	LES_TEST_ADD_TYPE(short*, LES_TYPE_INPUT_OUTPUT);
+	LES_TEST_ADD_TYPE(int*, LES_TYPE_INPUT_OUTPUT);
+	LES_TEST_ADD_TYPE(long*, LES_TYPE_INPUT_OUTPUT);
+
+	LES_TEST_ADD_TYPE(float*, LES_TYPE_INPUT_OUTPUT);
+	LES_TEST_ADD_TYPE(double*, LES_TYPE_INPUT_OUTPUT);
 
 	/* Sample functions for development */
 	LES_TEST_FUNCTION_START(jakeInit, void, 2, 1);
 	LES_TEST_FUNCTION_ADD_INPUT(int, a);
 	LES_TEST_FUNCTION_ADD_INPUT(short, b);
-	LES_TEST_FUNCTION_ADD_OUTPUT(float, r);
+	LES_TEST_FUNCTION_ADD_OUTPUT(float*, rPtr);
 	LES_TEST_FUNCTION_END();
 
 	/* Setup test data for specific tests */
@@ -442,7 +474,7 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_InputParamMissing, void, 3, 1);
-	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int*, output_0);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_1);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_2);
@@ -450,8 +482,8 @@ void LES_TestSetup(void)
 
 	LES_TEST_FUNCTION_START(LES_Test_TooManyOutputParameters, void, 1, 2);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
-	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
-	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_1);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int*, output_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int*, output_1);
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_OutputWrongIndex, void, 1, 2);
@@ -532,14 +564,21 @@ void LES_TestSetup(void)
 
 	LES_TEST_FUNCTION_START(LES_Test_OutputParamAlreadyUsed, void, 1, 2);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
-	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
-	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_1);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int*, output_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int*, output_1);
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_OutputParamMissing, void, 1, 2);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
-	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
-	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_1);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int*, output_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int*, output_1);
+	LES_TEST_FUNCTION_END();
+
+	LES_TEST_FUNCTION_START(LES_Test_InputOutputMixture, void, 2, 2);
+	LES_TEST_FUNCTION_ADD_INPUT(unsigned int, input_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(unsigned short*, output_0);
+	LES_TEST_FUNCTION_ADD_INPUT(unsigned char, input_1);
+	LES_TEST_FUNCTION_ADD_OUTPUT(float*, output_1);
 	LES_TEST_FUNCTION_END();
 
 	/* Run specific tests */
@@ -645,6 +684,18 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_OUTPUT(float, input_0);
 	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_TEST_FUNCTION_END();
+	fprintf(stderr, "\n");
+
+	/* Complex Input Output Parameter tests */
+	fprintf(stderr, "#### Complex Input Output Parameter tests ####\n");
+	LES_Test_InputOutputMixture(1, 2, 3, 4);
+	fprintf(stderr, "LES_Test_InputOutputMixture: success if no error output\n");
+	fprintf(stderr, "\n");
+
+	/* Add Type tests */
+	fprintf(stderr, "#### Add Type tests ####\n");
+	LES_TEST_ADD_TYPE_EX(unsigned char, 2, LES_TYPE_INPUT);
+	LES_TEST_ADD_TYPE(unsigned char, LES_TYPE_OUTPUT);
 	fprintf(stderr, "\n");
 }
 

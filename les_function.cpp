@@ -7,7 +7,8 @@
 struct LES_TypeEntry
 {
 	LES_Hash m_hash;
-	int m_typeDataSize;
+	unsigned int m_dataSize;
+	unsigned int m_flags;
 };
 
 static LES_FunctionDefinition* les_functionDefinitionArray = LES_NULL;
@@ -184,7 +185,8 @@ const LES_FunctionParameter* LES_FunctionDefinition::GetOutputParameterByIndex(c
 	return functionParam;
 }
 
-int LES_FunctionParamData::AddParam(const LES_StringEntry* const typeStringEntry, const void* const paramPtr)
+int LES_FunctionParamData::AddParam(const LES_StringEntry* const typeStringEntry, 
+																		const void* const paramDataPtr, const unsigned int paramMode)
 {
 	const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntry(typeStringEntry);
 	if (typeEntryPtr == NULL)
@@ -192,13 +194,21 @@ int LES_FunctionParamData::AddParam(const LES_StringEntry* const typeStringEntry
 		fprintf(stderr, "LES ERROR: AddParam type:'%s' not found\n", typeStringEntry->m_str);
 		return LES_ERROR;
 	}
-	if (paramPtr == NULL)
+	if (paramDataPtr == NULL)
 	{
 		fprintf(stderr, "LES ERROR: AddParam type:'%s' paramPtr is NULL\n", typeStringEntry->m_str);
 		return LES_ERROR;
 	}
-	const int paramDataSize = typeEntryPtr->m_typeDataSize;
-	memcpy(m_currentBufferPtr, paramPtr, paramDataSize);
+	const unsigned int flags = typeEntryPtr->m_flags;
+	if ((flags & paramMode) == 0)
+	{
+		fprintf(stderr, "LES ERROR: AddParam type:'%s' can't be used for this param mode typeFlags:0x%X paramMode:0x%X\n", 
+						typeStringEntry->m_str, flags, paramMode);
+		return LES_ERROR;
+	}
+
+	const unsigned int paramDataSize = typeEntryPtr->m_dataSize;
+	memcpy(m_currentBufferPtr, paramDataPtr, paramDataSize);
 	m_currentBufferPtr += paramDataSize;
 
 	return LES_OK;
@@ -242,9 +252,9 @@ int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefiniti
 	return index;
 }
 
-int LES_AddType(const char* const type, const int typeDataSize)
+int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags)
 {
-	const LES_Hash hash = LES_GenerateHashCaseSensitive(type);
+	const LES_Hash hash = LES_GenerateHashCaseSensitive(name);
 	int index = LES_GetTypeEntrySlow(hash);
 	if ((index < 0) || (index >= les_numTypeEntries))
 	{
@@ -252,17 +262,24 @@ int LES_AddType(const char* const type, const int typeDataSize)
 		index = les_numTypeEntries;
 		LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[index];
 		typeEntryPtr->m_hash = hash;
-		typeEntryPtr->m_typeDataSize = typeDataSize;
+		typeEntryPtr->m_dataSize = dataSize;
+		typeEntryPtr->m_flags = flags;
 		les_numTypeEntries++;
 	}
 	else
 	{
 		/* Check the data size match */
 		LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[index];
-		if (typeEntryPtr->m_typeDataSize != typeDataSize)
+		if (typeEntryPtr->m_dataSize != dataSize)
 		{
-			fprintf(stderr, "LES ERROR: type hash 0x%X already in list and typeDataSize doesn't match %d != %d\n",
-							hash, typeEntryPtr->m_typeDataSize, typeDataSize);
+			fprintf(stderr, "LES ERROR: AddType '%s' hash 0x%X already in list and dataSize do not match Existing:%d New:%d\n",
+							name, hash, typeEntryPtr->m_dataSize, dataSize);
+			return LES_ERROR;
+		}
+		if (typeEntryPtr->m_flags != flags)
+		{
+			fprintf(stderr, "LES ERROR: AddType '%s' hash 0x%X already in list and flags doesn't match Existing:0x%X New:0x%X\n",
+							name, hash, typeEntryPtr->m_flags, flags);
 			return LES_ERROR;
 		}
 	}
@@ -278,9 +295,9 @@ int LES_FunctionStart(const char* const name, const char* const returnType,
 	functionTempData->functionCurrentParamIndex = 0;
 	functionTempData->functionCurrentInputIndex = 0;
 	functionTempData->functionCurrentOutputIndex = 0;
-	functionTempData->functionParamData = LES_NULL;
 	functionTempData->functionInputMacroParamIndex = 0;
 	functionTempData->functionOutputMacroParamIndex = 0;
+	functionTempData->functionParamData = LES_NULL;
 	memset(functionTempData->paramUsed, 0, sizeof(char)*LES_MAX_NUM_FUNCTION_PARAMS);
 
 	const LES_Hash functionReturnTypeTypeHash = LES_GenerateHashCaseSensitive(returnType);
@@ -471,7 +488,12 @@ int LES_FunctionAddParam(const char* const type, const char* const name, const i
 		fprintf(stderr, "LES ERROR: '%s' : functionParamData is NULL\n", functionTempData->functionName);
 		return LES_ERROR;
 	}
-	functionParamData->AddParam(parameterTypeStringEntry, data);
+	if (functionParamData->AddParam(parameterTypeStringEntry, data, functionParameterPtr->m_mode) == LES_ERROR)
+	{
+		/* ERROR: during AddParam */
+		fprintf(stderr, "LES ERROR: '%s' : AddParam parameter:'%s' type:'%s' failed\n", functionTempData->functionName, name, type);
+		return LES_ERROR;
+	}
 
 	/* Update parameter indexes */
 	functionTempData->functionCurrentParamIndex++;
