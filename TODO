@@ -1,5 +1,4 @@
 High Priority:
-TEST: test decoding output parameters
 TEST: test decoding mixture of input & output parameters
 
 TEST: test input parameter as a pointer to POD
