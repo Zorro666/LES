@@ -4,18 +4,13 @@
 #include "les_function.h"
 #include "les_stringentry.h"
 
-struct LES_TypeEntry
-{
-	LES_Hash m_hash;
-	unsigned int m_dataSize;
-	unsigned int m_flags;
-};
-
 static LES_FunctionDefinition* les_functionDefinitionArray = LES_NULL;
 static int les_numFunctionDefinitions = 0;
 
 static LES_TypeEntry* les_typeEntryArray = LES_NULL;
 static int les_numTypeEntries = 0;
+
+const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEntry);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -35,18 +30,6 @@ static int LES_GetTypeEntrySlow(const LES_Hash hash)
 		}
 	}
 	return -1;
-}
-
-static const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEntry)
-{
-	const LES_Hash hash = typeStringEntry->m_hash;
-	int index = LES_GetTypeEntrySlow(hash);
-	if ((index >= 0) && (index < les_numTypeEntries))
-	{
-		const LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[index];
-		return typeEntryPtr;
-	}
-	return LES_NULL;
 }
 
 static int LES_GetFunctionDefinitionIndexByNameID(const int nameID)
@@ -109,8 +92,8 @@ LES_FunctionParameterData* LES_GetFunctionParameterData(const int functionNameID
 	}
 	const LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[index];
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
-	char* paramBuffer = new char[parameterDataSize];
-	LES_FunctionParameterData* parameterData = new LES_FunctionParameterData(paramBuffer);
+	char* parameterBuffer = new char[parameterDataSize];
+	LES_FunctionParameterData* parameterData = new LES_FunctionParameterData(parameterBuffer);
 
 	return parameterData;
 }
@@ -209,6 +192,8 @@ LES_FunctionParameterData::LES_FunctionParameterData(char* const bufferPtr) : m_
 LES_FunctionParameterData::~LES_FunctionParameterData()
 {
 	delete[] m_bufferPtr;
+	m_currentWriteBufferPtr = LES_NULL;
+	m_currentReadBufferPtr = LES_NULL;
 }
 
 int LES_FunctionParameterData::Read(const LES_StringEntry* const typeStringEntry, void* const parameterDataPtr ) const
@@ -633,3 +618,16 @@ int LES_FunctionGetParameterData(const LES_FunctionTempData* const functionTempD
 	*functionParameterDataPtr = functionParameterData;
 	return LES_OK;
 }
+
+const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEntry)
+{
+	const LES_Hash hash = typeStringEntry->m_hash;
+	int index = LES_GetTypeEntrySlow(hash);
+	if ((index >= 0) && (index < les_numTypeEntries))
+	{
+		const LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[index];
+		return typeEntryPtr;
+	}
+	return LES_NULL;
+}
+

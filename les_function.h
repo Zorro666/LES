@@ -19,6 +19,13 @@
 
 struct LES_FunctionTempData;
 
+struct LES_TypeEntry
+{
+	LES_Hash m_hash;
+	unsigned int m_dataSize;
+	unsigned int m_flags;
+};
+
 struct LES_FunctionParameter
 {
 	LES_Hash m_hash;

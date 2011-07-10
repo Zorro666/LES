@@ -6,12 +6,6 @@
 #include "les_test.h"
 #include "les_function.h"
 
-struct LES_TypeEntry
-{
-	LES_Hash m_hash;
-	int m_typeDataSize;
-};
-
 static LES_StringEntry* les_stringEntryArray = LES_NULL;
 static int les_numStringEntries = 0;
 

@@ -1,8 +1,5 @@
 High Priority:
-TEST: test decoding mixture of input & output parameters
-
-TEST: test input parameter as a pointer to POD
-TEST: test output parameter as a pointer to POD
+TEST: test the parameter data size from a function
 
 FUNCTION: build definition of structs from POD types
 TEST: test input parameter as a structure
