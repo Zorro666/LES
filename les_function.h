@@ -17,6 +17,8 @@
 
 #define LES_MAX_NUM_FUNCTION_PARAMS (32)
 
+struct LES_FunctionTempData;
+
 struct LES_FunctionParameter
 {
 	LES_Hash m_hash;
@@ -28,8 +30,29 @@ struct LES_FunctionParameter
 	int m_mode;
 };
 
-struct LES_FunctionDefinition
+class LES_FunctionDefinition
 {
+public:
+	LES_FunctionDefinition(void);
+	LES_FunctionDefinition(const int nameID, const int returnTypeID, const int numInputs, const int numOutputs);
+
+	void SetParamDataSize(const int paramDataSize);
+	void SetReturnTypeID(const int returnTypeID);
+
+	const LES_FunctionParameter* GetParameter(const LES_Hash hash) const;
+	const LES_FunctionParameter* GetParameterByIndex(const int index) const;
+	int GetNumParameters(void) const;
+	int GetNumInputs(void) const;
+	int GetNumOutputs(void) const;
+	int GetReturnTypeID(void) const;
+	int GetNameID(void) const;
+	int GetParamDataSize(void) const;
+
+	friend int LES_FunctionStart(const char* const name, const char* const returnType, 
+															 const LES_FunctionDefinition** functionDefinitionPtr,
+															 LES_FunctionTempData* const functionTempData);
+
+private:
 	int m_nameID;
 	int m_returnTypeID;
 	int m_paramDataSize;
@@ -38,16 +61,21 @@ struct LES_FunctionDefinition
 	int m_numOutputs;
 	//const LES_FunctionParameter* const m_params; - FOR NOW DO PROPER ASSIGNMENT IN CONSTRUCTOR OR PLACEMENT NEW
 	const LES_FunctionParameter* m_params;
-
-	const LES_FunctionParameter* GetParameter(const LES_Hash hash) const;
-	const LES_FunctionParameter* GetParameterByIndex(const int index) const;
 };
 
-struct LES_FunctionParamData
+class LES_FunctionParamData
 {
-	char* m_bufferPtr;
-	char* m_currentBufferPtr;
+public:
+	LES_FunctionParamData(char* const bufferPtr);
+	~LES_FunctionParamData();
+
 	int AddParamData(const LES_StringEntry* const typeStringEntry, const void* const paramDataPtr, const unsigned int paramMode);
+	int GetParamData(const LES_StringEntry* const typeStringEntry, void* const paramDataPtr, const unsigned int paramMode) const;
+
+private:
+	char* const m_bufferPtr;
+	char* m_currentWriteBufferPtr;
+	mutable char* m_currentReadBufferPtr;
 };
 
 const LES_FunctionDefinition* LES_GetFunctionDefinition(const char* const name);
