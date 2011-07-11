@@ -9,9 +9,6 @@
 static LES_FunctionDefinition* les_functionDefinitionArray = LES_NULL;
 static int les_numFunctionDefinitions = 0;
 
-static LES_TypeEntry* les_typeEntryArray = LES_NULL;
-static int les_numTypeEntries = 0;
-
 static LES_Hash s_intHash = LES_GenerateHashCaseSensitive("int");
 static LES_Hash s_unsignedintPtrHash = LES_GenerateHashCaseSensitive("unsigned int*");
 static LES_Hash s_shortHash = LES_GenerateHashCaseSensitive("short");
@@ -351,18 +348,12 @@ void LES_FunctionInit()
 {
 	les_functionDefinitionArray = new LES_FunctionDefinition[1024];
 	les_numFunctionDefinitions = 0;
-
-	les_typeEntryArray = new LES_TypeEntry[1024];
-	les_numTypeEntries = 0;
 }
 
 void LES_FunctionShutdown()
 {
 	les_numFunctionDefinitions = 0;
 	delete[] les_functionDefinitionArray;
-
-	les_numTypeEntries = 0;
-	delete[] les_typeEntryArray;
 }
 
 int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr)

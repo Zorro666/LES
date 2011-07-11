@@ -51,6 +51,18 @@ const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEnt
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
+void LES_TypeInit(void)
+{
+	les_typeEntryArray = new LES_TypeEntry[1024];
+	les_numTypeEntries = 0;
+}
+
+void LES_TypeShutdown(void)
+{
+	les_numTypeEntries = 0;
+	delete[] les_typeEntryArray;
+}
+
 int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags)
 {
 	const LES_Hash hash = LES_GenerateHashCaseSensitive(name);

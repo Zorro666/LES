@@ -59,6 +59,8 @@ static int LES_AddStringEntry(const LES_Hash hash, const char* const str)
 
 extern void LES_FunctionInit();
 extern void LES_FunctionShutdown();
+extern void LES_TypeInit();
+extern void LES_TypeShutdown();
 
 void LES_Init(void)
 {
@@ -66,6 +68,7 @@ void LES_Init(void)
 	les_numStringEntries = 0;
 
 	LES_FunctionInit();
+	LES_TypeInit();
 
 	LES_TestSetup();
 }
@@ -76,6 +79,7 @@ void LES_Shutdown(void)
 	delete[] les_stringEntryArray;
 
 	LES_FunctionShutdown();
+	LES_TypeShutdown();
 }
 
 const LES_StringEntry* LES_GetStringEntryForID(const int id)
