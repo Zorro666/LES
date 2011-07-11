@@ -1,4 +1,5 @@
 #include <math.h>
+#include <string.h>
 
 #include "les_test.h"
 #include "les_function.h"
@@ -674,6 +675,19 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 						*input_4, input_value_4);
 	}
 
+	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_ReadInputOutputParameters");
+	if (functionDefinitionPtr == LES_NULL)
+	{
+		fprintf(stderr, "LES_Test_ReadInputOutputParameters: can't find the function definition\n");
+		return;
+	}
+	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
+	if (parameterDataSize != 26)
+	{
+		fprintf(stderr, "LES_Test_ReadInputOutputParameters: parameterDataSize is wrong Code:%d Should be:%d\n",
+						parameterDataSize, 26);
+	}
+
 	fprintf(stderr, "LES_Test_ReadInputOutputParameters: input_0:%d value_0:%d\n", input_0, input_value_0);
 	fprintf(stderr, "LES_Test_ReadInputOutputParameters: output_0:%d value_0:%d\n", *output_0, output_value_0);
 	fprintf(stderr, "LES_Test_ReadInputOutputParameters: input_1:%d value_1:%d\n", input_1, input_value_1);
@@ -683,6 +697,51 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	fprintf(stderr, "LES_Test_ReadInputOutputParameters: input_3:%f value_3:%f\n", input_3, input_value_3);
 	fprintf(stderr, "LES_Test_ReadInputOutputParameters: output_3:%f value_3:%f\n", *output_3, output_value_3);
 	fprintf(stderr, "LES_Test_ReadInputOutputParameters: input_4:%d value_4:%d\n", *input_4, input_value_4);
+	fprintf(stderr, "LES_Test_ReadInputOutputParameters: parameterDataSize:%d\n", parameterDataSize);
+}
+
+static void LES_Test_DecodeInputOutputParameters(int input_0, short input_1, char input_2, float input_3, int* input_4,
+																							   unsigned int* output_0, unsigned short* output_1, unsigned char* output_2, float* output_3)
+{
+	LES_FunctionParameterData* parameterData = LES_NULL;
+
+	LES_FUNCTION_START(LES_Test_ReadInputOutputParameters, void);
+	LES_FUNCTION_ADD_INPUT(int, input_0);
+	LES_FUNCTION_ADD_OUTPUT(unsigned int*, output_0);
+	LES_FUNCTION_ADD_INPUT(short, input_1);
+	LES_FUNCTION_ADD_OUTPUT(unsigned short*, output_1);
+	LES_FUNCTION_ADD_INPUT(char, input_2);
+	LES_FUNCTION_ADD_OUTPUT(unsigned char*, output_2);
+	LES_FUNCTION_ADD_INPUT(float, input_3);
+	LES_FUNCTION_ADD_OUTPUT(float*, output_3);
+	LES_FUNCTION_ADD_INPUT(int*, input_4);
+	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
+	LES_FUNCTION_END();
+
+	if (parameterData == LES_NULL)
+	{
+		return;
+	}
+
+	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_ReadInputOutputParameters");
+	if (functionDefinitionPtr == LES_NULL)
+	{
+		fprintf(stderr, "LES_Test_DecodeInputOutputParameters: can't find the function definition\n");
+		return;
+	}
+	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
+	if (parameterDataSize != 26)
+	{
+		fprintf(stderr, "LES_Test_DecodeInputOutputParameters: parameterDataSize is wrong Code:%d Should be:%d\n",
+						parameterDataSize, 26);
+	}
+
+	if (functionDefinitionPtr->Decode(parameterData) == LES_ERROR)
+	{
+		fprintf(stderr, "LES_Test_ReadInputOutputParameters: Decode failed\n");
+		return;
+	}
+	return;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1111,6 +1170,8 @@ void LES_TestSetup(void)
 	LES_Test_ReadOutputParameters(&output_0, &output_1, &output_2, &output_3);
 	fprintf(stderr, "\n");
 	LES_Test_ReadInputOutputParameters(102, 23453, 110, -4.0332f, &input_4, &output_0, &output_1, &output_2, &output_3);
+	fprintf(stderr, "\n");
+	LES_Test_DecodeInputOutputParameters(201, 12863, -109, -8.9832f, &input_4, &output_0, &output_1, &output_2, &output_3);
 	fprintf(stderr, "\n");
 }
 

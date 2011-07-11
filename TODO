@@ -1,6 +1,4 @@
 High Priority:
-TEST: test the parameter data size from a function
-
 FUNCTION: build definition of structs from POD types
 TEST: test input parameter as a structure
 TEST: test output parameter as a structure
@@ -12,9 +10,6 @@ TEST: test input parameter as a POD array
 TEST: test output parameter as a POD array
 TEST: test input parameter as a structure array
 TEST: test output parameter as a structure array
-
-FUNCTION: decode parameter block semi-automatic pass in the function name, it does the GetParam() calls
-TEST: adding inputs & outputs to parameter block and reading it back
 
 Medium Priority:
 FUNCTION: error handling run out of memory when adding new function or new type e.g. array limit reached

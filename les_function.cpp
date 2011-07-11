@@ -12,6 +12,16 @@ static int les_numTypeEntries = 0;
 
 const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEntry);
 
+static LES_Hash s_intHash = LES_GenerateHashCaseSensitive("int");
+static LES_Hash s_unsignedintPtrHash = LES_GenerateHashCaseSensitive("unsigned int*");
+static LES_Hash s_shortHash = LES_GenerateHashCaseSensitive("short");
+static LES_Hash s_unsignedshortPtrHash = LES_GenerateHashCaseSensitive("unsigned short*");
+static LES_Hash s_charHash = LES_GenerateHashCaseSensitive("char");
+static LES_Hash s_unsignedcharPtrHash = LES_GenerateHashCaseSensitive("unsigned char*");
+static LES_Hash s_floatHash = LES_GenerateHashCaseSensitive("float");
+static LES_Hash s_floatPtrHash = LES_GenerateHashCaseSensitive("float*");
+static LES_Hash s_intPtrHash = LES_GenerateHashCaseSensitive("int*");
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Internal static functions
@@ -181,6 +191,82 @@ const LES_FunctionParameter* LES_FunctionDefinition::GetParameterByIndex(const i
 		return paramPtr;
 	}
 	return LES_NULL;
+}
+
+int LES_FunctionDefinition::Decode(const LES_FunctionParameterData* const functionParameterData) const
+{
+	const int numParams = GetNumParameters();
+	for (int i = 0; i < numParams; i++)
+	{
+		const LES_FunctionParameter* const functionParameterPtr = GetParameterByIndex(i);
+		const int nameID = functionParameterPtr->m_nameID;
+		const int typeID = functionParameterPtr->m_typeID;
+		const LES_StringEntry* const nameEntry = LES_GetStringEntryForID(nameID);
+		const LES_StringEntry* const typeEntry = LES_GetStringEntryForID(typeID);
+
+		const char* const nameStr = nameEntry->m_str;
+		const LES_Hash typeHash = typeEntry->m_hash;
+		const char* const typeStr = typeEntry->m_str;
+			
+		int intValue;
+		short shortValue;
+		char charValue;
+		float floatValue;
+
+		void* valuePtr = LES_NULL;
+		const char* fmtStr = LES_NULL;
+
+		if ((typeHash == s_intHash) || (typeHash == s_intPtrHash) || (typeHash == s_unsignedintPtrHash))
+		{
+			valuePtr = &intValue;
+			fmtStr = "%d";
+		}
+		else if ((typeHash == s_shortHash) || (typeHash == s_unsignedshortPtrHash))
+		{
+			valuePtr = &shortValue;
+			fmtStr = "%d";
+		}
+		else if ((typeHash == s_charHash) || (typeHash == s_unsignedcharPtrHash))
+		{
+			valuePtr = &charValue;
+			fmtStr = "%d";
+		}
+		else if ((typeHash == s_floatHash) || (typeHash == s_floatPtrHash))
+		{
+			valuePtr = &floatValue;
+			fmtStr = "%f";
+		}
+		if (valuePtr == LES_NULL)
+		{
+			fprintf(stderr, "LES ERROR: LES_FunctionDefinition::Decode valuePtr = LES_NULL parameter[%d]:'%s'\n", i, nameStr);
+			return LES_ERROR;
+		}
+		int errorCode = functionParameterData->Read(typeEntry, valuePtr);
+		if (errorCode == LES_ERROR)
+		{
+			fprintf(stderr, "LES ERROR: LES_FunctionDefinition::Decode Read failed for parameter[%d]:%s;\n", i, nameStr);
+			return LES_ERROR;
+		}
+		printf("LES_FunctionDefinition::Decode parameter[%d]:'%s' type:'%s' value:", i, nameStr, typeStr);
+		if ((typeHash == s_intHash) || (typeHash == s_intPtrHash) || (typeHash == s_unsignedintPtrHash))
+		{
+			printf(fmtStr, intValue);
+		}
+		else if ((typeHash == s_shortHash) || (typeHash == s_unsignedshortPtrHash))
+		{
+			printf(fmtStr, shortValue);
+		}
+		else if ((typeHash == s_charHash) || (typeHash == s_unsignedcharPtrHash))
+		{
+			printf(fmtStr, charValue);
+		}
+		else if ((typeHash == s_floatHash) || (typeHash == s_floatPtrHash))
+		{
+			printf(fmtStr, floatValue);
+		}
+		printf("\n");
+	}
+	return LES_OK;
 }
 
 LES_FunctionParameterData::LES_FunctionParameterData(char* const bufferPtr) : m_bufferPtr(bufferPtr)

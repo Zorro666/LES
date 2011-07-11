@@ -37,6 +37,21 @@ struct LES_FunctionParameter
 	int m_mode;
 };
 
+class LES_FunctionParameterData
+{
+public:
+	LES_FunctionParameterData(char* const bufferPtr);
+	~LES_FunctionParameterData();
+
+	int Write(const LES_StringEntry* const typeStringEntry, const void* const parameterDataPtr, const unsigned int paramMode);
+	int Read(const LES_StringEntry* const typeStringEntry, void* const parameterDataPtr) const;
+
+private:
+	char* const m_bufferPtr;
+	char* m_currentWriteBufferPtr;
+	mutable char* m_currentReadBufferPtr;
+};
+
 class LES_FunctionDefinition
 {
 public:
@@ -55,6 +70,7 @@ public:
 	int GetNameID(void) const;
 	int GetParameterDataSize(void) const;
 
+	int Decode(const LES_FunctionParameterData* const functionParameterData) const;
 private:
 	int m_nameID;
 	int m_returnTypeID;
@@ -64,21 +80,6 @@ private:
 	int m_numOutputs;
 	//const LES_FunctionParameter* const m_params; - FOR NOW DO PROPER ASSIGNMENT IN CONSTRUCTOR OR PLACEMENT NEW
 	const LES_FunctionParameter* m_params;
-};
-
-class LES_FunctionParameterData
-{
-public:
-	LES_FunctionParameterData(char* const bufferPtr);
-	~LES_FunctionParameterData();
-
-	int Write(const LES_StringEntry* const typeStringEntry, const void* const parameterDataPtr, const unsigned int paramMode);
-	int Read(const LES_StringEntry* const typeStringEntry, void* const parameterDataPtr) const;
-
-private:
-	char* const m_bufferPtr;
-	char* m_currentWriteBufferPtr;
-	mutable char* m_currentReadBufferPtr;
 };
 
 const LES_FunctionDefinition* LES_GetFunctionDefinition(const char* const name);
