@@ -3,12 +3,13 @@
 
 #include "les_test.h"
 #include "les_function.h"
+#include "les_function_macros.h"
 #include "les_stringentry.h"
+#include "les_parameter.h"
 
 extern int LES_AddStringEntry(const char* const str);
 extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr);
 extern int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags);
-extern const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEntry);
 
 #define LES_TEST_FUNCTION_START(NAME, RETURN_TYPE, NUM_INPUTS, NUM_OUTPUTS) \
 	{ \

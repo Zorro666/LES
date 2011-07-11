@@ -1,5 +1,5 @@
 #include "les_jake.h"
-#include "les_function.h"
+#include "les_function_macros.h"
 
 void LES_jakeInit(int a, short b)
 {
