@@ -21,6 +21,7 @@ class LES_FunctionDefinition
 public:
 	LES_FunctionDefinition(void);
 	LES_FunctionDefinition(const int nameID, const int returnTypeID, const int numInputs, const int numOutputs);
+	~LES_FunctionDefinition(void);
 
 	void SetParameterDataSize(const int parameterDataSize);
 	void SetReturnTypeID(const int returnTypeID);

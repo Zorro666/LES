@@ -6,6 +6,7 @@
 #include "les_function_macros.h"
 #include "les_stringentry.h"
 #include "les_parameter.h"
+#include "les_struct.h"
 
 extern int LES_AddStringEntry(const char* const str);
 extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr);
