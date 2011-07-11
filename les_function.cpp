@@ -111,6 +111,11 @@ LES_FunctionDefinition::LES_FunctionDefinition(const int nameID, const int retur
 	m_params = new LES_FunctionParameter[numInputs+numOutputs];
 }
 
+LES_FunctionDefinition::~LES_FunctionDefinition(void)
+{
+	delete[] m_params;
+}
+
 void LES_FunctionDefinition::SetParameterDataSize(const int parameterDataSize)
 {
 	m_parameterDataSize = parameterDataSize;
