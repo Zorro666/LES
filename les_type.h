@@ -17,6 +17,17 @@ struct LES_TypeEntry
 	LES_Hash m_hash;
 	unsigned int m_dataSize;
 	unsigned int m_flags;
+
+public:
+	static LES_Hash s_intHash;
+	static LES_Hash s_unsignedintPtrHash;
+	static LES_Hash s_shortHash;
+	static LES_Hash s_unsignedshortPtrHash;
+	static LES_Hash s_charHash;
+	static LES_Hash s_unsignedcharPtrHash;
+	static LES_Hash s_floatHash;
+	static LES_Hash s_floatPtrHash;
+	static LES_Hash s_intPtrHash;
 };
 
 const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEntry);

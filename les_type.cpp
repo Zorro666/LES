@@ -7,6 +7,16 @@
 static LES_TypeEntry* les_typeEntryArray = LES_NULL;
 static int les_numTypeEntries = 0;
 
+LES_Hash LES_TypeEntry::s_intHash = LES_GenerateHashCaseSensitive("int");
+LES_Hash LES_TypeEntry::s_unsignedintPtrHash = LES_GenerateHashCaseSensitive("unsigned int*");
+LES_Hash LES_TypeEntry::s_shortHash = LES_GenerateHashCaseSensitive("short");
+LES_Hash LES_TypeEntry::s_unsignedshortPtrHash = LES_GenerateHashCaseSensitive("unsigned short*");
+LES_Hash LES_TypeEntry::s_charHash = LES_GenerateHashCaseSensitive("char");
+LES_Hash LES_TypeEntry::s_unsignedcharPtrHash = LES_GenerateHashCaseSensitive("unsigned char*");
+LES_Hash LES_TypeEntry::s_floatHash = LES_GenerateHashCaseSensitive("float");
+LES_Hash LES_TypeEntry::s_floatPtrHash = LES_GenerateHashCaseSensitive("float*");
+LES_Hash LES_TypeEntry::s_intPtrHash = LES_GenerateHashCaseSensitive("int*");
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Internal static functions
