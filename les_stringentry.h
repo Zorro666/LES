@@ -1,6 +1,7 @@
 #ifndef LES_STRINGENTRY_HH
 #define LES_STRINGENTRY_HH
 
+#include "les_core.h"
 #include "les_hash.h"
 
 struct LES_StringEntry

@@ -1,5 +1,6 @@
-LES_CORE:= les_core.cpp les_hash.cpp les_test.cpp les_function.cpp les_function_macros.cpp les_type.cpp
-LES_DEPENDS:=$(LES_CORE) les_jake.cpp
+LES_FUNCTION:= les_function.cpp les_function_macros.cpp les_type.cpp les_parameter.cpp
+LES_CORE:= les_core.cpp les_hash.cpp les_test.cpp 
+LES_DEPENDS:=$(LES_CORE) $(LES_FUNCTION) les_jake.cpp
 LES_TEST_DEPENDS:=les_main.cpp $(LES_DEPENDS) 
 
 PROJECTS:=\

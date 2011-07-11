@@ -1,6 +1,8 @@
 #ifndef LES_HASH_HH
 #define LES_HASH_HH
 
+#include "les_core.h"
+
 typedef unsigned int LES_Hash;
 
 #define LES_INVALID_HASH (LES_Hash)(-1U);
