@@ -26,7 +26,7 @@ public:
 	void SetParameterDataSize(const int parameterDataSize);
 	void SetReturnTypeID(const int returnTypeID);
 
-	const LES_FunctionParameter* GetParameter(const LES_Hash hash) const;
+	const LES_FunctionParameter* GetParameter(const LES_Hash nameHash) const;
 	const LES_FunctionParameter* GetParameterByIndex(const int index) const;
 	int GetNumParameters(void) const;
 	int GetNumInputs(void) const;

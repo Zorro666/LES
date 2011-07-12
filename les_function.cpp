@@ -146,13 +146,13 @@ int LES_FunctionDefinition::GetParameterDataSize(void) const
 	return m_parameterDataSize;
 }
 
-const LES_FunctionParameter* LES_FunctionDefinition::GetParameter(const LES_Hash hash) const
+const LES_FunctionParameter* LES_FunctionDefinition::GetParameter(const LES_Hash nameHash) const
 {
 	const int numParams = m_numInputs + m_numOutputs;
 	for (int i = 0; i < numParams; i++)
 	{
 		const LES_FunctionParameter* const paramPtr = &m_params[i];
-		if (paramPtr->m_hash == hash)
+		if (paramPtr->m_hash == nameHash)
 		{
 			return paramPtr;
 		}
