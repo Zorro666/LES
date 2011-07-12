@@ -2,6 +2,7 @@
 *.swo
 *.o
 *.d
+*.orig
 temp.txt
 test.txt
 tags
