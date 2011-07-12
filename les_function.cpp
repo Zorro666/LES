@@ -90,20 +90,55 @@ LES_FunctionDefinition::LES_FunctionDefinition(void)
 	m_numInputs = 0;
 	m_numOutputs = 0;
 	m_params = LES_NULL;
+	m_ownsParamsMemory = false;
+}
+
+LES_FunctionDefinition::LES_FunctionDefinition(const LES_FunctionDefinition& other)
+{
+	*this = other;
+}
+
+LES_FunctionDefinition& LES_FunctionDefinition::operator = (const LES_FunctionDefinition& other)
+{
+	m_nameID = other.m_nameID;
+	m_returnTypeID = other.m_returnTypeID;
+	m_parameterDataSize = other.m_parameterDataSize;
+
+	m_numInputs = other.m_numInputs;
+	m_numOutputs = other.m_numOutputs;
+	m_params = other.m_params;
+	m_ownsParamsMemory = true;
+	other.m_ownsParamsMemory = false;
+
+	return *this;
 }
 
 LES_FunctionDefinition::LES_FunctionDefinition(const int nameID, const int returnTypeID, const int numInputs, const int numOutputs)
 {
 	m_nameID = nameID;
 	m_returnTypeID = returnTypeID;
+	m_parameterDataSize = 0;
+
 	m_numInputs = numInputs;
 	m_numOutputs = numOutputs;
 	m_params = new LES_FunctionParameter[numInputs+numOutputs];
+	m_ownsParamsMemory = true;
 }
 
 LES_FunctionDefinition::~LES_FunctionDefinition(void)
 {
-	delete[] m_params;
+	if (m_ownsParamsMemory)
+	{
+		delete[] m_params;
+	}
+	m_nameID = -1;
+	m_returnTypeID = -1;
+	m_parameterDataSize = 0;
+
+	m_numInputs = 0;
+	m_numOutputs = 0;
+	m_params = LES_NULL;
+	m_ownsParamsMemory = false;
 }
 
 void LES_FunctionDefinition::SetParameterDataSize(const int parameterDataSize)

@@ -20,6 +20,8 @@ class LES_FunctionDefinition
 {
 public:
 	LES_FunctionDefinition(void);
+	LES_FunctionDefinition(const LES_FunctionDefinition& other);
+	LES_FunctionDefinition& operator = (const LES_FunctionDefinition& other);
 	LES_FunctionDefinition(const int nameID, const int returnTypeID, const int numInputs, const int numOutputs);
 	~LES_FunctionDefinition(void);
 
@@ -45,6 +47,7 @@ private:
 	int m_numOutputs;
 	//const LES_FunctionParameter* const m_params; - FOR NOW DO PROPER ASSIGNMENT IN CONSTRUCTOR OR PLACEMENT NEW
 	const LES_FunctionParameter* m_params;
+	mutable bool m_ownsParamsMemory;
 };
 
 const LES_FunctionDefinition* LES_GetFunctionDefinition(const char* const name);

@@ -1,4 +1,10 @@
 High Priority:
+FUNCTION: AddFunction - needs to be deep copy or destructor shouldn't delete m_params
+FUNCTION: need to add the assignment operator and copy constructor
+
+STRUCT: AddStruct - needs to be deep copy of destructor shouldn't delete m_members
+STRUCT: need to add the assignment operator and copy constructor
+
 FUNCTION: build definition of structs from POD types
 TEST: test input parameter as a structure - struct would have a LES_TypeEntry with flag STRUCT
 TEST: test output parameter as a structure
