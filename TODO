@@ -1,6 +1,6 @@
 High Priority:
+STRUCT: need padding per member to get data written & read correctly, be nice to put data size also to speed things up = OFFSETOF :)
 STRUCT: Write parameter should write each entry separately not memcpy the struct
-STRUCT: save padding per member to get data written & read correctly
 TEST: test decode a struct inside a struct
 TEST: test output parameter as a structure
 TEST: test input parameter as a pointer to a structure

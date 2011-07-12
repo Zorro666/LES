@@ -4,6 +4,7 @@
 #include "les_parameter.h"
 #include "les_type.h"
 #include "les_stringentry.h"
+#include "les_struct.h"
 
 LES_FunctionParameterData::LES_FunctionParameterData(char* const bufferPtr) : m_bufferPtr(bufferPtr)
 {
@@ -88,8 +89,37 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 		return LES_ERROR;
 	}
 
-	if ((flags & LES_TYPE_POD) || (flags & LES_TYPE_STRUCT))
+	if (flags & LES_TYPE_STRUCT)
 	{
+		printf("Write type:'%s' size:%d STRUCT\n", typeStringEntry->m_str, typeEntryPtr->m_dataSize);
+		int returnCode = LES_OK;
+		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeStringEntry->m_str);
+		if (structDefinition == LES_NULL)
+		{
+			fprintf(stderr, "LES ERROR: Write type:'%s' is a struct but can't be found\n", typeStringEntry->m_str);
+			return LES_ERROR;
+		}
+		const int numMembers = structDefinition->GetNumMembers();
+		const char* memberDataPtr = (const char*)parameterDataPtr;
+		for (int i = 0; i < numMembers; i++)
+		{
+			const LES_StructMember* const structMember = structDefinition->GetMemberByIndex(i);
+			const int memberTypeID = structMember->m_typeID;
+			const LES_StringEntry* const memberTypeStringEntry = LES_GetStringEntryForID(memberTypeID);
+			returnCode = Write(memberTypeStringEntry, (const void* const)memberDataPtr, paramMode);
+			if (returnCode == LES_ERROR)
+			{
+				return LES_ERROR;
+			}
+			const LES_TypeEntry* const memberTypeEntryPtr = LES_GetTypeEntry(memberTypeStringEntry);
+			memberDataPtr += memberTypeEntryPtr->m_dataSize;
+		}
+		return returnCode;
+	}
+
+	if (flags & LES_TYPE_POD)
+	{
+		printf("Write type:'%s' size:%d\n", typeStringEntry->m_str, typeEntryPtr->m_dataSize);
 		memcpy(m_currentWriteBufferPtr, valueAddress, parameterDataSize);
 		m_currentWriteBufferPtr += parameterDataSize;
 	}
