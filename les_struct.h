@@ -14,6 +14,7 @@ struct LES_StructMember
 
 class LES_StructDefinition
 {
+public:
 	LES_StructDefinition(void);
 	LES_StructDefinition(const int nameID, const int numMembers);
 	~LES_StructDefinition(void);
