@@ -1,6 +1,6 @@
 High Priority:
 FUNCTION: build definition of structs from POD types
-TEST: test input parameter as a structure
+TEST: test input parameter as a structure - struct would have a LES_TypeEntry with flag STRUCT
 TEST: test output parameter as a structure
 TEST: test input parameter as a pointer to a structure
 TEST: test output parameter as a pointer to a structure

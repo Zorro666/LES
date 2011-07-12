@@ -11,7 +11,7 @@ static int les_numStringEntries = 0;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Internal static functions
+// Internal Static functions
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -59,8 +59,12 @@ static int LES_AddStringEntry(const LES_Hash hash, const char* const str)
 
 extern void LES_FunctionInit();
 extern void LES_FunctionShutdown();
+
 extern void LES_TypeInit();
 extern void LES_TypeShutdown();
+
+extern void LES_StructInit();
+extern void LES_StructShutdown();
 
 void LES_Init(void)
 {
@@ -69,17 +73,19 @@ void LES_Init(void)
 
 	LES_FunctionInit();
 	LES_TypeInit();
+	LES_StructInit();
 
 	LES_TestSetup();
 }
 
 void LES_Shutdown(void)
 {
+	LES_StructShutdown();
+	LES_TypeShutdown();
+	LES_FunctionShutdown();
+
 	les_numStringEntries = 0;
 	delete[] les_stringEntryArray;
-
-	LES_FunctionShutdown();
-	LES_TypeShutdown();
 }
 
 const LES_StringEntry* LES_GetStringEntryForID(const int id)

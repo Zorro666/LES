@@ -10,7 +10,8 @@ struct LES_StringEntry;
 #define LES_TYPE_OUTPUT 			(1<< 1)
 #define LES_TYPE_INPUT_OUTPUT (LES_TYPE_INPUT|LES_TYPE_OUTPUT)
 #define LES_TYPE_POD 					(1 << 2)
-#define LES_TYPE_POINTER 			(1 << 3)
+#define LES_TYPE_STRUCT  			(1 << 3)
+#define LES_TYPE_POINTER 			(1 << 4)
 
 struct LES_TypeEntry
 {

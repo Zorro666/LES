@@ -32,5 +32,4 @@ private:
 	mutable char* m_currentReadBufferPtr;
 };
 
-#endif // #ifdef LES_PARAMETER_HH
-
+#endif // #ifndef LES_PARAMETER_HH
