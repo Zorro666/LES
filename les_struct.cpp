@@ -73,6 +73,11 @@ LES_StructDefinition::~LES_StructDefinition(void)
 	delete[] m_members;
 }
 
+void LES_StructDefinition::SetTotalMemberDataSize(const int totalMemberDataSize)
+{
+	m_totalMemberDataSize = totalMemberDataSize;
+}
+
 int LES_StructDefinition::GetNameID(void) const
 {
 	return m_nameID;
@@ -89,6 +94,20 @@ const LES_StructMember* LES_StructDefinition::GetMemberByIndex(const int index) 
 	{
 		const LES_StructMember* const memberPtr = &m_members[index];
 		return memberPtr;
+	}
+	return LES_NULL;
+}
+
+const LES_StructMember* LES_StructDefinition::GetMember(const LES_Hash nameHash) const
+{
+	const int numMembers = m_numMembers;
+	for (int i = 0; i < numMembers; i++)
+	{
+		const LES_StructMember* const memberPtr = &m_members[i];
+		if (memberPtr->m_hash == nameHash)
+		{
+			return memberPtr;
+		}
 	}
 	return LES_NULL;
 }

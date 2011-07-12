@@ -106,7 +106,7 @@ extern int LES_AddStructDefinition(const char* const name, const LES_StructDefin
 		LES_StructMember* structMemberPtr; \
 		int globalMemberIndex = 0; \
 		int totalMemberSize = 0; \
-		globalParamIndex += 0; \
+		globalMemberIndex += 0; \
 		structMemberPtr = NULL; \
 
 
@@ -114,7 +114,7 @@ extern int LES_AddStructDefinition(const char* const name, const LES_StructDefin
 { \
 	bool __LES_ok = true; \
 	/* Error if member index off the end of the array */ \
-	const int maxNumMembers = structMember.GetNumMembers(); \
+	const int maxNumMembers = structDefinition.GetNumMembers(); \
 	if (globalMemberIndex >= maxNumMembers) \
 	{ \
 		fprintf(stderr, "LES ERROR: TEST struct '%s' : MemberIndex too big index:%d max:%d member:'%s' type:'%s'\n", \
@@ -139,11 +139,11 @@ extern int LES_AddStructDefinition(const char* const name, const LES_StructDefin
 			const int typeDataSize = typeEntryPtr->m_dataSize; \
 			totalMemberSize += typeDataSize; \
 		} \
-		structMemberPtr = (LES_StructMember* const)(structDefinition.GetMemberByIndex(globalParamIndex)); \
+		structMemberPtr = (LES_StructMember* const)(structDefinition.GetMemberByIndex(globalMemberIndex)); \
 		structMemberPtr->m_hash = nameHash; \
 		structMemberPtr->m_nameID = LES_AddStringEntry(#NAME); \
 		structMemberPtr->m_typeID = typeID; \
-		globalParamIndex++; \
+		globalMemberIndex++; \
 	} \
 } \
 

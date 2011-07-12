@@ -1083,5 +1083,19 @@ void LES_TestSetup(void)
 	fprintf(stderr, "\n");
 	LES_Test_DecodeInputOutputParameters(201, 12863, -109, -8.9832f, &input_4, &output_0, &output_1, &output_2, &output_3);
 	fprintf(stderr, "\n");
+
+	/* Struct tests */
+	fprintf(stderr, "#### Struct tests ####\n");
+	LES_TEST_STRUCT_START(LES_TooManyMembers, 1);
+	LES_TEST_STRUCT_ADD_MEMBER(int, m_one);
+	LES_TEST_STRUCT_ADD_MEMBER(short, m_two);
+	LES_TEST_STRUCT_END();
+	fprintf(stderr, "\n");
+
+	LES_TEST_STRUCT_START(LES_MemberAlreadyExists, 2);
+	LES_TEST_STRUCT_ADD_MEMBER(int, m_one);
+	LES_TEST_STRUCT_ADD_MEMBER(short, m_one);
+	LES_TEST_STRUCT_END();
+	fprintf(stderr, "\n");
 }
 
