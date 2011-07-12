@@ -43,15 +43,18 @@ int LES_FunctionParameterData::Read(const LES_StringEntry* const typeStringEntry
 		return LES_ERROR;
 	}
 
-	const unsigned int parameterDataSize = typeEntryPtr->m_dataSize;
-	memcpy(parameterDataPtr, m_currentReadBufferPtr, parameterDataSize);
-	m_currentReadBufferPtr += parameterDataSize;
+	if ((flags & LES_TYPE_POD) || (flags & LES_TYPE_STRUCT))
+	{
+		const unsigned int parameterDataSize = typeEntryPtr->m_dataSize;
+		memcpy(parameterDataPtr, m_currentReadBufferPtr, parameterDataSize);
+		m_currentReadBufferPtr += parameterDataSize;
+	}
 
 	return LES_OK;
 }
 
 int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntry, 
-																 const void* const parameterDataPtr, const unsigned int paramMode)
+																 		 const void* const parameterDataPtr, const unsigned int paramMode)
 {
 	const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntry(typeStringEntry);
 	if (typeEntryPtr == NULL)
@@ -85,8 +88,11 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 		return LES_ERROR;
 	}
 
-	memcpy(m_currentWriteBufferPtr, valueAddress, parameterDataSize);
-	m_currentWriteBufferPtr += parameterDataSize;
+	if ((flags & LES_TYPE_POD) || (flags & LES_TYPE_STRUCT))
+	{
+		memcpy(m_currentWriteBufferPtr, valueAddress, parameterDataSize);
+		m_currentWriteBufferPtr += parameterDataSize;
+	}
 
 	return LES_OK;
 }

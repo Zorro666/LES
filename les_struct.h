@@ -38,4 +38,6 @@ private:
 	mutable bool m_ownsMembersMemory;
 };
 
+const LES_StructDefinition* LES_GetStructDefinition(const char* const name);
+
 #endif // #ifndef LES_STRUCT_HH

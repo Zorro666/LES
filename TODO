@@ -1,21 +1,19 @@
 High Priority:
-FUNCTION: AddFunction - needs to be deep copy or destructor shouldn't delete m_params
-FUNCTION: need to add the assignment operator and copy constructor
-
-STRUCT: AddStruct - needs to be deep copy of destructor shouldn't delete m_members
-STRUCT: need to add the assignment operator and copy constructor
-
-FUNCTION: build definition of structs from POD types
-TEST: test input parameter as a structure - struct would have a LES_TypeEntry with flag STRUCT
+STRUCT: Write parameter should write each entry separately not memcpy the struct
+STRUCT: save padding per member to get data written & read correctly
+TEST: test decode a struct inside a struct
 TEST: test output parameter as a structure
 TEST: test input parameter as a pointer to a structure
 TEST: test output parameter as a pointer to a structure
+TEST: decode struct parameter by type entry (recursive?) and check the data is correct
+TEST: decode struct parameter in the Decode() function - decode struct members
 
 FUNCTION: type definition add count e.g. int[3] means int * 3 : wow you can do sizeof(int[3])
 TEST: test input parameter as a POD array
 TEST: test output parameter as a POD array
 TEST: test input parameter as a structure array
 TEST: test output parameter as a structure array
+TEST: test POD array as member in a struct
 
 Medium Priority:
 FUNCTION: error handling run out of memory when adding new function or new type e.g. array limit reached
