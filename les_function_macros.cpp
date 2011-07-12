@@ -79,6 +79,13 @@ int LES_FunctionAddParam(const char* const type, const char* const name, const i
 												 const LES_FunctionDefinition* const functionDefinition,
 												 LES_FunctionTempData* const functionTempData)
 {
+	if (functionTempData == LES_NULL)
+	{
+		fprintf(stderr, "LES ERROR: '%s' : functionTempData is NULL parameter:'%s' type:'%s'\n",
+						functionTempData->functionName, name, type);
+		return LES_ERROR;
+	}
+
 	const LES_Hash typeHash = LES_GenerateHashCaseSensitive(type);
 	const LES_Hash nameHash = LES_GenerateHashCaseSensitive(name);
 	/* Check the parameter index to see if it exceeds the number of declared parameters */
@@ -109,6 +116,13 @@ int LES_FunctionAddParam(const char* const type, const char* const name, const i
 	}
 	/* Check the parameter hasn't already been added */
 	const int functionParameterIndex = functionParameterPtr->m_index;
+	if ((functionParameterIndex < 0) || (functionParameterIndex >= LES_MAX_NUM_FUNCTION_PARAMS))
+	{
+		/* ERROR: invalid parameter index */
+		fprintf(stderr, "LES ERROR: '%s' : %s parameter:'%s' type:'%s' invalid parameter index:%d\n",
+						functionTempData->functionName, mode, name, type, functionParameterIndex);
+		return LES_ERROR;
+	}
 	if (functionTempData->paramUsed[functionParameterIndex] == 1)
 	{
 		/* ERROR: parameter has already been added */
