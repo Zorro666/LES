@@ -672,8 +672,8 @@ static void LES_Test_DecodeInputOutputParameters(int input_0, short input_1, cha
 
 struct TestStruct1
 {
-	int m_int;
 	char m_char;
+	int m_int;
 	short m_short;
 	float m_float;
 };
@@ -711,7 +711,7 @@ void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 inp
 		return;
 	}
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
-	const int realParameterDataSize = sizeof(int)+sizeof(TestStruct1);
+	const int realParameterDataSize = sizeof(int)+sizeof(TestStruct1) + sizeof(TestStruct2);
 	if (parameterDataSize != realParameterDataSize)
 	{
 		fprintf(stderr, "LES_Test_StructInputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
@@ -766,8 +766,8 @@ void LES_TestSetup(void)
 	LES_TEST_ADD_TYPE_EX(output_only, 4, LES_TYPE_OUTPUT|LES_TYPE_POD);
 
 	LES_TEST_STRUCT_START(TestStruct1, 4);
-	LES_TEST_STRUCT_ADD_MEMBER(int, m_int);
 	LES_TEST_STRUCT_ADD_MEMBER(char, m_char);
+	LES_TEST_STRUCT_ADD_MEMBER(int, m_int);
 	LES_TEST_STRUCT_ADD_MEMBER(short, m_short);
 	LES_TEST_STRUCT_ADD_MEMBER(float, m_float);
 	LES_TEST_STRUCT_END();

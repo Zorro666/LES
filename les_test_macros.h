@@ -148,8 +148,9 @@
 			structMemberPtr->m_nameID = LES_AddStringEntry(#NAME); \
 			structMemberPtr->m_typeID = typeID; \
 			structMemberPtr->m_dataSize = memberDataSize; \
-			structMemberPtr->m_alignmentPadding = LES_StructComputeAlignmentPadding(totalMemberSize, memberDataSize); \
-			totalMemberSize += memberDataSize; \
+			const int alignmentPadding = LES_StructComputeAlignmentPadding(totalMemberSize, memberDataSize); \
+			structMemberPtr->m_alignmentPadding = alignmentPadding; \
+			totalMemberSize += (memberDataSize + alignmentPadding); \
 			globalMemberIndex++; \
 		} \
 	} \

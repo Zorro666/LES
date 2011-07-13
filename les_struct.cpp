@@ -173,15 +173,15 @@ int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* 
 int LES_StructComputeAlignmentPadding(const int totalMemberSize, const int memberDataSize)
 {
 	int memberAlignmentSizeMinus1 = memberDataSize - 1;
-	// Max alignment is 8 bytes
-	if (memberAlignmentSizeMinus1 > 7)
+	// Max alignment is 4 bytes
+	if (memberAlignmentSizeMinus1 > 3)
 	{
-		memberAlignmentSizeMinus1 = 7;
+		memberAlignmentSizeMinus1 = 3;
 	}
 	const int alignedOffset = ((totalMemberSize + memberAlignmentSizeMinus1) & ~memberAlignmentSizeMinus1);
 	const int alignmentPadding = alignedOffset - totalMemberSize;
 
-	printf("TotalMemberSize:0x%X MemberDataSize:0x%d Alignment:%d\n", totalMemberSize, memberDataSize, alignmentPadding);
+	//printf("TotalMemberSize:0x%X MemberDataSize:0x%d Alignment:%d\n", totalMemberSize, memberDataSize, alignmentPadding);
 
 	return alignmentPadding;
 }

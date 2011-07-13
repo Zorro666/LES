@@ -91,7 +91,7 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 
 	if (flags & LES_TYPE_STRUCT)
 	{
-		printf("Write type:'%s' size:%d STRUCT\n", typeStringEntry->m_str, typeEntryPtr->m_dataSize);
+		//printf("Write type:'%s' size:%d STRUCT\n", typeStringEntry->m_str, typeEntryPtr->m_dataSize);
 		int returnCode = LES_OK;
 		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeStringEntry->m_str);
 		if (structDefinition == LES_NULL)
@@ -122,7 +122,7 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 
 	if (flags & LES_TYPE_POD)
 	{
-		printf("Write type:'%s' size:%d\n", typeStringEntry->m_str, typeEntryPtr->m_dataSize);
+		//printf("Write type:'%s' size:%d\n", typeStringEntry->m_str, typeEntryPtr->m_dataSize);
 		memcpy(m_currentWriteBufferPtr, valueAddress, parameterDataSize);
 		m_currentWriteBufferPtr += parameterDataSize;
 	}
