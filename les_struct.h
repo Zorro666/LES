@@ -9,7 +9,9 @@ struct LES_StructMember
 	LES_Hash m_hash;
 	int m_nameID;
 	int m_typeID;
-	// Need to include padding offset for natural alignment
+
+	int m_dataSize;
+	int m_alignmentPadding;
 };
 
 class LES_StructDefinition

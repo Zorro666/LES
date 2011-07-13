@@ -5,11 +5,6 @@
 #include "les_function.h"
 #include "les_struct.h"
 
-extern int LES_AddStringEntry(const char* const str);
-extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr);
-extern int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags);
-extern int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* const structDefinitionPtr);
-
 #define LES_TEST_FUNCTION_START(NAME, RETURN_TYPE, NUM_INPUTS, NUM_OUTPUTS) \
 	{ \
 		const char* const functionName = #NAME; \
@@ -139,16 +134,24 @@ extern int LES_AddStructDefinition(const char* const name, const LES_StructDefin
 		const int typeID = LES_AddStringEntry(#TYPE); \
 		const LES_StringEntry* const typeStringEntry = LES_GetStringEntryForID(typeID); \
 		const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntry(typeStringEntry); \
-		if (typeEntryPtr != LES_NULL) \
+		if (typeEntryPtr == LES_NULL) \
 		{ \
-			const int typeDataSize = typeEntryPtr->m_dataSize; \
-			totalMemberSize += typeDataSize; \
+			fprintf(stderr, "LES ERROR: TEST struct '%s' : member '%s' type '%s' not found\n",  \
+						structName, #NAME, #TYPE); \
+		__LES_ok = false; \
 		} \
-		structMemberPtr = (LES_StructMember* const)(structDefinition.GetMemberByIndex(globalMemberIndex)); \
-		structMemberPtr->m_hash = nameHash; \
-		structMemberPtr->m_nameID = LES_AddStringEntry(#NAME); \
-		structMemberPtr->m_typeID = typeID; \
-		globalMemberIndex++; \
+		if (__LES_ok == true) \
+		{ \
+			const int memberDataSize = typeEntryPtr->m_dataSize; \
+			structMemberPtr = (LES_StructMember* const)(structDefinition.GetMemberByIndex(globalMemberIndex)); \
+			structMemberPtr->m_hash = nameHash; \
+			structMemberPtr->m_nameID = LES_AddStringEntry(#NAME); \
+			structMemberPtr->m_typeID = typeID; \
+			structMemberPtr->m_dataSize = memberDataSize; \
+			structMemberPtr->m_alignmentPadding = LES_StructComputeAlignmentPadding(totalMemberSize, memberDataSize); \
+			totalMemberSize += memberDataSize; \
+			globalMemberIndex++; \
+		} \
 	} \
 } \
 

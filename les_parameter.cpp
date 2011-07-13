@@ -106,13 +106,16 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 			const LES_StructMember* const structMember = structDefinition->GetMemberByIndex(i);
 			const int memberTypeID = structMember->m_typeID;
 			const LES_StringEntry* const memberTypeStringEntry = LES_GetStringEntryForID(memberTypeID);
+			const int memberAlignmentPadding = structMember->m_alignmentPadding;
+			memberDataPtr += memberAlignmentPadding;
 			returnCode = Write(memberTypeStringEntry, (const void* const)memberDataPtr, paramMode);
 			if (returnCode == LES_ERROR)
 			{
 				return LES_ERROR;
 			}
-			const LES_TypeEntry* const memberTypeEntryPtr = LES_GetTypeEntry(memberTypeStringEntry);
-			memberDataPtr += memberTypeEntryPtr->m_dataSize;
+//			const LES_TypeEntry* const memberTypeEntryPtr = LES_GetTypeEntry(memberTypeStringEntry);
+//			memberDataPtr += memberTypeEntryPtr->m_dataSize;
+				memberDataPtr += structMember->m_dataSize;
 		}
 		return returnCode;
 	}

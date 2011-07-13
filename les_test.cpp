@@ -9,6 +9,12 @@
 #include "les_parameter.h"
 #include "les_struct.h"
 
+extern int LES_AddStringEntry(const char* const str);
+extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr);
+extern int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags);
+extern int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* const structDefinitionPtr);
+extern int LES_StructComputeAlignmentPadding(const int totalMemberSize, const int memberDataSize);
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Internal test functions
