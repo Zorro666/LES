@@ -672,6 +672,7 @@ static void LES_Test_DecodeInputOutputParameters(int input_0, short input_1, cha
 
 struct TestStruct1
 {
+	long long int m_longlong;
 	char m_char;
 	int m_int;
 	short m_short;
@@ -746,6 +747,7 @@ void LES_TestSetup(void)
 	LES_TEST_ADD_TYPE_POD(short);
 	LES_TEST_ADD_TYPE_POD(int);
 	LES_TEST_ADD_TYPE_POD(long);
+	LES_TEST_ADD_TYPE_POD(long long int);
 
 	LES_TEST_ADD_TYPE_POD(float);
 	LES_TEST_ADD_TYPE_POD(double);
@@ -765,7 +767,8 @@ void LES_TestSetup(void)
 
 	LES_TEST_ADD_TYPE_EX(output_only, 4, LES_TYPE_OUTPUT|LES_TYPE_POD);
 
-	LES_TEST_STRUCT_START(TestStruct1, 4);
+	LES_TEST_STRUCT_START(TestStruct1, 5);
+	LES_TEST_STRUCT_ADD_MEMBER(long long int, m_long);
 	LES_TEST_STRUCT_ADD_MEMBER(char, m_char);
 	LES_TEST_STRUCT_ADD_MEMBER(int, m_int);
 	LES_TEST_STRUCT_ADD_MEMBER(short, m_short);
@@ -1185,19 +1188,25 @@ void LES_TestSetup(void)
 
 	/* Struct tests */
 	fprintf(stderr, "#### Struct tests ####\n");
-	LES_TEST_STRUCT_START(LES_TooManyMembers, 1);
+	LES_TEST_STRUCT_START(LES_Struct_TooManyMembers, 1);
 	LES_TEST_STRUCT_ADD_MEMBER(int, m_one);
 	LES_TEST_STRUCT_ADD_MEMBER(short, m_two);
 	LES_TEST_STRUCT_END();
 	fprintf(stderr, "\n");
-	LES_TEST_STRUCT_START(LES_MemberAlreadyExists, 2);
+	LES_TEST_STRUCT_START(LES_Struct_MemberAlreadyExists, 2);
 	LES_TEST_STRUCT_ADD_MEMBER(int, m_one);
 	LES_TEST_STRUCT_ADD_MEMBER(short, m_one);
+	LES_TEST_STRUCT_END();
+	fprintf(stderr, "\n");
+	LES_TEST_STRUCT_START(LES_Struct_NotEnoughMembers, 3);
+	LES_TEST_STRUCT_ADD_MEMBER(long long int, m_long);
+	LES_TEST_STRUCT_ADD_MEMBER(char, m_char);
 	LES_TEST_STRUCT_END();
 	fprintf(stderr, "\n");
 
 	{
 		TestStruct1 input_2;
+		input_2.m_longlong = -100048;
 		input_2.m_int = 65;
 		input_2.m_short = -123;
 		input_2.m_char = 42;

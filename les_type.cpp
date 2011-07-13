@@ -7,6 +7,7 @@
 static LES_TypeEntry* les_typeEntryArray = LES_NULL;
 static int les_numTypeEntries = 0;
 
+LES_Hash LES_TypeEntry::s_longlongHash = LES_GenerateHashCaseSensitive("long long int");
 LES_Hash LES_TypeEntry::s_intHash = LES_GenerateHashCaseSensitive("int");
 LES_Hash LES_TypeEntry::s_unsignedintPtrHash = LES_GenerateHashCaseSensitive("unsigned int*");
 LES_Hash LES_TypeEntry::s_shortHash = LES_GenerateHashCaseSensitive("short");

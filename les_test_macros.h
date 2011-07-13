@@ -7,6 +7,7 @@
 
 #define LES_TEST_FUNCTION_START(NAME, RETURN_TYPE, NUM_INPUTS, NUM_OUTPUTS) \
 	{ \
+		bool __LES_function_ok = true; \
 		const char* const functionName = #NAME; \
 		const int nameID = LES_AddStringEntry(functionName); \
 		const int returnTypeID = LES_AddStringEntry(#RETURN_TYPE); \
@@ -24,7 +25,7 @@
 
 #define	LES_TEST_FUNCTION_ADD_PARAM(IS_INPUT, TYPE, NAME) \
 { \
-	bool __LES_ok = true; \
+	bool __LES_ok = __LES_function_ok; \
 	/* Error if parameter index off the end of the array */ \
 	const int maxNumParam = (IS_INPUT ? functionDefinition.GetNumInputs() : functionDefinition.GetNumOutputs()); \
 	int* const paramIndex = (IS_INPUT ? &inputParamIndex : &outputParamIndex); \
@@ -35,6 +36,7 @@
 		fprintf(stderr, "LES ERROR: TEST function '%s' : %s ParamIndex too big index:%d max:%d parameter:'%s' type:'%s'\n", \
 						functionName, paramModeStr, *paramIndex, maxNumParam, #NAME, #TYPE); \
 		__LES_ok = false; \
+		__LES_function_ok = false; \
 	} \
 	const LES_Hash nameHash = LES_GenerateHashCaseSensitive(#NAME); \
 	/* Test to see if the parameter has already been added */ \
@@ -43,6 +45,7 @@
 		fprintf(stderr, "LES ERROR: TEST function '%s' : parameter '%s' already exists type:'%s'\n",  \
 						functionName, #NAME, #TYPE); \
 		__LES_ok = false; \
+		__LES_function_ok = false; \
 	} \
 	if (__LES_ok == true) \
 	{ \
@@ -74,9 +77,23 @@
 
 
 #define LES_TEST_FUNCTION_END() \
-		functionDefinition.SetParameterDataSize(parameterDataSize); \
-		LES_AddFunctionDefinition(functionName, &functionDefinition); \
+		if (globalParamIndex != functionDefinition.GetNumParameters()) \
+		{ \
+			__LES_function_ok = false; \
+			fprintf(stderr, "LES ERROR: TEST function '%s' : ERROR not the right number of parameters Added:%d Should be:%d\n", \
+							functionName, globalParamIndex, functionDefinition.GetNumParameters()); \
+		} \
+		if (__LES_function_ok == true) \
+		{ \
+			functionDefinition.SetParameterDataSize(parameterDataSize); \
+			LES_AddFunctionDefinition(functionName, &functionDefinition); \
+		} \
+		else \
+		{ \
+			fprintf(stderr, "LES ERROR: TEST function '%s' : ERROR cannot create definition\n", functionName); \
+		} \
 	} \
+
 
 
 #define LES_TEST_ADD_TYPE_EX(TYPE, SIZE, FLAGS) \
@@ -100,6 +117,7 @@
 
 #define LES_TEST_STRUCT_START(NAME, NUM_MEMBERS) \
 	{ \
+		bool __LES_struct_ok = true; \
 		const char* const structName = #NAME; \
 		const int nameID = LES_AddStringEntry(structName); \
 		LES_StructDefinition structDefinition(nameID, NUM_MEMBERS); \
@@ -112,7 +130,7 @@
 
 #define	LES_TEST_STRUCT_ADD_MEMBER(TYPE, NAME) \
 { \
-	bool __LES_ok = true; \
+	bool __LES_ok = __LES_struct_ok; \
 	/* Error if member index off the end of the array */ \
 	const int maxNumMembers = structDefinition.GetNumMembers(); \
 	if (globalMemberIndex >= maxNumMembers) \
@@ -120,6 +138,7 @@
 		fprintf(stderr, "LES ERROR: TEST struct '%s' : MemberIndex too big index:%d max:%d member:'%s' type:'%s'\n", \
 						structName, globalMemberIndex, maxNumMembers, #NAME, #TYPE); \
 		__LES_ok = false; \
+		__LES_struct_ok = false; \
 	} \
 	const LES_Hash nameHash = LES_GenerateHashCaseSensitive(#NAME); \
 	/* Test to see if the member has already been added */ \
@@ -128,6 +147,7 @@
 		fprintf(stderr, "LES ERROR: TEST struct '%s' : member '%s' already exists type:'%s'\n",  \
 						structName, #NAME, #TYPE); \
 		__LES_ok = false; \
+		__LES_struct_ok = false; \
 	} \
 	if (__LES_ok == true) \
 	{ \
@@ -138,7 +158,8 @@
 		{ \
 			fprintf(stderr, "LES ERROR: TEST struct '%s' : member '%s' type '%s' not found\n",  \
 						structName, #NAME, #TYPE); \
-		__LES_ok = false; \
+			__LES_ok = false; \
+			__LES_struct_ok = false; \
 		} \
 		if (__LES_ok == true) \
 		{ \
@@ -158,8 +179,21 @@
 
 
 #define LES_TEST_STRUCT_END() \
-		structDefinition.SetTotalMemberDataSize(totalMemberSize); \
-		LES_AddStructDefinition(structName, &structDefinition); \
+		if (globalMemberIndex != structDefinition.GetNumMembers()) \
+		{ \
+			__LES_struct_ok = false; \
+			fprintf(stderr, "LES ERROR: TEST struct '%s' : ERROR not the right number of members Added:%d Should be:%d\n", \
+							structName, globalMemberIndex, structDefinition.GetNumMembers()); \
+		} \
+		if (__LES_struct_ok == true) \
+		{ \
+			structDefinition.SetTotalMemberDataSize(totalMemberSize); \
+			LES_AddStructDefinition(structName, &structDefinition); \
+		} \
+		else \
+		{ \
+			fprintf(stderr, "LES ERROR: TEST struct '%s' : ERROR cannot create its definition\n", structName ); \
+		} \
 	} \
 
 

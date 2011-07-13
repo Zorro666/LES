@@ -94,6 +94,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		return returnCode;
 	}
 
+	long long int longlongValue;
 	int intValue;
 	short shortValue;
 	char charValue;
@@ -103,9 +104,14 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	const char* fmtStr = LES_NULL;
 	const int typeDataSize = typeData->m_dataSize;
 
-	if ((typeHash == LES_TypeEntry::s_intHash) || 
-			(typeHash == LES_TypeEntry::s_intPtrHash) || 
-			(typeHash == LES_TypeEntry::s_unsignedintPtrHash))
+	if (typeHash == LES_TypeEntry::s_longlongHash)
+	{
+		valuePtr = &longlongValue;
+		fmtStr = "%ld";
+	}
+	else if ((typeHash == LES_TypeEntry::s_intHash) || 
+					(typeHash == LES_TypeEntry::s_intPtrHash) || 
+					(typeHash == LES_TypeEntry::s_unsignedintPtrHash))
 	{
 		valuePtr = &intValue;
 		fmtStr = "%d";
@@ -151,9 +157,13 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	}
 	printf("[%d]:'%s' type:'%s' value:", parameterIndex, nameStr, typeStr);
 
-	if ((typeHash == LES_TypeEntry::s_intHash) || 
-			(typeHash == LES_TypeEntry::s_intPtrHash) || 
-			(typeHash == LES_TypeEntry::s_unsignedintPtrHash))
+	if (typeHash == LES_TypeEntry::s_longlongHash)
+	{
+		printf(fmtStr, longlongValue);
+	}
+	else if ((typeHash == LES_TypeEntry::s_intHash) || 
+					(typeHash == LES_TypeEntry::s_intPtrHash) || 
+					(typeHash == LES_TypeEntry::s_unsignedintPtrHash))
 	{
 		printf(fmtStr, intValue);
 	}

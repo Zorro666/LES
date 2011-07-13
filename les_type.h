@@ -20,6 +20,7 @@ struct LES_TypeEntry
 	unsigned int m_flags;
 
 public:
+	static LES_Hash s_longlongHash;
 	static LES_Hash s_intHash;
 	static LES_Hash s_unsignedintPtrHash;
 	static LES_Hash s_shortHash;
