@@ -99,6 +99,14 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		typeEntryPtr->m_dataSize = dataSize;
 		typeEntryPtr->m_flags = flags;
 		typeEntryPtr->m_aliasedTypeID = aliasedTypeID;
+
+		const LES_Hash aliasedHash = LES_GenerateHashCaseSensitive(aliasedName);
+		if (aliasedHash != hash)
+		{
+			typeEntryPtr->m_flags |= LES_TYPE_ALIAS;
+			printf("Type '%s' has an alias to '%s'\n", name, aliasedName);
+		}
+
 		les_numTypeEntries++;
 	}
 	else

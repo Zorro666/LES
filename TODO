@@ -1,4 +1,5 @@
 High Priority:
+TEST: add printf test in Write(), Read(), DecodeSingle() for pointer type to char: dataSize=1 but pointer size=4
 FUNCTION: use aliased type id for pointer types to get final data size correctly
 FUNCTION: use aliased type id for pointer to structure types to get final data type 
 
