@@ -1,4 +1,7 @@
 High Priority:
+FUNCTION: use aliased type id for pointer types to get final data size correctly
+FUNCTION: use aliased type id for pointer to structure types to get final data type 
+
 TEST: test output parameter as a pointer to a structure
 TEST: test input parameter as a pointer to a structure
 

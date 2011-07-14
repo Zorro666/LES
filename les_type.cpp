@@ -74,9 +74,22 @@ void LES_TypeShutdown(void)
 	delete[] les_typeEntryArray;
 }
 
-int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags)
+int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags, const char* const aliasedName)
 {
 	const LES_Hash hash = LES_GenerateHashCaseSensitive(name);
+	const LES_Hash aliasedTypeHash = LES_GenerateHashCaseSensitive(aliasedName);
+	const bool hasAnAlias = (hash != aliasedTypeHash);
+
+	const int aliasedTypeID = LES_GetTypeEntrySlow(aliasedTypeHash);
+	if ((aliasedTypeID < 0) || (aliasedTypeID >= les_numTypeEntries))
+	{
+		if (hasAnAlias)
+		{
+			fprintf(stderr, "LES ERROR: AddType '%s' : aliasedType '%s' not found\n", name, aliasedName);
+			return LES_ERROR;
+		}
+	}
+
 	int index = LES_GetTypeEntrySlow(hash);
 	if ((index < 0) || (index >= les_numTypeEntries))
 	{
@@ -86,11 +99,12 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		typeEntryPtr->m_hash = hash;
 		typeEntryPtr->m_dataSize = dataSize;
 		typeEntryPtr->m_flags = flags;
+		typeEntryPtr->m_aliasedTypeID = (hasAnAlias ? aliasedTypeID : index);
 		les_numTypeEntries++;
 	}
 	else
 	{
-		/* Check the data size match */
+		/* Check the type data matchs */
 		LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[index];
 		if (typeEntryPtr->m_dataSize != dataSize)
 		{
@@ -102,6 +116,12 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		{
 			fprintf(stderr, "LES ERROR: AddType '%s' hash 0x%X already in list and flags doesn't match Existing:0x%X New:0x%X\n",
 							name, hash, typeEntryPtr->m_flags, flags);
+			return LES_ERROR;
+		}
+		if (typeEntryPtr->m_aliasedTypeID != aliasedTypeID)
+		{
+			fprintf(stderr, "LES ERROR: AddType '%s' hash 0x%X already in list and aliasedTypeID doesn't match Existing:%d New:%d\n",
+							name, hash, typeEntryPtr->m_aliasedTypeID, aliasedTypeID);
 			return LES_ERROR;
 		}
 	}

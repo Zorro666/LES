@@ -11,7 +11,7 @@
 
 extern int LES_AddStringEntry(const char* const str);
 extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr);
-extern int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags);
+extern int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags, const char* const aliasedName);
 extern int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* const structDefinitionPtr);
 extern int LES_StructComputeAlignmentPadding(const int totalMemberSize, const int memberDataSize);
 
@@ -688,6 +688,22 @@ struct TestStruct2
 	int m_int;
 };
 
+struct TestStruct3
+{
+	short m_short;
+	float m_float;
+	int m_int;
+	char m_char;
+};
+
+struct TestStruct4
+{
+	float m_float;
+	int m_int;
+	char m_char;
+	short m_short;
+	TestStruct3 m_testStruct3;
+};
 
 void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 input_2)
 {
@@ -728,6 +744,44 @@ void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 inp
 	return;
 }
 
+void LES_Test_StructOutputParam(TestStruct3* out_0, TestStruct4* out_1)
+{
+	LES_FunctionParameterData* parameterData = LES_NULL;
+
+	LES_FUNCTION_START(LES_Test_StructOutputParam, void);
+	LES_FUNCTION_ADD_OUTPUT(TestStruct3*, out_0);
+	LES_FUNCTION_ADD_OUTPUT(TestStruct4*, out_1);
+	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
+	LES_FUNCTION_END();
+
+	if (parameterData == LES_NULL)
+	{
+		return;
+	}
+
+	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_StructOutputParam");
+	if (functionDefinitionPtr == LES_NULL)
+	{
+		fprintf(stderr, "LES_Test_StructOutputParam: can't find the function definition\n");
+		return;
+	}
+	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
+	const int realParameterDataSize = sizeof(TestStruct3) + sizeof(TestStruct4);
+	if (parameterDataSize != realParameterDataSize)
+	{
+		fprintf(stderr, "LES_Test_StructOutputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
+						parameterDataSize, realParameterDataSize);
+	}
+
+	if (functionDefinitionPtr->Decode(parameterData) == LES_ERROR)
+	{
+		fprintf(stderr, "LES_Test_StructOutputParam: Decode failed\n");
+		return;
+	}
+	fprintf(stderr, "LES_Test_StructOutputParam: parameterDataSize:%d\n", parameterDataSize);
+	return;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -765,7 +819,7 @@ void LES_TestSetup(void)
 	LES_TEST_ADD_TYPE_POD_POINTER(float, LES_TYPE_INPUT_OUTPUT);
 	LES_TEST_ADD_TYPE_POD_POINTER(double, LES_TYPE_INPUT_OUTPUT);
 
-	LES_TEST_ADD_TYPE_EX(output_only, 4, LES_TYPE_OUTPUT|LES_TYPE_POD);
+	LES_TEST_ADD_TYPE_EX(output_only, 4, LES_TYPE_OUTPUT|LES_TYPE_POD,output_only);
 
 	LES_TEST_STRUCT_START(TestStruct1, 5);
 	LES_TEST_STRUCT_ADD_MEMBER(long long int, m_long);
@@ -786,6 +840,27 @@ void LES_TestSetup(void)
 	LES_TEST_STRUCT_END();
 
 	LES_TEST_ADD_TYPE_STRUCT(TestStruct2);
+
+	LES_TEST_STRUCT_START(TestStruct3, 4);
+	LES_TEST_STRUCT_ADD_MEMBER(short, m_short);
+	LES_TEST_STRUCT_ADD_MEMBER(float, m_float);
+	LES_TEST_STRUCT_ADD_MEMBER(int, m_int);
+	LES_TEST_STRUCT_ADD_MEMBER(char, m_char);
+	LES_TEST_STRUCT_END();
+
+	LES_TEST_ADD_TYPE_STRUCT(TestStruct3);
+	LES_TEST_ADD_TYPE_STRUCT_POINTER(TestStruct3, LES_TYPE_INPUT_OUTPUT);
+
+	LES_TEST_STRUCT_START(TestStruct4, 5);
+	LES_TEST_STRUCT_ADD_MEMBER(float, m_float);
+	LES_TEST_STRUCT_ADD_MEMBER(int, m_int);
+	LES_TEST_STRUCT_ADD_MEMBER(char, m_char);
+	LES_TEST_STRUCT_ADD_MEMBER(short, m_short);
+	LES_TEST_STRUCT_ADD_MEMBER(TestStruct3, m_testStruct3);
+	LES_TEST_STRUCT_END();
+
+	LES_TEST_ADD_TYPE_STRUCT(TestStruct4);
+	LES_TEST_ADD_TYPE_STRUCT_POINTER(TestStruct4, LES_TYPE_INPUT_OUTPUT);
 
 	/* Sample functions for development */
 	LES_TEST_FUNCTION_START(jakeInit, void, 2, 1);
@@ -827,6 +902,7 @@ void LES_TestSetup(void)
 	functionParameterPtr->m_nameID = -1;
 	functionParameterPtr->m_typeID = LES_AddStringEntry("int");
 	functionParameterPtr->m_mode = LES_PARAM_MODE_INPUT;
+	globalParamIndex++;
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_InputNameDoesntExist, void, 1, 1);
@@ -841,6 +917,7 @@ void LES_TestSetup(void)
 	functionParameterPtr->m_nameID = LES_AddStringEntry("wrongHash");
 	functionParameterPtr->m_typeID = LES_AddStringEntry("int");
 	functionParameterPtr->m_mode = LES_PARAM_MODE_INPUT;
+	globalParamIndex++;
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_InputNameStringIsWrong, void, 1, 0);
@@ -860,6 +937,7 @@ void LES_TestSetup(void)
 	functionParameterPtr->m_nameID = LES_AddStringEntry("input_0");
 	functionParameterPtr->m_typeID = -1;
 	functionParameterPtr->m_mode = LES_PARAM_MODE_INPUT;
+	globalParamIndex++;
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_InputTypeHashIsWrong, void, 1, 0);
@@ -869,6 +947,7 @@ void LES_TestSetup(void)
 	functionParameterPtr->m_nameID = LES_AddStringEntry("input_0");
 	functionParameterPtr->m_typeID = LES_AddStringEntry("wrongHash");
 	functionParameterPtr->m_mode = LES_PARAM_MODE_INPUT;
+	globalParamIndex++;
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_InputTypeStringIsWrong, void, 1, 0);
@@ -923,6 +1002,7 @@ void LES_TestSetup(void)
 	functionParameterPtr->m_nameID = -1;
 	functionParameterPtr->m_typeID = LES_AddStringEntry("int");
 	functionParameterPtr->m_mode = LES_PARAM_MODE_OUTPUT;
+	globalParamIndex++;
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_OutputNameDoesntExist, void, 0, 1);
@@ -936,6 +1016,7 @@ void LES_TestSetup(void)
 	functionParameterPtr->m_nameID = LES_AddStringEntry("wrongHash");
 	functionParameterPtr->m_typeID = LES_AddStringEntry("int");
 	functionParameterPtr->m_mode = LES_PARAM_MODE_OUTPUT;
+	globalParamIndex++;
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_OutputNameStringIsWrong, void, 0, 1);
@@ -955,6 +1036,7 @@ void LES_TestSetup(void)
 	functionParameterPtr->m_nameID = LES_AddStringEntry("output_0");
 	functionParameterPtr->m_typeID = -1;
 	functionParameterPtr->m_mode = LES_PARAM_MODE_OUTPUT;
+	globalParamIndex++;
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_OutputTypeHashIsWrong, void, 0, 1);
@@ -964,6 +1046,7 @@ void LES_TestSetup(void)
 	functionParameterPtr->m_nameID = LES_AddStringEntry("output_0");
 	functionParameterPtr->m_typeID = LES_AddStringEntry("wrongHash");
 	functionParameterPtr->m_mode = LES_PARAM_MODE_OUTPUT;
+	globalParamIndex++;
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_OutputTypeStringIsWrong, void, 0, 1);
@@ -1045,6 +1128,11 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_INPUT(TestStruct2, input_0);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_1);
 	LES_TEST_FUNCTION_ADD_INPUT(TestStruct1, input_2);
+	LES_TEST_FUNCTION_END();
+
+	LES_TEST_FUNCTION_START(LES_Test_StructOutputParam, void, 0, 2);
+	LES_TEST_FUNCTION_ADD_OUTPUT(TestStruct3*, out_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(TestStruct4*, out_1);
 	LES_TEST_FUNCTION_END();
 
 	/* Run specific tests */
@@ -1170,9 +1258,11 @@ void LES_TestSetup(void)
 
 	/* Add Type tests */
 	fprintf(stderr, "#### Add Type tests ####\n");
-	LES_TEST_ADD_TYPE_EX(unsigned char, 2, LES_TYPE_POD|LES_TYPE_INPUT);
+	LES_TEST_ADD_TYPE_EX(unsigned char, 2, LES_TYPE_POD|LES_TYPE_INPUT, unsigned char);
 	fprintf(stderr, "\n");
-	LES_TEST_ADD_TYPE_EX(unsigned char, 1, LES_TYPE_POINTER|LES_TYPE_OUTPUT);
+	LES_TEST_ADD_TYPE_EX(unsigned char, 1, LES_TYPE_POINTER|LES_TYPE_OUTPUT, unsigned char);
+	fprintf(stderr, "\n");
+	LES_TEST_ADD_TYPE_EX(unsigned char, 1, LES_TYPE_POD|LES_TYPE_INPUT, unsigned int);
 	fprintf(stderr, "\n");
 
 	/* Read Parameter tests */
@@ -1204,21 +1294,33 @@ void LES_TestSetup(void)
 	LES_TEST_STRUCT_END();
 	fprintf(stderr, "\n");
 
-	{
-		TestStruct1 input_2;
-		input_2.m_longlong = -100048;
-		input_2.m_int = 65;
-		input_2.m_short = -123;
-		input_2.m_char = 42;
-		input_2.m_float = 666.987f;
-		TestStruct2 input_0;
-		input_0.m_float = 666.987f;
-		input_0.m_testStruct1 = input_2;
-		input_0.m_char = 42;
-		input_0.m_short = -123;
-		input_0.m_int = 65;
-		LES_Test_StructInputParam(input_0, 7243, input_2);
-		fprintf(stderr, "\n");
-	}
+	TestStruct1 in_2;
+	in_2.m_longlong = -100048;
+	in_2.m_int = 65;
+	in_2.m_short = -123;
+	in_2.m_char = 42;
+	in_2.m_float = 666.987f;
+	TestStruct2 in_0;
+	in_0.m_float = 666.987f;
+	in_0.m_testStruct1 = in_2;
+	in_0.m_char = 42;
+	in_0.m_short = -123;
+	in_0.m_int = 65;
+	LES_Test_StructInputParam(in_0, 7243, in_2);
+	fprintf(stderr, "\n");
+
+	TestStruct3 out_0;
+	out_0.m_float = 666.987f;
+	out_0.m_char = 42;
+	out_0.m_short = -123;
+	out_0.m_int = 65;
+	TestStruct4 out_1;
+	out_1.m_float = 666.987f;
+	out_1.m_testStruct3 = out_0;
+	out_1.m_char = 42;
+	out_1.m_short = -123;
+	out_1.m_int = 65;
+	LES_Test_StructOutputParam(&out_0, &out_1);
+	fprintf(stderr, "\n");
 }
 

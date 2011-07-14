@@ -18,6 +18,7 @@ struct LES_TypeEntry
 	LES_Hash m_hash;
 	unsigned int m_dataSize;
 	unsigned int m_flags;
+	int m_aliasedTypeID;
 
 public:
 	static LES_Hash s_longlongHash;
