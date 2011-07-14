@@ -109,17 +109,17 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 	{
 		typeEntryPtr = aliasedTypeEntryPtr;
 	}
+	const void* valueAddress = parameterDataPtr;
+	if (rawTypeFlags & LES_TYPE_POINTER)
+	{
+		const void** pointerAddress = (const void**)parameterDataPtr;
+		valueAddress = *pointerAddress;
+	}
 
 	const int typeFlags = typeEntryPtr->m_flags;
 	const int typeDataSize = typeEntryPtr->m_dataSize;
 
 	unsigned int parameterDataSize = typeDataSize;
-	const void* valueAddress = parameterDataPtr;
-	if (typeFlags & LES_TYPE_POINTER)
-	{
-		const void** pointerAddress = (const void**)parameterDataPtr;
-		valueAddress = *pointerAddress;
-	}
 	if (valueAddress == NULL)
 	{
 		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Write type:'%s' valueAddress is NULL\n", typeStringEntry->m_str);
@@ -128,25 +128,26 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 
 	if (typeFlags & LES_TYPE_STRUCT)
 	{
-		//printf("Write type:'%s' size:%d STRUCT\n", typeStringEntry->m_str, typeEntryPtr->m_dataSize);
+		printf("Write type:'%s' size:%d STRUCT\n", typeStringEntry->m_str, typeEntryPtr->m_dataSize);
 		int returnCode = LES_OK;
-		JAKE NEED TO USE typeEntryPtr to struct definition
-		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeStringEntry->m_str);
+		//JAKE NEED TO USE typeEntryPtr to struct definition
+		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeEntryPtr->m_hash);
 		if (structDefinition == LES_NULL)
 		{
 			fprintf(stderr, "LES ERROR: Write type:'%s' is a struct but can't be found\n", typeStringEntry->m_str);
 			return LES_ERROR;
 		}
 		const int numMembers = structDefinition->GetNumMembers();
-		const char* memberDataPtr = (const char*)parameterDataPtr;
+		const char* memberDataPtr = (const char*)valueAddress;
 		for (int i = 0; i < numMembers; i++)
 		{
 			const LES_StructMember* const structMember = structDefinition->GetMemberByIndex(i);
 			const int memberTypeID = structMember->m_typeID;
 			const LES_StringEntry* const memberTypeStringEntry = LES_GetStringEntryForID(memberTypeID);
 			const int memberAlignmentPadding = structMember->m_alignmentPadding;
+			const int memberParamMode = paramMode | (rawTypeFlags & LES_TYPE_INPUT) | (rawTypeFlags & LES_TYPE_OUTPUT);
 			memberDataPtr += memberAlignmentPadding;
-			returnCode = Write(memberTypeStringEntry, (const void* const)memberDataPtr, paramMode);
+			returnCode = Write(memberTypeStringEntry, (const void* const)memberDataPtr, memberParamMode);
 			if (returnCode == LES_ERROR)
 			{
 				return LES_ERROR;
@@ -160,7 +161,7 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 
 	if (typeFlags & LES_TYPE_POD)
 	{
-		//printf("Write type:'%s' size:%d\n", typeStringEntry->m_str, typeEntryPtr->m_dataSize);
+		printf("Write type:'%s' size:%d\n", typeStringEntry->m_str, typeEntryPtr->m_dataSize);
 		memcpy(m_currentWriteBufferPtr, valueAddress, parameterDataSize);
 		m_currentWriteBufferPtr += parameterDataSize;
 	}

@@ -69,7 +69,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	}
 
 	const int rawTypeFlags = rawTypeData->m_flags;
-	const LES_TypeEntry* typeData = rawTypeData;
+	const LES_TypeEntry* typeDataPtr = rawTypeData;
 	if (rawTypeFlags & LES_TYPE_ALIAS)
 	{
 		const int aliasedTypeID = rawTypeData->m_aliasedTypeID;
@@ -80,22 +80,22 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 							parameterIndex, nameStr, typeStr, aliasedTypeID);
 			return LES_ERROR;
 		}
-		typeData = LES_GetTypeEntry(aliasedTypeEntry);
+		typeDataPtr = LES_GetTypeEntry(aliasedTypeEntry);
 	}
-	if (typeData == LES_NULL)
+	if (typeDataPtr == LES_NULL)
 	{
 		fprintf(stderr, "LES ERROR: DecodeSingle parameter[%d]:'%s' type:'%s' type can't be found\n", 
 						parameterIndex, nameStr, typeStr);
 		return LES_ERROR;
 	}
 
-	const int typeFlags = typeData->m_flags;
-	const int typeDataSize = typeData->m_dataSize;
+	const int typeFlags = typeDataPtr->m_flags;
+	const int typeDataSize = typeDataPtr->m_dataSize;
 	if (typeFlags & LES_TYPE_STRUCT)
 	{
 		printf("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d STRUCT\n", parameterIndex, nameStr, typeStr, typeDataSize);
 		int returnCode = LES_OK;
-		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeStr);
+		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeDataPtr->m_hash);
 		if (structDefinition == LES_NULL)
 		{
 			fprintf(stderr, "LES ERROR: DecodeSingle parameter[%d]:'%s' type:'%s' is a struct but can't be found\n", 
@@ -206,7 +206,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	}
 	else
 	{
-		printf(":UNKNOWN typeDataSize:%d struct:%d", typeDataSize, (typeData->m_flags&LES_TYPE_STRUCT));
+		printf(":UNKNOWN typeDataSize:%d struct:%d", typeDataSize, (typeDataPtr->m_flags&LES_TYPE_STRUCT));
 	}
 	printf("\n");
 	return LES_OK;

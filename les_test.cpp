@@ -1310,16 +1310,16 @@ void LES_TestSetup(void)
 	fprintf(stderr, "\n");
 
 	TestStruct3 out_0;
-	out_0.m_float = 666.987f;
-	out_0.m_char = 42;
 	out_0.m_short = -123;
+	out_0.m_float = 666.987f;
 	out_0.m_int = 65;
+	out_0.m_char = 42;
 	TestStruct4 out_1;
 	out_1.m_float = 666.987f;
-	out_1.m_testStruct3 = out_0;
+	out_1.m_int = 65;
 	out_1.m_char = 42;
 	out_1.m_short = -123;
-	out_1.m_int = 65;
+	out_1.m_testStruct3 = out_0;
 	LES_Test_StructOutputParam(&out_0, &out_1);
 	fprintf(stderr, "\n");
 }

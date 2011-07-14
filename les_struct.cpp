@@ -13,21 +13,16 @@ static int les_numStructDefinitions = 0;
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int LES_GetStructDefinitionIndex(const char* const name)
+static int LES_GetStructDefinitionIndex(const LES_Hash nameHash)
 {
-	const LES_Hash structNameHash = LES_GenerateHashCaseSensitive(name);
-
 	/* This is horribly slow - need hash lookup table */
 	for (int i=0; i<les_numStructDefinitions; i++)
 	{
 		const LES_StructDefinition* const structDefinitionPtr = &les_structDefinitionArray[i];
 		const LES_StringEntry* const structNameStringEntryPtr = LES_GetStringEntryForID(structDefinitionPtr->GetNameID());
-		if (structNameStringEntryPtr->m_hash == structNameHash)
+		if (structNameStringEntryPtr->m_hash == nameHash)
 		{
-			if (strcmp(structNameStringEntryPtr->m_str, name) == 0)
-			{
-				return i;
-			}
+			return i;
 		}
 	}
 	return -1;
@@ -127,9 +122,9 @@ const LES_StructMember* LES_StructDefinition::GetMember(const LES_Hash nameHash)
 	return LES_NULL;
 }
 
-const LES_StructDefinition* LES_GetStructDefinition(const char* const name)
+const LES_StructDefinition* LES_GetStructDefinition(const LES_Hash nameHash)
 {
-	const int index = LES_GetStructDefinitionIndex(name);
+	const int index = LES_GetStructDefinitionIndex(nameHash);
 	if ((index < 0) || (index >= les_numStructDefinitions))
 	{
 		return LES_NULL;
@@ -158,7 +153,8 @@ void LES_StructShutdown()
 
 int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* const structDefinitionPtr)
 {
-	int index = LES_GetStructDefinitionIndex(name);
+	const LES_Hash nameHash = LES_GenerateHashCaseSensitive(name);
+	int index = LES_GetStructDefinitionIndex(nameHash);
 	if ((index < 0) || (index >= les_numStructDefinitions))
 	{
 		/* Not found so add it */
