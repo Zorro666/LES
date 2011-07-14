@@ -62,6 +62,7 @@ int LES_FunctionParameterData::Read(const LES_StringEntry* const typeStringEntry
 
 	if ((flags & LES_TYPE_POD) || (flags & LES_TYPE_STRUCT))
 	{
+		printf("Read type:'%s' size:%d %p -> %p\n", typeStringEntry->m_str, typeEntryPtr->m_dataSize, m_currentReadBufferPtr, parameterDataPtr);
 		memcpy(parameterDataPtr, m_currentReadBufferPtr, parameterDataSize);
 		m_currentReadBufferPtr += parameterDataSize;
 	}
@@ -161,7 +162,7 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 
 	if (typeFlags & LES_TYPE_POD)
 	{
-		printf("Write type:'%s' size:%d\n", typeStringEntry->m_str, typeEntryPtr->m_dataSize);
+		printf("Write type:'%s' size:%d %p -> %p\n", typeStringEntry->m_str, typeEntryPtr->m_dataSize, valueAddress, m_currentWriteBufferPtr);
 		memcpy(m_currentWriteBufferPtr, valueAddress, parameterDataSize);
 		m_currentWriteBufferPtr += parameterDataSize;
 	}

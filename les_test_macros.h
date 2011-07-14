@@ -54,16 +54,30 @@
 		const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntry(typeStringEntry); \
 		if (typeEntryPtr != LES_NULL) \
 		{ \
-			parameterDataSize += typeEntryPtr->m_dataSize; \
+			const int typeDataStorageSize = typeEntryPtr->ComputeDataStorageSize(); \
+			if (typeDataStorageSize < 0) \
+			{ \
+				fprintf(stderr, "LES ERROR: TEST function '%s' : parameter '%s' type:'%s' invalid typeDataStorageSize\n",  \
+								functionName, #NAME, #TYPE); \
+				__LES_ok = false; \
+				__LES_function_ok = false; \
+			} \
+			else \
+			{ \
+				parameterDataSize += typeDataStorageSize; \
+			} \
 		} \
-		functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(globalParamIndex)); \
-		functionParameterPtr->m_index = globalParamIndex; \
-		functionParameterPtr->m_hash = nameHash; \
-		functionParameterPtr->m_nameID = LES_AddStringEntry(#NAME); \
-		functionParameterPtr->m_typeID = typeID; \
-		functionParameterPtr->m_mode = paramMode; \
-		globalParamIndex++; \
-		*paramIndex = *paramIndex + 1; \
+		if (__LES_ok == true) \
+		{ \
+			functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(globalParamIndex)); \
+			functionParameterPtr->m_index = globalParamIndex; \
+			functionParameterPtr->m_hash = nameHash; \
+			functionParameterPtr->m_nameID = LES_AddStringEntry(#NAME); \
+			functionParameterPtr->m_typeID = typeID; \
+			functionParameterPtr->m_mode = paramMode; \
+			globalParamIndex++; \
+			*paramIndex = *paramIndex + 1; \
+		} \
 	} \
 } \
 
@@ -107,7 +121,7 @@
 
 
 #define LES_TEST_ADD_TYPE_POD_POINTER(TYPE, FLAGS) \
-	LES_TEST_ADD_TYPE_EX(TYPE*, sizeof(TYPE*), FLAGS|LES_TYPE_POINTER|LES_TYPE_POD,TYPE) \
+	LES_TEST_ADD_TYPE_EX(TYPE*, sizeof(TYPE*), FLAGS|LES_TYPE_POINTER|LES_TYPE_POD, TYPE) \
 
 
 #define LES_TEST_ADD_TYPE_POD(TYPE) \

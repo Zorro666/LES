@@ -705,7 +705,7 @@ struct TestStruct4
 	TestStruct3 m_testStruct3;
 };
 
-void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 input_2)
+void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 input_2, TestStruct4 input_3)
 {
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
@@ -713,6 +713,7 @@ void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 inp
 	LES_FUNCTION_ADD_INPUT(TestStruct2, input_0);
 	LES_FUNCTION_ADD_INPUT(int, input_1);
 	LES_FUNCTION_ADD_INPUT(TestStruct1, input_2);
+	LES_FUNCTION_ADD_INPUT(TestStruct4, input_3);
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
@@ -1124,10 +1125,11 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_INPUT(int*, input_4);
 	LES_TEST_FUNCTION_END();
 
-	LES_TEST_FUNCTION_START(LES_Test_StructInputParam, void, 3, 0);
+	LES_TEST_FUNCTION_START(LES_Test_StructInputParam, void, 4, 0);
 	LES_TEST_FUNCTION_ADD_INPUT(TestStruct2, input_0);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_1);
 	LES_TEST_FUNCTION_ADD_INPUT(TestStruct1, input_2);
+	LES_TEST_FUNCTION_ADD_INPUT(TestStruct4, input_3);
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_StructOutputParam, void, 0, 2);
@@ -1306,20 +1308,38 @@ void LES_TestSetup(void)
 	in_0.m_char = 42;
 	in_0.m_short = -123;
 	in_0.m_int = 65;
-	LES_Test_StructInputParam(in_0, 7243, in_2);
+	TestStruct4 in_3;
+	in_3.m_float = 987.123f;
+	in_3.m_int = 12;
+	in_3.m_char = 56;
+	in_3.m_short = +321;
+	in_3.m_testStruct3.m_char = 1;
+	in_3.m_testStruct3.m_float = 3.141f;
+	in_3.m_testStruct3.m_int = 2;
+	in_3.m_testStruct3.m_short = 3;
+	LES_Test_StructInputParam(in_0, 7243, in_2, in_3);
 	fprintf(stderr, "\n");
 
 	TestStruct3 out_0;
-	out_0.m_short = -123;
-	out_0.m_float = 666.987f;
-	out_0.m_int = 65;
-	out_0.m_char = 42;
+	out_0.m_short = +1718;
+	out_0.m_float = 271.387f;
+	out_0.m_int = 14;
+	out_0.m_char = 96;
 	TestStruct4 out_1;
-	out_1.m_float = 666.987f;
-	out_1.m_int = 65;
-	out_1.m_char = 42;
-	out_1.m_short = -123;
+	out_1.m_float = 1414.987f;
+	out_1.m_int = -2713;
+	out_1.m_char = 32;
+	out_1.m_short = +321;
 	out_1.m_testStruct3 = out_0;
+	printf("TestStruct3: m_short:%p\n", &out_0.m_short);
+	printf("TestStruct3: m_float:%p\n", &out_0.m_float);
+	printf("TestStruct3: m_int:%p\n", &out_0.m_int);
+	printf("TestStruct3: m_char:%p\n", &out_0.m_char);
+	printf("TestStruct4: m_float:%p\n", &out_1.m_float);
+	printf("TestStruct4: m_int:%p\n", &out_1.m_int);
+	printf("TestStruct4: m_char:%p\n", &out_1.m_char);
+	printf("TestStruct4: m_short:%p\n", &out_1.m_short);
+	printf("TestStruct4: m_testStruct3:%p\n", &out_1.m_testStruct3);
 	LES_Test_StructOutputParam(&out_0, &out_1);
 	fprintf(stderr, "\n");
 }

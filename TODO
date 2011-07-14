@@ -1,7 +1,6 @@
 High Priority:
-TEST: add printf test in Write(), Read(), DecodeSingle() for pointer type to char: dataSize=1 but pointer size=4
-FUNCTION: use aliased type id for pointer types to get final data size correctly
-FUNCTION: use aliased type id for pointer to structure types to get final data type 
+FUNCTION: when computing parameterDataSize handle the aliased data types, pointers and structures
+TEST: check functionParameter block size 
 
 TEST: test output parameter as a pointer to a structure
 TEST: test input parameter as a pointer to a structure
@@ -13,6 +12,9 @@ TEST: test input parameter as a structure array
 TEST: test output parameter as a structure array
 TEST: test POD array as member in a struct
 TEST: test struct array as member in a struct
+
+TEST: POD pointer inside a structure
+TEST: struct pointer inside a structure
 
 Medium Priority:
 FUNCTION: error handling run out of memory when adding new function or new type e.g. array limit reached

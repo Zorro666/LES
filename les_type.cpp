@@ -58,6 +58,34 @@ const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEnt
 	return LES_NULL;
 }
 
+int LES_TypeEntry::ComputeDataStorageSize(void) const
+{
+	const LES_TypeEntry* typeEntry = this;
+	int flags = typeEntry->m_flags;
+	while (flags & LES_TYPE_ALIAS)
+	{
+		const int aliasedTypeID = typeEntry->m_aliasedTypeID;
+		printf("Type 0x%X alias:%d flags:0x%X\n", typeEntry->m_hash, aliasedTypeID, flags);
+		const LES_StringEntry* const aliasedStringTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
+		if (aliasedStringTypeEntry == LES_NULL)
+		{
+			fprintf(stderr, "LES ERROR: ComputeDataStorageSize aliased type:%d entry can't be found\n", aliasedTypeID);
+			return -1;
+		}
+		const LES_TypeEntry* const aliasedTypeEntryPtr = LES_GetTypeEntry(aliasedStringTypeEntry);
+		if (aliasedTypeEntryPtr == LES_NULL)
+		{
+			fprintf(stderr, "LES ERROR: ComputeDataStorageSize aliased type not found aliased type:'%s'\n", aliasedStringTypeEntry->m_str);
+			return -1;
+		}
+		typeEntry = (const LES_TypeEntry*)aliasedTypeEntryPtr;
+		flags = typeEntry->m_flags;
+		printf("Alias Type 0x%X flags:0x%X\n", typeEntry->m_hash, flags);
+	}
+	const int dataSize = typeEntry->m_dataSize;
+	return dataSize;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Private External functions
@@ -87,6 +115,7 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		return LES_ERROR;
 	}
 	const int aliasedTypeID = LES_AddStringEntry(aliasedName);
+	printf("aliasedTypeID:%d name:'%s' aliasedName:'%s'\n", aliasedTypeID, name, aliasedName);
 
 	const LES_Hash hash = LES_GenerateHashCaseSensitive(name);
 	int index = LES_GetTypeEntrySlow(hash);

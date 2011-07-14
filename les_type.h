@@ -22,6 +22,9 @@ struct LES_TypeEntry
 	int m_aliasedTypeID;
 
 public:
+	int ComputeDataStorageSize(void) const;
+
+public:
 	static LES_Hash s_longlongHash;
 	static LES_Hash s_intHash;
 	static LES_Hash s_unsignedintPtrHash;

@@ -238,6 +238,7 @@ LES_FunctionParameterData* LES_GetFunctionParameterData(const int functionNameID
 	}
 	const LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[index];
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
+	//char* parameterBuffer = new char[parameterDataSize + 16 * 1024];
 	char* parameterBuffer = new char[parameterDataSize];
 	LES_FunctionParameterData* parameterData = new LES_FunctionParameterData(parameterBuffer);
 
