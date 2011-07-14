@@ -63,6 +63,20 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Write type:'%s' not found\n", typeStringEntry->m_str);
 		return LES_ERROR;
 	}
+	const LES_StringEntry* const aliasedStringEntryPtr = LES_GetStringEntryForID(typeEntryPtr->m_aliasedTypeID);
+	if (aliasedStringEntryPtr == NULL)
+	{
+		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Write type:'%s' aliasedStringEntry:%d not found\n", 
+						typeStringEntry->m_str, typeEntryPtr->m_aliasedTypeID);
+		return LES_ERROR;
+	}
+	const LES_TypeEntry* const aliasedTypeEntryPtr = LES_GetTypeEntry(aliasedStringEntryPtr);
+	if (aliasedTypeEntryPtr == NULL)
+	{
+		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Write type:'%s' aliased type:'%s' not found\n", 
+						typeStringEntry->m_str, aliasedStringEntryPtr->m_str);
+		return LES_ERROR;
+	}
 	if (parameterDataPtr == NULL)
 	{
 		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Write type:'%s' parameterDataPtr is NULL\n", typeStringEntry->m_str);

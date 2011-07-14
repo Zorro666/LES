@@ -822,7 +822,7 @@ void LES_TestSetup(void)
 	LES_TEST_ADD_TYPE_EX(output_only, 4, LES_TYPE_OUTPUT|LES_TYPE_POD,output_only);
 
 	LES_TEST_STRUCT_START(TestStruct1, 5);
-	LES_TEST_STRUCT_ADD_MEMBER(long long int, m_long);
+	LES_TEST_STRUCT_ADD_MEMBER(long long int, m_longlong);
 	LES_TEST_STRUCT_ADD_MEMBER(char, m_char);
 	LES_TEST_STRUCT_ADD_MEMBER(int, m_int);
 	LES_TEST_STRUCT_ADD_MEMBER(short, m_short);
@@ -1289,7 +1289,7 @@ void LES_TestSetup(void)
 	LES_TEST_STRUCT_END();
 	fprintf(stderr, "\n");
 	LES_TEST_STRUCT_START(LES_Struct_NotEnoughMembers, 3);
-	LES_TEST_STRUCT_ADD_MEMBER(long long int, m_long);
+	LES_TEST_STRUCT_ADD_MEMBER(long long int, m_longlong);
 	LES_TEST_STRUCT_ADD_MEMBER(char, m_char);
 	LES_TEST_STRUCT_END();
 	fprintf(stderr, "\n");

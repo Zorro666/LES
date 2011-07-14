@@ -18,6 +18,8 @@ LES_Hash LES_TypeEntry::s_floatHash = LES_GenerateHashCaseSensitive("float");
 LES_Hash LES_TypeEntry::s_floatPtrHash = LES_GenerateHashCaseSensitive("float*");
 LES_Hash LES_TypeEntry::s_intPtrHash = LES_GenerateHashCaseSensitive("int*");
 
+extern int LES_AddStringEntry(const char* const str);
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Static Internal functions
@@ -76,20 +78,17 @@ void LES_TypeShutdown(void)
 
 int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags, const char* const aliasedName)
 {
-	const LES_Hash hash = LES_GenerateHashCaseSensitive(name);
-	const LES_Hash aliasedTypeHash = LES_GenerateHashCaseSensitive(aliasedName);
-	const bool hasAnAlias = (hash != aliasedTypeHash);
+	LES_AddStringEntry(name);
 
-	const int aliasedTypeID = LES_GetTypeEntrySlow(aliasedTypeHash);
-	if ((aliasedTypeID < 0) || (aliasedTypeID >= les_numTypeEntries))
+	const LES_StringEntry* const aliasedEntryPtr = LES_GetStringEntry(aliasedName);
+	if (aliasedEntryPtr == LES_NULL)
 	{
-		if (hasAnAlias)
-		{
-			fprintf(stderr, "LES ERROR: AddType '%s' : aliasedType '%s' not found\n", name, aliasedName);
-			return LES_ERROR;
-		}
+		fprintf(stderr, "LES ERROR: AddType '%s' : aliasedEntry '%s' not found\n", name, aliasedName);
+		return LES_ERROR;
 	}
+	const int aliasedTypeID = LES_AddStringEntry(aliasedName);
 
+	const LES_Hash hash = LES_GenerateHashCaseSensitive(name);
 	int index = LES_GetTypeEntrySlow(hash);
 	if ((index < 0) || (index >= les_numTypeEntries))
 	{
@@ -99,7 +98,7 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		typeEntryPtr->m_hash = hash;
 		typeEntryPtr->m_dataSize = dataSize;
 		typeEntryPtr->m_flags = flags;
-		typeEntryPtr->m_aliasedTypeID = (hasAnAlias ? aliasedTypeID : index);
+		typeEntryPtr->m_aliasedTypeID = aliasedTypeID;
 		les_numTypeEntries++;
 	}
 	else
