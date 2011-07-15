@@ -9,6 +9,8 @@
 #include "les_parameter.h"
 #include "les_struct.h"
 
+#define LES_TEST_DEBUG 0
+
 extern int LES_AddStringEntry(const char* const str);
 extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr);
 extern int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags, const char* const aliasedName);
@@ -667,6 +669,7 @@ static void LES_Test_DecodeInputOutputParameters(int input_0, short input_1, cha
 		fprintf(stderr, "LES_Test_ReadInputOutputParameters: Decode failed\n");
 		return;
 	}
+	fprintf(stderr, "LES_Test_ReadInputOutputParameters: parameterDataSize:%d\n", parameterDataSize);
 	return;
 }
 
@@ -729,7 +732,7 @@ void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 inp
 		return;
 	}
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
-	const int realParameterDataSize = sizeof(int)+sizeof(TestStruct1) + sizeof(TestStruct2);
+	const int realParameterDataSize = sizeof(TestStruct2) + sizeof(int)+sizeof(TestStruct1) + sizeof(TestStruct4);
 	if (parameterDataSize != realParameterDataSize)
 	{
 		fprintf(stderr, "LES_Test_StructInputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
@@ -1331,6 +1334,7 @@ void LES_TestSetup(void)
 	out_1.m_char = 32;
 	out_1.m_short = +321;
 	out_1.m_testStruct3 = out_0;
+#if LES_TEST_DEBUG
 	printf("TestStruct3: m_short:%p\n", &out_0.m_short);
 	printf("TestStruct3: m_float:%p\n", &out_0.m_float);
 	printf("TestStruct3: m_int:%p\n", &out_0.m_int);
@@ -1340,6 +1344,7 @@ void LES_TestSetup(void)
 	printf("TestStruct4: m_char:%p\n", &out_1.m_char);
 	printf("TestStruct4: m_short:%p\n", &out_1.m_short);
 	printf("TestStruct4: m_testStruct3:%p\n", &out_1.m_testStruct3);
+#endif // #if LES_TEST_DEBUG
 	LES_Test_StructOutputParam(&out_0, &out_1);
 	fprintf(stderr, "\n");
 }

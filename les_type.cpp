@@ -4,6 +4,8 @@
 #include "les_core.h"
 #include "les_stringentry.h"
 
+#define LES_TYPE_DEBUG 0
+
 static LES_TypeEntry* les_typeEntryArray = LES_NULL;
 static int les_numTypeEntries = 0;
 
@@ -65,7 +67,9 @@ int LES_TypeEntry::ComputeDataStorageSize(void) const
 	while (flags & LES_TYPE_ALIAS)
 	{
 		const int aliasedTypeID = typeEntry->m_aliasedTypeID;
+#if LES_TYPE_DEBUG
 		printf("Type 0x%X alias:%d flags:0x%X\n", typeEntry->m_hash, aliasedTypeID, flags);
+#endif // #if LES_TYPE_DEBUG
 		const LES_StringEntry* const aliasedStringTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
 		if (aliasedStringTypeEntry == LES_NULL)
 		{
@@ -80,7 +84,9 @@ int LES_TypeEntry::ComputeDataStorageSize(void) const
 		}
 		typeEntry = (const LES_TypeEntry*)aliasedTypeEntryPtr;
 		flags = typeEntry->m_flags;
+#if LES_TYPE_DEBUG
 		printf("Alias Type 0x%X flags:0x%X\n", typeEntry->m_hash, flags);
+#endif // #if LES_TYPE_DEBUG
 	}
 	const int dataSize = typeEntry->m_dataSize;
 	return dataSize;
@@ -115,7 +121,9 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		return LES_ERROR;
 	}
 	const int aliasedTypeID = LES_AddStringEntry(aliasedName);
+#if LES_TYPE_DEBUG
 	printf("aliasedTypeID:%d name:'%s' aliasedName:'%s'\n", aliasedTypeID, name, aliasedName);
+#endif // #if LES_TYPE_DEBUG
 
 	const LES_Hash hash = LES_GenerateHashCaseSensitive(name);
 	int index = LES_GetTypeEntrySlow(hash);
@@ -133,7 +141,9 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		if (aliasedHash != hash)
 		{
 			typeEntryPtr->m_flags |= LES_TYPE_ALIAS;
+#if LES_TYPE_DEBUG
 			printf("Type '%s' has an alias to '%s'\n", name, aliasedName);
+#endif // #if LES_TYPE_DEBUG
 		}
 
 		les_numTypeEntries++;

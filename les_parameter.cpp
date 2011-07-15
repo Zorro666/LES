@@ -6,6 +6,8 @@
 #include "les_stringentry.h"
 #include "les_struct.h"
 
+#define LES_PARAMETER_DEBUG 0
+
 LES_FunctionParameterData::LES_FunctionParameterData(char* const bufferPtr) : m_bufferPtr(bufferPtr)
 {
 	m_currentWriteBufferPtr = m_bufferPtr;
@@ -62,7 +64,9 @@ int LES_FunctionParameterData::Read(const LES_StringEntry* const typeStringEntry
 
 	if ((flags & LES_TYPE_POD) || (flags & LES_TYPE_STRUCT))
 	{
+#if LES_PARAMETER_DEBUG
 		printf("Read type:'%s' size:%d %p -> %p\n", typeStringEntry->m_str, typeEntryPtr->m_dataSize, m_currentReadBufferPtr, parameterDataPtr);
+#endif // #if LES_PARAMETER_DEBUG
 		memcpy(parameterDataPtr, m_currentReadBufferPtr, parameterDataSize);
 		m_currentReadBufferPtr += parameterDataSize;
 	}
@@ -129,7 +133,9 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 
 	if (typeFlags & LES_TYPE_STRUCT)
 	{
+#if LES_PARAMETER_DEBUG
 		printf("Write type:'%s' size:%d STRUCT\n", typeStringEntry->m_str, typeEntryPtr->m_dataSize);
+#endif // #if LES_PARAMETER_DEBUG
 		int returnCode = LES_OK;
 		//JAKE NEED TO USE typeEntryPtr to struct definition
 		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeEntryPtr->m_hash);
@@ -162,7 +168,9 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 
 	if (typeFlags & LES_TYPE_POD)
 	{
+#if LES_PARAMETER_DEBUG
 		printf("Write type:'%s' size:%d %p -> %p\n", typeStringEntry->m_str, typeEntryPtr->m_dataSize, valueAddress, m_currentWriteBufferPtr);
+#endif // #if LES_PARAMETER_DEBUG
 		memcpy(m_currentWriteBufferPtr, valueAddress, parameterDataSize);
 		m_currentWriteBufferPtr += parameterDataSize;
 	}
