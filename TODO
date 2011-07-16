@@ -1,18 +1,13 @@
 High Priority:
+TEST: test POD reference member in a struct
+TEST: test struct reference as member in a struct
+
 CORE: need common error handling & log system: warning, log, error, fatal error
 CORE: query log system if an error occurred
 CORE: mark fatal error as fatal/non-fatal from outside, 
 CORE: mark error as fatal/non-fatal from outside, on/off
 CORE: mark warning as fatal/non-fatal from outside, on/off
 CORE: mark log as fatal/non-fatal from outside, on/off
-
-FEATURE: what about references? Treat them as pointers :)
-TEST: test input parameter as a POD reference
-TEST: test output parameter as a POD reference
-TEST: test input parameter as a structure reference
-TEST: test output parameter as a structure reference 
-TEST: test POD reference member in a struct
-TEST: test struct reference as member in a struct
 
 FEATURE: type definition add count e.g. int[3] means int * 3 : wow you can do sizeof(int[3])
 FEATURE: make pod types alias to byte[sizeOfDataType], so byte is the final base pure type

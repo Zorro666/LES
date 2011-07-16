@@ -841,12 +841,13 @@ void LES_Test_StructInputOutputParam(TestStruct5* in_0, TestStruct6* out_0)
 	return;
 }
 
-void LES_Test_ReferenceInputParam(int& input_0)
+void LES_Test_ReferenceInputParam(int& input_0, TestStruct1& input_1)
 {
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_ReferenceInputParam, void);
 	LES_FUNCTION_ADD_INPUT(int&, input_0);
+	LES_FUNCTION_ADD_INPUT(TestStruct1&, input_1);
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
@@ -862,7 +863,7 @@ void LES_Test_ReferenceInputParam(int& input_0)
 		return;
 	}
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
-	const int realParameterDataSize = sizeof(int);
+	const int realParameterDataSize = sizeof(int) + sizeof(TestStruct1);
 	if (parameterDataSize != realParameterDataSize)
 	{
 		fprintf(stderr, "LES_Test_ReferenceInputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
@@ -875,6 +876,44 @@ void LES_Test_ReferenceInputParam(int& input_0)
 		return;
 	}
 	fprintf(stderr, "LES_Test_ReferenceInputParam: parameterDataSize:%d\n", parameterDataSize);
+	return;
+}
+
+void LES_Test_ReferenceOutputParam(char& output_0, TestStruct2& output_1)
+{
+	LES_FunctionParameterData* parameterData = LES_NULL;
+
+	LES_FUNCTION_START(LES_Test_ReferenceOutputParam, void);
+	LES_FUNCTION_ADD_OUTPUT(char&, output_0);
+	LES_FUNCTION_ADD_OUTPUT(TestStruct2&, output_1);
+	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
+	LES_FUNCTION_END();
+
+	if (parameterData == LES_NULL)
+	{
+		return;
+	}
+
+	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_ReferenceOutputParam");
+	if (functionDefinitionPtr == LES_NULL)
+	{
+		fprintf(stderr, "LES_Test_ReferenceOutputParam: can't find the function definition\n");
+		return;
+	}
+	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
+	const int realParameterDataSize = sizeof(char) + sizeof(TestStruct2);
+	if (parameterDataSize != realParameterDataSize)
+	{
+		fprintf(stderr, "LES_Test_ReferenceOutputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
+						parameterDataSize, realParameterDataSize);
+	}
+
+	if (functionDefinitionPtr->Decode(parameterData) == LES_ERROR)
+	{
+		fprintf(stderr, "LES_Test_ReferenceOutputParam: Decode failed\n");
+		return;
+	}
+	fprintf(stderr, "LES_Test_ReferenceOutputParam: parameterDataSize:%d\n", parameterDataSize);
 	return;
 }
 
@@ -915,7 +954,8 @@ void LES_TestSetup(void)
 	LES_TEST_ADD_TYPE_POD_POINTER(double, LES_TYPE_INPUT_OUTPUT);
 
 	LES_TEST_ADD_TYPE_POD_REFERENCE(int, LES_TYPE_INPUT_OUTPUT);
-
+	LES_TEST_ADD_TYPE_POD_REFERENCE(char, LES_TYPE_INPUT_OUTPUT);
+	
 	LES_TEST_ADD_TYPE_EX(output_only, 4, LES_TYPE_OUTPUT|LES_TYPE_POD,output_only);
 
 	LES_TEST_STRUCT_START(TestStruct1, 5);
@@ -927,6 +967,7 @@ void LES_TestSetup(void)
 	LES_TEST_STRUCT_END();
 
 	LES_TEST_ADD_TYPE_STRUCT(TestStruct1);
+	LES_TEST_ADD_TYPE_STRUCT_REFERENCE(TestStruct1, LES_TYPE_INPUT_OUTPUT);
 
 	LES_TEST_STRUCT_START(TestStruct2, 5);
 	LES_TEST_STRUCT_ADD_MEMBER(float, m_float);
@@ -937,6 +978,7 @@ void LES_TestSetup(void)
 	LES_TEST_STRUCT_END();
 
 	LES_TEST_ADD_TYPE_STRUCT(TestStruct2);
+	LES_TEST_ADD_TYPE_STRUCT_REFERENCE(TestStruct2, LES_TYPE_INPUT_OUTPUT);
 
 	LES_TEST_STRUCT_START(TestStruct3, 4);
 	LES_TEST_STRUCT_ADD_MEMBER(short, m_short);
@@ -1270,8 +1312,14 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_OUTPUT(TestStruct6*, out_0);
 	LES_TEST_FUNCTION_END();
 
-	LES_TEST_FUNCTION_START(LES_Test_ReferenceInputParam, void, 1, 0);
+	LES_TEST_FUNCTION_START(LES_Test_ReferenceInputParam, void, 2, 0);
 	LES_TEST_FUNCTION_ADD_INPUT(int&, input_0);
+	LES_TEST_FUNCTION_ADD_INPUT(TestStruct1&, input_1);
+	LES_TEST_FUNCTION_END();
+
+	LES_TEST_FUNCTION_START(LES_Test_ReferenceOutputParam, void, 0, 2);
+	LES_TEST_FUNCTION_ADD_OUTPUT(char&, output_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(TestStruct2&, output_1);
 	LES_TEST_FUNCTION_END();
 
 	/* Run specific tests */
@@ -1504,7 +1552,22 @@ void LES_TestSetup(void)
 	/* Reference tests */
 	fprintf(stderr, "#### Reference tests ####\n");
 	int ref_input_0 = 954;
-	LES_Test_ReferenceInputParam(ref_input_0);
+	TestStruct1 ref_input_1;
+	ref_input_1.m_char = '1';
+	ref_input_1.m_float = 16.2131f;
+	ref_input_1.m_int = 14;
+	ref_input_1.m_longlong = 162132;
+	ref_input_1.m_short = 936;
+	LES_Test_ReferenceInputParam(ref_input_0, ref_input_1);
+	fprintf(stderr, "\n");
+	char ref_output_0 = 'R';
+	TestStruct2 ref_output_1;
+	ref_output_1.m_char = 'Z';
+	ref_output_1.m_float = 2131.16f;
+	ref_output_1.m_int = 1564;
+	ref_output_1.m_short = 2526;
+	ref_output_1.m_testStruct1 = ref_input_1;
+	LES_Test_ReferenceOutputParam(ref_output_0, ref_output_1);
 	fprintf(stderr, "\n");
 }
 
