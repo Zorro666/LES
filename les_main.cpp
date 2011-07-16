@@ -20,12 +20,12 @@ void JAKE_Test(void)
 		const float gridSize = epsilon * 2.0f;
 
 		r = rand();
-		randFloatUnit = (float)r/RAND_MAX;
+		randFloatUnit = (float)r/(float)RAND_MAX;
 
 		float x1 = 1.0f + xScale * (randFloatUnit - 0.5f + 0.5f);
 
 		r = rand();
-		randFloatUnit = (float)r/RAND_MAX;
+		randFloatUnit = (float)r/(float)RAND_MAX;
 		float x2 = 1.0f + x1 + deltaScale * (randFloatUnit - 0.5f + 0.5f);
 
 		const bool theSameTruth = fabsf(x2-x1) < epsilon;
@@ -91,7 +91,7 @@ int main(const int argc, const char* const argv[])
 		printf("argv[%d]='%s'\n", i, argv[i]);
 	}
 
-	JAKE_Test();
+	//JAKE_Test();
 	LES_Init();
 
 	LES_jakeInit(666, 123);
