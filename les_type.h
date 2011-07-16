@@ -12,7 +12,8 @@ struct LES_StringEntry;
 #define LES_TYPE_POD 					(1 << 2)
 #define LES_TYPE_STRUCT  			(1 << 3)
 #define LES_TYPE_POINTER 			(1 << 4)
-#define LES_TYPE_ALIAS 				(1 << 5)
+#define LES_TYPE_REFERENCE 		(1 << 5)
+#define LES_TYPE_ALIAS 				(1 << 6)
 
 struct LES_TypeEntry
 {

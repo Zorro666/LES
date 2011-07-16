@@ -1,5 +1,10 @@
 High Priority:
-CORE: need common error handling & log system
+CORE: need common error handling & log system: warning, log, error, fatal error
+CORE: query log system if an error occurred
+CORE: mark fatal error as fatal/non-fatal from outside, 
+CORE: mark error as fatal/non-fatal from outside, on/off
+CORE: mark warning as fatal/non-fatal from outside, on/off
+CORE: mark log as fatal/non-fatal from outside, on/off
 
 FEATURE: what about references? Treat them as pointers :)
 TEST: test input parameter as a POD reference

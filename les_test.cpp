@@ -841,7 +841,42 @@ void LES_Test_StructInputOutputParam(TestStruct5* in_0, TestStruct6* out_0)
 	return;
 }
 
+void LES_Test_ReferenceInputParam(int& input_0)
+{
+	LES_FunctionParameterData* parameterData = LES_NULL;
 
+	LES_FUNCTION_START(LES_Test_ReferenceInputParam, void);
+	LES_FUNCTION_ADD_INPUT(int&, input_0);
+	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
+	LES_FUNCTION_END();
+
+	if (parameterData == LES_NULL)
+	{
+		return;
+	}
+
+	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_ReferenceInputParam");
+	if (functionDefinitionPtr == LES_NULL)
+	{
+		fprintf(stderr, "LES_Test_ReferenceInputParam: can't find the function definition\n");
+		return;
+	}
+	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
+	const int realParameterDataSize = sizeof(int);
+	if (parameterDataSize != realParameterDataSize)
+	{
+		fprintf(stderr, "LES_Test_ReferenceInputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
+						parameterDataSize, realParameterDataSize);
+	}
+
+	if (functionDefinitionPtr->Decode(parameterData) == LES_ERROR)
+	{
+		fprintf(stderr, "LES_Test_ReferenceInputParam: Decode failed\n");
+		return;
+	}
+	fprintf(stderr, "LES_Test_ReferenceInputParam: parameterDataSize:%d\n", parameterDataSize);
+	return;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -878,6 +913,8 @@ void LES_TestSetup(void)
 
 	LES_TEST_ADD_TYPE_POD_POINTER(float, LES_TYPE_INPUT_OUTPUT);
 	LES_TEST_ADD_TYPE_POD_POINTER(double, LES_TYPE_INPUT_OUTPUT);
+
+	LES_TEST_ADD_TYPE_POD_REFERENCE(int, LES_TYPE_INPUT_OUTPUT);
 
 	LES_TEST_ADD_TYPE_EX(output_only, 4, LES_TYPE_OUTPUT|LES_TYPE_POD,output_only);
 
@@ -1233,6 +1270,10 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_OUTPUT(TestStruct6*, out_0);
 	LES_TEST_FUNCTION_END();
 
+	LES_TEST_FUNCTION_START(LES_Test_ReferenceInputParam, void, 1, 0);
+	LES_TEST_FUNCTION_ADD_INPUT(int&, input_0);
+	LES_TEST_FUNCTION_END();
+
 	/* Run specific tests */
 	/* Function header definition tests */
 	fprintf(stderr, "#### Function header definition tests ####\n");
@@ -1458,6 +1499,12 @@ void LES_TestSetup(void)
 	char charTest = '6';
 	testStruct6.m_charPtr = &charTest;
 	LES_Test_StructInputOutputParam(&testStruct5, &testStruct6);
+	fprintf(stderr, "\n");
+
+	/* Reference tests */
+	fprintf(stderr, "#### Reference tests ####\n");
+	int ref_input_0 = 954;
+	LES_Test_ReferenceInputParam(ref_input_0);
 	fprintf(stderr, "\n");
 }
 

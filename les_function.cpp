@@ -57,8 +57,8 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 												const int depth)
 {
 	const LES_StringEntry* const nameEntry = LES_GetStringEntryForID(nameID);
-	const LES_StringEntry* const typeEntry = LES_GetStringEntryForID(typeID);
-	const LES_TypeEntry* const rawTypeData = LES_GetTypeEntry(typeEntry);
+	const LES_StringEntry* typeEntry = LES_GetStringEntryForID(typeID);
+	const LES_TypeEntry* typeDataPtr = LES_GetTypeEntry(typeEntry);
 
 #if LES_FUNCTION_DEBUG
 	printf("DecodeSingle: '%s' '%s' %d\n", nameEntry->m_str, typeEntry->m_str, typeID);
@@ -67,27 +67,6 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	const char* const nameStr = nameEntry->m_str;
 	const char* const typeStr = typeEntry->m_str;
 
-	if (rawTypeData == LES_NULL)
-	{
-		fprintf(stderr, "LES ERROR: DecodeSingle parameter[%d]:'%s' type:'%s' type can't be found\n", 
-						parameterIndex, nameStr, typeStr);
-		return LES_ERROR;
-	}
-
-	const int rawTypeFlags = rawTypeData->m_flags;
-	const LES_TypeEntry* typeDataPtr = rawTypeData;
-	if (rawTypeFlags & LES_TYPE_ALIAS)
-	{
-		const int aliasedTypeID = rawTypeData->m_aliasedTypeID;
-		const LES_StringEntry* const aliasedTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
-		if (aliasedTypeEntry == LES_NULL)
-		{
-			fprintf(stderr, "LES ERROR: DecodeSingle parameter[%d]:'%s' type:'%s' aliased type:%d entry can't be found\n", 
-							parameterIndex, nameStr, typeStr, aliasedTypeID);
-			return LES_ERROR;
-		}
-		typeDataPtr = LES_GetTypeEntry(aliasedTypeEntry);
-	}
 	if (typeDataPtr == LES_NULL)
 	{
 		fprintf(stderr, "LES ERROR: DecodeSingle parameter[%d]:'%s' type:'%s' type can't be found\n", 
@@ -95,7 +74,31 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		return LES_ERROR;
 	}
 
-	const int typeFlags = typeDataPtr->m_flags;
+	int typeFlags = typeDataPtr->m_flags;
+	while ( typeFlags & LES_TYPE_ALIAS)
+	{
+		const int aliasedTypeID = typeDataPtr->m_aliasedTypeID;
+		const LES_StringEntry* const aliasedTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
+		if (aliasedTypeEntry == LES_NULL)
+		{
+			fprintf(stderr, "LES ERROR: DecodeSingle parameter[%d]:'%s' type:'%s' aliased type:%d entry can't be found\n", 
+							parameterIndex, nameStr, typeStr, aliasedTypeID);
+			return LES_ERROR;
+		}
+#if LES_FUNCTION_DEBUG
+		printf("Type:'%s' aliased to '%s'\n", typeEntry->m_str, aliasedTypeEntry->m_str);
+#endif // #if LES_FUNCTION_DEBUG
+		typeDataPtr = LES_GetTypeEntry(aliasedTypeEntry);
+		if (typeDataPtr == LES_NULL)
+		{
+			fprintf(stderr, "LES ERROR: DecodeSingle parameter[%d]:'%s' type:'%s' type can't be found\n", 
+							parameterIndex, nameStr, typeStr);
+			return LES_ERROR;
+		}
+		typeFlags = typeDataPtr->m_flags;
+		typeEntry = aliasedTypeEntry;
+	}
+
 	const int typeDataSize = typeDataPtr->m_dataSize;
 	if (typeFlags & LES_TYPE_STRUCT)
 	{

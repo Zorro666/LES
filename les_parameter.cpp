@@ -125,6 +125,9 @@ int LES_FunctionParameterData::WriteInternal(const LES_StringEntry* const typeSt
 	if (rawTypeFlags & LES_TYPE_ALIAS)
 	{
 		typeEntryPtr = aliasedTypeEntryPtr;
+#if LES_PARAMETER_DEBUG
+		printf("Type:'%s' aliased to 0x%X\n", typeStringEntry->m_str, aliasedTypeEntryPtr->m_hash);
+#endif // #if LES_PARAMETER_DEBUG
 	}
 	const void* valueAddress = parameterDataPtr;
 	if (rawTypeFlags & LES_TYPE_POINTER)
