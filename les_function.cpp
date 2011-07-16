@@ -10,6 +10,8 @@
 static LES_FunctionDefinition* les_functionDefinitionArray = LES_NULL;
 static int les_numFunctionDefinitions = 0;
 
+#define LES_FUNCTION_DEBUG 0
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Internal Static functions
@@ -51,14 +53,18 @@ static int LES_GetFunctionDefinitionIndex(const char* const name)
 }
 
 static int DecodeSingle(const LES_FunctionParameterData* const functionParameterData, 
-								 				const int parameterIndex, const int nameID, const int typeID, const int parentParameterIndex)
+								 				const int parameterIndex, const int nameID, const int typeID, const int parentParameterIndex,
+												const int depth)
 {
 	const LES_StringEntry* const nameEntry = LES_GetStringEntryForID(nameID);
 	const LES_StringEntry* const typeEntry = LES_GetStringEntryForID(typeID);
 	const LES_TypeEntry* const rawTypeData = LES_GetTypeEntry(typeEntry);
 
+#if LES_FUNCTION_DEBUG
+	printf("DecodeSingle: '%s' '%s' %d\n", nameEntry->m_str, typeEntry->m_str, typeID);
+#endif // #if LES_FUNCTION_DEBUG
+
 	const char* const nameStr = nameEntry->m_str;
-	const LES_Hash typeHash = typeEntry->m_hash;
 	const char* const typeStr = typeEntry->m_str;
 
 	if (rawTypeData == LES_NULL)
@@ -103,12 +109,13 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 			return LES_ERROR;
 		}
 		const int numMembers = structDefinition->GetNumMembers();
+		const int newDepth = depth + 1;
 		for (int i = 0; i < numMembers; i++)
 		{
 			const LES_StructMember* const structMember = structDefinition->GetMemberByIndex(i);
 			const int memberNameID = structMember->m_nameID;
 			const int memberTypeID = structMember->m_typeID;
-			returnCode = DecodeSingle(functionParameterData, i, memberNameID, memberTypeID, parameterIndex);
+			returnCode = DecodeSingle(functionParameterData, i, memberNameID, memberTypeID, parameterIndex, newDepth);
 			if (returnCode == LES_ERROR)
 			{
 				return LES_ERROR;
@@ -116,6 +123,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		}
 		return returnCode;
 	}
+	const LES_Hash typeHash = typeDataPtr->m_hash;
 
 	long long int longlongValue;
 	int intValue;
@@ -131,27 +139,22 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		valuePtr = &longlongValue;
 		fmtStr = "%ld";
 	}
-	else if ((typeHash == LES_TypeEntry::s_intHash) || 
-					(typeHash == LES_TypeEntry::s_intPtrHash) || 
-					(typeHash == LES_TypeEntry::s_unsignedintPtrHash))
+	else if (typeHash == LES_TypeEntry::s_intHash)
 	{
 		valuePtr = &intValue;
 		fmtStr = "%d";
 	}
-	else if ((typeHash == LES_TypeEntry::s_shortHash) || 
-			(typeHash == LES_TypeEntry::s_unsignedshortPtrHash))
+	else if (typeHash == LES_TypeEntry::s_shortHash)
 	{
 		valuePtr = &shortValue;
 		fmtStr = "%d";
 	}
-	else if ((typeHash == LES_TypeEntry::s_charHash) || 
-			(typeHash == LES_TypeEntry::s_unsignedcharPtrHash))
+	else if (typeHash == LES_TypeEntry::s_charHash)
 	{
 		valuePtr = &charValue;
-		fmtStr = "%d";
+		fmtStr = "'%c'";
 	}
-	else if ((typeHash == LES_TypeEntry::s_floatHash) || 
-			(typeHash == LES_TypeEntry::s_floatPtrHash))
+	else if (typeHash == LES_TypeEntry::s_floatHash)
 	{
 		valuePtr = &floatValue;
 		fmtStr = "%f";
@@ -172,7 +175,12 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		fprintf(stderr, "LES ERROR: DecodeSingle Read failed for parameter[%d]:%s;\n", parameterIndex, nameStr);
 		return LES_ERROR;
 	}
-	printf("DecodeSingle parameter");
+	printf("DecodeSingle ");
+	for (int i = 0; i < depth*2; i++)
+	{
+		printf(" ");
+	}
+	printf("parameter");
 	if (parentParameterIndex >= 0)
 	{
 		printf("[%d] member", parentParameterIndex);
@@ -183,24 +191,19 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	{
 		printf(fmtStr, longlongValue);
 	}
-	else if ((typeHash == LES_TypeEntry::s_intHash) || 
-					(typeHash == LES_TypeEntry::s_intPtrHash) || 
-					(typeHash == LES_TypeEntry::s_unsignedintPtrHash))
+	else if (typeHash == LES_TypeEntry::s_intHash)
 	{
 		printf(fmtStr, intValue);
 	}
-	else if ((typeHash == LES_TypeEntry::s_shortHash) || 
-			(typeHash == LES_TypeEntry::s_unsignedshortPtrHash))
+	else if (typeHash == LES_TypeEntry::s_shortHash)
 	{
 		printf(fmtStr, shortValue);
 	}
-	else if ((typeHash == LES_TypeEntry::s_charHash) || 
-			(typeHash == LES_TypeEntry::s_unsignedcharPtrHash))
+	else if (typeHash == LES_TypeEntry::s_charHash)
 	{
 		printf(fmtStr, charValue);
 	}
-	else if ((typeHash == LES_TypeEntry::s_floatHash) || 
-			(typeHash == LES_TypeEntry::s_floatPtrHash))
+	else if (typeHash == LES_TypeEntry::s_floatHash)
 	{
 		printf(fmtStr, floatValue);
 	}
@@ -379,7 +382,7 @@ int LES_FunctionDefinition::Decode(const LES_FunctionParameterData* const functi
 		const LES_FunctionParameter* const functionParameterPtr = GetParameterByIndex(i);
 		const int nameID = functionParameterPtr->m_nameID;
 		const int typeID = functionParameterPtr->m_typeID;
-		returnCode = DecodeSingle(functionParameterData, i, nameID, typeID, -1);
+		returnCode = DecodeSingle(functionParameterData, i, nameID, typeID, -1, 0);
 		if (returnCode == LES_ERROR)
 		{
 			return LES_ERROR;

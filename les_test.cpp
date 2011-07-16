@@ -615,20 +615,21 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	fprintf(stderr, "LES_Test_ReadInputOutputParameters: output_0:%d value_0:%d\n", *output_0, output_value_0);
 	fprintf(stderr, "LES_Test_ReadInputOutputParameters: input_1:%d value_1:%d\n", input_1, input_value_1);
 	fprintf(stderr, "LES_Test_ReadInputOutputParameters: output_1:%d value_1:%d\n", *output_1, output_value_1);
-	fprintf(stderr, "LES_Test_ReadInputOutputParameters: input_2:%d value_2:%d\n", input_2, input_value_2);
-	fprintf(stderr, "LES_Test_ReadInputOutputParameters: output_2:%d value_2:%d\n", *output_2, output_value_2);
+	fprintf(stderr, "LES_Test_ReadInputOutputParameters: input_2:'%c' value_2:'%c'\n", input_2, input_value_2);
+	fprintf(stderr, "LES_Test_ReadInputOutputParameters: output_2:'%c' value_2:'%c'\n", *output_2, output_value_2);
 	fprintf(stderr, "LES_Test_ReadInputOutputParameters: input_3:%f value_3:%f\n", input_3, input_value_3);
 	fprintf(stderr, "LES_Test_ReadInputOutputParameters: output_3:%f value_3:%f\n", *output_3, output_value_3);
 	fprintf(stderr, "LES_Test_ReadInputOutputParameters: input_4:%d value_4:%d\n", *input_4, input_value_4);
 	fprintf(stderr, "LES_Test_ReadInputOutputParameters: parameterDataSize:%d\n", parameterDataSize);
 }
 
-static void LES_Test_DecodeInputOutputParameters(int input_0, short input_1, char input_2, float input_3, int* input_4,
+static void LES_Test_DecodeInputOutputParameters(int input_0, short input_1, char input_2, float input_3, 
+																								 int* input_4, short* input_5, char* input_6,
 																							   unsigned int* output_0, unsigned short* output_1, unsigned char* output_2, float* output_3)
 {
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
-	LES_FUNCTION_START(LES_Test_ReadInputOutputParameters, void);
+	LES_FUNCTION_START(LES_Test_DecodeInputOutputParameters, void);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_ADD_OUTPUT(unsigned int*, output_0);
 	LES_FUNCTION_ADD_INPUT(short, input_1);
@@ -638,6 +639,8 @@ static void LES_Test_DecodeInputOutputParameters(int input_0, short input_1, cha
 	LES_FUNCTION_ADD_INPUT(float, input_3);
 	LES_FUNCTION_ADD_OUTPUT(float*, output_3);
 	LES_FUNCTION_ADD_INPUT(int*, input_4);
+	LES_FUNCTION_ADD_INPUT(short*, input_5);
+	LES_FUNCTION_ADD_INPUT(char*, input_6);
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
@@ -646,7 +649,7 @@ static void LES_Test_DecodeInputOutputParameters(int input_0, short input_1, cha
 		return;
 	}
 
-	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_ReadInputOutputParameters");
+	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_DecodeInputOutputParameters");
 	if (functionDefinitionPtr == LES_NULL)
 	{
 		fprintf(stderr, "LES_Test_DecodeInputOutputParameters: can't find the function definition\n");
@@ -657,7 +660,7 @@ static void LES_Test_DecodeInputOutputParameters(int input_0, short input_1, cha
 																		sizeof(short)+sizeof(unsigned short)+
 																		sizeof(char)+sizeof(unsigned char)+
 																		sizeof(float)+sizeof(float)+
-																		sizeof(int);
+																		sizeof(int)+sizeof(short)+sizeof(char);
 	if (parameterDataSize != realParameterDataSize)
 	{
 		fprintf(stderr, "LES_Test_DecodeInputOutputParameters: parameterDataSize is wrong Code:%d Should be:%d\n",
@@ -708,7 +711,20 @@ struct TestStruct4
 	TestStruct3 m_testStruct3;
 };
 
-void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 input_2, TestStruct4 input_3)
+struct TestStruct5
+{
+	char m_char;
+	short* m_shortPtr;
+};
+
+struct TestStruct6
+{
+	short m_short;
+	TestStruct5* m_testStruct5Ptr;
+	char* m_charPtr;
+};
+
+void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 input_2, TestStruct3 input_3, TestStruct4* input_4)
 {
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
@@ -716,7 +732,8 @@ void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 inp
 	LES_FUNCTION_ADD_INPUT(TestStruct2, input_0);
 	LES_FUNCTION_ADD_INPUT(int, input_1);
 	LES_FUNCTION_ADD_INPUT(TestStruct1, input_2);
-	LES_FUNCTION_ADD_INPUT(TestStruct4, input_3);
+	LES_FUNCTION_ADD_INPUT(TestStruct3, input_3);
+	LES_FUNCTION_ADD_INPUT(TestStruct4*, input_4);
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
@@ -732,7 +749,7 @@ void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 inp
 		return;
 	}
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
-	const int realParameterDataSize = sizeof(TestStruct2) + sizeof(int)+sizeof(TestStruct1) + sizeof(TestStruct4);
+	const int realParameterDataSize = sizeof(TestStruct2) + sizeof(int)+sizeof(TestStruct1) + sizeof(TestStruct3) + sizeof(TestStruct4);
 	if (parameterDataSize != realParameterDataSize)
 	{
 		fprintf(stderr, "LES_Test_StructInputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
@@ -785,6 +802,45 @@ void LES_Test_StructOutputParam(TestStruct3* out_0, TestStruct4* out_1)
 	fprintf(stderr, "LES_Test_StructOutputParam: parameterDataSize:%d\n", parameterDataSize);
 	return;
 }
+
+void LES_Test_StructInputOutputParam(TestStruct5* in_0, TestStruct6* out_0)
+{
+	LES_FunctionParameterData* parameterData = LES_NULL;
+
+	LES_FUNCTION_START(LES_Test_StructInputOutputParam, void);
+	LES_FUNCTION_ADD_INPUT(TestStruct5*, in_0);
+	LES_FUNCTION_ADD_OUTPUT(TestStruct6*, out_0);
+	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
+	LES_FUNCTION_END();
+
+	if (parameterData == LES_NULL)
+	{
+		return;
+	}
+
+	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_StructInputOutputParam");
+	if (functionDefinitionPtr == LES_NULL)
+	{
+		fprintf(stderr, "LES_Test_StructInputOutputParam: can't find the function definition\n");
+		return;
+	}
+	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
+	const int realParameterDataSize = sizeof(TestStruct5) + sizeof(TestStruct6);
+	if (parameterDataSize != realParameterDataSize)
+	{
+		fprintf(stderr, "LES_Test_StructInputOutputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
+						parameterDataSize, realParameterDataSize);
+	}
+
+	if (functionDefinitionPtr->Decode(parameterData) == LES_ERROR)
+	{
+		fprintf(stderr, "LES_Test_StructInputOutputParam: Decode failed\n");
+		return;
+	}
+	fprintf(stderr, "LES_Test_StructInputOutputParam: parameterDataSize:%d\n", parameterDataSize);
+	return;
+}
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -865,6 +921,23 @@ void LES_TestSetup(void)
 
 	LES_TEST_ADD_TYPE_STRUCT(TestStruct4);
 	LES_TEST_ADD_TYPE_STRUCT_POINTER(TestStruct4, LES_TYPE_INPUT_OUTPUT);
+
+	LES_TEST_STRUCT_START(TestStruct5, 2);
+	LES_TEST_STRUCT_ADD_MEMBER(char, m_char);
+	LES_TEST_STRUCT_ADD_MEMBER(short*, m_shortPtr);
+	LES_TEST_STRUCT_END();
+
+	LES_TEST_ADD_TYPE_STRUCT(TestStruct5);
+	LES_TEST_ADD_TYPE_STRUCT_POINTER(TestStruct5, LES_TYPE_INPUT_OUTPUT);
+
+	LES_TEST_STRUCT_START(TestStruct6, 3);
+	LES_TEST_STRUCT_ADD_MEMBER(short, m_short);
+	LES_TEST_STRUCT_ADD_MEMBER(TestStruct5*, m_testStructPtr);
+	LES_TEST_STRUCT_ADD_MEMBER(char*, m_charPtr);
+	LES_TEST_STRUCT_END();
+
+	LES_TEST_ADD_TYPE_STRUCT(TestStruct6);
+	LES_TEST_ADD_TYPE_STRUCT_POINTER(TestStruct6, LES_TYPE_INPUT_OUTPUT);
 
 	/* Sample functions for development */
 	LES_TEST_FUNCTION_START(jakeInit, void, 2, 1);
@@ -1128,16 +1201,36 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_INPUT(int*, input_4);
 	LES_TEST_FUNCTION_END();
 
-	LES_TEST_FUNCTION_START(LES_Test_StructInputParam, void, 4, 0);
+	LES_TEST_FUNCTION_START(LES_Test_DecodeInputOutputParameters, void, 7, 4);
+	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(unsigned int*, output_0);
+	LES_TEST_FUNCTION_ADD_INPUT(short, input_1);
+	LES_TEST_FUNCTION_ADD_OUTPUT(unsigned short*, output_1);
+	LES_TEST_FUNCTION_ADD_INPUT(char, input_2);
+	LES_TEST_FUNCTION_ADD_OUTPUT(unsigned char*, output_2);
+	LES_TEST_FUNCTION_ADD_INPUT(float, input_3);
+	LES_TEST_FUNCTION_ADD_OUTPUT(float*, output_3);
+	LES_TEST_FUNCTION_ADD_INPUT(int*, input_4);
+	LES_TEST_FUNCTION_ADD_INPUT(short*, input_5);
+	LES_TEST_FUNCTION_ADD_INPUT(char*, input_6);
+	LES_TEST_FUNCTION_END();
+
+	LES_TEST_FUNCTION_START(LES_Test_StructInputParam, void, 5, 0);
 	LES_TEST_FUNCTION_ADD_INPUT(TestStruct2, input_0);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_1);
 	LES_TEST_FUNCTION_ADD_INPUT(TestStruct1, input_2);
-	LES_TEST_FUNCTION_ADD_INPUT(TestStruct4, input_3);
+	LES_TEST_FUNCTION_ADD_INPUT(TestStruct3, input_3);
+	LES_TEST_FUNCTION_ADD_INPUT(TestStruct4*, input_4);
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_StructOutputParam, void, 0, 2);
 	LES_TEST_FUNCTION_ADD_OUTPUT(TestStruct3*, out_0);
 	LES_TEST_FUNCTION_ADD_OUTPUT(TestStruct4*, out_1);
+	LES_TEST_FUNCTION_END();
+
+	LES_TEST_FUNCTION_START(LES_Test_StructInputOutputParam, void, 1, 1);
+	LES_TEST_FUNCTION_ADD_INPUT(TestStruct5*, in_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(TestStruct6*, out_0);
 	LES_TEST_FUNCTION_END();
 
 	/* Run specific tests */
@@ -1154,7 +1247,7 @@ void LES_TestSetup(void)
 
 	unsigned int output_0 = 1;
 	unsigned short output_1 = 2;
-	unsigned char output_2 = 3;
+	unsigned char output_2 = 'O';
 	float output_3 = -123.456f;
 	int input_4 = 12345;
 
@@ -1276,9 +1369,12 @@ void LES_TestSetup(void)
 	fprintf(stderr, "\n");
 	LES_Test_ReadOutputParameters(&output_0, &output_1, &output_2, &output_3);
 	fprintf(stderr, "\n");
-	LES_Test_ReadInputOutputParameters(102, 23453, 110, -4.0332f, &input_4, &output_0, &output_1, &output_2, &output_3);
+	LES_Test_ReadInputOutputParameters(102, 23453, '*', -4.0332f, &input_4, &output_0, &output_1, &output_2, &output_3);
 	fprintf(stderr, "\n");
-	LES_Test_DecodeInputOutputParameters(201, 12863, -109, -8.9832f, &input_4, &output_0, &output_1, &output_2, &output_3);
+	short input_5 = 8989;
+	char input_6 = '6';
+	LES_Test_DecodeInputOutputParameters(201, 12863, ';', -8.9832f, &input_4, &input_5, &input_6, 
+																			 &output_0, &output_1, &output_2, &output_3);
 	fprintf(stderr, "\n");
 
 	/* Struct tests */
@@ -1303,35 +1399,40 @@ void LES_TestSetup(void)
 	in_2.m_longlong = -100048;
 	in_2.m_int = 65;
 	in_2.m_short = -123;
-	in_2.m_char = 42;
+	in_2.m_char = 'A';
 	in_2.m_float = 666.987f;
 	TestStruct2 in_0;
 	in_0.m_float = 666.987f;
 	in_0.m_testStruct1 = in_2;
-	in_0.m_char = 42;
+	in_0.m_char = 'B';
 	in_0.m_short = -123;
 	in_0.m_int = 65;
-	TestStruct4 in_3;
-	in_3.m_float = 987.123f;
-	in_3.m_int = 12;
-	in_3.m_char = 56;
-	in_3.m_short = +321;
-	in_3.m_testStruct3.m_char = 1;
-	in_3.m_testStruct3.m_float = 3.141f;
-	in_3.m_testStruct3.m_int = 2;
-	in_3.m_testStruct3.m_short = 3;
-	LES_Test_StructInputParam(in_0, 7243, in_2, in_3);
+	TestStruct3 in_3;
+	in_3.m_char = 'J';
+	in_3.m_float = 2.173f;
+	in_3.m_int = -542;
+	in_3.m_short = 209;
+	TestStruct4 in_4;
+	in_4.m_float = 987.123f;
+	in_4.m_int = 12;
+	in_4.m_char = 'L';
+	in_4.m_short = +321;
+	in_4.m_testStruct3.m_char = '#';
+	in_4.m_testStruct3.m_float = 3.141f;
+	in_4.m_testStruct3.m_int = 2;
+	in_4.m_testStruct3.m_short = 3;
+	LES_Test_StructInputParam(in_0, 7243, in_2, in_3, &in_4);
 	fprintf(stderr, "\n");
 
 	TestStruct3 out_0;
 	out_0.m_short = +1718;
 	out_0.m_float = 271.387f;
 	out_0.m_int = 14;
-	out_0.m_char = 96;
+	out_0.m_char = 'a';
 	TestStruct4 out_1;
 	out_1.m_float = 1414.987f;
 	out_1.m_int = -2713;
-	out_1.m_char = 32;
+	out_1.m_char = 'Z';
 	out_1.m_short = +321;
 	out_1.m_testStruct3 = out_0;
 #if LES_TEST_DEBUG
@@ -1346,6 +1447,17 @@ void LES_TestSetup(void)
 	printf("TestStruct4: m_testStruct3:%p\n", &out_1.m_testStruct3);
 #endif // #if LES_TEST_DEBUG
 	LES_Test_StructOutputParam(&out_0, &out_1);
+	fprintf(stderr, "\n");
+	TestStruct5 testStruct5;
+	testStruct5.m_char = '5';
+	short shortTest = 4242;
+	testStruct5.m_shortPtr = &shortTest;
+	TestStruct6 testStruct6;
+	testStruct6.m_short = -5656;
+	testStruct6.m_testStruct5Ptr = &testStruct5;
+	char charTest = '6';
+	testStruct6.m_charPtr = &charTest;
+	LES_Test_StructInputOutputParam(&testStruct5, &testStruct6);
 	fprintf(stderr, "\n");
 }
 

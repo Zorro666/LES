@@ -83,25 +83,6 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Write type:'%s' not found\n", typeStringEntry->m_str);
 		return LES_ERROR;
 	}
-	const LES_StringEntry* const aliasedStringEntryPtr = LES_GetStringEntryForID(rawTypeEntryPtr->m_aliasedTypeID);
-	if (aliasedStringEntryPtr == NULL)
-	{
-		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Write type:'%s' aliasedStringEntry:%d not found\n", 
-						typeStringEntry->m_str, rawTypeEntryPtr->m_aliasedTypeID);
-		return LES_ERROR;
-	}
-	const LES_TypeEntry* const aliasedTypeEntryPtr = LES_GetTypeEntry(aliasedStringEntryPtr);
-	if (aliasedTypeEntryPtr == NULL)
-	{
-		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Write type:'%s' aliased type:'%s' not found\n", 
-						typeStringEntry->m_str, aliasedStringEntryPtr->m_str);
-		return LES_ERROR;
-	}
-	if (parameterDataPtr == NULL)
-	{
-		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Write type:'%s' parameterDataPtr is NULL\n", typeStringEntry->m_str);
-		return LES_ERROR;
-	}
 	const unsigned int rawTypeFlags = rawTypeEntryPtr->m_flags;
 	if ((rawTypeFlags & paramMode) == 0)
 	{
@@ -109,6 +90,37 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 						typeStringEntry->m_str, rawTypeFlags, paramMode);
 		return LES_ERROR;
 	}
+	return WriteInternal(typeStringEntry, parameterDataPtr);
+}
+
+int LES_FunctionParameterData::WriteInternal(const LES_StringEntry* const typeStringEntry, const void* const parameterDataPtr)
+{
+	const LES_TypeEntry* const rawTypeEntryPtr = LES_GetTypeEntry(typeStringEntry);
+	if (rawTypeEntryPtr == NULL)
+	{
+		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::WriteInternal type:'%s' not found\n", typeStringEntry->m_str);
+		return LES_ERROR;
+	}
+	const LES_StringEntry* const aliasedStringEntryPtr = LES_GetStringEntryForID(rawTypeEntryPtr->m_aliasedTypeID);
+	if (aliasedStringEntryPtr == NULL)
+	{
+		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::WriteInternal type:'%s' aliasedStringEntry:%d not found\n", 
+						typeStringEntry->m_str, rawTypeEntryPtr->m_aliasedTypeID);
+		return LES_ERROR;
+	}
+	const LES_TypeEntry* const aliasedTypeEntryPtr = LES_GetTypeEntry(aliasedStringEntryPtr);
+	if (aliasedTypeEntryPtr == NULL)
+	{
+		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::WriteInternal type:'%s' aliased type:'%s' not found\n", 
+						typeStringEntry->m_str, aliasedStringEntryPtr->m_str);
+		return LES_ERROR;
+	}
+	if (parameterDataPtr == NULL)
+	{
+		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::WriteInternal type:'%s' parameterDataPtr is NULL\n", typeStringEntry->m_str);
+		return LES_ERROR;
+	}
+	const unsigned int rawTypeFlags = rawTypeEntryPtr->m_flags;
 	const LES_TypeEntry* typeEntryPtr = rawTypeEntryPtr;
 	if (rawTypeFlags & LES_TYPE_ALIAS)
 	{
@@ -127,7 +139,7 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 	unsigned int parameterDataSize = typeDataSize;
 	if (valueAddress == NULL)
 	{
-		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::Write type:'%s' valueAddress is NULL\n", typeStringEntry->m_str);
+		fprintf(stderr, "LES ERROR: LES_FunctionParameterData::WriteInternal type:'%s' valueAddress is NULL\n", typeStringEntry->m_str);
 		return LES_ERROR;
 	}
 
@@ -152,16 +164,13 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 			const int memberTypeID = structMember->m_typeID;
 			const LES_StringEntry* const memberTypeStringEntry = LES_GetStringEntryForID(memberTypeID);
 			const int memberAlignmentPadding = structMember->m_alignmentPadding;
-			const int memberParamMode = paramMode | (rawTypeFlags & LES_TYPE_INPUT) | (rawTypeFlags & LES_TYPE_OUTPUT);
 			memberDataPtr += memberAlignmentPadding;
-			returnCode = Write(memberTypeStringEntry, (const void* const)memberDataPtr, memberParamMode);
+			returnCode = WriteInternal(memberTypeStringEntry, (const void* const)memberDataPtr);
 			if (returnCode == LES_ERROR)
 			{
 				return LES_ERROR;
 			}
-//			const LES_TypeEntry* const memberTypeEntryPtr = LES_GetTypeEntry(memberTypeStringEntry);
-//			memberDataPtr += memberTypeEntryPtr->m_dataSize;
-				memberDataPtr += structMember->m_dataSize;
+			memberDataPtr += structMember->m_dataSize;
 		}
 		return returnCode;
 	}

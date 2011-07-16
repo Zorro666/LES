@@ -27,14 +27,9 @@ public:
 public:
 	static LES_Hash s_longlongHash;
 	static LES_Hash s_intHash;
-	static LES_Hash s_unsignedintPtrHash;
 	static LES_Hash s_shortHash;
-	static LES_Hash s_unsignedshortPtrHash;
 	static LES_Hash s_charHash;
-	static LES_Hash s_unsignedcharPtrHash;
 	static LES_Hash s_floatHash;
-	static LES_Hash s_floatPtrHash;
-	static LES_Hash s_intPtrHash;
 };
 
 const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEntry);
