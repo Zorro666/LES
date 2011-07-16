@@ -1,28 +1,31 @@
 High Priority:
-FUNCTION: when computing parameterDataSize handle the aliased data types, pointers and structures
-TEST: check functionParameter block size 
+CORE: need common error handling & log system
 
-TEST: test output parameter as a pointer to a structure
-TEST: test input parameter as a pointer to a structure
+FEATURE: what about references? Treat them as pointers :)
+TEST: test input parameter as a POD reference
+TEST: test output parameter as a POD reference
+TEST: test input parameter as a structure reference
+TEST: test output parameter as a structure reference 
+TEST: test POD reference member in a struct
+TEST: test struct reference as member in a struct
 
-FUNCTION: type definition add count e.g. int[3] means int * 3 : wow you can do sizeof(int[3])
+FEATURE: type definition add count e.g. int[3] means int * 3 : wow you can do sizeof(int[3])
+FEATURE: make pod types alias to byte[sizeOfDataType], so byte is the final base pure type
 TEST: test input parameter as a POD array
 TEST: test output parameter as a POD array
 TEST: test input parameter as a structure array
 TEST: test output parameter as a structure array
+TEST: test input parameter as a reference array
+TEST: test output parameter as a reference array
 TEST: test POD array as member in a struct
 TEST: test struct array as member in a struct
-
-TEST: POD pointer inside a structure
-TEST: struct pointer inside a structure
+TEST: test POD reference array as member in a struct
+TEST: test struct reference array as member in a struct
 
 Medium Priority:
 FUNCTION: error handling run out of memory when adding new function or new type e.g. array limit reached
 
-FUNCTION: what about references? Treat them as pointers :)
-
 CORE: error handling run out of memory when adding new string e.g. array limit reached
-CORE: need common error handling & log system
 
 LES: need good debugging ability for the packets before sent and at server end
 LES: send packet data to server?
