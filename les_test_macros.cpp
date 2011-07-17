@@ -82,3 +82,16 @@ void LES_TestFunctionStart(LES_FunctionDefinition* const functionDefinitionPtr, 
 	LES_AddFunctionDefinition(testFunctionDataPtr->functionName, functionDefinitionPtr);
 }
 
+bool LES_TestStructStart(const char* const structName, const int numMembers, 
+												 LES_StructDefinition* const structDefinitionPtr, LES_TEST_STRUCT_DATA* testStructDataPtr)
+{
+	testStructDataPtr->structName = structName;
+	testStructDataPtr->globalMemberIndex = 0;
+	testStructDataPtr->totalMemberSizeWithPadding = 0;
+
+	const int nameID = LES_AddStringEntry(structName);
+	LES_StructDefinition structDefinition(nameID, numMembers);
+	*structDefinitionPtr = structDefinition;
+
+	return true;
+}
