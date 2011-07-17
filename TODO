@@ -1,9 +1,4 @@
 High Priority:
-STRUCT: compute the param block size for it, store it with the structure or as the dataSize in the type
-TEST: when it is fixed, checks to make sure the size is right will fail as they just used sizeof(structName)
-
-TEST: move the LES_TEST_* macros into functions to make them easier to maintain
-
 CORE: need common error handling & log system: warning, log, error, fatal error
 CORE: query log system if an error occurred
 CORE: mark fatal error as fatal/non-fatal from outside, 
