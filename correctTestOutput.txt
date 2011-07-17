@@ -1,0 +1,304 @@
+#### Function header definition tests ####
+LES ERROR: 'LES_Test_FunctionNotFound' : Can't find function definition
+LES ERROR: 'LES_Test_FunctionNotFound' : Error during LES_FunctionStart
+
+LES ERROR: 'LES_Test_ReturnTypeNotFound' : Can't find function return type for ID:-1 'jake'
+LES ERROR: 'LES_Test_ReturnTypeNotFound' : Error during LES_FunctionStart
+
+LES_ERROR: 'LES_Test_ReturnTypeHashIsWrong' : Return type hash doesn't match function definition 0x108833C7 != 0x98A68178 Code:'wrongReturnType' Definition:'void'
+LES ERROR: 'LES_Test_ReturnTypeHashIsWrong' : Error during LES_FunctionStart
+
+LES_ERROR: 'LES_Test_ReturnTypeStringIsWrong' : Return type string doesn't match function definition 'ReturnTypeBrokenHash' != 'brokenString'
+LES ERROR: 'LES_Test_ReturnTypeStringIsWrong' : Error during LES_FunctionStart
+
+#### Input parameter tests ####
+LES ERROR: 'LES_Test_TooManyInputParameters' : Too many Input parameters index:2 max:2 parameter:'input_2' type:'int'
+LES ERROR: 'LES_Test_TooManyInputParameters' : Error adding Input parameter 2 'input_2' type:'int'
+
+LES ERROR: 'LES_Test_InputWrongIndex' : Wrong function parameter index:0 expected:1 Input parameter:'input_1' type:'int'
+LES ERROR: 'LES_Test_InputWrongIndex' : Error adding Input parameter 0 'input_1' type:'int'
+
+LES ERROR: 'LES_Test_InputGlobalIndexIsWrong' : Wrong function parameter index:0 expected:1 Input parameter:'input_0' type:'int'
+LES ERROR: 'LES_Test_InputGlobalIndexIsWrong' : Error adding Input parameter 0 'input_0' type:'int'
+
+LES ERROR: 'LES_Test_InputUsedAsOutput' : input_0 parameter wrong mode Code:'Output' Definition:'Input'
+LES ERROR: 'LES_Test_InputUsedAsOutput' : Error adding Output parameter 0 'input_0' type:'int'
+
+LES ERROR: 'LES_Test_InputParamAlreadyUsed' : Input parameter:'input_0' type:'int' has already been added param index:0
+LES ERROR: 'LES_Test_InputParamAlreadyUsed' : Error adding Input parameter 1 'input_0' type:'int'
+
+LES ERROR: 'LES_Test_InputParamMissing' : parameter index:2 not set mode:'Input' name:'input_1' type:'int'
+LES ERROR: 'LES_Test_InputParamMissing' : parameter index:3 not set mode:'Input' name:'input_2' type:'int'
+LES ERROR: 'LES_Test_InputParamMissing' : not all parameters were set num missing:2
+LES ERROR: 'LES_Test_InputParamMissing' : Error during LES_FunctionEnd
+
+#### Input name tests ####
+LES ERROR: 'LES_Test_InputNameDoesntExist' : Input parameter index:0 parameter:'inputNotExist' type:'int' not found
+LES ERROR: 'LES_Test_InputNameDoesntExist' : Error adding Input parameter 0 'inputNotExist' type:'int'
+
+LES ERROR: 'LES_Test_InputNameIDNotFound' : Can't find parameter name for ID:-1 parameter:'input_0' type:'int'
+LES ERROR: 'LES_Test_InputNameIDNotFound' : Error adding Input parameter 0 'input_0' type:'int'
+
+LES ERROR: 'LES_Test_InputNameHashIsWrong' : Adding parameter 'input_0' name hash doesn't match for ID:77 0x480D993 != 0x97A0017 Code:'input_0' Definition:'wrongHash'
+LES ERROR: 'LES_Test_InputNameHashIsWrong' : Error adding Input parameter 0 'input_0' type:'int'
+
+LES ERROR: 'LES_Test_InputNameStringIsWrong' : Adding parameter 'InputNameBrokenHash' name string doesn't match for ID:79 'InputNameBrokenHash' != 'brokenString' 0x99F1870C : 0x99F1870C
+LES ERROR: 'LES_Test_InputNameStringIsWrong' : Error adding Input parameter 0 'InputNameBrokenHash' type:'int'
+
+#### Input type tests ####
+LES ERROR: 'LES_Test_InputTypeIDNotFound' : Can't find Input parameter type for ID:-1 parameter:'input_0' type:'int'
+LES ERROR: 'LES_Test_InputTypeIDNotFound' : Error adding Input parameter 0 'input_0' type:'int'
+
+LES ERROR: 'LES_Test_InputTypeHashIsWrong' : parameter:0 'input_0' (Input) type hash doesn't match for ID:77 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
+LES ERROR: 'LES_Test_InputTypeHashIsWrong' : Error adding Input parameter 0 'input_0' type:'int'
+
+LES ERROR: 'LES_Test_InputTypeStringIsWrong' : Adding parameter 'input_0' type string doesn't match for ID:83 'InputTypeBrokenHash' != 'brokenString' 0x7EF15B07 : 0x7EF15B07
+LES ERROR: 'LES_Test_InputTypeStringIsWrong' : Error adding Input parameter 0 'input_0' type:'InputTypeBrokenHash'
+
+#### Output parameter tests ####
+LES ERROR: 'LES_Test_TooManyOutputParameters' : Too many Output parameters index:2 max:2 parameter:'output_2' type:'unsigned char*'
+LES ERROR: 'LES_Test_TooManyOutputParameters' : Error adding Output parameter 2 'output_2' type:'unsigned char*'
+
+LES ERROR: 'LES_Test_OutputWrongIndex' : Wrong Output parameter index:0 expected:1 parameter:'output_1' type:'int'
+LES ERROR: 'LES_Test_OutputWrongIndex' : Error adding Output parameter 1 'output_1' type:'int'
+
+LES ERROR: 'LES_Test_OutputGlobalIndexIsWrong' : Wrong function parameter index:0 expected:1 Output parameter:'output_0' type:'int'
+LES ERROR: 'LES_Test_OutputGlobalIndexIsWrong' : Error adding Output parameter 0 'output_0' type:'int'
+
+LES ERROR: 'LES_Test_OutputUsedAsInput' : output_0 parameter wrong mode Code:'Input' Definition:'Output'
+LES ERROR: 'LES_Test_OutputUsedAsInput' : Error adding Input parameter 0 'output_0' type:'int'
+
+LES ERROR: 'LES_Test_OutputParamAlreadyUsed' : Output parameter:'output_0' type:'unsigned int*' has already been added param index:1
+LES ERROR: 'LES_Test_OutputParamAlreadyUsed' : Error adding Output parameter 1 'output_0' type:'unsigned int*'
+
+LES ERROR: 'LES_Test_OutputParamMissing' : parameter index:2 not set mode:'Output' name:'output_1' type:'unsigned short*'
+LES ERROR: 'LES_Test_OutputParamMissing' : not all parameters were set num missing:1
+LES ERROR: 'LES_Test_OutputParamMissing' : Error during LES_FunctionEnd
+
+#### Output name tests ####
+LES ERROR: 'LES_Test_OutputNameDoesntExist' : Output parameter index:0 parameter:'outputNotExist' type:'int' not found
+LES ERROR: 'LES_Test_OutputNameDoesntExist' : Error adding Output parameter 0 'outputNotExist' type:'int'
+
+LES ERROR: 'LES_Test_OutputNameIDNotFound' : Can't find parameter name for ID:-1 parameter:'output_0' type:'int'
+LES ERROR: 'LES_Test_OutputNameIDNotFound' : Error adding Output parameter 0 'output_0' type:'int'
+
+LES ERROR: 'LES_Test_OutputNameHashIsWrong' : Adding parameter 'output_0' name hash doesn't match for ID:77 0x1D1CA836 != 0x97A0017 Code:'output_0' Definition:'wrongHash'
+LES ERROR: 'LES_Test_OutputNameHashIsWrong' : Error adding Output parameter 0 'output_0' type:'int'
+
+LES ERROR: 'LES_Test_OutputNameStringIsWrong' : Adding parameter 'OutputNameBrokenHash' name string doesn't match for ID:96 'OutputNameBrokenHash' != 'brokenString' 0x61782F3F : 0x61782F3F
+LES ERROR: 'LES_Test_OutputNameStringIsWrong' : Error adding Output parameter 0 'OutputNameBrokenHash' type:'int'
+
+#### Output type tests ####
+LES ERROR: 'LES_Test_OutputTypeIDNotFound' : Can't find Output parameter type for ID:-1 parameter:'output_0' type:'int'
+LES ERROR: 'LES_Test_OutputTypeIDNotFound' : Error adding Output parameter 0 'output_0' type:'int'
+
+LES ERROR: 'LES_Test_OutputTypeHashIsWrong' : parameter:0 'output_0' (Output) type hash doesn't match for ID:77 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
+LES ERROR: 'LES_Test_OutputTypeHashIsWrong' : Error adding Output parameter 0 'output_0' type:'int'
+
+LES ERROR: 'LES_Test_OutputTypeStringIsWrong' : Adding parameter 'output_0' type string doesn't match for ID:100 'OutputTypeBrokenHash' != 'brokenString' 0x4678033A : 0x4678033A
+LES ERROR: 'LES_Test_OutputTypeStringIsWrong' : Error adding Output parameter 0 'output_0' type:'OutputTypeBrokenHash'
+
+#### Parameter already exists tests ####
+LES ERROR: TEST function 'LES_Test_InputParameterAlreadyExists' : parameter 'input_0' already exists type:'char'
+LES ERROR: TEST function 'LES_Test_InputParameterAlreadyExists' : ERROR cannot create definition
+
+LES ERROR: TEST function 'LES_Test_OutputParameterAlreadyExists' : parameter 'output_0' already exists type:'short'
+LES ERROR: TEST function 'LES_Test_OutputParameterAlreadyExists' : ERROR cannot create definition
+
+LES ERROR: TEST function 'LES_Test_ParameterAlreadyExists' : parameter 'input_0' already exists type:'float'
+LES ERROR: TEST function 'LES_Test_ParameterAlreadyExists' : ERROR cannot create definition
+
+#### Complex Input Output Parameter tests ####
+LES_Test_InputOutputMixture: success if no error output
+
+LES ERROR: LES_FunctionParameterData::Write type:'unsigned short' flags incorrect for parameter mode typeFlags:0x5 paramMode:0x2
+LES ERROR: 'LES_Test_InputParamUsedAsOutput' : Write parameter:'output_0' type:'unsigned short' failed
+LES ERROR: 'LES_Test_InputParamUsedAsOutput' : Error adding Output parameter 0 'output_0' type:'unsigned short'
+
+LES ERROR: LES_FunctionParameterData::Write type:'output_only' flags incorrect for parameter mode typeFlags:0x6 paramMode:0x1
+LES ERROR: 'LES_Test_OutputParamUsedAsInput' : Write parameter:'input_0' type:'output_only' failed
+LES ERROR: 'LES_Test_OutputParamUsedAsInput' : Error adding Input parameter 0 'input_0' type:'output_only'
+
+#### Add Type tests ####
+LES ERROR: AddType 'unsigned char' hash 0x6E40A25D already in list and dataSize doesn't match Existing:1 New:2
+LES ERROR: TEST AddType 'unsigned char' 0x6E40A25D Alias 'unsigned char' failed
+
+LES ERROR: AddType 'unsigned char' hash 0x6E40A25D already in list and flags doesn't match Existing:0x5 New:0x12
+LES ERROR: TEST AddType 'unsigned char' 0x6E40A25D Alias 'unsigned char' failed
+
+LES ERROR: AddType 'unsigned char' hash 0x6E40A25D already in list and aliasedTypeID doesn't match Existing:0 New:2
+LES ERROR: TEST AddType 'unsigned char' 0x6E40A25D Alias 'unsigned int' failed
+
+#### Read Parameter tests ####
+LES_Test_ReadInputParameters: input_0:102 value_0:102
+LES_Test_ReadInputParameters: input_1:23453 value_1:23453
+LES_Test_ReadInputParameters: input_2:110 value_2:110
+LES_Test_ReadInputParameters: input_3:-4.033200 value_3:-4.033200
+LES_Test_ReadInputParameters: input_4:12345 value_4:12345
+
+LES_Test_ReadOutputParameters: output_0:1 value_0:1
+LES_Test_ReadOutputParameters: output_1:2 value_1:2
+LES_Test_ReadOutputParameters: output_2:79 value_2:79
+LES_Test_ReadOutputParameters: output_3:-123.456001 value_3:-123.456001
+
+LES_Test_ReadInputOutputParameters: input_0:102 value_0:102
+LES_Test_ReadInputOutputParameters: output_0:1 value_0:1
+LES_Test_ReadInputOutputParameters: input_1:23453 value_1:23453
+LES_Test_ReadInputOutputParameters: output_1:2 value_1:2
+LES_Test_ReadInputOutputParameters: input_2:'*' value_2:'*'
+LES_Test_ReadInputOutputParameters: output_2:'O' value_2:'O'
+LES_Test_ReadInputOutputParameters: input_3:-4.033200 value_3:-4.033200
+LES_Test_ReadInputOutputParameters: output_3:-123.456001 value_3:-123.456001
+LES_Test_ReadInputOutputParameters: input_4:12345 value_4:12345
+LES_Test_ReadInputOutputParameters: parameterDataSize:26
+
+LES_Test_ReadInputOutputParameters: parameterDataSize:29
+
+#### Struct tests ####
+LES ERROR: TEST struct 'LES_Struct_TooManyMembers' : MemberIndex too big index:1 max:1 member:'m_two' type:'short'
+LES ERROR: TEST struct 'LES_Struct_TooManyMembers' : ERROR cannot create its definition
+
+LES ERROR: TEST struct 'LES_Struct_MemberAlreadyExists' : member 'm_one' already exists type:'short'
+LES ERROR: TEST struct 'LES_Struct_MemberAlreadyExists' : ERROR not the right number of members Added:1 Should be:2
+LES ERROR: TEST struct 'LES_Struct_MemberAlreadyExists' : ERROR cannot create its definition
+
+LES ERROR: TEST struct 'LES_Struct_NotEnoughMembers' : ERROR not the right number of members Added:2 Should be:3
+LES ERROR: TEST struct 'LES_Struct_NotEnoughMembers' : ERROR cannot create its definition
+
+LES ERROR: 'LES_Test_StructInputParam' : wrong number of bytes written NumBytesWritten:86 ParameterDataSize:108
+LES ERROR: 'LES_Test_StructInputParam' : Error during LES_FunctionEnd
+LES_Test_StructInputParam: parameterDataSize:108
+
+LES ERROR: 'LES_Test_StructOutputParam' : wrong number of bytes written NumBytesWritten:33 ParameterDataSize:44
+LES ERROR: 'LES_Test_StructOutputParam' : Error during LES_FunctionEnd
+argc=1
+argv[0]='les_test'
+DecodeSingle parameter[0]:'input_0' type:'int' value:201
+DecodeSingle parameter[1]:'output_0' type:'unsigned int*' value:1
+DecodeSingle parameter[2]:'input_1' type:'short' value:12863
+DecodeSingle parameter[3]:'output_1' type:'unsigned short*' value:2
+DecodeSingle parameter[4]:'input_2' type:'char' value:';'
+DecodeSingle parameter[5]:'output_2' type:'unsigned char*' value:'O'
+DecodeSingle parameter[6]:'input_3' type:'float' value:-8.983200
+DecodeSingle parameter[7]:'output_3' type:'float*' value:-123.456001
+DecodeSingle parameter[8]:'input_4' type:'int*' value:12345
+DecodeSingle parameter[9]:'input_5' type:'short*' value:8989
+DecodeSingle parameter[10]:'input_6' type:'char*' value:'6'
+DecodeSingle parameter[0]:'input_0' type:'TestStruct2' size:36 STRUCT
+DecodeSingle   parameter[0] member[0]:'m_float' type:'float' value:666.987000
+DecodeSingle parameter[1]:'m_testStruct1' type:'TestStruct1' size:24 STRUCT
+DecodeSingle     parameter[1] member[0]:'m_longlong' type:'long long int' value:-100048
+DecodeSingle     parameter[1] member[1]:'m_char' type:'char' value:'A'
+DecodeSingle     parameter[1] member[2]:'m_int' type:'int' value:65
+DecodeSingle     parameter[1] member[3]:'m_short' type:'short' value:-123
+DecodeSingle     parameter[1] member[4]:'m_float' type:'float' value:666.987000
+DecodeSingle   parameter[0] member[2]:'m_char' type:'char' value:'B'
+DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:-123
+DecodeSingle   parameter[0] member[4]:'m_int' type:'int' value:65
+DecodeSingle parameter[1]:'input_1' type:'int' value:7243
+DecodeSingle parameter[2]:'input_2' type:'TestStruct1' size:24 STRUCT
+DecodeSingle   parameter[2] member[0]:'m_longlong' type:'long long int' value:-100048
+DecodeSingle   parameter[2] member[1]:'m_char' type:'char' value:'A'
+DecodeSingle   parameter[2] member[2]:'m_int' type:'int' value:65
+DecodeSingle   parameter[2] member[3]:'m_short' type:'short' value:-123
+DecodeSingle   parameter[2] member[4]:'m_float' type:'float' value:666.987000
+DecodeSingle parameter[3]:'input_3' type:'TestStruct3' size:16 STRUCT
+DecodeSingle   parameter[3] member[0]:'m_short' type:'short' value:209
+DecodeSingle   parameter[3] member[1]:'m_float' type:'float' value:2.173000
+DecodeSingle   parameter[3] member[2]:'m_int' type:'int' value:-542
+DecodeSingle   parameter[3] member[3]:'m_char' type:'char' value:'J'
+DecodeSingle parameter[4]:'input_4' type:'TestStruct4*' size:28 STRUCT
+DecodeSingle   parameter[4] member[0]:'m_float' type:'float' value:987.122986
+DecodeSingle   parameter[4] member[1]:'m_int' type:'int' value:12
+DecodeSingle   parameter[4] member[2]:'m_char' type:'char' value:'L'
+DecodeSingle   parameter[4] member[3]:'m_short' type:'short' value:321
+DecodeSingle parameter[4]:'m_testStruct3' type:'TestStruct3' size:16 STRUCT
+DecodeSingle     parameter[4] member[0]:'m_short' type:'short' value:3
+DecodeSingle     parameter[4] member[1]:'m_float' type:'float' value:3.141000
+DecodeSingle     parameter[4] member[2]:'m_int' type:'int' value:2
+DecodeSingle     parameter[4] member[3]:'m_char' type:'char' value:'#'
+DecodeSingle parameter[0]:'out_0' type:'TestStruct3*' size:16 STRUCT
+DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:1718
+DecodeSingle   parameter[0] member[1]:'m_float' type:'float' value:271.386993
+DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:14
+DecodeSingle   parameter[0] member[3]:'m_char' type:'char' value:'a'
+DecodeSingle parameter[1]:'out_1' type:'TestStruct4*' size:28 STRUCT
+DecodeSingle   parameter[1] member[0]:'m_float' type:'float' value:1414.987061
+DecodeSingle   parameter[1] member[1]:'m_int' type:'int' value:-2713
+DecodeSingle   parameter[1] member[2]:'m_char' type:'char' value:'Z'
+DecodeSingle   parameter[1] member[3]:'m_short' type:'short' value:321
+DecodeSingle parameter[4]:'m_testStruct3' type:'TestStruct3' size:16 STRUCT
+DecodeSingle     parameter[4] member[0]:'m_short' type:'short' value:1718
+DecodeSingle     parameter[4] member[1]:'m_float' type:'float' value:271.386993
+DecodeSingle     parameter[4] member[2]:'m_int' typeLES_Test_StructOutputParam: parameterDataSize:44
+
+LES ERROR: 'LES_Test_StructInputOutputParam' : wrong number of bytes written NumBytesWritten:9 ParameterDataSize:20
+LES ERROR: 'LES_Test_StructInputOutputParam' : Error during LES_FunctionEnd
+LES_Test_StructInputOutputParam: parameterDataSize:20
+
+#### Reference tests ####
+LES_Test_ReferenceInputPODParam: parameterDataSize:4
+
+LES ERROR: 'LES_Test_ReferenceInputStructParam' : wrong number of bytes written NumBytesWritten:19 ParameterDataSize:24
+LES ERROR: 'LES_Test_ReferenceInputStructParam' : Error during LES_FunctionEnd
+LES_Test_ReferenceInputStructParam: parameterDataSize:24
+
+LES_Test_ReferenceOutputPODParam: parameterDataSize:1
+
+LES ERROR: 'LES_Test_ReferenceOutputStructParam' : wrong number of bytes written NumBytesWritten:30 ParameterDataSize:36
+LES ERROR: 'LES_Test_ReferenceOutputStructParam' : Error during LES_FunctionEnd
+LES_Test_ReferenceOutputStructParam: parameterDataSize:36
+
+LES ERROR: 'LES_Test_ReferenceStructInputParam' : wrong number of bytes written NumBytesWritten:9 ParameterDataSize:20
+LES ERROR: 'LES_Test_ReferenceStructInputParam' : Error during LES_FunctionEnd
+LES_Test_ReferenceStructInputParam: parameterDataSize:20
+
+LES ERROR: 'LES_Test_ReferenceStructOutputParam' : wrong number of bytes written NumBytesWritten:6 ParameterDataSize:12
+LES ERROR: 'LES_Test_ReferenceStructOutputParam' : Error during LES_FunctionEnd
+LES_Test_ReferenceStructOutputParam: parameterDataSize:12
+
+LES_Test_ReadInputOutputParameters: parameterDataSize:1
+
+:'int' value:14
+DecodeSingle     parameter[4] member[3]:'m_char' type:'char' value:'a'
+DecodeSingle parameter[0]:'in_0' type:'TestStruct5*' size:8 STRUCT
+DecodeSingle   parameter[0] member[0]:'m_char' type:'char' value:'5'
+DecodeSingle   parameter[0] member[1]:'m_shortPtr' type:'short*' value:4242
+DecodeSingle parameter[1]:'out_0' type:'TestStruct6*' size:12 STRUCT
+DecodeSingle   parameter[1] member[0]:'m_short' type:'short' value:-5656
+DecodeSingle parameter[1]:'m_testStructPtr' type:'TestStruct5*' size:8 STRUCT
+DecodeSingle     parameter[1] member[0]:'m_char' type:'char' value:'5'
+DecodeSingle     parameter[1] member[1]:'m_shortPtr' type:'short*' value:4242
+DecodeSingle   parameter[1] member[2]:'m_charPtr' type:'char*' value:'6'
+DecodeSingle parameter[0]:'input_0' type:'int&' value:954
+DecodeSingle parameter[0]:'input_0' type:'TestStruct1&' size:24 STRUCT
+DecodeSingle   parameter[0] member[0]:'m_longlong' type:'long long int' value:162132
+DecodeSingle   parameter[0] member[1]:'m_char' type:'char' value:'1'
+DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:14
+DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:936
+DecodeSingle   parameter[0] member[4]:'m_float' type:'float' value:16.213100
+DecodeSingle parameter[0]:'output_0' type:'char&' value:'R'
+DecodeSingle parameter[0]:'output_0' type:'TestStruct2&' size:36 STRUCT
+DecodeSingle   parameter[0] member[0]:'m_float' type:'float' value:2131.159912
+DecodeSingle parameter[1]:'m_testStruct1' type:'TestStruct1' size:24 STRUCT
+DecodeSingle     parameter[1] member[0]:'m_longlong' type:'long long int' value:162132
+DecodeSingle     parameter[1] member[1]:'m_char' type:'char' value:'1'
+DecodeSingle     parameter[1] member[2]:'m_int' type:'int' value:14
+DecodeSingle     parameter[1] member[3]:'m_short' type:'short' value:936
+DecodeSingle     parameter[1] member[4]:'m_float' type:'float' value:16.213100
+DecodeSingle   parameter[0] member[2]:'m_char' type:'char' value:'Z'
+DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:2526
+DecodeSingle   parameter[0] member[4]:'m_int' type:'int' value:1564
+DecodeSingle parameter[0]:'input_0' type:'TestStruct7&' size:20 STRUCT
+DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:936
+DecodeSingle   parameter[0] member[1]:'m_floatRef' type:'float&' value:76.123199
+DecodeSingle   parameter[0] member[2]:'m_char' type:'char' value:'A'
+DecodeSingle   parameter[0] member[3]:'m_charRef' type:'char&' value:'C'
+DecodeSingle   parameter[0] member[4]:'m_charPtr' type:'char*' value:'R'
+DecodeSingle parameter[0]:'output_0' type:'TestStruct8&' size:12 STRUCT
+DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:2526
+DecodeSingle parameter[1]:'m_testStruct5Ref' type:'TestStruct5&' size:8 STRUCT
+DecodeSingle     parameter[1] member[0]:'m_char' type:'char' value:'5'
+DecodeSingle     parameter[1] member[1]:'m_shortPtr' type:'short*' value:4242
+DecodeSingle   parameter[0] member[2]:'m_charPtr' type:'char*' value:'R'
+DecodeSingle parameter[0]:'output_0' type:'char&' value:'C'
