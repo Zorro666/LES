@@ -219,7 +219,6 @@
 		} \
 		if (__LES_struct_ok == true) \
 		{ \
-			structDefinition.SetTotalMemberDataSize(totalMemberSize); \
 			LES_AddStructDefinition(structName, &structDefinition); \
 		} \
 		else \
