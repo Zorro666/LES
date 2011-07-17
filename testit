@@ -1,0 +1,5 @@
+#! /bin/bash
+
+make
+les_test &> currentTestOutput.txt
+diff currentTestOutput.txt correctTestOutput.txt
