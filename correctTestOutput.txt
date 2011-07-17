@@ -164,12 +164,8 @@ LES ERROR: TEST struct 'LES_Struct_MemberAlreadyExists' : ERROR cannot create de
 LES ERROR: TEST struct 'LES_Struct_NotEnoughMembers' : ERROR not the right number of members Added:2 Should be:3
 LES ERROR: TEST struct 'LES_Struct_NotEnoughMembers' : ERROR cannot create definition
 
-LES ERROR: 'LES_Test_StructInputParam' : wrong number of bytes written NumBytesWritten:86 ParameterDataSize:108
-LES ERROR: 'LES_Test_StructInputParam' : Error during LES_FunctionEnd
-LES_Test_StructInputParam: parameterDataSize:108
+LES_Test_StructInputParam: parameterDataSize:86
 
-LES ERROR: 'LES_Test_StructOutputParam' : wrong number of bytes written NumBytesWritten:33 ParameterDataSize:44
-LES ERROR: 'LES_Test_StructOutputParam' : Error during LES_FunctionEnd
 argc=1
 argv[0]='les_test'
 DecodeSingle parameter[0]:'input_0' type:'int' value:201
@@ -229,32 +225,22 @@ DecodeSingle   parameter[1] member[3]:'m_short' type:'short' value:321
 DecodeSingle parameter[4]:'m_testStruct3' type:'TestStruct3' size:16 STRUCT
 DecodeSingle     parameter[4] member[0]:'m_short' type:'short' value:1718
 DecodeSingle     parameter[4] member[1]:'m_float' type:'float' value:271.386993
-DecodeSingle     parameter[4] member[2]:'m_int' typeLES_Test_StructOutputParam: parameterDataSize:44
+DecodeSingle     parameter[4] member[2]:'m_int' typeLES_Test_StructOutputParam: parameterDataSize:33
 
-LES ERROR: 'LES_Test_StructInputOutputParam' : wrong number of bytes written NumBytesWritten:9 ParameterDataSize:20
-LES ERROR: 'LES_Test_StructInputOutputParam' : Error during LES_FunctionEnd
-LES_Test_StructInputOutputParam: parameterDataSize:20
+LES_Test_StructInputOutputParam: parameterDataSize:9
 
 #### Reference tests ####
 LES_Test_ReferenceInputPODParam: parameterDataSize:4
 
-LES ERROR: 'LES_Test_ReferenceInputStructParam' : wrong number of bytes written NumBytesWritten:19 ParameterDataSize:24
-LES ERROR: 'LES_Test_ReferenceInputStructParam' : Error during LES_FunctionEnd
-LES_Test_ReferenceInputStructParam: parameterDataSize:24
+LES_Test_ReferenceInputStructParam: parameterDataSize:19
 
 LES_Test_ReferenceOutputPODParam: parameterDataSize:1
 
-LES ERROR: 'LES_Test_ReferenceOutputStructParam' : wrong number of bytes written NumBytesWritten:30 ParameterDataSize:36
-LES ERROR: 'LES_Test_ReferenceOutputStructParam' : Error during LES_FunctionEnd
-LES_Test_ReferenceOutputStructParam: parameterDataSize:36
+LES_Test_ReferenceOutputStructParam: parameterDataSize:30
 
-LES ERROR: 'LES_Test_ReferenceStructInputParam' : wrong number of bytes written NumBytesWritten:9 ParameterDataSize:20
-LES ERROR: 'LES_Test_ReferenceStructInputParam' : Error during LES_FunctionEnd
-LES_Test_ReferenceStructInputParam: parameterDataSize:20
+LES_Test_ReferenceStructInputParam: parameterDataSize:9
 
-LES ERROR: 'LES_Test_ReferenceStructOutputParam' : wrong number of bytes written NumBytesWritten:6 ParameterDataSize:12
-LES ERROR: 'LES_Test_ReferenceStructOutputParam' : Error during LES_FunctionEnd
-LES_Test_ReferenceStructOutputParam: parameterDataSize:12
+LES_Test_ReferenceStructOutputParam: parameterDataSize:6
 
 LES_Test_ReadInputOutputParameters: parameterDataSize:1
 

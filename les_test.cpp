@@ -799,7 +799,14 @@ void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 inp
 		return;
 	}
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
-	const int realParameterDataSize = sizeof(TestStruct2) + sizeof(int)+sizeof(TestStruct1) + sizeof(TestStruct3) + sizeof(TestStruct4);
+	const int realParameterDataSize = sizeof(float)+
+																		sizeof(long long int)+sizeof(char)+sizeof(int)+sizeof(short)+sizeof(float)+
+																		sizeof(char)+sizeof(short)+sizeof(int)+
+																		sizeof(int)+
+																		sizeof(long long int)+sizeof(char)+sizeof(int)+sizeof(short)+sizeof(float)+
+																		sizeof(short)+sizeof(float)+sizeof(int)+sizeof(char)+
+																		sizeof(float)+sizeof(int)+sizeof(char)+sizeof(short)+
+																		sizeof(short)+sizeof(float)+sizeof(int)+sizeof(char);
 	if (parameterDataSize != realParameterDataSize)
 	{
 		fprintf(stderr, "LES_Test_StructInputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
@@ -837,7 +844,9 @@ void LES_Test_StructOutputParam(TestStruct3* out_0, TestStruct4* out_1)
 		return;
 	}
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
-	const int realParameterDataSize = sizeof(TestStruct3) + sizeof(TestStruct4);
+	const int realParameterDataSize = sizeof(short)+sizeof(float)+sizeof(int)+sizeof(char)+
+																		sizeof(float)+sizeof(int)+sizeof(char)+sizeof(short)+
+																		sizeof(short)+sizeof(float)+sizeof(int)+sizeof(char);
 	if (parameterDataSize != realParameterDataSize)
 	{
 		fprintf(stderr, "LES_Test_StructOutputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
@@ -875,7 +884,10 @@ void LES_Test_StructInputOutputParam(TestStruct5* in_0, TestStruct6* out_0)
 		return;
 	}
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
-	const int realParameterDataSize = sizeof(TestStruct5) + sizeof(TestStruct6);
+	const int realParameterDataSize = sizeof(char)+sizeof(short)+
+																		sizeof(short)+
+																		sizeof(char)+sizeof(short)+
+																		sizeof(char);
 	if (parameterDataSize != realParameterDataSize)
 	{
 		fprintf(stderr, "LES_Test_StructInputOutputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
@@ -949,7 +961,7 @@ void LES_Test_ReferenceInputStructParam(TestStruct1& input_0)
 		return;
 	}
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
-	const int realParameterDataSize = sizeof(TestStruct1);
+	const int realParameterDataSize = sizeof(long long int)+sizeof(char)+sizeof(int)+sizeof(short)+sizeof(float);
 	if (parameterDataSize != realParameterDataSize)
 	{
 		fprintf(stderr, "LES_Test_ReferenceInputStructParam: parameterDataSize is wrong Code:%d Should be:%d\n",
@@ -1023,7 +1035,9 @@ void LES_Test_ReferenceOutputStructParam(TestStruct2& output_0)
 		return;
 	}
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
-	const int realParameterDataSize = sizeof(TestStruct2);
+	const int realParameterDataSize = sizeof(float)+
+																		sizeof(long long int)+sizeof(char)+sizeof(int)+sizeof(short)+sizeof(float)+
+																		sizeof(char)+ sizeof(short)+ sizeof(int);
 	if (parameterDataSize != realParameterDataSize)
 	{
 		fprintf(stderr, "LES_Test_ReferenceOutputStructParam: parameterDataSize is wrong Code:%d Should be:%d\n",
@@ -1060,7 +1074,7 @@ void LES_Test_ReferenceStructInputParam(TestStruct7& input_0)
 		return;
 	}
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
-	const int realParameterDataSize = sizeof(TestStruct7);
+	const int realParameterDataSize = sizeof(short)+ sizeof(float)+ sizeof(char)+ sizeof(char)+ sizeof(char);
 	if (parameterDataSize != realParameterDataSize)
 	{
 		fprintf(stderr, "LES_Test_ReferenceStructInputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
@@ -1097,7 +1111,9 @@ void LES_Test_ReferenceStructOutputParam(TestStruct8& output_0)
 		return;
 	}
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
-	const int realParameterDataSize = sizeof(TestStruct8);
+	const int realParameterDataSize = sizeof(short)+
+																		sizeof(char)+ sizeof(short)+
+																		sizeof(char);
 	if (parameterDataSize != realParameterDataSize)
 	{
 		fprintf(stderr, "LES_Test_ReferenceStructOutputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
