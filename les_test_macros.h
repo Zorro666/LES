@@ -29,11 +29,10 @@ bool LES_TestFunctionAddParam(const bool isInput, const char* const type, const 
 															LES_FunctionDefinition* const functionDefinitionPtr, LES_TEST_FUNCTION_DATA* testFunctionDataPtr);
 
 #define	LES_TEST_FUNCTION_ADD_PARAM(IS_INPUT, TYPE, NAME) \
-	if (__LES_function_ok) \
-	{ \
-		__LES_function_ok = LES_TestFunctionAddParam( IS_INPUT, #TYPE, #NAME, \
-																									&functionDefinition, &testFunctionData); \
-	} \
+		if (__LES_function_ok) \
+		{ \
+			__LES_function_ok = LES_TestFunctionAddParam( IS_INPUT, #TYPE, #NAME, &functionDefinition, &testFunctionData); \
+		} \
 
 
 #define	LES_TEST_FUNCTION_ADD_INPUT(TYPE, NAME) \
@@ -44,14 +43,14 @@ bool LES_TestFunctionAddParam(const bool isInput, const char* const type, const 
 	LES_TEST_FUNCTION_ADD_PARAM(false, TYPE, NAME) \
 
 
-void LES_TestFunctionStart(LES_FunctionDefinition* const functionDefinitionPtr, LES_TEST_FUNCTION_DATA* testFunctionDataPtr);
+bool LES_TestFunctionEnd(LES_FunctionDefinition* const functionDefinitionPtr, LES_TEST_FUNCTION_DATA* testFunctionDataPtr);
 
 #define LES_TEST_FUNCTION_END() \
 		if (__LES_function_ok) \
 		{ \
-			LES_TestFunctionStart(&functionDefinition, &testFunctionData); \
+			__LES_function_ok = LES_TestFunctionEnd(&functionDefinition, &testFunctionData); \
 		} \
-		else \
+		if (__LES_function_ok == false) \
 		{ \
 			fprintf(stderr, "LES ERROR: TEST function '%s' : ERROR cannot create definition\n", testFunctionData.functionName); \
 		} \
@@ -109,71 +108,27 @@ bool LES_TestStructStart(const char* const structName, const int numMembers,
 		bool __LES_struct_ok = LES_TestStructStart(#NAME, NUM_MEMBERS, &structDefinition, &testStructData); \
 
 
-#define	LES_TEST_STRUCT_ADD_MEMBER(TYPE, NAME) \
-{ \
-	bool __LES_ok = __LES_struct_ok; \
-	/* Error if member index off the end of the array */ \
-	const int maxNumMembers = structDefinition.GetNumMembers(); \
-	if (testStructData.globalMemberIndex >= maxNumMembers) \
-	{ \
-		fprintf(stderr, "LES ERROR: TEST struct '%s' : MemberIndex too big index:%d max:%d member:'%s' type:'%s'\n", \
-						testStructData.structName, testStructData.globalMemberIndex, maxNumMembers, #NAME, #TYPE); \
-		__LES_ok = false; \
-		__LES_struct_ok = false; \
-	} \
-	const LES_Hash nameHash = LES_GenerateHashCaseSensitive(#NAME); \
-	/* Test to see if the member has already been added */ \
-	if (structDefinition.GetMember(nameHash) != LES_NULL) \
-	{ \
-		fprintf(stderr, "LES ERROR: TEST struct '%s' : member '%s' already exists type:'%s'\n",  \
-						testStructData.structName, #NAME, #TYPE); \
-		__LES_ok = false; \
-		__LES_struct_ok = false; \
-	} \
-	if (__LES_ok == true) \
-	{ \
-		const int typeID = LES_AddStringEntry(#TYPE); \
-		const LES_StringEntry* const typeStringEntry = LES_GetStringEntryForID(typeID); \
-		const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntry(typeStringEntry); \
-		if (typeEntryPtr == LES_NULL) \
-		{ \
-			fprintf(stderr, "LES ERROR: TEST struct '%s' : member '%s' type '%s' not found\n",  \
-						testStructData.structName, #NAME, #TYPE); \
-			__LES_ok = false; \
-			__LES_struct_ok = false; \
-		} \
-		if (__LES_ok == true) \
-		{ \
-			const int memberDataSize = typeEntryPtr->m_dataSize; \
-			LES_StructMember* const structMemberPtr = (LES_StructMember* const)(structDefinition.GetMemberByIndex(testStructData.globalMemberIndex)); \
-			structMemberPtr->m_hash = nameHash; \
-			structMemberPtr->m_nameID = LES_AddStringEntry(#NAME); \
-			structMemberPtr->m_typeID = typeID; \
-			structMemberPtr->m_dataSize = memberDataSize; \
-			const int alignmentPadding = LES_StructComputeAlignmentPadding(testStructData.totalMemberSizeWithPadding, memberDataSize); \
-			structMemberPtr->m_alignmentPadding = alignmentPadding; \
-			testStructData.totalMemberSizeWithPadding += (memberDataSize + alignmentPadding); \
-			testStructData.globalMemberIndex++; \
-			/*printf("%s %s DataSize:%d aligmentPadding:%d\n", testStructData.structName, #NAME, memberDataSize, alignmentPadding);*/ \
-		} \
-	} \
-} \
+bool LES_TestStructAddMember(const char* const type, const char* const name,
+												 		 LES_StructDefinition* const structDefinitionPtr, LES_TEST_STRUCT_DATA* testStructDataPtr);
 
+#define	LES_TEST_STRUCT_ADD_MEMBER(TYPE, NAME) \
+	if (__LES_struct_ok) \
+	{ \
+		__LES_struct_ok = LES_TestStructAddMember(#TYPE, #NAME, &structDefinition, &testStructData); \
+	} \
+
+extern int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* const structDefinitionPtr);
+
+bool LES_TestStructEnd(LES_StructDefinition* const structDefinitionPtr, LES_TEST_STRUCT_DATA* testStructDataPtr);
 
 #define LES_TEST_STRUCT_END() \
-		if (testStructData.globalMemberIndex != structDefinition.GetNumMembers()) \
+		if (__LES_struct_ok) \
 		{ \
-			__LES_struct_ok = false; \
-			fprintf(stderr, "LES ERROR: TEST struct '%s' : ERROR not the right number of members Added:%d Should be:%d\n", \
-							testStructData.structName, testStructData.globalMemberIndex, structDefinition.GetNumMembers()); \
+			__LES_struct_ok = LES_TestStructEnd(&structDefinition, &testStructData); \
 		} \
-		if (__LES_struct_ok == true) \
+		if (__LES_struct_ok == false) \
 		{ \
-			LES_AddStructDefinition(testStructData.structName, &structDefinition); \
-		} \
-		else \
-		{ \
-			fprintf(stderr, "LES ERROR: TEST struct '%s' : ERROR cannot create its definition\n", testStructData.structName ); \
+			fprintf(stderr, "LES ERROR: TEST struct '%s' : ERROR cannot create definition\n", testStructData.structName); \
 		} \
 	} \
 

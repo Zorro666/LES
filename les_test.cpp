@@ -13,8 +13,6 @@
 
 extern int LES_AddStringEntry(const char* const str);
 extern int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags, const char* const aliasedName);
-extern int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* const structDefinitionPtr);
-extern int LES_StructComputeAlignmentPadding(const int totalMemberSize, const int memberDataSize);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //

@@ -156,14 +156,13 @@ LES_Test_ReadInputOutputParameters: parameterDataSize:29
 
 #### Struct tests ####
 LES ERROR: TEST struct 'LES_Struct_TooManyMembers' : MemberIndex too big index:1 max:1 member:'m_two' type:'short'
-LES ERROR: TEST struct 'LES_Struct_TooManyMembers' : ERROR cannot create its definition
+LES ERROR: TEST struct 'LES_Struct_TooManyMembers' : ERROR cannot create definition
 
 LES ERROR: TEST struct 'LES_Struct_MemberAlreadyExists' : member 'm_one' already exists type:'short'
-LES ERROR: TEST struct 'LES_Struct_MemberAlreadyExists' : ERROR not the right number of members Added:1 Should be:2
-LES ERROR: TEST struct 'LES_Struct_MemberAlreadyExists' : ERROR cannot create its definition
+LES ERROR: TEST struct 'LES_Struct_MemberAlreadyExists' : ERROR cannot create definition
 
 LES ERROR: TEST struct 'LES_Struct_NotEnoughMembers' : ERROR not the right number of members Added:2 Should be:3
-LES ERROR: TEST struct 'LES_Struct_NotEnoughMembers' : ERROR cannot create its definition
+LES ERROR: TEST struct 'LES_Struct_NotEnoughMembers' : ERROR cannot create definition
 
 LES ERROR: 'LES_Test_StructInputParam' : wrong number of bytes written NumBytesWritten:86 ParameterDataSize:108
 LES ERROR: 'LES_Test_StructInputParam' : Error during LES_FunctionEnd

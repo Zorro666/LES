@@ -6,6 +6,8 @@
 extern int LES_AddStringEntry(const char* const str);
 extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr);
 
+extern int LES_StructComputeAlignmentPadding(const int totalMemberSize, const int memberDataSize);
+
 bool LES_TestFunctionStart(const char* const functionName, const char* const returnType, const int numInputs, const int numOutputs,
 													 LES_FunctionDefinition* const functionDefinitionPtr, LES_TEST_FUNCTION_DATA* testFunctionDataPtr)
 {
@@ -25,7 +27,7 @@ bool LES_TestFunctionStart(const char* const functionName, const char* const ret
 bool LES_TestFunctionAddParam(const bool isInput, const char* const type, const char* const name, 
 															LES_FunctionDefinition* const functionDefinitionPtr, LES_TEST_FUNCTION_DATA* testFunctionDataPtr)
 {
-	/* Error if parameter index off the end of the array */
+	// Error if parameter index off the end of the array
 	const int maxNumParam = (isInput ? functionDefinitionPtr->GetNumInputs() : functionDefinitionPtr->GetNumOutputs());
 	int* const paramIndex = (isInput ? &testFunctionDataPtr->inputParamIndex : &testFunctionDataPtr->outputParamIndex);
 	const char* const paramModeStr = (isInput ? "Input" : "Output");
@@ -37,7 +39,7 @@ bool LES_TestFunctionAddParam(const bool isInput, const char* const type, const 
 		return false;
 	}
 	const LES_Hash nameHash = LES_GenerateHashCaseSensitive(name);
-	/* Test to see if the parameter has already been added */
+	// Test to see if the parameter has already been added
 	if (functionDefinitionPtr->GetParameter(nameHash) != LES_NULL)
 	{
 		fprintf(stderr, "LES ERROR: TEST function '%s' : parameter '%s' already exists type:'%s'\n",
@@ -70,16 +72,18 @@ bool LES_TestFunctionAddParam(const bool isInput, const char* const type, const 
 	return true;
 }
 
-void LES_TestFunctionStart(LES_FunctionDefinition* const functionDefinitionPtr, LES_TEST_FUNCTION_DATA* testFunctionDataPtr)
+bool LES_TestFunctionEnd(LES_FunctionDefinition* const functionDefinitionPtr, LES_TEST_FUNCTION_DATA* testFunctionDataPtr)
 {
 	if (testFunctionDataPtr->globalParamIndex != functionDefinitionPtr->GetNumParameters())
 	{
 		fprintf(stderr, "LES ERROR: TEST function '%s' : ERROR not the right number of parameters Added:%d Should be:%d\n",
 						testFunctionDataPtr->functionName, testFunctionDataPtr->globalParamIndex, functionDefinitionPtr->GetNumParameters());
-		return;
+		return false;
 	}
 	functionDefinitionPtr->ComputeParameterDataSize();
 	LES_AddFunctionDefinition(testFunctionDataPtr->functionName, functionDefinitionPtr);
+
+	return true;
 }
 
 bool LES_TestStructStart(const char* const structName, const int numMembers, 
@@ -92,6 +96,63 @@ bool LES_TestStructStart(const char* const structName, const int numMembers,
 	const int nameID = LES_AddStringEntry(structName);
 	LES_StructDefinition structDefinition(nameID, numMembers);
 	*structDefinitionPtr = structDefinition;
+
+	return true;
+}
+
+bool LES_TestStructAddMember(const char* const type, const char* const name,
+												 		 LES_StructDefinition* const structDefinitionPtr, LES_TEST_STRUCT_DATA* testStructDataPtr)
+{
+	// Error if member index off the end of the array
+	const int maxNumMembers = structDefinitionPtr->GetNumMembers();
+	if (testStructDataPtr->globalMemberIndex >= maxNumMembers)
+	{
+		fprintf(stderr, "LES ERROR: TEST struct '%s' : MemberIndex too big index:%d max:%d member:'%s' type:'%s'\n",
+						testStructDataPtr->structName, testStructDataPtr->globalMemberIndex, maxNumMembers, name, type);
+		return false;
+	}
+	const LES_Hash nameHash = LES_GenerateHashCaseSensitive(name);
+	// Test to see if the member has already been added
+	if (structDefinitionPtr->GetMember(nameHash) != LES_NULL)
+	{
+		fprintf(stderr, "LES ERROR: TEST struct '%s' : member '%s' already exists type:'%s'\n",
+						testStructDataPtr->structName, name, type);
+		return false;
+	}
+	const int typeID = LES_AddStringEntry(type);
+	const LES_StringEntry* const typeStringEntry = LES_GetStringEntryForID(typeID);
+	const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntry(typeStringEntry);
+	if (typeEntryPtr == LES_NULL)
+	{
+		fprintf(stderr, "LES ERROR: TEST struct '%s' : member '%s' type '%s' not found\n",
+					  testStructDataPtr->structName, name, type);
+		return false;
+	}
+	const int memberDataSize = typeEntryPtr->m_dataSize;
+	const int globalMemberIndex = testStructDataPtr->globalMemberIndex;
+	LES_StructMember* const structMemberPtr = (LES_StructMember* const)(structDefinitionPtr->GetMemberByIndex(globalMemberIndex));
+	structMemberPtr->m_hash = nameHash;
+	structMemberPtr->m_nameID = LES_AddStringEntry(name);
+	structMemberPtr->m_typeID = typeID;
+	structMemberPtr->m_dataSize = memberDataSize;
+	const int alignmentPadding = LES_StructComputeAlignmentPadding(testStructDataPtr->totalMemberSizeWithPadding, memberDataSize);
+	structMemberPtr->m_alignmentPadding = alignmentPadding;
+	testStructDataPtr->totalMemberSizeWithPadding += (memberDataSize + alignmentPadding);
+	testStructDataPtr->globalMemberIndex++;
+	//printf("%s %s DataSize:%d aligmentPadding:%d\n", testStructDataPtr->structName, name, memberDataSize, alignmentPadding);
+
+	return true;
+}
+
+bool LES_TestStructEnd(LES_StructDefinition* const structDefinitionPtr, LES_TEST_STRUCT_DATA* testStructDataPtr)
+{
+	if (testStructDataPtr->globalMemberIndex != structDefinitionPtr->GetNumMembers())
+	{
+		fprintf(stderr, "LES ERROR: TEST struct '%s' : ERROR not the right number of members Added:%d Should be:%d\n",
+						testStructDataPtr->structName, testStructDataPtr->globalMemberIndex, structDefinitionPtr->GetNumMembers());
+		return false;
+	}
+	LES_AddStructDefinition(testStructDataPtr->structName, structDefinitionPtr);
 
 	return true;
 }
