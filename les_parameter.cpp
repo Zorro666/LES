@@ -8,6 +8,12 @@
 
 #define LES_PARAMETER_DEBUG 0
 
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Public External functions
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
 LES_FunctionParameterData::LES_FunctionParameterData(char* const bufferPtr) : m_bufferPtr(bufferPtr)
 {
 	m_currentWriteBufferPtr = m_bufferPtr;
@@ -92,6 +98,20 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 	}
 	return WriteInternal(typeStringEntry, typeEntryPtr, parameterDataPtr);
 }
+
+int LES_FunctionParameterData::GetNumBytesWritten(void) const
+{
+	unsigned int start = (unsigned int)m_bufferPtr;
+	unsigned int current = (unsigned int)m_currentWriteBufferPtr;
+	unsigned int numBytesWritten = current - start;
+	return numBytesWritten;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Private Internal functions
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////
 
 int LES_FunctionParameterData::WriteInternal(const LES_StringEntry* const typeStringEntry, const LES_TypeEntry* const inputTypeEntryPtr, 
 																						 const void* const parameterDataPtr)

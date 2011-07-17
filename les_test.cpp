@@ -676,6 +676,43 @@ static void LES_Test_DecodeInputOutputParameters(int input_0, short input_1, cha
 	return;
 }
 
+static void LES_Test_DecodeOutputParameters(char& output_0)
+{
+	LES_FunctionParameterData* parameterData = LES_NULL;
+
+	LES_FUNCTION_START(LES_Test_DecodeOutputParameters, void);
+	LES_FUNCTION_ADD_OUTPUT(char&, output_0);
+	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
+	LES_FUNCTION_END();
+
+	if (parameterData == LES_NULL)
+	{
+		return;
+	}
+
+	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_DecodeOutputParameters");
+	if (functionDefinitionPtr == LES_NULL)
+	{
+		fprintf(stderr, "LES_Test_DecodeOutputParameters: can't find the function definition\n");
+		return;
+	}
+	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
+	const int realParameterDataSize = sizeof(char);
+	if (parameterDataSize != realParameterDataSize)
+	{
+		fprintf(stderr, "LES_Test_DecodeOutputParameters: parameterDataSize is wrong Code:%d Should be:%d\n",
+						parameterDataSize, realParameterDataSize);
+	}
+
+	if (functionDefinitionPtr->Decode(parameterData) == LES_ERROR)
+	{
+		fprintf(stderr, "LES_Test_ReadInputOutputParameters: Decode failed\n");
+		return;
+	}
+	fprintf(stderr, "LES_Test_ReadInputOutputParameters: parameterDataSize:%d\n", parameterDataSize);
+	return;
+}
+
 struct TestStruct1
 {
 	long long int m_longlong;
@@ -1525,6 +1562,10 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_OUTPUT(TestStruct8&, output_0);
 	LES_TEST_FUNCTION_END();
 
+	LES_TEST_FUNCTION_START(LES_Test_DecodeOutputParameters, void, 0, 1);
+	LES_TEST_FUNCTION_ADD_OUTPUT(char&, output_0);
+	LES_TEST_FUNCTION_END();
+
 	/* Run specific tests */
 	/* Function header definition tests */
 	fprintf(stderr, "#### Function header definition tests ####\n");
@@ -1814,6 +1855,9 @@ void LES_TestSetup(void)
 
 	TestStruct8 refStruct_output_0 = { 2526, testStruct5, &ref_output_0 };
 	LES_Test_ReferenceStructOutputParam(refStruct_output_0);
+	fprintf(stderr, "\n");
+
+	LES_Test_DecodeOutputParameters(ref_char);
 	fprintf(stderr, "\n");
 }
 

@@ -279,6 +279,16 @@ int LES_FunctionEnd(const LES_FunctionDefinition* const functionDefinitionPtr,
 		fprintf(stderr, "LES ERROR: '%s' : not all parameters were set num missing:%d\n", functionTempData->functionName, numMissing);
 		return LES_ERROR;
 	}
+	// Check the number of bytes written matched parameter data size
+	LES_FunctionParameterData* const functionParameterData = functionTempData->functionParameterData;
+	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
+	const int numBytesWritten = functionParameterData->GetNumBytesWritten();
+	if (parameterDataSize != numBytesWritten)
+	{
+		fprintf(stderr, "LES ERROR: '%s' : wrong number of bytes written NumBytesWritten:%d ParameterDataSize:%d\n", 
+						functionTempData->functionName, numBytesWritten, parameterDataSize);
+		return LES_ERROR;
+	}
 	return LES_OK;
 }
 

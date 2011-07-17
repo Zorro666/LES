@@ -74,7 +74,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		return LES_ERROR;
 	}
 
-	int typeFlags = typeDataPtr->m_flags;
+	unsigned int typeFlags = typeDataPtr->m_flags;
 	while ( typeFlags & LES_TYPE_ALIAS)
 	{
 		const int aliasedTypeID = typeDataPtr->m_aliasedTypeID;

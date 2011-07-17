@@ -88,6 +88,11 @@ void LES_StructDefinition::SetTotalMemberDataSize(const int totalMemberDataSize)
 	m_totalMemberDataSize = totalMemberDataSize;
 }
 
+void LES_StructDefinition::SetTotalMemberDataSizeWithPadding(const int totalMemberDataSizeWithPadding)
+{
+	m_totalMemberDataSizeWithPadding = totalMemberDataSizeWithPadding;
+}
+
 int LES_StructDefinition::GetNameID(void) const
 {
 	return m_nameID;
@@ -96,6 +101,16 @@ int LES_StructDefinition::GetNameID(void) const
 int LES_StructDefinition::GetNumMembers(void) const
 {
 	return m_numMembers;
+}
+
+int LES_StructDefinition::GetTotalMemberDataSize(void) const
+{
+	return m_totalMemberDataSize;
+}
+
+int LES_StructDefinition::GetTotalMemberDataSizeWithPadding(void) const
+{
+	return m_totalMemberDataSizeWithPadding;
 }
 
 const LES_StructMember* LES_StructDefinition::GetMemberByIndex(const int index) const

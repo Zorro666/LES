@@ -63,7 +63,7 @@ const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEnt
 int LES_TypeEntry::ComputeDataStorageSize(void) const
 {
 	const LES_TypeEntry* typeEntry = this;
-	int flags = typeEntry->m_flags;
+	unsigned int flags = typeEntry->m_flags;
 	while (flags & LES_TYPE_ALIAS)
 	{
 		const int aliasedTypeID = typeEntry->m_aliasedTypeID;

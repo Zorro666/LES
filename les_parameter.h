@@ -27,6 +27,7 @@ public:
 	int Write(const LES_StringEntry* const typeStringEntry, const void* const parameterDataPtr, const unsigned int paramMode);
 	int Read(const LES_StringEntry* const typeStringEntry, void* const parameterDataPtr) const;
 
+	int GetNumBytesWritten(void) const;
 private:
 
 	int WriteInternal(const LES_StringEntry* const typeStringEntry, const LES_TypeEntry* const rawTypeEntryPtr, 

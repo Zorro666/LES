@@ -152,6 +152,7 @@
 		LES_StructDefinition structDefinition(nameID, NUM_MEMBERS); \
 		LES_StructMember* structMemberPtr; \
 		int globalMemberIndex = 0; \
+		int totalMemberSizeWithPadding = 0; \
 		int totalMemberSize = 0; \
 		globalMemberIndex += 0; \
 		structMemberPtr = NULL; \
@@ -198,9 +199,10 @@
 			structMemberPtr->m_nameID = LES_AddStringEntry(#NAME); \
 			structMemberPtr->m_typeID = typeID; \
 			structMemberPtr->m_dataSize = memberDataSize; \
-			const int alignmentPadding = LES_StructComputeAlignmentPadding(totalMemberSize, memberDataSize); \
+			const int alignmentPadding = LES_StructComputeAlignmentPadding(totalMemberSizeWithPadding, memberDataSize); \
 			structMemberPtr->m_alignmentPadding = alignmentPadding; \
-			totalMemberSize += (memberDataSize + alignmentPadding); \
+			totalMemberSizeWithPadding += (memberDataSize + alignmentPadding); \
+			totalMemberSize += memberDataSize; \
 			globalMemberIndex++; \
 			/*printf("%s %s DataSize:%d aligmentPadding:%d\n", structName, #NAME, memberDataSize, alignmentPadding);*/ \
 		} \
