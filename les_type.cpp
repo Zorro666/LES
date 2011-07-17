@@ -13,6 +13,11 @@ LES_Hash LES_TypeEntry::s_longlongHash = LES_GenerateHashCaseSensitive("long lon
 LES_Hash LES_TypeEntry::s_intHash = LES_GenerateHashCaseSensitive("int");
 LES_Hash LES_TypeEntry::s_shortHash = LES_GenerateHashCaseSensitive("short");
 LES_Hash LES_TypeEntry::s_charHash = LES_GenerateHashCaseSensitive("char");
+
+LES_Hash LES_TypeEntry::s_uintHash = LES_GenerateHashCaseSensitive("unsigned int");
+LES_Hash LES_TypeEntry::s_ushortHash = LES_GenerateHashCaseSensitive("unsigned short");
+LES_Hash LES_TypeEntry::s_ucharHash = LES_GenerateHashCaseSensitive("unsigned char");
+
 LES_Hash LES_TypeEntry::s_floatHash = LES_GenerateHashCaseSensitive("float");
 
 extern int LES_AddStringEntry(const char* const str);
@@ -145,7 +150,7 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 	}
 	else
 	{
-		/* Check the type data matchs */
+		/* Check the type data matches */
 		LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[index];
 		if (typeEntryPtr->m_dataSize != dataSize)
 		{

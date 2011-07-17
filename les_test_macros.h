@@ -120,16 +120,16 @@
 	}\
 
 
-#define LES_TEST_ADD_TYPE_POD_REFERENCE(TYPE, FLAGS) \
-	LES_TEST_ADD_TYPE_EX(TYPE&, sizeof(TYPE&), FLAGS|LES_TYPE_REFERENCE|LES_TYPE_POD, TYPE) \
+#define LES_TEST_ADD_TYPE_POD(TYPE) \
+	LES_TEST_ADD_TYPE_EX(TYPE, sizeof(TYPE), LES_TYPE_INPUT|LES_TYPE_POD, TYPE) \
 
 
 #define LES_TEST_ADD_TYPE_POD_POINTER(TYPE, FLAGS) \
 	LES_TEST_ADD_TYPE_EX(TYPE*, sizeof(TYPE*), FLAGS|LES_TYPE_POINTER|LES_TYPE_POD, TYPE) \
 
 
-#define LES_TEST_ADD_TYPE_POD(TYPE) \
-	LES_TEST_ADD_TYPE_EX(TYPE, sizeof(TYPE), LES_TYPE_INPUT|LES_TYPE_POD, TYPE) \
+#define LES_TEST_ADD_TYPE_POD_REFERENCE(TYPE, FLAGS) \
+	LES_TEST_ADD_TYPE_EX(TYPE&, sizeof(TYPE*), FLAGS|LES_TYPE_REFERENCE|LES_TYPE_POD, TYPE*) \
 
 
 #define LES_TEST_ADD_TYPE_STRUCT(TYPE) \
@@ -141,7 +141,7 @@
 
 
 #define LES_TEST_ADD_TYPE_STRUCT_REFERENCE(TYPE, FLAGS) \
-	LES_TEST_ADD_TYPE_EX(TYPE&, sizeof(TYPE&), FLAGS|LES_TYPE_REFERENCE|LES_TYPE_STRUCT, TYPE) \
+	LES_TEST_ADD_TYPE_EX(TYPE&, sizeof(TYPE*), FLAGS|LES_TYPE_REFERENCE|LES_TYPE_STRUCT, TYPE*) \
 
 
 #define LES_TEST_STRUCT_START(NAME, NUM_MEMBERS) \
@@ -202,6 +202,7 @@
 			structMemberPtr->m_alignmentPadding = alignmentPadding; \
 			totalMemberSize += (memberDataSize + alignmentPadding); \
 			globalMemberIndex++; \
+			/*printf("%s %s DataSize:%d aligmentPadding:%d\n", structName, #NAME, memberDataSize, alignmentPadding);*/ \
 		} \
 	} \
 } \

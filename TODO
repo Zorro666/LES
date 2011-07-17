@@ -1,6 +1,5 @@
 High Priority:
-TEST: test POD reference member in a struct
-TEST: test struct reference as member in a struct
+DEBUG: reference base data size is now ptr size : check that isn't making things bigger e.g. char& only needs 1 byte in param block
 
 CORE: need common error handling & log system: warning, log, error, fatal error
 CORE: query log system if an error occurred

@@ -30,6 +30,11 @@ public:
 	static LES_Hash s_intHash;
 	static LES_Hash s_shortHash;
 	static LES_Hash s_charHash;
+
+	static LES_Hash s_uintHash;
+	static LES_Hash s_ushortHash;
+	static LES_Hash s_ucharHash;
+
 	static LES_Hash s_floatHash;
 };
 

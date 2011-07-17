@@ -5,6 +5,7 @@
 #include "les_hash.h"
 
 struct LES_StringEntry;
+struct LES_TypeEntry;
 
 struct LES_FunctionParameter
 {
@@ -28,7 +29,8 @@ public:
 
 private:
 
-	int WriteInternal(const LES_StringEntry* const typeStringEntry, const void* const parameterDataPtr);
+	int WriteInternal(const LES_StringEntry* const typeStringEntry, const LES_TypeEntry* const rawTypeEntryPtr, 
+										const void* const parameterDataPtr);
 
 	char* const m_bufferPtr;
 	char* m_currentWriteBufferPtr;

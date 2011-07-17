@@ -142,17 +142,17 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		valuePtr = &longlongValue;
 		fmtStr = "%ld";
 	}
-	else if (typeHash == LES_TypeEntry::s_intHash)
+	else if ((typeHash == LES_TypeEntry::s_intHash) || (typeHash == LES_TypeEntry::s_uintHash))
 	{
 		valuePtr = &intValue;
 		fmtStr = "%d";
 	}
-	else if (typeHash == LES_TypeEntry::s_shortHash)
+	else if ((typeHash == LES_TypeEntry::s_shortHash) || (typeHash == LES_TypeEntry::s_ushortHash))
 	{
 		valuePtr = &shortValue;
 		fmtStr = "%d";
 	}
-	else if (typeHash == LES_TypeEntry::s_charHash)
+	else if ((typeHash == LES_TypeEntry::s_charHash) || (typeHash == LES_TypeEntry::s_ucharHash))
 	{
 		valuePtr = &charValue;
 		fmtStr = "'%c'";
@@ -194,15 +194,15 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	{
 		printf(fmtStr, longlongValue);
 	}
-	else if (typeHash == LES_TypeEntry::s_intHash)
+	else if ((typeHash == LES_TypeEntry::s_intHash) || (typeHash == LES_TypeEntry::s_uintHash))
 	{
 		printf(fmtStr, intValue);
 	}
-	else if (typeHash == LES_TypeEntry::s_shortHash)
+	else if ((typeHash == LES_TypeEntry::s_shortHash) || (typeHash == LES_TypeEntry::s_ushortHash))
 	{
 		printf(fmtStr, shortValue);
 	}
-	else if (typeHash == LES_TypeEntry::s_charHash)
+	else if ((typeHash == LES_TypeEntry::s_charHash) || (typeHash == LES_TypeEntry::s_ucharHash))
 	{
 		printf(fmtStr, charValue);
 	}
