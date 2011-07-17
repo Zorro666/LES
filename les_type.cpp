@@ -3,6 +3,7 @@
 #include "les_type.h"
 #include "les_core.h"
 #include "les_stringentry.h"
+#include "les_struct.h"
 
 #define LES_TYPE_DEBUG 0
 
@@ -62,13 +63,13 @@ const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEnt
 
 int LES_TypeEntry::ComputeDataStorageSize(void) const
 {
-	const LES_TypeEntry* typeEntry = this;
-	unsigned int flags = typeEntry->m_flags;
+	const LES_TypeEntry* typeEntryPtr = this;
+	unsigned int flags = typeEntryPtr->m_flags;
 	while (flags & LES_TYPE_ALIAS)
 	{
-		const int aliasedTypeID = typeEntry->m_aliasedTypeID;
+		const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
 #if LES_TYPE_DEBUG
-		printf("Type 0x%X alias:%d flags:0x%X\n", typeEntry->m_hash, aliasedTypeID, flags);
+		printf("Type 0x%X alias:%d flags:0x%X\n", typeEntryPtr->m_hash, aliasedTypeID, flags);
 #endif // #if LES_TYPE_DEBUG
 		const LES_StringEntry* const aliasedStringTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
 		if (aliasedStringTypeEntry == LES_NULL)
@@ -82,13 +83,38 @@ int LES_TypeEntry::ComputeDataStorageSize(void) const
 			fprintf(stderr, "LES ERROR: ComputeDataStorageSize aliased type not found aliased type:'%s'\n", aliasedStringTypeEntry->m_str);
 			return -1;
 		}
-		typeEntry = (const LES_TypeEntry*)aliasedTypeEntryPtr;
-		flags = typeEntry->m_flags;
+		typeEntryPtr = (const LES_TypeEntry*)aliasedTypeEntryPtr;
+		flags = typeEntryPtr->m_flags;
 #if LES_TYPE_DEBUG
-		printf("Alias Type 0x%X flags:0x%X\n", typeEntry->m_hash, flags);
+		printf("Alias Type 0x%X flags:0x%X\n", typeEntryPtr->m_hash, flags);
 #endif // #if LES_TYPE_DEBUG
 	}
-	const int dataSize = typeEntry->m_dataSize;
+	if (flags & LES_TYPE_STRUCT)
+	{
+		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeEntryPtr->m_hash);
+		if (structDefinition == LES_NULL)
+		{
+			fprintf(stderr, "LES ERROR: ComputeDataStorage type:0x%X is a struct but can't be found\n", typeEntryPtr->m_hash);
+			return -1;
+		}
+		const int numMembers = structDefinition->GetNumMembers();
+		int totalDataSize = 0;
+		for (int i = 0; i < numMembers; i++)
+		{
+			const LES_StructMember* const structMember = structDefinition->GetMemberByIndex(i);
+			const int memberTypeID = structMember->m_typeID;
+			const LES_StringEntry* const memberTypeStringEntry = LES_GetStringEntryForID(memberTypeID);
+			const LES_TypeEntry* const memberTypeEntryPtr = LES_GetTypeEntry(memberTypeStringEntry);
+			const int dataSize = memberTypeEntryPtr->ComputeDataStorageSize();
+			if (dataSize == -1)
+			{
+				return -1;
+			}
+			totalDataSize += dataSize;
+		}
+		return totalDataSize;
+	}
+	const int dataSize = typeEntryPtr->m_dataSize;
 	return dataSize;
 }
 
