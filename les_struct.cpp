@@ -37,7 +37,6 @@ static int LES_GetStructDefinitionIndex(const LES_Hash nameHash)
 LES_StructDefinition::LES_StructDefinition(void)
 {
 	m_nameID = -1;
-	m_totalMemberDataSize = 0;
 	m_numMembers = 0;
 	m_members = LES_NULL;
 	m_ownsMembersMemory = false;
@@ -52,7 +51,6 @@ LES_StructDefinition& LES_StructDefinition::operator=(const LES_StructDefinition
 {
 	m_nameID = other.m_nameID;
 
-	m_totalMemberDataSize = other.m_totalMemberDataSize;
 	m_numMembers = other.m_numMembers;
 	m_members = other.m_members;
 	m_ownsMembersMemory = true;
@@ -64,7 +62,6 @@ LES_StructDefinition& LES_StructDefinition::operator=(const LES_StructDefinition
 LES_StructDefinition::LES_StructDefinition(const int nameID, const int numMembers)
 {
 	m_nameID = nameID;
-	m_totalMemberDataSize = 0;
 	m_numMembers = numMembers;
 	m_members = new LES_StructMember[numMembers];
 	m_ownsMembersMemory = true;
@@ -77,20 +74,9 @@ LES_StructDefinition::~LES_StructDefinition(void)
 		delete[] m_members;
 	}
 	m_nameID = -1;
-	m_totalMemberDataSize = 0;
 	m_numMembers = 0;
 	m_members = LES_NULL;
 	m_ownsMembersMemory = false;
-}
-
-void LES_StructDefinition::SetTotalMemberDataSize(const int totalMemberDataSize)
-{
-	m_totalMemberDataSize = totalMemberDataSize;
-}
-
-void LES_StructDefinition::SetTotalMemberDataSizeWithPadding(const int totalMemberDataSizeWithPadding)
-{
-	m_totalMemberDataSizeWithPadding = totalMemberDataSizeWithPadding;
 }
 
 int LES_StructDefinition::GetNameID(void) const
@@ -101,16 +87,6 @@ int LES_StructDefinition::GetNameID(void) const
 int LES_StructDefinition::GetNumMembers(void) const
 {
 	return m_numMembers;
-}
-
-int LES_StructDefinition::GetTotalMemberDataSize(void) const
-{
-	return m_totalMemberDataSize;
-}
-
-int LES_StructDefinition::GetTotalMemberDataSizeWithPadding(void) const
-{
-	return m_totalMemberDataSizeWithPadding;
 }
 
 const LES_StructMember* LES_StructDefinition::GetMemberByIndex(const int index) const

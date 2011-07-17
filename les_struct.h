@@ -23,21 +23,14 @@ public:
 	LES_StructDefinition(const int nameID, const int numMembers);
 	~LES_StructDefinition(void);
 
-	void SetTotalMemberDataSize(const int totalMemberDataSize);
-	void SetTotalMemberDataSizeWithPadding(const int totalMemberDataSizeWithPadding);
-
 	int GetNameID(void) const;
 	int GetNumMembers(void) const;
 	const LES_StructMember* GetMemberByIndex(const int index) const;
 	const LES_StructMember* GetMember(const LES_Hash nameHash) const;
-	int GetTotalMemberDataSize(void) const;
-	int GetTotalMemberDataSizeWithPadding(void) const;
 
 private:
 	int m_nameID;
 
-	int m_totalMemberDataSize;
-	int m_totalMemberDataSizeWithPadding;
 	int m_numMembers;
 	const LES_StructMember* m_members;
 	mutable bool m_ownsMembersMemory;
