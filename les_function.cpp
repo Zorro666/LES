@@ -311,9 +311,9 @@ LES_FunctionDefinition::~LES_FunctionDefinition(void)
 	m_ownsParamsMemory = false;
 }
 
-void LES_FunctionDefinition::SetParameterDataSize(const int parameterDataSize)
+void LES_FunctionDefinition::ComputeParameterDataSize(void)
 {
-	m_parameterDataSize = parameterDataSize;
+#error fjdsjdkskj
 }
 
 void LES_FunctionDefinition::SetReturnTypeID(const int returnTypeID)

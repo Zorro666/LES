@@ -1,8 +1,8 @@
 High Priority:
-STRUCT: correct size now being set for the struct, except for ref & ptr members : use ComputeDataStorageSize()
+STRUCT: compute the param block size for it, store it with the structure or as the dataSize in the type
 TEST: when it is fixed, checks to make sure the size is right will fail as they just used sizeof(structName)
 
-TEST: move the macros into functions to make them easier to maintain
+TEST: move the LES_TEST_* macros into functions to make them easier to maintain
 
 CORE: need common error handling & log system: warning, log, error, fatal error
 CORE: query log system if an error occurred

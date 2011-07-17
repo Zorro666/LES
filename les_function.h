@@ -25,7 +25,7 @@ public:
 	LES_FunctionDefinition(const int nameID, const int returnTypeID, const int numInputs, const int numOutputs);
 	~LES_FunctionDefinition(void);
 
-	void SetParameterDataSize(const int parameterDataSize);
+	void ComputeParameterDataSize(void);
 	void SetReturnTypeID(const int returnTypeID);
 
 	const LES_FunctionParameter* GetParameter(const LES_Hash nameHash) const;

@@ -12,7 +12,6 @@
 #define LES_TEST_DEBUG 0
 
 extern int LES_AddStringEntry(const char* const str);
-extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr);
 extern int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags, const char* const aliasedName);
 extern int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* const structDefinitionPtr);
 extern int LES_StructComputeAlignmentPadding(const int totalMemberSize, const int memberDataSize);
@@ -1277,14 +1276,14 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_InputNameIDNotFound, void, 1, 0);
-	functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(0));
+	LES_FunctionParameter* const functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(0));
 	LES_AddStringEntry("input_0");
 	functionParameterPtr->m_index = 0;
 	functionParameterPtr->m_hash = LES_GenerateHashCaseSensitive("input_0");
 	functionParameterPtr->m_nameID = -1;
 	functionParameterPtr->m_typeID = LES_AddStringEntry("int");
 	functionParameterPtr->m_mode = LES_PARAM_MODE_INPUT;
-	globalParamIndex++;
+	testFunctionData.globalParamIndex++;
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_InputNameDoesntExist, void, 1, 1);
@@ -1293,13 +1292,13 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_InputNameHashIsWrong, void, 1, 0);
-	functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(0));
+	LES_FunctionParameter* const functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(0));
 	functionParameterPtr->m_index = 0;
 	functionParameterPtr->m_hash = LES_GenerateHashCaseSensitive("input_0");
 	functionParameterPtr->m_nameID = LES_AddStringEntry("wrongHash");
 	functionParameterPtr->m_typeID = LES_AddStringEntry("int");
 	functionParameterPtr->m_mode = LES_PARAM_MODE_INPUT;
-	globalParamIndex++;
+	testFunctionData.globalParamIndex++;
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_InputNameStringIsWrong, void, 1, 0);
@@ -1312,24 +1311,24 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_InputTypeIDNotFound, void, 1, 0);
-	functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(0));
+	LES_FunctionParameter* const functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(0));
 	LES_AddStringEntry("int");
 	functionParameterPtr->m_index = 0;
 	functionParameterPtr->m_hash = LES_GenerateHashCaseSensitive("input_0");
 	functionParameterPtr->m_nameID = LES_AddStringEntry("input_0");
 	functionParameterPtr->m_typeID = -1;
 	functionParameterPtr->m_mode = LES_PARAM_MODE_INPUT;
-	globalParamIndex++;
+	testFunctionData.globalParamIndex++;
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_InputTypeHashIsWrong, void, 1, 0);
-	functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(0));
+	LES_FunctionParameter* const functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(0));
 	functionParameterPtr->m_index = 0;
 	functionParameterPtr->m_hash = LES_GenerateHashCaseSensitive("input_0");
 	functionParameterPtr->m_nameID = LES_AddStringEntry("input_0");
 	functionParameterPtr->m_typeID = LES_AddStringEntry("wrongHash");
 	functionParameterPtr->m_mode = LES_PARAM_MODE_INPUT;
-	globalParamIndex++;
+	testFunctionData.globalParamIndex++;
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_InputTypeStringIsWrong, void, 1, 0);
@@ -1377,14 +1376,14 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_OutputNameIDNotFound, void, 0, 1);
-	functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(0));
+	LES_FunctionParameter* const functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(0));
 	LES_AddStringEntry("output_0");
 	functionParameterPtr->m_index = 0;
 	functionParameterPtr->m_hash = LES_GenerateHashCaseSensitive("output_0");
 	functionParameterPtr->m_nameID = -1;
 	functionParameterPtr->m_typeID = LES_AddStringEntry("int");
 	functionParameterPtr->m_mode = LES_PARAM_MODE_OUTPUT;
-	globalParamIndex++;
+	testFunctionData.globalParamIndex++;
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_OutputNameDoesntExist, void, 0, 1);
@@ -1392,13 +1391,13 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_OutputNameHashIsWrong, void, 0, 1);
-	functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(0));
+	LES_FunctionParameter* const functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(0));
 	functionParameterPtr->m_index = 0;
 	functionParameterPtr->m_hash = LES_GenerateHashCaseSensitive("output_0");
 	functionParameterPtr->m_nameID = LES_AddStringEntry("wrongHash");
 	functionParameterPtr->m_typeID = LES_AddStringEntry("int");
 	functionParameterPtr->m_mode = LES_PARAM_MODE_OUTPUT;
-	globalParamIndex++;
+	testFunctionData.globalParamIndex++;
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_OutputNameStringIsWrong, void, 0, 1);
@@ -1411,24 +1410,24 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_OutputTypeIDNotFound, void, 0, 1);
-	functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(0));
+	LES_FunctionParameter* const functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(0));
 	LES_AddStringEntry("int");
 	functionParameterPtr->m_index = 0;
 	functionParameterPtr->m_hash = LES_GenerateHashCaseSensitive("output_0");
 	functionParameterPtr->m_nameID = LES_AddStringEntry("output_0");
 	functionParameterPtr->m_typeID = -1;
 	functionParameterPtr->m_mode = LES_PARAM_MODE_OUTPUT;
-	globalParamIndex++;
+	testFunctionData.globalParamIndex++;
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_OutputTypeHashIsWrong, void, 0, 1);
-	functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(0));
+	LES_FunctionParameter* const functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(0));
 	functionParameterPtr->m_index = 0;
 	functionParameterPtr->m_hash = LES_GenerateHashCaseSensitive("output_0");
 	functionParameterPtr->m_nameID = LES_AddStringEntry("output_0");
 	functionParameterPtr->m_typeID = LES_AddStringEntry("wrongHash");
 	functionParameterPtr->m_mode = LES_PARAM_MODE_OUTPUT;
-	globalParamIndex++;
+	testFunctionData.globalParamIndex++;
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_OutputTypeStringIsWrong, void, 0, 1);

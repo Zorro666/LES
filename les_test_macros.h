@@ -5,81 +5,35 @@
 #include "les_function.h"
 #include "les_struct.h"
 
+struct LES_TEST_FUNCTION_DATA
+{
+	const char* functionName;
+	int globalParamIndex;
+	int inputParamIndex;
+	int outputParamIndex;
+};
+
+bool LES_TestFunctionStart(const char* const functionName, const char* const returnType, const int numInputs, const int numOutputs,
+													 LES_FunctionDefinition* const functionDefinitionPtr, LES_TEST_FUNCTION_DATA* testFunctionDataPtr);
+
 #define LES_TEST_FUNCTION_START(NAME, RETURN_TYPE, NUM_INPUTS, NUM_OUTPUTS) \
 	{ \
+		LES_TEST_FUNCTION_DATA testFunctionData; \
+		LES_FunctionDefinition functionDefinition; \
 		bool __LES_function_ok = true; \
-		const char* const functionName = #NAME; \
-		const int nameID = LES_AddStringEntry(functionName); \
-		const int returnTypeID = LES_AddStringEntry(#RETURN_TYPE); \
-		LES_FunctionDefinition functionDefinition(nameID, returnTypeID, NUM_INPUTS, NUM_OUTPUTS); \
-		LES_FunctionParameter* functionParameterPtr; \
-		int parameterDataSize = 0; \
-		int globalParamIndex = 0; \
-		int inputParamIndex = 0; \
-		int outputParamIndex = 0; \
-		globalParamIndex += 0; \
-		inputParamIndex += 0; \
-		outputParamIndex += 0; \
-		functionParameterPtr = NULL; \
+		__LES_function_ok = LES_TestFunctionStart( #NAME, #RETURN_TYPE, NUM_INPUTS, NUM_OUTPUTS, \
+																							 &functionDefinition, &testFunctionData); \
 
+
+bool LES_TestFunctionAddParam(const bool isInput, const char* const type, const char* const name, 
+															LES_FunctionDefinition* const functionDefinitionPtr, LES_TEST_FUNCTION_DATA* testFunctionDataPtr);
 
 #define	LES_TEST_FUNCTION_ADD_PARAM(IS_INPUT, TYPE, NAME) \
-{ \
-	bool __LES_ok = __LES_function_ok; \
-	/* Error if parameter index off the end of the array */ \
-	const int maxNumParam = (IS_INPUT ? functionDefinition.GetNumInputs() : functionDefinition.GetNumOutputs()); \
-	int* const paramIndex = (IS_INPUT ? &inputParamIndex : &outputParamIndex); \
-	const char* const paramModeStr = (IS_INPUT ? "Input" : "Output"); \
-	const int paramMode = (IS_INPUT ? LES_PARAM_MODE_INPUT : LES_PARAM_MODE_OUTPUT); \
-	if (*paramIndex >= maxNumParam) \
+	if (__LES_function_ok) \
 	{ \
-		fprintf(stderr, "LES ERROR: TEST function '%s' : %s ParamIndex too big index:%d max:%d parameter:'%s' type:'%s'\n", \
-						functionName, paramModeStr, *paramIndex, maxNumParam, #NAME, #TYPE); \
-		__LES_ok = false; \
-		__LES_function_ok = false; \
+		__LES_function_ok = LES_TestFunctionAddParam( IS_INPUT, #TYPE, #NAME, \
+																									&functionDefinition, &testFunctionData); \
 	} \
-	const LES_Hash nameHash = LES_GenerateHashCaseSensitive(#NAME); \
-	/* Test to see if the parameter has already been added */ \
-	if (functionDefinition.GetParameter(nameHash) != LES_NULL) \
-	{ \
-		fprintf(stderr, "LES ERROR: TEST function '%s' : parameter '%s' already exists type:'%s'\n",  \
-						functionName, #NAME, #TYPE); \
-		__LES_ok = false; \
-		__LES_function_ok = false; \
-	} \
-	if (__LES_ok == true) \
-	{ \
-		const int typeID = LES_AddStringEntry(#TYPE); \
-		const LES_StringEntry* const typeStringEntry = LES_GetStringEntryForID(typeID); \
-		const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntry(typeStringEntry); \
-		if (typeEntryPtr != LES_NULL) \
-		{ \
-			const int typeDataStorageSize = typeEntryPtr->ComputeDataStorageSize(); \
-			if (typeDataStorageSize < 0) \
-			{ \
-				fprintf(stderr, "LES ERROR: TEST function '%s' : parameter '%s' type:'%s' invalid typeDataStorageSize\n",  \
-								functionName, #NAME, #TYPE); \
-				__LES_ok = false; \
-				__LES_function_ok = false; \
-			} \
-			else \
-			{ \
-				parameterDataSize += typeDataStorageSize; \
-			} \
-		} \
-		if (__LES_ok == true) \
-		{ \
-			functionParameterPtr = (LES_FunctionParameter* const)(functionDefinition.GetParameterByIndex(globalParamIndex)); \
-			functionParameterPtr->m_index = globalParamIndex; \
-			functionParameterPtr->m_hash = nameHash; \
-			functionParameterPtr->m_nameID = LES_AddStringEntry(#NAME); \
-			functionParameterPtr->m_typeID = typeID; \
-			functionParameterPtr->m_mode = paramMode; \
-			globalParamIndex++; \
-			*paramIndex = *paramIndex + 1; \
-		} \
-	} \
-} \
 
 
 #define	LES_TEST_FUNCTION_ADD_INPUT(TYPE, NAME) \
@@ -90,24 +44,18 @@
 	LES_TEST_FUNCTION_ADD_PARAM(false, TYPE, NAME) \
 
 
+void LES_TestFunctionStart(LES_FunctionDefinition* const functionDefinitionPtr, LES_TEST_FUNCTION_DATA* testFunctionDataPtr);
+
 #define LES_TEST_FUNCTION_END() \
-		if (globalParamIndex != functionDefinition.GetNumParameters()) \
+		if (__LES_function_ok) \
 		{ \
-			__LES_function_ok = false; \
-			fprintf(stderr, "LES ERROR: TEST function '%s' : ERROR not the right number of parameters Added:%d Should be:%d\n", \
-							functionName, globalParamIndex, functionDefinition.GetNumParameters()); \
-		} \
-		if (__LES_function_ok == true) \
-		{ \
-			functionDefinition.SetParameterDataSize(parameterDataSize); \
-			LES_AddFunctionDefinition(functionName, &functionDefinition); \
+			LES_TestFunctionStart(&functionDefinition, &testFunctionData); \
 		} \
 		else \
 		{ \
-			fprintf(stderr, "LES ERROR: TEST function '%s' : ERROR cannot create definition\n", functionName); \
+			fprintf(stderr, "LES ERROR: TEST function '%s' : ERROR cannot create definition\n", testFunctionData.functionName); \
 		} \
 	} \
-
 
 
 #define LES_TEST_ADD_TYPE_EX(TYPE, SIZE, FLAGS, ALIASED_TYPE) \
