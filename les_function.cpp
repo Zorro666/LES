@@ -313,7 +313,27 @@ LES_FunctionDefinition::~LES_FunctionDefinition(void)
 
 void LES_FunctionDefinition::ComputeParameterDataSize(void)
 {
-#error fjdsjdkskj
+	m_parameterDataSize = 0;
+	int paramDataSize = 0;
+	int numParams = GetNumParameters();
+	for (int i = 0; i < numParams; i++)
+	{
+		const LES_FunctionParameter* const memberPtr = GetParameterByIndex(i);
+		const int typeID = memberPtr->m_typeID;
+		const LES_StringEntry* const typeStringEntryPtr = LES_GetStringEntryForID(typeID);
+		if (typeStringEntryPtr == LES_NULL)
+		{
+			return;
+		}
+		const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntry(typeStringEntryPtr);
+		if (typeEntryPtr == LES_NULL)
+		{
+			return;
+		}
+		// Need to make this recursively on structs, looping over the members
+		paramDataSize += typeEntryPtr->ComputeDataStorageSize();
+	}
+	m_parameterDataSize = paramDataSize;
 }
 
 void LES_FunctionDefinition::SetReturnTypeID(const int returnTypeID)
