@@ -1,7 +1,8 @@
 High Priority:
-TEST: structure ComputeDataStorageSize() returns the wrong answer - it includes padding
-FUNCTION: struct data size computation is right (no padding), 
+STRUCT: correct size now being set for the struct, except for ref & ptr members : use ComputeDataStorageSize()
 TEST: when it is fixed, checks to make sure the size is right will fail as they just used sizeof(structName)
+
+TEST: move the macros into functions to make them easier to maintain
 
 CORE: need common error handling & log system: warning, log, error, fatal error
 CORE: query log system if an error occurred
