@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "les_core.h"
+#include "les_log.h"
 #include "les_hash.h"
 #include "les_stringentry.h"
 #include "les_test.h"
@@ -68,6 +69,8 @@ extern void LES_StructShutdown();
 
 void LES_Init(void)
 {
+	LES_Logger::Init();
+
 	les_stringEntryArray = new LES_StringEntry[1024];
 	les_numStringEntries = 0;
 

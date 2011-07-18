@@ -1,8 +1,8 @@
 #include <string.h>
-#include <stdio.h>
 
 #include "les_struct.h"
 #include "les_core.h"
+#include "les_log.h"
 #include "les_stringentry.h"
 
 static LES_StructDefinition* les_structDefinitionArray = LES_NULL;
@@ -169,7 +169,7 @@ int LES_StructComputeAlignmentPadding(const int totalMemberSize, const int membe
 	const int alignedOffset = ((totalMemberSize + memberAlignmentSizeMinus1) & ~memberAlignmentSizeMinus1);
 	const int alignmentPadding = alignedOffset - totalMemberSize;
 
-	//printf("TotalMemberSize:0x%X MemberDataSize:0x%d Alignment:%d\n", totalMemberSize, memberDataSize, alignmentPadding);
+	//LES_LOG("TotalMemberSize:0x%X MemberDataSize:0x%d Alignment:%d\n", totalMemberSize, memberDataSize, alignmentPadding);
 
 	return alignmentPadding;
 }

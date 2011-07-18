@@ -24,227 +24,287 @@ extern int LES_AddType(const char* const name, const unsigned int dataSize, cons
 
 static void LES_Test_FunctionNotFound(void)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_FunctionNotFound, void);
 	LES_FUNCTION_END();
-	LES_FATAL_ERROR("Function not found: '%s'", "LES_Test_functionNotFound");
+	LES_WARNING("Function not found: '%s'\n", "LES_Test_functionNotFound");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_ReturnTypeNotFound(void)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_ReturnTypeNotFound, jake);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_ReturnTypeHashIsWrong()
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_ReturnTypeHashIsWrong, wrongReturnType);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_ReturnTypeStringIsWrong()
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_ReturnTypeStringIsWrong, ReturnTypeBrokenHash);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_TooManyInputParameters(int input_0, int input_1, int input_2, int output_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_TooManyInputParameters, void);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_ADD_INPUT(int, input_1);
 	LES_FUNCTION_ADD_INPUT(int, input_2);
 	LES_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_InputWrongIndex(int input_0, int input_1, int output_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_InputWrongIndex, void);
 	LES_FUNCTION_ADD_INPUT(int, input_1);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_InputNameDoesntExist(int inputNotExist)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_InputNameDoesntExist, void);
 	LES_FUNCTION_ADD_INPUT(int, inputNotExist);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_InputNameIDNotFound(int input_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_InputNameIDNotFound, void);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_InputNameHashIsWrong(int input_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_InputNameHashIsWrong, void);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_InputNameStringIsWrong(int InputNameBrokenHash)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_InputNameStringIsWrong, void);
 	LES_FUNCTION_ADD_INPUT(int, InputNameBrokenHash);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_InputTypeIDNotFound(int input_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_InputTypeIDNotFound, void);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_InputTypeHashIsWrong(int input_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_InputTypeHashIsWrong, void);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_InputTypeStringIsWrong(int input_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_InputTypeStringIsWrong, void);
 	LES_FUNCTION_ADD_INPUT(InputTypeBrokenHash, input_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_InputGlobalIndexIsWrong(int input_0, int output_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_InputGlobalIndexIsWrong, void);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_InputUsedAsOutput(int input_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_InputUsedAsOutput, void);
 	LES_FUNCTION_ADD_OUTPUT(int, input_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_InputParamAlreadyUsed(int input_0, int output_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_InputParamAlreadyUsed, void);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_ADD_OUTPUT_EX(2, int, output_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_InputParamMissing(int input_0, unsigned int* output_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_InputParamMissing, void);
 	LES_FUNCTION_ADD_OUTPUT(unsigned int*, output_0);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_TooManyOutputParameters(int input_0, unsigned int* output_0, unsigned short* output_1, unsigned char* output_2)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_TooManyOutputParameters, void);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_ADD_OUTPUT(unsigned int*, output_0);
 	LES_FUNCTION_ADD_OUTPUT(unsigned short*, output_1);
 	LES_FUNCTION_ADD_OUTPUT(unsigned char*, output_2);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_OutputWrongIndex(int input_0, int output_0, int output_1)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_OutputWrongIndex, void);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_ADD_OUTPUT_EX(1, int, output_1);
 	LES_FUNCTION_ADD_OUTPUT_EX(2, int, output_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_OutputNameDoesntExist(int outputNotExist)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_OutputNameDoesntExist, void);
 	LES_FUNCTION_ADD_OUTPUT(int, outputNotExist);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_OutputNameIDNotFound(int output_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_OutputNameIDNotFound, void);
 	LES_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_OutputNameHashIsWrong(int output_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_OutputNameHashIsWrong, void);
 	LES_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_OutputNameStringIsWrong(int OutputNameBrokenHash)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_OutputNameStringIsWrong, void);
 	LES_FUNCTION_ADD_OUTPUT(int, OutputNameBrokenHash);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_OutputTypeIDNotFound(int output_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_OutputTypeIDNotFound, void);
 	LES_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_OutputTypeHashIsWrong(int output_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_OutputTypeHashIsWrong, void);
 	LES_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_OutputTypeStringIsWrong(int output_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_OutputTypeStringIsWrong, void);
 	LES_FUNCTION_ADD_OUTPUT(OutputTypeBrokenHash, output_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_OutputGlobalIndexIsWrong(int input_0, int output_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_OutputGlobalIndexIsWrong, void);
 	LES_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_OutputUsedAsInput(int output_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_OutputUsedAsInput, void);
 	LES_FUNCTION_ADD_INPUT(int, output_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_OutputParamAlreadyUsed(int input_0, unsigned int* output_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_OutputParamAlreadyUsed, void);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_ADD_OUTPUT(unsigned int*, output_0);
 	LES_FUNCTION_ADD_OUTPUT(unsigned int*, output_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_OutputParamMissing(int input_0, unsigned int* output_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_OutputParamMissing, void);
 	LES_FUNCTION_ADD_INPUT(int, input_0);
 	LES_FUNCTION_ADD_OUTPUT(unsigned int*, output_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_InputOutputMixture(unsigned short input_0, unsigned int* output_0, unsigned char input_1, unsigned short* output_1)
@@ -259,18 +319,22 @@ static void LES_Test_InputOutputMixture(unsigned short input_0, unsigned int* ou
 
 static void LES_Test_InputParamUsedAsOutput(unsigned int input_0, unsigned short output_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_InputParamUsedAsOutput, void);
 	LES_FUNCTION_ADD_INPUT(unsigned int, input_0);
 	LES_FUNCTION_ADD_OUTPUT(unsigned short, output_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_OutputParamUsedAsInput(unsigned int input_0, unsigned short output_0)
 {
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_FUNCTION_START(LES_Test_OutputParamUsedAsInput, void);
 	LES_FUNCTION_ADD_INPUT(output_only, input_0);
 	LES_FUNCTION_ADD_OUTPUT(unsigned short, output_0);
 	LES_FUNCTION_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
 static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_2, float input_3, int* input_4)
@@ -288,6 +352,7 @@ static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_
 
 	if (parameterData == LES_NULL)
 	{
+		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadInputParameters: parameterData is NULL\n");
 		return;
 	}
 	const LES_StringEntry* typeEntry = LES_NULL;
@@ -357,11 +422,11 @@ static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_
 	{
 		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadInputParameters: parameter data is wrong input_4:%d value_4:%d\n", *input_4, value_4);
 	}
-	LES_FATAL_ERROR("LES_Test_ReadInputParameters: input_0:%d value_0:%d\n", input_0, value_0);
-	LES_FATAL_ERROR("LES_Test_ReadInputParameters: input_1:%d value_1:%d\n", input_1, value_1);
-	LES_FATAL_ERROR("LES_Test_ReadInputParameters: input_2:%d value_2:%d\n", input_2, value_2);
-	LES_FATAL_ERROR("LES_Test_ReadInputParameters: input_3:%f value_3:%f\n", input_3, value_3);
-	LES_FATAL_ERROR("LES_Test_ReadInputParameters: input_4:%d value_4:%d\n", *input_4, value_4);
+	LES_LOG("LES_Test_ReadInputParameters: input_0:%d value_0:%d\n", input_0, value_0);
+	LES_LOG("LES_Test_ReadInputParameters: input_1:%d value_1:%d\n", input_1, value_1);
+	LES_LOG("LES_Test_ReadInputParameters: input_2:%d value_2:%d\n", input_2, value_2);
+	LES_LOG("LES_Test_ReadInputParameters: input_3:%f value_3:%f\n", input_3, value_3);
+	LES_LOG("LES_Test_ReadInputParameters: input_4:%d value_4:%d\n", *input_4, value_4);
 }
 
 static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short* output_1, unsigned char* output_2, float* output_3)
@@ -378,6 +443,7 @@ static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short
 
 	if (parameterData == LES_NULL)
 	{
+		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadOutputParameters: parameterData is NULL\n");
 		return;
 	}
 	const LES_StringEntry* typeEntry = LES_NULL;
@@ -394,6 +460,7 @@ static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short
 	if (*output_0 != value_0)
 	{
 		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadOutputParameters: parameter data is wrong output_0:%d value_0:%d\n", *output_0, value_0);
+		return;
 	}
 
 	typeEntry = LES_GetStringEntry("unsigned short*");
@@ -407,6 +474,7 @@ static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short
 	if (*output_1 != value_1)
 	{
 		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadOutputParameters: parameter data is wrong output_1:%d value_1:%d\n", *output_1, value_1);
+		return;
 	}
 
 	typeEntry = LES_GetStringEntry("unsigned char*");
@@ -420,6 +488,7 @@ static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short
 	if (*output_2 != value_2)
 	{
 		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadOutputParameters: parameter data is wrong output_2:%d value_2:%d\n", *output_2, value_2);
+		return;
 	}
 
 	typeEntry = LES_GetStringEntry("float*");
@@ -433,12 +502,13 @@ static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short
 	if (fabsf(*output_3-value_3) > 1.0e-6f)
 	{
 		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadOutputParameters: parameter data is wrong output_3:%f value_3:%f\n", *output_3, value_3);
+		return;
 	}
 
-	LES_FATAL_ERROR("LES_Test_ReadOutputParameters: output_0:%d value_0:%d\n", *output_0, value_0);
-	LES_FATAL_ERROR("LES_Test_ReadOutputParameters: output_1:%d value_1:%d\n", *output_1, value_1);
-	LES_FATAL_ERROR("LES_Test_ReadOutputParameters: output_2:%d value_2:%d\n", *output_2, value_2);
-	LES_FATAL_ERROR("LES_Test_ReadOutputParameters: output_3:%f value_3:%f\n", *output_3, value_3);
+	LES_LOG("LES_Test_ReadOutputParameters: output_0:%d value_0:%d\n", *output_0, value_0);
+	LES_LOG("LES_Test_ReadOutputParameters: output_1:%d value_1:%d\n", *output_1, value_1);
+	LES_LOG("LES_Test_ReadOutputParameters: output_2:%d value_2:%d\n", *output_2, value_2);
+	LES_LOG("LES_Test_ReadOutputParameters: output_3:%f value_3:%f\n", *output_3, value_3);
 }
 
 static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char input_2, float input_3, int* input_4,
@@ -461,6 +531,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 
 	if (parameterData == LES_NULL)
 	{
+		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadInputOutputParameters: parameterData is NULL\n");
 		return;
 	}
 
@@ -479,6 +550,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	{
 		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadInputOutputParameters: parameter data is wrong input_0:%d value_0:%d\n",
 						input_0, input_value_0);
+		return;
 	}
 
 	typeEntry = LES_GetStringEntry("unsigned int*");
@@ -493,6 +565,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	{
 		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadInputOutputParameters: parameter data is wrong output_0:%d value_0:%d\n",
 						*output_0, output_value_0);
+		return;
 	}
 
 	typeEntry = LES_GetStringEntry("short");
@@ -507,6 +580,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	{
 		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadInputOutputParameters: parameter data is wrong input_1:%d value_1:%d\n",
 						input_1, input_value_1);
+		return;
 	}
 
 	typeEntry = LES_GetStringEntry("unsigned short*");
@@ -521,6 +595,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	{
 		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadInputOutputParameters: parameter data is wrong output_1:%d value_1:%d\n",
 						*output_1, output_value_1);
+		return;
 	}
 
 	typeEntry = LES_GetStringEntry("char");
@@ -535,6 +610,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	{
 		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadInputOutputParameters: parameter data is wrong input_2:%d value_2:%d\n",
 						input_2, input_value_2);
+		return;
 	}
 
 	typeEntry = LES_GetStringEntry("unsigned char*");
@@ -549,6 +625,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	{
 		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadInputOutputParameters: parameter data is wrong output_2:%d value_2:%d\n",
 						*output_2, output_value_2);
+		return;
 	}
 
 	typeEntry = LES_GetStringEntry("float");
@@ -563,6 +640,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	{
 		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadInputOutputParameters: parameter data is wrong input_3:%f value_3:%f\n",
 						input_3, input_value_3);
+		return;
 	}
 
 	typeEntry = LES_GetStringEntry("float*");
@@ -577,6 +655,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	{
 		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadInputOutputParameters: parameter data is wrong output_3:%f value_3:%f\n",
 						*output_3, output_value_3);
+		return;
 	}
 
 	typeEntry = LES_GetStringEntry("int*");
@@ -591,6 +670,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	{
 		LES_FATAL_ERROR("LES ERROR: LES_Test_ReadInputOutputParameters: parameter data is wrong input_4:%d value_4:%d\n",
 						*input_4, input_value_4);
+		return;
 	}
 
 	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_ReadInputOutputParameters");
@@ -609,18 +689,19 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	{
 		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: parameterDataSize is wrong Code:%d Should be:%d\n",
 						parameterDataSize, realParameterDataSize);
+		return;
 	}
 
-	LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: input_0:%d value_0:%d\n", input_0, input_value_0);
-	LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: output_0:%d value_0:%d\n", *output_0, output_value_0);
-	LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: input_1:%d value_1:%d\n", input_1, input_value_1);
-	LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: output_1:%d value_1:%d\n", *output_1, output_value_1);
-	LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: input_2:'%c' value_2:'%c'\n", input_2, input_value_2);
-	LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: output_2:'%c' value_2:'%c'\n", *output_2, output_value_2);
-	LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: input_3:%f value_3:%f\n", input_3, input_value_3);
-	LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: output_3:%f value_3:%f\n", *output_3, output_value_3);
-	LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: input_4:%d value_4:%d\n", *input_4, input_value_4);
-	LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: parameterDataSize:%d\n", parameterDataSize);
+	LES_LOG("LES_Test_ReadInputOutputParameters: input_0:%d value_0:%d\n", input_0, input_value_0);
+	LES_LOG("LES_Test_ReadInputOutputParameters: output_0:%d value_0:%d\n", *output_0, output_value_0);
+	LES_LOG("LES_Test_ReadInputOutputParameters: input_1:%d value_1:%d\n", input_1, input_value_1);
+	LES_LOG("LES_Test_ReadInputOutputParameters: output_1:%d value_1:%d\n", *output_1, output_value_1);
+	LES_LOG("LES_Test_ReadInputOutputParameters: input_2:'%c' value_2:'%c'\n", input_2, input_value_2);
+	LES_LOG("LES_Test_ReadInputOutputParameters: output_2:'%c' value_2:'%c'\n", *output_2, output_value_2);
+	LES_LOG("LES_Test_ReadInputOutputParameters: input_3:%f value_3:%f\n", input_3, input_value_3);
+	LES_LOG("LES_Test_ReadInputOutputParameters: output_3:%f value_3:%f\n", *output_3, output_value_3);
+	LES_LOG("LES_Test_ReadInputOutputParameters: input_4:%d value_4:%d\n", *input_4, input_value_4);
+	LES_LOG("LES_Test_ReadInputOutputParameters: parameterDataSize:%d\n", parameterDataSize);
 }
 
 static void LES_Test_DecodeInputOutputParameters(int input_0, short input_1, char input_2, float input_3, 
@@ -646,6 +727,7 @@ static void LES_Test_DecodeInputOutputParameters(int input_0, short input_1, cha
 
 	if (parameterData == LES_NULL)
 	{
+		LES_FATAL_ERROR("LES ERROR: LES_Test_DecodeInputOutputParameters: parameterData is NULL\n");
 		return;
 	}
 
@@ -665,6 +747,7 @@ static void LES_Test_DecodeInputOutputParameters(int input_0, short input_1, cha
 	{
 		LES_FATAL_ERROR("LES_Test_DecodeInputOutputParameters: parameterDataSize is wrong Code:%d Should be:%d\n",
 						parameterDataSize, realParameterDataSize);
+		return;
 	}
 
 	if (functionDefinitionPtr->Decode(parameterData) == LES_ERROR)
@@ -672,7 +755,7 @@ static void LES_Test_DecodeInputOutputParameters(int input_0, short input_1, cha
 		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: Decode failed\n");
 		return;
 	}
-	LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: parameterDataSize:%d\n", parameterDataSize);
+	LES_LOG("LES_Test_ReadInputOutputParameters: parameterDataSize:%d\n", parameterDataSize);
 	return;
 }
 
@@ -687,6 +770,7 @@ static void LES_Test_DecodeOutputParameters(char& output_0)
 
 	if (parameterData == LES_NULL)
 	{
+		LES_FATAL_ERROR("LES ERROR: LES_Test_DecodeOutputParameters: parameterData is NULL\n");
 		return;
 	}
 
@@ -709,7 +793,7 @@ static void LES_Test_DecodeOutputParameters(char& output_0)
 		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: Decode failed\n");
 		return;
 	}
-	LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: parameterDataSize:%d\n", parameterDataSize);
+	LES_LOG("LES_Test_ReadInputOutputParameters: parameterDataSize:%d\n", parameterDataSize);
 	return;
 }
 
@@ -792,6 +876,7 @@ void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 inp
 
 	if (parameterData == LES_NULL)
 	{
+		LES_FATAL_ERROR("LES ERROR: LES_Test_StructInputParam: parameterData is NULL\n");
 		return;
 	}
 
@@ -814,6 +899,7 @@ void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 inp
 	{
 		LES_FATAL_ERROR("LES_Test_StructInputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
 						parameterDataSize, realParameterDataSize);
+		return;
 	}
 
 	if (functionDefinitionPtr->Decode(parameterData) == LES_ERROR)
@@ -821,7 +907,7 @@ void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 inp
 		LES_FATAL_ERROR("LES_Test_StructInputParam: Decode failed\n");
 		return;
 	}
-	LES_FATAL_ERROR("LES_Test_StructInputParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_LOG("LES_Test_StructInputParam: parameterDataSize:%d\n", parameterDataSize);
 	return;
 }
 
@@ -837,6 +923,7 @@ void LES_Test_StructOutputParam(TestStruct3* out_0, TestStruct4* out_1)
 
 	if (parameterData == LES_NULL)
 	{
+		LES_FATAL_ERROR("LES ERROR: LES_Test_StructOutputParam: parameterData is NULL\n");
 		return;
 	}
 
@@ -854,6 +941,7 @@ void LES_Test_StructOutputParam(TestStruct3* out_0, TestStruct4* out_1)
 	{
 		LES_FATAL_ERROR("LES_Test_StructOutputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
 						parameterDataSize, realParameterDataSize);
+		return;
 	}
 
 	if (functionDefinitionPtr->Decode(parameterData) == LES_ERROR)
@@ -861,7 +949,7 @@ void LES_Test_StructOutputParam(TestStruct3* out_0, TestStruct4* out_1)
 		LES_FATAL_ERROR("LES_Test_StructOutputParam: Decode failed\n");
 		return;
 	}
-	LES_FATAL_ERROR("LES_Test_StructOutputParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_LOG("LES_Test_StructOutputParam: parameterDataSize:%d\n", parameterDataSize);
 	return;
 }
 
@@ -877,6 +965,7 @@ void LES_Test_StructInputOutputParam(TestStruct5* in_0, TestStruct6* out_0)
 
 	if (parameterData == LES_NULL)
 	{
+		LES_FATAL_ERROR("LES ERROR: LES_Test_StructInputOutputParam: parameterData is NULL\n");
 		return;
 	}
 
@@ -895,6 +984,7 @@ void LES_Test_StructInputOutputParam(TestStruct5* in_0, TestStruct6* out_0)
 	{
 		LES_FATAL_ERROR("LES_Test_StructInputOutputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
 						parameterDataSize, realParameterDataSize);
+		return;
 	}
 
 	if (functionDefinitionPtr->Decode(parameterData) == LES_ERROR)
@@ -902,7 +992,7 @@ void LES_Test_StructInputOutputParam(TestStruct5* in_0, TestStruct6* out_0)
 		LES_FATAL_ERROR("LES_Test_StructInputOutputParam: Decode failed\n");
 		return;
 	}
-	LES_FATAL_ERROR("LES_Test_StructInputOutputParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_LOG("LES_Test_StructInputOutputParam: parameterDataSize:%d\n", parameterDataSize);
 	return;
 }
 
@@ -917,6 +1007,7 @@ void LES_Test_ReferenceInputPODParam(int& input_0)
 
 	if (parameterData == LES_NULL)
 	{
+		LES_FATAL_ERROR("LES ERROR: LES_Test_ReferenceInputPODParam: parameterData is NULL\n");
 		return;
 	}
 
@@ -932,6 +1023,7 @@ void LES_Test_ReferenceInputPODParam(int& input_0)
 	{
 		LES_FATAL_ERROR("LES_Test_ReferenceInputPODParam: parameterDataSize is wrong Code:%d Should be:%d\n",
 						parameterDataSize, realParameterDataSize);
+		return;
 	}
 
 	if (functionDefinitionPtr->Decode(parameterData) == LES_ERROR)
@@ -939,7 +1031,7 @@ void LES_Test_ReferenceInputPODParam(int& input_0)
 		LES_FATAL_ERROR("LES_Test_ReferenceInputPODParam: Decode failed\n");
 		return;
 	}
-	LES_FATAL_ERROR("LES_Test_ReferenceInputPODParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_LOG("LES_Test_ReferenceInputPODParam: parameterDataSize:%d\n", parameterDataSize);
 	return;
 }
 
@@ -954,6 +1046,7 @@ void LES_Test_ReferenceInputStructParam(TestStruct1& input_0)
 
 	if (parameterData == LES_NULL)
 	{
+		LES_FATAL_ERROR("LES ERROR: LES_Test_ReferenceInputStructParam: parameterData is NULL\n");
 		return;
 	}
 
@@ -969,6 +1062,7 @@ void LES_Test_ReferenceInputStructParam(TestStruct1& input_0)
 	{
 		LES_FATAL_ERROR("LES_Test_ReferenceInputStructParam: parameterDataSize is wrong Code:%d Should be:%d\n",
 						parameterDataSize, realParameterDataSize);
+		return;
 	}
 
 	if (functionDefinitionPtr->Decode(parameterData) == LES_ERROR)
@@ -976,7 +1070,7 @@ void LES_Test_ReferenceInputStructParam(TestStruct1& input_0)
 		LES_FATAL_ERROR("LES_Test_ReferenceInputStructParam: Decode failed\n");
 		return;
 	}
-	LES_FATAL_ERROR("LES_Test_ReferenceInputStructParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_LOG("LES_Test_ReferenceInputStructParam: parameterDataSize:%d\n", parameterDataSize);
 	return;
 }
 
@@ -991,6 +1085,7 @@ void LES_Test_ReferenceOutputPODParam(char& output_0)
 
 	if (parameterData == LES_NULL)
 	{
+		LES_FATAL_ERROR("LES ERROR: LES_Test_ReferenceOutputPODParam: parameterData is NULL\n");
 		return;
 	}
 
@@ -1006,6 +1101,7 @@ void LES_Test_ReferenceOutputPODParam(char& output_0)
 	{
 		LES_FATAL_ERROR("LES_Test_ReferenceOutputPODParam: parameterDataSize is wrong Code:%d Should be:%d\n",
 						parameterDataSize, realParameterDataSize);
+		return;
 	}
 
 	if (functionDefinitionPtr->Decode(parameterData) == LES_ERROR)
@@ -1013,7 +1109,7 @@ void LES_Test_ReferenceOutputPODParam(char& output_0)
 		LES_FATAL_ERROR("LES_Test_ReferenceOutputPODParam: Decode failed\n");
 		return;
 	}
-	LES_FATAL_ERROR("LES_Test_ReferenceOutputPODParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_LOG("LES_Test_ReferenceOutputPODParam: parameterDataSize:%d\n", parameterDataSize);
 	return;
 }
 
@@ -1028,6 +1124,7 @@ void LES_Test_ReferenceOutputStructParam(TestStruct2& output_0)
 
 	if (parameterData == LES_NULL)
 	{
+		LES_FATAL_ERROR("LES ERROR: LES_Test_ReferenceOutputStructParam: parameterData is NULL\n");
 		return;
 	}
 
@@ -1045,6 +1142,7 @@ void LES_Test_ReferenceOutputStructParam(TestStruct2& output_0)
 	{
 		LES_FATAL_ERROR("LES_Test_ReferenceOutputStructParam: parameterDataSize is wrong Code:%d Should be:%d\n",
 						parameterDataSize, realParameterDataSize);
+		return;
 	}
 
 	if (functionDefinitionPtr->Decode(parameterData) == LES_ERROR)
@@ -1052,7 +1150,7 @@ void LES_Test_ReferenceOutputStructParam(TestStruct2& output_0)
 		LES_FATAL_ERROR("LES_Test_ReferenceOutputStructParam: Decode failed\n");
 		return;
 	}
-	LES_FATAL_ERROR("LES_Test_ReferenceOutputStructParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_LOG("LES_Test_ReferenceOutputStructParam: parameterDataSize:%d\n", parameterDataSize);
 	return;
 }
 
@@ -1067,6 +1165,7 @@ void LES_Test_ReferenceStructInputParam(TestStruct7& input_0)
 
 	if (parameterData == LES_NULL)
 	{
+		LES_FATAL_ERROR("LES ERROR: LES_Test_ReferenceStructInputParam: parameterData is NULL\n");
 		return;
 	}
 
@@ -1082,6 +1181,7 @@ void LES_Test_ReferenceStructInputParam(TestStruct7& input_0)
 	{
 		LES_FATAL_ERROR("LES_Test_ReferenceStructInputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
 						parameterDataSize, realParameterDataSize);
+		return;
 	}
 
 	if (functionDefinitionPtr->Decode(parameterData) == LES_ERROR)
@@ -1089,7 +1189,7 @@ void LES_Test_ReferenceStructInputParam(TestStruct7& input_0)
 		LES_FATAL_ERROR("LES_Test_ReferenceStructInputParam: Decode failed\n");
 		return;
 	}
-	LES_FATAL_ERROR("LES_Test_ReferenceStructInputParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_LOG("LES_Test_ReferenceStructInputParam: parameterDataSize:%d\n", parameterDataSize);
 	return;
 }
 
@@ -1104,6 +1204,7 @@ void LES_Test_ReferenceStructOutputParam(TestStruct8& output_0)
 
 	if (parameterData == LES_NULL)
 	{
+		LES_FATAL_ERROR("LES ERROR: LES_Test_ReferenceStructOutputParam: parameterData is NULL\n");
 		return;
 	}
 
@@ -1121,6 +1222,7 @@ void LES_Test_ReferenceStructOutputParam(TestStruct8& output_0)
 	{
 		LES_FATAL_ERROR("LES_Test_ReferenceStructOutputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
 						parameterDataSize, realParameterDataSize);
+		return;
 	}
 
 	if (functionDefinitionPtr->Decode(parameterData) == LES_ERROR)
@@ -1128,7 +1230,7 @@ void LES_Test_ReferenceStructOutputParam(TestStruct8& output_0)
 		LES_FATAL_ERROR("LES_Test_ReferenceStructOutputParam: Decode failed\n");
 		return;
 	}
-	LES_FATAL_ERROR("LES_Test_ReferenceStructOutputParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_LOG("LES_Test_ReferenceStructOutputParam: parameterDataSize:%d\n", parameterDataSize);
 	return;
 }
 
@@ -1601,148 +1703,162 @@ void LES_TestSetup(void)
 	int input_4 = 12345;
 
 	/* Input parameter tests */
-	LES_FATAL_ERROR("#### Input parameter tests ####\n");
+	LES_LOG("#### Input parameter tests ####\n");
 	LES_Test_TooManyInputParameters(1, 2, 3, 4);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_InputWrongIndex(1, 2, 3);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_InputGlobalIndexIsWrong(1, 2);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_InputUsedAsOutput(1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_InputParamAlreadyUsed(1, 2);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_InputParamMissing(1, &output_0);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 
 	/* Input name tests */
-	LES_FATAL_ERROR("#### Input name tests ####\n");
+	LES_LOG("#### Input name tests ####\n");
 	LES_Test_InputNameDoesntExist(1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_InputNameIDNotFound(1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_InputNameHashIsWrong(1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_InputNameStringIsWrong(1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 
 	/* Input type tests */
-	LES_FATAL_ERROR("#### Input type tests ####\n");
+	LES_LOG("#### Input type tests ####\n");
 	LES_Test_InputTypeIDNotFound(1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_InputTypeHashIsWrong(1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_InputTypeStringIsWrong(1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 
 	/* Output parameter tests */
-	LES_FATAL_ERROR("#### Output parameter tests ####\n");
+	LES_LOG("#### Output parameter tests ####\n");
 	LES_Test_TooManyOutputParameters(1, &output_0, &output_1, &output_2);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_OutputWrongIndex(1, 2, 3);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_OutputGlobalIndexIsWrong(1, 2);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_OutputUsedAsInput(1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_OutputParamAlreadyUsed(1, &output_0);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_OutputParamMissing(1, &output_0);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 
 	/* Output name tests */
-	LES_FATAL_ERROR("#### Output name tests ####\n");
+	LES_LOG("#### Output name tests ####\n");
 	LES_Test_OutputNameDoesntExist(1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_OutputNameIDNotFound(1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_OutputNameHashIsWrong(1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_OutputNameStringIsWrong(1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 
 	/* Output type tests */
-	LES_FATAL_ERROR("#### Output type tests ####\n");
+	LES_LOG("#### Output type tests ####\n");
 	LES_Test_OutputTypeIDNotFound(1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_OutputTypeHashIsWrong(1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_OutputTypeStringIsWrong(1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 
 	/* Parameter already exists tests */
-	LES_FATAL_ERROR("#### Parameter already exists tests ####\n");
+	LES_LOG("#### Parameter already exists tests ####\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_TEST_FUNCTION_START(LES_Test_InputParameterAlreadyExists, void, 2, 1);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
 	LES_TEST_FUNCTION_ADD_INPUT(char, input_0);
 	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_TEST_FUNCTION_END();
-	LES_FATAL_ERROR("\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
+	LES_LOG("\n");
 
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_TEST_FUNCTION_START(LES_Test_OutputParameterAlreadyExists, void, 1, 2);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
 	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_TEST_FUNCTION_ADD_OUTPUT(short, output_0);
 	LES_TEST_FUNCTION_END();
-	LES_FATAL_ERROR("\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
+	LES_LOG("\n");
 
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_TEST_FUNCTION_START(LES_Test_ParameterAlreadyExists, void, 1, 2);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
 	LES_TEST_FUNCTION_ADD_OUTPUT(float, input_0);
 	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
 	LES_TEST_FUNCTION_END();
-	LES_FATAL_ERROR("\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
+	LES_LOG("\n");
 
 	/* Complex Input Output Parameter tests */
-	LES_FATAL_ERROR("#### Complex Input Output Parameter tests ####\n");
+	LES_LOG("#### Complex Input Output Parameter tests ####\n");
 	LES_Test_InputOutputMixture(1, &output_0, 3, &output_1);
-	LES_FATAL_ERROR("LES_Test_InputOutputMixture: success if no error output\n");
-	LES_FATAL_ERROR("\n");
+	LES_LOG("LES_Test_InputOutputMixture: success if no error output\n");
+	LES_LOG("\n");
 	LES_Test_InputParamUsedAsOutput(1, 2);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_OutputParamUsedAsInput(1, 2);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 
 	/* Add Type tests */
-	LES_FATAL_ERROR("#### Add Type tests ####\n");
+	LES_LOG("#### Add Type tests ####\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_TEST_ADD_TYPE_EX(unsigned char, 2, LES_TYPE_POD|LES_TYPE_INPUT, unsigned char);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_TEST_ADD_TYPE_EX(unsigned char, 1, LES_TYPE_POINTER|LES_TYPE_OUTPUT, unsigned char);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_TEST_ADD_TYPE_EX(unsigned char, 1, LES_TYPE_POD|LES_TYPE_INPUT, unsigned int);
-	LES_FATAL_ERROR("\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
+	LES_LOG("\n");
 
 	/* Read Parameter tests */
-	LES_FATAL_ERROR("#### Read Parameter tests ####\n");
+	LES_LOG("#### Read Parameter tests ####\n");
 	LES_Test_ReadInputParameters(102, 23453, 110, -4.0332f, &input_4);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_ReadOutputParameters(&output_0, &output_1, &output_2, &output_3);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	LES_Test_ReadInputOutputParameters(102, 23453, '*', -4.0332f, &input_4, &output_0, &output_1, &output_2, &output_3);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	short input_5 = 8989;
 	char input_6 = '6';
 	LES_Test_DecodeInputOutputParameters(201, 12863, ';', -8.9832f, &input_4, &input_5, &input_6, 
 																			 &output_0, &output_1, &output_2, &output_3);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 
 	/* Struct tests */
-	LES_FATAL_ERROR("#### Struct tests ####\n");
+	LES_LOG("#### Struct tests ####\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_TEST_STRUCT_START(LES_Struct_TooManyMembers, 1);
 	LES_TEST_STRUCT_ADD_MEMBER(int, m_one);
 	LES_TEST_STRUCT_ADD_MEMBER(short, m_two);
 	LES_TEST_STRUCT_END();
-	LES_FATAL_ERROR("\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
+	LES_LOG("\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_TEST_STRUCT_START(LES_Struct_MemberAlreadyExists, 2);
 	LES_TEST_STRUCT_ADD_MEMBER(int, m_one);
 	LES_TEST_STRUCT_ADD_MEMBER(short, m_one);
 	LES_TEST_STRUCT_END();
-	LES_FATAL_ERROR("\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
+	LES_LOG("\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_TEST_STRUCT_START(LES_Struct_NotEnoughMembers, 3);
 	LES_TEST_STRUCT_ADD_MEMBER(long long int, m_longlong);
 	LES_TEST_STRUCT_ADD_MEMBER(char, m_char);
 	LES_TEST_STRUCT_END();
-	LES_FATAL_ERROR("\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
+	LES_LOG("\n");
 
 	TestStruct1 in_2;
 	in_2.m_longlong = -100048;
@@ -1771,7 +1887,7 @@ void LES_TestSetup(void)
 	in_4.m_testStruct3.m_int = 2;
 	in_4.m_testStruct3.m_short = 3;
 	LES_Test_StructInputParam(in_0, 7243, in_2, in_3, &in_4);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 
 	TestStruct3 out_0;
 	out_0.m_short = +1718;
@@ -1785,18 +1901,18 @@ void LES_TestSetup(void)
 	out_1.m_short = +321;
 	out_1.m_testStruct3 = out_0;
 #if LES_TEST_DEBUG
-	printf("TestStruct3: m_short:%p\n", &out_0.m_short);
-	printf("TestStruct3: m_float:%p\n", &out_0.m_float);
-	printf("TestStruct3: m_int:%p\n", &out_0.m_int);
-	printf("TestStruct3: m_char:%p\n", &out_0.m_char);
-	printf("TestStruct4: m_float:%p\n", &out_1.m_float);
-	printf("TestStruct4: m_int:%p\n", &out_1.m_int);
-	printf("TestStruct4: m_char:%p\n", &out_1.m_char);
-	printf("TestStruct4: m_short:%p\n", &out_1.m_short);
-	printf("TestStruct4: m_testStruct3:%p\n", &out_1.m_testStruct3);
+	LES_LOG("TestStruct3: m_short:%p\n", &out_0.m_short);
+	LES_LOG("TestStruct3: m_float:%p\n", &out_0.m_float);
+	LES_LOG("TestStruct3: m_int:%p\n", &out_0.m_int);
+	LES_LOG("TestStruct3: m_char:%p\n", &out_0.m_char);
+	LES_LOG("TestStruct4: m_float:%p\n", &out_1.m_float);
+	LES_LOG("TestStruct4: m_int:%p\n", &out_1.m_int);
+	LES_LOG("TestStruct4: m_char:%p\n", &out_1.m_char);
+	LES_LOG("TestStruct4: m_short:%p\n", &out_1.m_short);
+	LES_LOG("TestStruct4: m_testStruct3:%p\n", &out_1.m_testStruct3);
 #endif // #if LES_TEST_DEBUG
 	LES_Test_StructOutputParam(&out_0, &out_1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 	TestStruct5 testStruct5;
 	testStruct5.m_char = '5';
 	short shortTest = 4242;
@@ -1807,14 +1923,14 @@ void LES_TestSetup(void)
 	char charTest = '6';
 	testStruct6.m_charPtr = &charTest;
 	LES_Test_StructInputOutputParam(&testStruct5, &testStruct6);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 
 	/* Reference tests */
-	LES_FATAL_ERROR("#### Reference tests ####\n");
+	LES_LOG("#### Reference tests ####\n");
 
 	int ref_input_0 = 954;
 	LES_Test_ReferenceInputPODParam(ref_input_0);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 
 	TestStruct1 ref_input_1;
 	ref_input_1.m_char = '1';
@@ -1823,11 +1939,11 @@ void LES_TestSetup(void)
 	ref_input_1.m_longlong = 162132;
 	ref_input_1.m_short = 936;
 	LES_Test_ReferenceInputStructParam(ref_input_1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 
 	char ref_output_0 = 'R';
 	LES_Test_ReferenceOutputPODParam(ref_output_0);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 
 	TestStruct2 ref_output_1;
 	ref_output_1.m_char = 'Z';
@@ -1836,7 +1952,7 @@ void LES_TestSetup(void)
 	ref_output_1.m_short = 2526;
 	ref_output_1.m_testStruct1 = ref_input_1;
 	LES_Test_ReferenceOutputStructParam(ref_output_1);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 
 #if LES_TEST_DEBUG
 	{
@@ -1847,7 +1963,7 @@ void LES_TestSetup(void)
 		stringEntry = LES_GetStringEntry("char&");
 		int charRefSize = LES_GetTypeEntry(stringEntry)->ComputeDataStorageSize();
 		charRefSize = LES_GetTypeEntry(stringEntry)->m_dataSize;
-		printf("charPtrSize:%d charRefSize:%d\n", charPtrSize, charRefSize);
+		LES_LOG("charPtrSize:%d charRefSize:%d\n", charPtrSize, charRefSize);
 
 		stringEntry = LES_GetStringEntry("short*");
 		int shortPtrSize = LES_GetTypeEntry(stringEntry)->ComputeDataStorageSize();
@@ -1855,7 +1971,7 @@ void LES_TestSetup(void)
 		stringEntry = LES_GetStringEntry("short&");
 		int shortRefSize = LES_GetTypeEntry(stringEntry)->ComputeDataStorageSize();
 		shortRefSize = LES_GetTypeEntry(stringEntry)->m_dataSize;
-		printf("shortPtrSize:%d shortRefSize:%d\n", shortPtrSize, shortRefSize);
+		LES_LOG("shortPtrSize:%d shortRefSize:%d\n", shortPtrSize, shortRefSize);
 	}
 #endif // #if LES_TEST_DEBUG
 
@@ -1863,17 +1979,17 @@ void LES_TestSetup(void)
 	char ref_char = 'C';
 	TestStruct7 refStruct_input_0 = { 936, ref_float, 'A', ref_char, &ref_output_0 };
 #if LES_TEST_DEBUG
-	printf("m_floatRef = %f ref_float:%p m_floatRef:%p\n", refStruct_input_0.m_floatRef, &ref_float, &refStruct_input_0.m_floatRef);
-	printf("m_charRef = '%c' ref_char:%p m_charRef:%p\n", refStruct_input_0.m_charRef, &ref_char, &refStruct_input_0.m_charRef);
+	LES_LOG("m_floatRef = %f ref_float:%p m_floatRef:%p\n", refStruct_input_0.m_floatRef, &ref_float, &refStruct_input_0.m_floatRef);
+	LES_LOG("m_charRef = '%c' ref_char:%p m_charRef:%p\n", refStruct_input_0.m_charRef, &ref_char, &refStruct_input_0.m_charRef);
 #endif // #if LES_TEST_DEBUG
 	LES_Test_ReferenceStructInputParam(refStruct_input_0);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 
 	TestStruct8 refStruct_output_0 = { 2526, testStruct5, &ref_output_0 };
 	LES_Test_ReferenceStructOutputParam(refStruct_output_0);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 
 	LES_Test_DecodeOutputParameters(ref_char);
-	LES_FATAL_ERROR("\n");
+	LES_LOG("\n");
 }
 

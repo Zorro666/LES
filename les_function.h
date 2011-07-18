@@ -1,8 +1,6 @@
 #ifndef LES_FUNCTION_HH
 #define LES_FUNCTION_HH
 
-#include <stdio.h>
-
 #include "les_base.h"
 #include "les_hash.h"
 #include "les_type.h"

@@ -1,7 +1,6 @@
-#include <stdio.h>
-
 #include "les_type.h"
 #include "les_core.h"
+#include "les_log.h"
 #include "les_stringentry.h"
 #include "les_struct.h"
 
@@ -69,24 +68,24 @@ int LES_TypeEntry::ComputeDataStorageSize(void) const
 	{
 		const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
 #if LES_TYPE_DEBUG
-		printf("Type 0x%X alias:%d flags:0x%X\n", typeEntryPtr->m_hash, aliasedTypeID, flags);
+		LES_LOG("Type 0x%X alias:%d flags:0x%X\n", typeEntryPtr->m_hash, aliasedTypeID, flags);
 #endif // #if LES_TYPE_DEBUG
 		const LES_StringEntry* const aliasedStringTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
 		if (aliasedStringTypeEntry == LES_NULL)
 		{
-			fprintf(stderr, "LES ERROR: ComputeDataStorageSize aliased type:%d entry can't be found\n", aliasedTypeID);
+			LES_WARNING("ComputeDataStorageSize aliased type:%d entry can't be found\n", aliasedTypeID);
 			return -1;
 		}
 		const LES_TypeEntry* const aliasedTypeEntryPtr = LES_GetTypeEntry(aliasedStringTypeEntry);
 		if (aliasedTypeEntryPtr == LES_NULL)
 		{
-			fprintf(stderr, "LES ERROR: ComputeDataStorageSize aliased type not found aliased type:'%s'\n", aliasedStringTypeEntry->m_str);
+			LES_WARNING("ComputeDataStorageSize aliased type not found aliased type:'%s'\n", aliasedStringTypeEntry->m_str);
 			return -1;
 		}
 		typeEntryPtr = (const LES_TypeEntry*)aliasedTypeEntryPtr;
 		flags = typeEntryPtr->m_flags;
 #if LES_TYPE_DEBUG
-		printf("Alias Type 0x%X flags:0x%X\n", typeEntryPtr->m_hash, flags);
+		LES_LOG("Alias Type 0x%X flags:0x%X\n", typeEntryPtr->m_hash, flags);
 #endif // #if LES_TYPE_DEBUG
 	}
 	if (flags & LES_TYPE_STRUCT)
@@ -94,7 +93,7 @@ int LES_TypeEntry::ComputeDataStorageSize(void) const
 		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeEntryPtr->m_hash);
 		if (structDefinition == LES_NULL)
 		{
-			fprintf(stderr, "LES ERROR: ComputeDataStorage type:0x%X is a struct but can't be found\n", typeEntryPtr->m_hash);
+			LES_WARNING("ComputeDataStorage type:0x%X is a struct but can't be found\n", typeEntryPtr->m_hash);
 			return -1;
 		}
 		const int numMembers = structDefinition->GetNumMembers();
@@ -143,12 +142,12 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 	const LES_StringEntry* const aliasedEntryPtr = LES_GetStringEntry(aliasedName);
 	if (aliasedEntryPtr == LES_NULL)
 	{
-		fprintf(stderr, "LES ERROR: AddType '%s' : aliasedEntry '%s' not found\n", name, aliasedName);
+		LES_WARNING("AddType '%s' : aliasedEntry '%s' not found\n", name, aliasedName);
 		return LES_ERROR;
 	}
 	const int aliasedTypeID = LES_AddStringEntry(aliasedName);
 #if LES_TYPE_DEBUG
-	printf("aliasedTypeID:%d name:'%s' aliasedName:'%s'\n", aliasedTypeID, name, aliasedName);
+	LES_LOG("aliasedTypeID:%d name:'%s' aliasedName:'%s'\n", aliasedTypeID, name, aliasedName);
 #endif // #if LES_TYPE_DEBUG
 
 	const LES_Hash hash = LES_GenerateHashCaseSensitive(name);
@@ -168,7 +167,7 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		{
 			typeEntryPtr->m_flags |= LES_TYPE_ALIAS;
 #if LES_TYPE_DEBUG
-			printf("Type '%s' has an alias to '%s'\n", name, aliasedName);
+			LES_LOG("Type '%s' has an alias to '%s'\n", name, aliasedName);
 #endif // #if LES_TYPE_DEBUG
 		}
 
@@ -180,19 +179,19 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[index];
 		if (typeEntryPtr->m_dataSize != dataSize)
 		{
-			fprintf(stderr, "LES ERROR: AddType '%s' hash 0x%X already in list and dataSize doesn't match Existing:%d New:%d\n",
+			LES_WARNING("AddType '%s' hash 0x%X already in list and dataSize doesn't match Existing:%d New:%d\n",
 							name, hash, typeEntryPtr->m_dataSize, dataSize);
 			return LES_ERROR;
 		}
 		if (typeEntryPtr->m_flags != flags)
 		{
-			fprintf(stderr, "LES ERROR: AddType '%s' hash 0x%X already in list and flags doesn't match Existing:0x%X New:0x%X\n",
+			LES_WARNING("AddType '%s' hash 0x%X already in list and flags doesn't match Existing:0x%X New:0x%X\n",
 							name, hash, typeEntryPtr->m_flags, flags);
 			return LES_ERROR;
 		}
 		if (typeEntryPtr->m_aliasedTypeID != aliasedTypeID)
 		{
-			fprintf(stderr, "LES ERROR: AddType '%s' hash 0x%X already in list and aliasedTypeID doesn't match Existing:%d New:%d\n",
+			LES_WARNING("AddType '%s' hash 0x%X already in list and aliasedTypeID doesn't match Existing:%d New:%d\n",
 							name, hash, typeEntryPtr->m_aliasedTypeID, aliasedTypeID);
 			return LES_ERROR;
 		}

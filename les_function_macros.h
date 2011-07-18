@@ -2,6 +2,7 @@
 #define LES_FUNCTION_MACROS_HH
 
 #include "les_base.h"
+#include "les_log.h"
 #include "les_function.h"
 
 class LES_FunctionDefinition;
@@ -41,7 +42,7 @@ extern int LES_FunctionStart(const char* const name, const char* const returnTyp
 													&__LESfunctionDefinition, \
 													&__LESfunctionTempData) == LES_ERROR) \
 		{ \
-			fprintf(stderr, "LES ERROR: '%s' : Error during LES_FunctionStart\n", #FUNC_NAME); \
+			LES_FATAL_ERROR("'%s' : Error during LES_FunctionStart\n", #FUNC_NAME); \
 			__LES_ok = false; \
 		} \
 
@@ -54,7 +55,7 @@ extern int LES_FunctionGetParameterData(const LES_FunctionTempData* const functi
 		{ \
 			if (LES_FunctionGetParameterData(&__LESfunctionTempData, &PARAMETER_DATA_PTR) == LES_ERROR) \
 			{ \
-				fprintf(stderr, "LES ERROR: '%s' : Error during LES_FunctionGetParameterData\n", __LESfunctionTempData.functionName); \
+				LES_FATAL_ERROR("'%s' : Error during LES_FunctionGetParameterData\n", __LESfunctionTempData.functionName); \
 				__LES_ok = false; \
 			} \
 		} \
@@ -67,7 +68,7 @@ extern int LES_FunctionEnd(const LES_FunctionDefinition* const functionDefinitio
 		{ \
 			if (LES_FunctionEnd(__LESfunctionDefinition, &__LESfunctionTempData) == LES_ERROR) \
 			{ \
-				fprintf(stderr, "LES ERROR: '%s' : Error during LES_FunctionEnd\n", __LESfunctionTempData.functionName); \
+				LES_FATAL_ERROR("'%s' : Error during LES_FunctionEnd\n", __LESfunctionTempData.functionName); \
 				__LES_ok = false; \
 			} \
 		} \
@@ -85,8 +86,8 @@ extern int LES_FunctionAddParam(const char* const type, const char* const name, 
 			if (LES_FunctionAddParam(#TYPE, #NAME, NUMBER, #PARAM_TYPE, IS_INPUT, (void*)&NAME, \
 						__LESfunctionDefinition, &__LESfunctionTempData) == LES_ERROR) \
 			{ \
-				fprintf(stderr, "LES ERROR: '%s' : Error adding " #PARAM_TYPE " parameter %d '%s' type:'%s'\n", \
-						__LESfunctionTempData.functionName, NUMBER, #NAME, #TYPE); \
+				LES_FATAL_ERROR("'%s' : Error adding " #PARAM_TYPE " parameter %d '%s' type:'%s'\n", \
+												__LESfunctionTempData.functionName, NUMBER, #NAME, #TYPE); \
 				__LES_ok = false; \
 			} \
 		} \

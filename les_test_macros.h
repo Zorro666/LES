@@ -2,6 +2,7 @@
 #define LES_TEST_MACROS_HH
 
 #include "les_base.h"
+#include "les_log.h"
 #include "les_function.h"
 #include "les_struct.h"
 
@@ -52,7 +53,7 @@ bool LES_TestFunctionEnd(LES_FunctionDefinition* const functionDefinitionPtr, LE
 		} \
 		if (__LES_function_ok == false) \
 		{ \
-			fprintf(stderr, "LES ERROR: TEST function '%s' : ERROR cannot create definition\n", testFunctionData.functionName); \
+			LES_FATAL_ERROR("TEST function '%s' : ERROR cannot create definition\n", testFunctionData.functionName); \
 		} \
 	} \
 
@@ -61,8 +62,8 @@ bool LES_TestFunctionEnd(LES_FunctionDefinition* const functionDefinitionPtr, LE
 	{\
 		if (LES_AddType(#TYPE, SIZE, FLAGS, #ALIASED_TYPE) == LES_ERROR) \
 		{\
-			fprintf(stderr, "LES ERROR: TEST AddType '%s' 0x%X Alias '%s' failed\n", \
-							#TYPE, LES_GenerateHashCaseSensitive(#TYPE), #ALIASED_TYPE); \
+			LES_FATAL_ERROR("TEST AddType '%s' 0x%X Alias '%s' failed\n", \
+								#TYPE, LES_GenerateHashCaseSensitive(#TYPE), #ALIASED_TYPE); \
 		}\
 	}\
 
@@ -128,7 +129,7 @@ bool LES_TestStructEnd(LES_StructDefinition* const structDefinitionPtr, LES_TEST
 		} \
 		if (__LES_struct_ok == false) \
 		{ \
-			fprintf(stderr, "LES ERROR: TEST struct '%s' : ERROR cannot create definition\n", testStructData.structName); \
+			LES_FATAL_ERROR("TEST struct '%s' : ERROR cannot create definition\n", testStructData.structName); \
 		} \
 	} \
 
