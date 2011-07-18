@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "les_struct.h"
+#include "les_core.h"
 #include "les_stringentry.h"
 
 static LES_StructDefinition* les_structDefinitionArray = LES_NULL;

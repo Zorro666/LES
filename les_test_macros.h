@@ -1,7 +1,7 @@
 #ifndef LES_TEST_MACROS_HH
 #define LES_TEST_MACROS_HH
 
-#include "les_core.h"
+#include "les_base.h"
 #include "les_function.h"
 #include "les_struct.h"
 

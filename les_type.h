@@ -1,7 +1,7 @@
 #ifndef LES_TYPE_HH
 #define LES_TYPE_HH
 
-#include "les_core.h"
+#include "les_base.h"
 #include "les_hash.h"
 
 struct LES_StringEntry;

@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "les_function_macros.h"
+#include "les_core.h"
 #include "les_parameter.h"
 #include "les_stringentry.h"
 

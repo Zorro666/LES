@@ -1,7 +1,7 @@
 #ifndef LES_FUNCTION_MACROS_HH
 #define LES_FUNCTION_MACROS_HH
 
-#include "les_core.h"
+#include "les_base.h"
 #include "les_function.h"
 
 class LES_FunctionDefinition;

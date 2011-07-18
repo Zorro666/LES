@@ -1,7 +1,7 @@
 #ifndef LES_HASH_HH
 #define LES_HASH_HH
 
-#include "les_core.h"
+#include "les_base.h"
 
 typedef unsigned int LES_Hash;
 

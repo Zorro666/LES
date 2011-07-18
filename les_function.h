@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#include "les_core.h"
+#include "les_base.h"
 #include "les_hash.h"
 #include "les_type.h"
 

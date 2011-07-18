@@ -2,6 +2,7 @@
 #include <memory.h>
 
 #include "les_parameter.h"
+#include "les_core.h"
 #include "les_type.h"
 #include "les_stringentry.h"
 #include "les_struct.h"

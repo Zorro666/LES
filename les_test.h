@@ -1,7 +1,7 @@
 #ifndef LES_TEST_HH
 #define LES_TEST_HH
 
-#include "les_core.h"
+#include "les_base.h"
 
 void LES_TestSetup(void);
 
