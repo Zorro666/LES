@@ -1,12 +1,13 @@
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
 
 #include "les_core.h"
+#include "les_logger.h"
 
 #include "les_jake.h"
 
+#if 0
 void JAKE_Test(void)
 {
 	int numTests = 10000;
@@ -82,20 +83,43 @@ void JAKE_Test(void)
 		numTests--;
 	}
 }
+#endif // #if 0
 
 int main(const int argc, const char* const argv[])
 {
-	printf("argc=%d\n", argc);
-	for (int i=0; i<argc;i++)
+	bool verbose = true;
+	for (int i = 0; i < argc; i++)
 	{
-		printf("argv[%d]='%s'\n", i, argv[i]);
+		if (strcmp(argv[i], "-verbose") == 0)
+		{
+			verbose = true;
+		}
+		if (strcmp(argv[i], "-quiet") == 0)
+		{
+			verbose = false;
+		}
 	}
-
 	//JAKE_Test();
+	LES_Logger::Init();
+	LES_Logger::SetConsoleOutput(LES_Logger::CHANNEL_LOG, verbose);
 	LES_Init();
 
 	LES_jakeInit(666, 123);
+
+	LES_Logger::SetConsoleOutput(LES_Logger::CHANNEL_LOG, true);
+	for (int i = 0; i < argc; i++)
+	{
+		LES_LOG("arg[%d] '%s'\n", i, argv[i]);
+	}
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_WARNING, false);
+	LES_WARNING("A test warning\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_ERROR, false);
+	LES_ERROR("A test error\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
+	LES_FATAL_ERROR("A test fatal error\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
+
 	LES_Shutdown();
-	return -1;
+	return 0;
 }
 

@@ -4,7 +4,7 @@
 
 #include "les_logger.h"
 
-unsigned int LES_Logger::s_channelFlags[LOG_NUM_CHANNELS] = { 0, 0, 0 };
+unsigned int LES_Logger::s_channelFlags[LOG_NUM_CHANNELS];
 
 unsigned int LES_Logger::GetChannelFlags(const int channel)
 {
@@ -40,7 +40,12 @@ void LES_Logger::SetConsoleOutput(const int channel, const bool consoleOutput)
 
 void LES_Logger::Init(void)
 {
+	for (int i = 0; i < LOG_NUM_CHANNELS; i++)
+	{
+		s_channelFlags[i] = 0;
+	}
 	SetChannelFlags(CHANNEL_FATAL_ERROR, CHANNEL_FLAGS_FATAL | CHANNEL_FLAGS_CONSOLE_OUTPUT);
+	SetChannelFlags(CHANNEL_ERROR, CHANNEL_FLAGS_CONSOLE_OUTPUT);
 	SetChannelFlags(CHANNEL_WARNING, CHANNEL_FLAGS_CONSOLE_OUTPUT);
 	SetChannelFlags(CHANNEL_LOG, CHANNEL_FLAGS_CONSOLE_OUTPUT);
 }
@@ -56,6 +61,15 @@ void LES_Logger::FatalError(const char* const fmt, ...)
 
 	const unsigned int flags = GetChannelFlags(CHANNEL_FATAL_ERROR);
 	InternalOutput(flags, "FATAL_ERROR: ", fmt, &argPtr);
+}
+
+void LES_Logger::Error(const char* const fmt, ...)
+{
+	va_list argPtr;
+	va_start(argPtr, fmt);
+
+	const unsigned int flags = GetChannelFlags(CHANNEL_ERROR);
+	InternalOutput(flags, "ERROR: ", fmt, &argPtr);
 }
 
 void LES_Logger::Warning(const char* const fmt, ...)
