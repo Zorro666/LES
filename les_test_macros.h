@@ -2,7 +2,7 @@
 #define LES_TEST_MACROS_HH
 
 #include "les_base.h"
-#include "les_log.h"
+#include "les_logger.h"
 #include "les_function.h"
 #include "les_struct.h"
 

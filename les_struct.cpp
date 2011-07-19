@@ -2,7 +2,7 @@
 
 #include "les_struct.h"
 #include "les_core.h"
-#include "les_log.h"
+#include "les_logger.h"
 #include "les_stringentry.h"
 
 static LES_StructDefinition* les_structDefinitionArray = LES_NULL;

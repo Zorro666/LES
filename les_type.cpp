@@ -1,6 +1,6 @@
 #include "les_type.h"
 #include "les_core.h"
-#include "les_log.h"
+#include "les_logger.h"
 #include "les_stringentry.h"
 #include "les_struct.h"
 

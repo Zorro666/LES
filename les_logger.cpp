@@ -2,7 +2,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
-#include "les_log.h"
+#include "les_logger.h"
 
 unsigned int LES_Logger::s_channelFlags[LOG_NUM_CHANNELS] = { 0, 0, 0 };
 
