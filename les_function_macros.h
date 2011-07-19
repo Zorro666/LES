@@ -40,7 +40,7 @@ extern int LES_FunctionStart(const char* const name, const char* const returnTyp
 		LES_FunctionTempData __LESfunctionTempData; \
 		if (LES_FunctionStart(#FUNC_NAME, #RETURN_TYPE, \
 													&__LESfunctionDefinition, \
-													&__LESfunctionTempData) == LES_ERROR) \
+													&__LESfunctionTempData) == LES_RETURN_ERROR) \
 		{ \
 			LES_FATAL_ERROR("'%s' : Error during LES_FunctionStart\n", #FUNC_NAME); \
 			__LES_ok = false; \
@@ -53,7 +53,7 @@ extern int LES_FunctionGetParameterData(const LES_FunctionTempData* const functi
 #define LES_FUNCTION_GET_PARAMETER_DATA(PARAMETER_DATA_PTR) \
 		if (__LES_ok == true) \
 		{ \
-			if (LES_FunctionGetParameterData(&__LESfunctionTempData, &PARAMETER_DATA_PTR) == LES_ERROR) \
+			if (LES_FunctionGetParameterData(&__LESfunctionTempData, &PARAMETER_DATA_PTR) == LES_RETURN_ERROR) \
 			{ \
 				LES_FATAL_ERROR("'%s' : Error during LES_FunctionGetParameterData\n", __LESfunctionTempData.functionName); \
 				__LES_ok = false; \
@@ -66,7 +66,7 @@ extern int LES_FunctionEnd(const LES_FunctionDefinition* const functionDefinitio
 #define LES_FUNCTION_END() \
 		if (__LES_ok == true) \
 		{ \
-			if (LES_FunctionEnd(__LESfunctionDefinition, &__LESfunctionTempData) == LES_ERROR) \
+			if (LES_FunctionEnd(__LESfunctionDefinition, &__LESfunctionTempData) == LES_RETURN_ERROR) \
 			{ \
 				LES_FATAL_ERROR("'%s' : Error during LES_FunctionEnd\n", __LESfunctionTempData.functionName); \
 				__LES_ok = false; \
@@ -84,7 +84,7 @@ extern int LES_FunctionAddParam(const char* const type, const char* const name, 
 		if (__LES_ok == true) \
 		{ \
 			if (LES_FunctionAddParam(#TYPE, #NAME, NUMBER, #PARAM_TYPE, IS_INPUT, (void*)&NAME, \
-						__LESfunctionDefinition, &__LESfunctionTempData) == LES_ERROR) \
+						__LESfunctionDefinition, &__LESfunctionTempData) == LES_RETURN_ERROR) \
 			{ \
 				LES_FATAL_ERROR("'%s' : Error adding " #PARAM_TYPE " parameter %d '%s' type:'%s'\n", \
 												__LESfunctionTempData.functionName, NUMBER, #NAME, #TYPE); \

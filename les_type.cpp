@@ -143,7 +143,7 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 	if (aliasedEntryPtr == LES_NULL)
 	{
 		LES_WARNING("AddType '%s' : aliasedEntry '%s' not found\n", name, aliasedName);
-		return LES_ERROR;
+		return LES_RETURN_ERROR;
 	}
 	const int aliasedTypeID = LES_AddStringEntry(aliasedName);
 #if LES_TYPE_DEBUG
@@ -181,19 +181,19 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		{
 			LES_WARNING("AddType '%s' hash 0x%X already in list and dataSize doesn't match Existing:%d New:%d\n",
 							name, hash, typeEntryPtr->m_dataSize, dataSize);
-			return LES_ERROR;
+			return LES_RETURN_ERROR;
 		}
 		if (typeEntryPtr->m_flags != flags)
 		{
 			LES_WARNING("AddType '%s' hash 0x%X already in list and flags doesn't match Existing:0x%X New:0x%X\n",
 							name, hash, typeEntryPtr->m_flags, flags);
-			return LES_ERROR;
+			return LES_RETURN_ERROR;
 		}
 		if (typeEntryPtr->m_aliasedTypeID != aliasedTypeID)
 		{
 			LES_WARNING("AddType '%s' hash 0x%X already in list and aliasedTypeID doesn't match Existing:%d New:%d\n",
 							name, hash, typeEntryPtr->m_aliasedTypeID, aliasedTypeID);
-			return LES_ERROR;
+			return LES_RETURN_ERROR;
 		}
 	}
 	return index;

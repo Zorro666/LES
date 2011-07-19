@@ -71,7 +71,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	if (typeDataPtr == LES_NULL)
 	{
 		LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' type can't be found\n", parameterIndex, nameStr, typeStr);
-		return LES_ERROR;
+		return LES_RETURN_ERROR;
 	}
 
 	unsigned int typeFlags = typeDataPtr->m_flags;
@@ -83,7 +83,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		{
 			LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' aliased type:%d entry can't be found\n", 
 									parameterIndex, nameStr, typeStr, aliasedTypeID);
-			return LES_ERROR;
+			return LES_RETURN_ERROR;
 		}
 #if LES_FUNCTION_DEBUG
 		LES_LOG("Type:'%s' aliased to '%s'\n", typeEntry->m_str, aliasedTypeEntry->m_str);
@@ -92,7 +92,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		if (typeDataPtr == LES_NULL)
 		{
 			LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' type can't be found\n", parameterIndex, nameStr, typeStr);
-			return LES_ERROR;
+			return LES_RETURN_ERROR;
 		}
 		typeFlags = typeDataPtr->m_flags;
 		typeEntry = aliasedTypeEntry;
@@ -102,12 +102,12 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	if (typeFlags & LES_TYPE_STRUCT)
 	{
 		LES_LOG("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d STRUCT\n", parameterIndex, nameStr, typeStr, typeDataSize);
-		int returnCode = LES_OK;
+		int returnCode = LES_RETURN_OK;
 		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeDataPtr->m_hash);
 		if (structDefinition == LES_NULL)
 		{
 			LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' is a struct but can't be found\n", parameterIndex, nameStr, typeStr);
-			return LES_ERROR;
+			return LES_RETURN_ERROR;
 		}
 		const int numMembers = structDefinition->GetNumMembers();
 		const int newDepth = depth + 1;
@@ -117,9 +117,9 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 			const int memberNameID = structMember->m_nameID;
 			const int memberTypeID = structMember->m_typeID;
 			returnCode = DecodeSingle(functionParameterData, i, memberNameID, memberTypeID, parameterIndex, newDepth);
-			if (returnCode == LES_ERROR)
+			if (returnCode == LES_RETURN_ERROR)
 			{
-				return LES_ERROR;
+				return LES_RETURN_ERROR;
 			}
 		}
 		return returnCode;
@@ -167,14 +167,14 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	}
 	if (valuePtr == LES_NULL)
 	{
-		LES_WARNING("LES ERROR: DecodeSingle valuePtr = LES_NULL parameter[%d]:'%s'\n", parameterIndex, nameStr);
-		return LES_ERROR;
+		LES_WARNING("DecodeSingle valuePtr = LES_NULL parameter[%d]:'%s'\n", parameterIndex, nameStr);
+		return LES_RETURN_ERROR;
 	}
 	int errorCode = functionParameterData->Read(typeEntry, valuePtr);
-	if (errorCode == LES_ERROR)
+	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_WARNING("LES ERROR: DecodeSingle Read failed for parameter[%d]:%s;\n", parameterIndex, nameStr);
-		return LES_ERROR;
+		LES_WARNING("DecodeSingle Read failed for parameter[%d]:%s;\n", parameterIndex, nameStr);
+		return LES_RETURN_ERROR;
 	}
 	LES_LOG("DecodeSingle ");
 	for (int i = 0; i < depth*2; i++)
@@ -213,7 +213,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		LES_LOG(":UNKNOWN typeDataSize:%d struct:%d", typeDataSize, (typeDataPtr->m_flags&LES_TYPE_STRUCT));
 	}
 	LES_LOG("\n");
-	return LES_OK;
+	return LES_RETURN_OK;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -397,16 +397,16 @@ const LES_FunctionParameter* LES_FunctionDefinition::GetParameterByIndex(const i
 int LES_FunctionDefinition::Decode(const LES_FunctionParameterData* const functionParameterData) const
 {
 	const int numParams = GetNumParameters();
-	int returnCode = LES_OK;
+	int returnCode = LES_RETURN_OK;
 	for (int i = 0; i < numParams; i++)
 	{
 		const LES_FunctionParameter* const functionParameterPtr = GetParameterByIndex(i);
 		const int nameID = functionParameterPtr->m_nameID;
 		const int typeID = functionParameterPtr->m_typeID;
 		returnCode = DecodeSingle(functionParameterData, i, nameID, typeID, -1, 0);
-		if (returnCode == LES_ERROR)
+		if (returnCode == LES_RETURN_ERROR)
 		{
-			return LES_ERROR;
+			return LES_RETURN_ERROR;
 		}
 	}
 	return returnCode;

@@ -60,7 +60,7 @@ bool LES_TestFunctionEnd(LES_FunctionDefinition* const functionDefinitionPtr, LE
 
 #define LES_TEST_ADD_TYPE_EX(TYPE, SIZE, FLAGS, ALIASED_TYPE) \
 	{\
-		if (LES_AddType(#TYPE, SIZE, FLAGS, #ALIASED_TYPE) == LES_ERROR) \
+		if (LES_AddType(#TYPE, SIZE, FLAGS, #ALIASED_TYPE) == LES_RETURN_ERROR) \
 		{\
 			LES_FATAL_ERROR("TEST AddType '%s' 0x%X Alias '%s' failed\n", \
 								#TYPE, LES_GenerateHashCaseSensitive(#TYPE), #ALIASED_TYPE); \

@@ -4,6 +4,7 @@
 #include <stdarg.h>
 
 #define LES_FATAL_ERROR LES_Logger::FatalError
+#define LES_ERROR LES_Logger::FatalError
 #define LES_WARNING LES_Logger::Warning
 #define LES_LOG LES_Logger::Log
 
