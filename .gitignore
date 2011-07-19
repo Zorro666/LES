@@ -6,6 +6,9 @@
 temp.txt
 test.txt
 log.txt
+error.txt
+warning.txt
+console.txt
 tags
 core
 les_test
