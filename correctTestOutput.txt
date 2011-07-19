@@ -288,6 +288,7 @@ LES_Test_ReadInputOutputParameters: parameterDataSize:1
 
 arg[0] 'les_test'
 arg[1] '-verbose'
+arg[2] '-tests'
 WARNING: A test warning
 ERROR: A test error
 FATAL_ERROR: A test fatal error

@@ -4,6 +4,7 @@
 
 #include "les_core.h"
 #include "les_logger.h"
+#include "les_test.h"
 
 #include "les_jake.h"
 
@@ -88,6 +89,7 @@ void JAKE_Test(void)
 int main(const int argc, const char* const argv[])
 {
 	bool verbose = true;
+	bool runTests = false;
 	for (int i = 0; i < argc; i++)
 	{
 		if (strcmp(argv[i], "-verbose") == 0)
@@ -98,13 +100,24 @@ int main(const int argc, const char* const argv[])
 		{
 			verbose = false;
 		}
+		if (strcmp(argv[i], "-tests") == 0)
+		{
+			runTests = true;
+		}
+		if (strcmp(argv[i], "-notests") == 0)
+		{
+			runTests = false;
+		}
 	}
 	//JAKE_Test();
 	LES_Logger::Init();
 	LES_Logger::SetConsoleOutput(LES_Logger::CHANNEL_LOG, verbose);
 	LES_Init();
-
-	LES_jakeInit(666, 123);
+	if (runTests)
+	{
+		LES_TestSetup();
+		LES_jakeInit(666, 123);
+	}
 
 	LES_Logger::SetConsoleOutput(LES_Logger::CHANNEL_LOG, true);
 	for (int i = 0; i < argc; i++)

@@ -4,7 +4,6 @@
 #include "les_logger.h"
 #include "les_hash.h"
 #include "les_stringentry.h"
-#include "les_test.h"
 #include "les_function.h"
 
 static LES_StringEntry* les_stringEntryArray = LES_NULL;
@@ -75,8 +74,6 @@ void LES_Init(void)
 	LES_FunctionInit();
 	LES_TypeInit();
 	LES_StructInit();
-
-	LES_TestSetup();
 }
 
 void LES_Shutdown(void)
