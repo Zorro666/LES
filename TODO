@@ -1,10 +1,10 @@
 High Priority:
-CORE: need common error handling & log system: warning, log, error, fatal error
-CORE: query log system if an error occurred
-CORE: mark fatal error as fatal/non-fatal from outside, 
-CORE: mark error as fatal/non-fatal from outside, on/off
-CORE: mark warning as fatal/non-fatal from outside, on/off
-CORE: mark log as fatal/non-fatal from outside, on/off
+LOG: query log system if an error occurred
+LOG: add error like fatal_error but non fatal :)
+TEST: mark error as fatal/non-fatal from outside, on/off
+TEST: mark warning as fatal/non-fatal from outside, on/off
+TEST: mark log as fatal/non-fatal from outside, on/off
+TEST: disable fatal_error, error, warning, log output on/off
 
 FEATURE: type definition add count e.g. int[3] means int * 3 : wow you can do sizeof(int[3])
 FEATURE: make pod types alias to byte[sizeOfDataType], so byte is the final base pure type
