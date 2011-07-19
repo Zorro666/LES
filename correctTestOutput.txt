@@ -1,5 +1,3 @@
-argc=1
-argv[0]='les_test'
 #### Function header definition tests ####
 WARNING: 'LES_Test_FunctionNotFound' : Can't find function definition
 FATAL_ERROR: 'LES_Test_FunctionNotFound' : Error during LES_FunctionStart
@@ -288,3 +286,7 @@ LES_Test_ReferenceStructOutputParam: parameterDataSize:6
 DecodeSingle parameter[0]:'output_0' type:'char&' value:'C'
 LES_Test_ReadInputOutputParameters: parameterDataSize:1
 
+arg[0] 'les_test'
+WARNING: A test warning
+ERROR: A test error
+FATAL_ERROR: A test fatal error
