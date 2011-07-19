@@ -5,8 +5,8 @@
 *.orig
 temp.txt
 test.txt
+log.txt
 tags
 core
 les_test
 les_test.exe
-currentTestOutput.txt

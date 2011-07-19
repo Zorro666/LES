@@ -2,6 +2,9 @@
 #define LES_LOG_HH
 
 #include <stdarg.h>
+#include <stdio.h>
+
+#include "les_base.h"
 
 #define LES_FATAL_ERROR LES_Logger::FatalError
 #define LES_ERROR LES_Logger::Error
@@ -11,16 +14,16 @@
 class LES_Logger
 {
 public:
-	enum LogChannel { CHANNEL_FATAL_ERROR = 0, 
-										CHANNEL_ERROR = 1, 
-										CHANNEL_WARNING = 2, 
-										CHANNEL_LOG = 3, 
-										LOG_NUM_CHANNELS = 4 
+	enum LogChannel { CHANNEL_FATAL_ERROR = 0,
+										CHANNEL_ERROR = 1,
+										CHANNEL_WARNING = 2,
+										CHANNEL_LOG = 3,
+										LOG_NUM_CHANNELS = 4,
 									};
 
 	enum ChannelFlags { CHANNEL_FLAGS_FATAL = (1<<0),
-											CHANNEL_FLAGS_CONSOLE_OUTPUT = (1<<1)
-											//CHANNEL_FILE_OUTPUT = (1<<2),
+											CHANNEL_FLAGS_CONSOLE_OUTPUT = (1<<1),
+											CHANNEL_FLAGS_FILE_OUTPUT = (1<<2),
 										};
 
 public:
@@ -46,6 +49,7 @@ private:
 
 	static unsigned int s_channelFlags[LOG_NUM_CHANNELS];
 	static bool s_errorFlag;
+	static FILE* s_filePtr;
 };
 
 #endif // #ifdef LES_LOG_HH

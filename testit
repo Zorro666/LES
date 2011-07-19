@@ -1,5 +1,18 @@
 #! /bin/bash
 
 make
-les_test -verbose -tests &> currentTestOutput.txt
-diff currentTestOutput.txt correctTestOutput.txt
+les_test -verbose -tests 
+diff log.txt correctTestOutput.txt
+if [ $? -gt 0 ]; then
+    echo -e ""
+    echo -e "###########"
+    echo -e "TESTS FAILED"
+    echo -e "###########"
+    echo -e ""
+else
+    echo -e ""
+    echo -e "###########"
+    echo -e "TESTS PASSED"
+    echo -e "###########"
+    echo -e ""
+fi
