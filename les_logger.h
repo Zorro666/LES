@@ -11,6 +11,8 @@
 #define LES_WARNING LES_Logger::Warning
 #define LES_LOG LES_Logger::Log
 
+struct LES_LoggerChannel;
+
 class LES_Logger
 {
 public:
@@ -45,12 +47,11 @@ public:
 	static void Warning(const char* const fmt, ...);
 	static void Log(const char* const fmt, ...);
 private:
-	static void InternalOutput(const unsigned int flags, const char* const prefix, const char* const fmt, va_list* pArgPtr);
+	static void InternalOutput(const LES_LoggerChannel* const channelPtr, const char* const fmt, va_list* pArgPtr);
 	static void SetErrorStatus(void);
 
-	static unsigned int s_channelFlags[LOG_NUM_CHANNELS];
 	static bool s_errorFlag;
-	static FILE* s_filePtr;
+	static LES_LoggerChannel* s_channels;
 };
 
 #endif // #ifdef LES_LOG_HH
