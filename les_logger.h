@@ -27,6 +27,9 @@ public:
 	static void Init(void);
 	static void Shutdown(void);
 
+	static bool GetErrorStatus(void);
+	static void ClearErrorStatus(void);
+
 	static void SetChannelFlags(const int channel, const int flags);
 	static unsigned int GetChannelFlags(const int channel);
 	static void SetFatal(const int channel, const bool fatal);
@@ -38,8 +41,11 @@ public:
 	static void Warning(const char* const fmt, ...);
 	static void Log(const char* const fmt, ...);
 private:
-	static unsigned int s_channelFlags[LOG_NUM_CHANNELS];
 	static void InternalOutput(const unsigned int flags, const char* const prefix, const char* const fmt, va_list* pArgPtr);
+	static void SetErrorStatus(void);
+
+	static unsigned int s_channelFlags[LOG_NUM_CHANNELS];
+	static bool s_errorFlag;
 };
 
 #endif // #ifdef LES_LOG_HH

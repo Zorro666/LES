@@ -5,6 +5,22 @@
 #include "les_logger.h"
 
 unsigned int LES_Logger::s_channelFlags[LOG_NUM_CHANNELS];
+bool LES_Logger::s_errorFlag = false;
+
+bool LES_Logger::GetErrorStatus(void)
+{
+	return s_errorFlag;
+}
+
+void LES_Logger::ClearErrorStatus(void)
+{
+	s_errorFlag = false;
+}
+
+void LES_Logger::SetErrorStatus(void)
+{
+	s_errorFlag = true;
+}
 
 unsigned int LES_Logger::GetChannelFlags(const int channel)
 {
@@ -60,6 +76,7 @@ void LES_Logger::FatalError(const char* const fmt, ...)
 	va_start(argPtr, fmt);
 
 	const unsigned int flags = GetChannelFlags(CHANNEL_FATAL_ERROR);
+	SetErrorStatus();
 	InternalOutput(flags, "FATAL_ERROR: ", fmt, &argPtr);
 }
 
@@ -69,6 +86,7 @@ void LES_Logger::Error(const char* const fmt, ...)
 	va_start(argPtr, fmt);
 
 	const unsigned int flags = GetChannelFlags(CHANNEL_ERROR);
+	SetErrorStatus();
 	InternalOutput(flags, "ERROR: ", fmt, &argPtr);
 }
 
@@ -104,6 +122,7 @@ void LES_Logger::InternalOutput(const unsigned int flags, const char* const pref
 	}
 	if (flags & CHANNEL_FLAGS_FATAL)
 	{
+		SetErrorStatus();
 		exit(-1);
 	}
 }
