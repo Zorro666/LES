@@ -1,6 +1,4 @@
 High Priority:
-FEATURE: log file output and per channel flag
-
 FEATURE: type definition add count e.g. int[3] means int * 3 : wow you can do sizeof(int[3])
 FEATURE: make pod types alias to byte[sizeOfDataType], so byte is the final base pure type
 TEST: test input parameter as a POD array
@@ -13,6 +11,8 @@ TEST: test POD array as member in a struct
 TEST: test struct array as member in a struct
 TEST: test POD reference array as member in a struct
 TEST: test struct reference array as member in a struct
+
+FEATURE: log channels should be there own struct, allocate custom ones on demand, per channel log filename
 
 Medium Priority:
 FUNCTION: error handling run out of memory when adding new function or new type e.g. array limit reached

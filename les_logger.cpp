@@ -58,6 +58,13 @@ void LES_Logger::SetConsoleOutput(const int channel, const bool consoleOutput)
 	SetChannelFlags(channel, newFlags);
 }
 
+void LES_Logger::SetFileOutput(const int channel, const bool fileOutput)
+{
+	const unsigned int currentFlags = GetChannelFlags(channel);
+	const unsigned int newFlags = (currentFlags & ~CHANNEL_FLAGS_FILE_OUTPUT) | (fileOutput ? CHANNEL_FLAGS_FILE_OUTPUT : 0);
+	SetChannelFlags(channel, newFlags);
+}
+
 void LES_Logger::Init(void)
 {
 	if (s_filePtr == LES_NULL)
