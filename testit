@@ -1,5 +1,5 @@
 #! /bin/bash
 
 make
-les_test &> currentTestOutput.txt
+les_test -verbose &> currentTestOutput.txt
 diff currentTestOutput.txt correctTestOutput.txt
