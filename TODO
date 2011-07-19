@@ -1,6 +1,5 @@
 High Priority:
-LOG: query log system if an error occurred
-FEATURE: log output and per channel flag
+FEATURE: log file output and per channel flag
 
 FEATURE: type definition add count e.g. int[3] means int * 3 : wow you can do sizeof(int[3])
 FEATURE: make pod types alias to byte[sizeOfDataType], so byte is the final base pure type
