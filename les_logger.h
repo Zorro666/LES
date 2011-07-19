@@ -37,10 +37,12 @@ public:
 
 	static void SetChannelFlags(const int channel, const int flags);
 	static unsigned int GetChannelFlags(const int channel);
+	static LES_LoggerChannel* GetChannel(const int channel);
 
 	static void SetFatal(const int channel, const bool fatal);
 	static void SetConsoleOutput(const int channel, const bool consoleOutput);
 	static void SetFileOutput(const int channel, const bool fileOutput);
+	static void SetOutputFileName(const int channel, const char* const fname);
 
 	static void FatalError(const char* const fmt, ...);
 	static void Error(const char* const fmt, ...);

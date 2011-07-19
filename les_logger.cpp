@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "les_logger.h"
 
@@ -24,6 +25,7 @@ struct LES_LoggerChannel
 	unsigned int m_flags;
 	FILE* m_filePtr;
 	bool Create( const char* const nickName, const char* const prefix, const char* const outputFileName, const unsigned int flags);
+	void SetOutputFileName(const char* const fname);
 };
 
 bool LES_LoggerChannel::Create( const char* const nickName, const char* const prefix, const char* const outputFileName, 
@@ -41,6 +43,20 @@ bool LES_LoggerChannel::Create( const char* const nickName, const char* const pr
 	fclose(m_filePtr);
 
 	return true;
+}
+
+void LES_LoggerChannel::SetOutputFileName(const char* const fname)
+{
+	if (strcmp(m_outputFileName, fname) != 0)
+	{
+		m_outputFileName = fname;
+		m_filePtr = fopen(m_outputFileName, "w");
+		if (m_filePtr == LES_NULL)
+		{
+			return;
+		}
+		fclose(m_filePtr);
+	}
 }
 
 void LES_Logger::InternalOutput(const LES_LoggerChannel* const channelPtr, const char* const fmt, va_list* pArgPtr)
@@ -118,22 +134,32 @@ void LES_Logger::SetErrorStatus(void)
 	s_errorFlag = true;
 }
 
-unsigned int LES_Logger::GetChannelFlags(const int channel)
+LES_LoggerChannel* LES_Logger::GetChannel(const int channel)
 {
 	if ((channel < 0) || (channel >= LOG_NUM_CHANNELS))
 	{
-		return 0;
+		return LES_NULL;
 	}
-	return s_channels[channel].m_flags;
+	return &s_channels[channel];
+}
+
+unsigned int LES_Logger::GetChannelFlags(const int channel)
+{
+	LES_LoggerChannel* const channelPtr = GetChannel(channel);
+	if (channelPtr)
+	{
+		return channelPtr->m_flags;
+	}
+	return 0;
 }
 
 void LES_Logger::SetChannelFlags(const int channel, const int flags)
 {
-	if ((channel < 0) || (channel >= LOG_NUM_CHANNELS))
+	LES_LoggerChannel* const channelPtr = GetChannel(channel);
+	if (channelPtr)
 	{
-		return;
+		channelPtr->m_flags = flags;
 	}
-	s_channels[channel].m_flags = flags;
 }
 
 void LES_Logger::SetFatal(const int channel, const bool fatal)
@@ -157,13 +183,23 @@ void LES_Logger::SetFileOutput(const int channel, const bool fileOutput)
 	SetChannelFlags(channel, newFlags);
 }
 
+void LES_Logger::SetOutputFileName(const int channel, const char* const fname)
+{
+	LES_LoggerChannel* const channelPtr = GetChannel(channel);
+	if (channelPtr)
+	{
+		channelPtr->SetOutputFileName(fname);
+	}
+}
+
 void LES_Logger::FatalError(const char* const fmt, ...)
 {
 	va_list argPtr;
 	va_start(argPtr, fmt);
 
 	SetErrorStatus();
-	InternalOutput(&s_channels[CHANNEL_FATAL_ERROR], fmt, &argPtr);
+	LES_LoggerChannel* const channelPtr = GetChannel(CHANNEL_FATAL_ERROR);
+	InternalOutput(channelPtr, fmt, &argPtr);
 }
 
 void LES_Logger::Error(const char* const fmt, ...)
@@ -172,7 +208,8 @@ void LES_Logger::Error(const char* const fmt, ...)
 	va_start(argPtr, fmt);
 
 	SetErrorStatus();
-	InternalOutput(&s_channels[CHANNEL_ERROR], fmt, &argPtr);
+	LES_LoggerChannel* const channelPtr = GetChannel(CHANNEL_ERROR);
+	InternalOutput(channelPtr, fmt, &argPtr);
 }
 
 void LES_Logger::Warning(const char* const fmt, ...)
@@ -180,7 +217,8 @@ void LES_Logger::Warning(const char* const fmt, ...)
 	va_list argPtr;
 	va_start(argPtr, fmt);
 
-	InternalOutput(&s_channels[CHANNEL_WARNING], fmt, &argPtr);
+	LES_LoggerChannel* const channelPtr = GetChannel(CHANNEL_WARNING);
+	InternalOutput(channelPtr, fmt, &argPtr);
 }
 
 void LES_Logger::Log(const char* const fmt, ...)
@@ -188,6 +226,7 @@ void LES_Logger::Log(const char* const fmt, ...)
 	va_list argPtr;
 	va_start(argPtr, fmt);
 
-	InternalOutput(&s_channels[CHANNEL_LOG], fmt, &argPtr);
+	LES_LoggerChannel* const channelPtr = GetChannel(CHANNEL_LOG);
+	InternalOutput(channelPtr, fmt, &argPtr);
 }
 

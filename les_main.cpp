@@ -119,18 +119,22 @@ int main(const int argc, const char* const argv[])
 		LES_jakeInit(666, 123);
 	}
 
-	LES_Logger::SetFileOutput(LES_Logger::CHANNEL_LOG, false);
+	LES_Logger::SetOutputFileName(LES_Logger::CHANNEL_WARNING, "warning.txt");
+	LES_Logger::SetOutputFileName(LES_Logger::CHANNEL_ERROR, "error.txt");
+	LES_Logger::SetOutputFileName(LES_Logger::CHANNEL_LOG, "console.txt");
+
+	LES_Logger::SetFileOutput(LES_Logger::CHANNEL_LOG, true);
 	LES_Logger::SetConsoleOutput(LES_Logger::CHANNEL_LOG, true);
 	for (int i = 0; i < argc; i++)
 	{
 		LES_LOG("arg[%d] '%s'\n", i, argv[i]);
 	}
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_WARNING, false);
-	LES_Logger::SetFileOutput(LES_Logger::CHANNEL_WARNING, false);
+	LES_Logger::SetFileOutput(LES_Logger::CHANNEL_WARNING, true);
 	LES_WARNING("A test warning\n");
 
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_ERROR, false);
-	LES_Logger::SetFileOutput(LES_Logger::CHANNEL_ERROR, false);
+	LES_Logger::SetFileOutput(LES_Logger::CHANNEL_ERROR, true);
 	LES_ERROR("A test error\n");
 
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
