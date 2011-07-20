@@ -3,6 +3,7 @@
 *.o
 *.d
 *.orig
+jake.txt
 temp.txt
 test.txt
 log.txt

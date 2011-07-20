@@ -125,8 +125,12 @@ int main(const int argc, const char* const argv[])
 
 	LES_Logger::SetFileOutput(LES_Logger::CHANNEL_LOG, true);
 	LES_Logger::SetConsoleOutput(LES_Logger::CHANNEL_LOG, true);
+
+	LES_LoggerChannel* jakeChannel = LES_Logger::CreateChannel("Jake", "Custom: ", "jake.txt", 
+																								LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT | LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT);
 	for (int i = 0; i < argc; i++)
 	{
+		jakeChannel->Print("arg[%d] '%s'\n", i, argv[i]);
 		LES_LOG("arg[%d] '%s'\n", i, argv[i]);
 	}
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_WARNING, false);
