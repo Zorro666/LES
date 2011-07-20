@@ -113,3 +113,20 @@ void LES_LoggerChannel::ChangeFlags(const int flags, const bool enable)
 	m_flags = newFlags;
 }
 
+void LES_LoggerChannel::Error(const char* const fmt, ...)
+{
+	va_list argPtr;
+	va_start(argPtr, fmt);
+
+	LES_Logger::SetErrorStatus();
+	InternalOutput(fmt, &argPtr);
+}
+
+void LES_LoggerChannel::Print(const char* const fmt, ...)
+{
+	va_list argPtr;
+	va_start(argPtr, fmt);
+
+	InternalOutput(fmt, &argPtr);
+}
+
