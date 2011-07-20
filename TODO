@@ -1,8 +1,4 @@
 High Priority:
-LOG: allocate logger channels, get the ptr back, custom ones on demand
-LOG: test the custom logger channel
-LOG: test the error status flag, Get(), Clear()
-
 FEATURE: type definition add count e.g. int[3] means int * 3 : wow you can do sizeof(int[3])
 FEATURE: make pod types alias to byte[sizeOfDataType], so byte is the final base pure type
 TEST: test input parameter as a POD array

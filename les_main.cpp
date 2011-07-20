@@ -128,22 +128,31 @@ int main(const int argc, const char* const argv[])
 
 	LES_LoggerChannel* jakeChannel = LES_Logger::CreateChannel("Jake", "Custom: ", "jake.txt", 
 																								LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT | LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT);
+	LES_Logger::ClearErrorStatus();
+	LES_LOG("0 ErrorStatus:%d\n", LES_Logger::GetErrorStatus());
 	for (int i = 0; i < argc; i++)
 	{
 		jakeChannel->Print("arg[%d] '%s'\n", i, argv[i]);
 		LES_LOG("arg[%d] '%s'\n", i, argv[i]);
 	}
+	LES_LOG("0 ErrorStatus:%d\n", LES_Logger::GetErrorStatus());
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_WARNING, false);
 	LES_Logger::SetFileOutput(LES_Logger::CHANNEL_WARNING, true);
 	LES_WARNING("A test warning\n");
+	LES_LOG("0 ErrorStatus:%d\n", LES_Logger::GetErrorStatus());
 
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_ERROR, false);
 	LES_Logger::SetFileOutput(LES_Logger::CHANNEL_ERROR, true);
 	LES_ERROR("A test error\n");
+	LES_LOG("1 ErrorStatus:%d\n", LES_Logger::GetErrorStatus());
+	LES_Logger::ClearErrorStatus();
+	LES_LOG("0 ErrorStatus:%d\n", LES_Logger::GetErrorStatus());
 
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_Logger::SetFileOutput(LES_Logger::CHANNEL_FATAL_ERROR, false);
+	LES_LOG("0 ErrorStatus:%d\n", LES_Logger::GetErrorStatus());
 	LES_FATAL_ERROR("A test fatal error\n");
+	LES_LOG("1 ErrorStatus:%d\n", LES_Logger::GetErrorStatus());
 
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 
