@@ -11,23 +11,6 @@
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool LES_LoggerChannel::Create( const char* const nickName, const char* const prefix, const char* const outputFileName, 
-																const unsigned int flags)
-{
-	m_nickName = nickName;
-	m_prefixStr = prefix;
-	m_flags = flags;
-	m_outputFileName = outputFileName;
-	FILE* const filePtr = fopen(m_outputFileName, "w");
-	if (filePtr == LES_NULL)
-	{
-		return false;
-	}
-	fclose(filePtr);
-
-	return true;
-}
-
 void LES_LoggerChannel::SetOutputFileName(const char* const fname)
 {
 	if (strcmp(m_outputFileName, fname) != 0)
@@ -86,6 +69,20 @@ LES_LoggerChannel::LES_LoggerChannel()
 	m_prefixStr = LES_NULL;
 	m_outputFileName = LES_NULL;
 	m_flags = 0;
+}
+
+LES_LoggerChannel::Les_LoggerChannel( const char* const nickName, const char* const prefix, const char* const outputFileName, 
+																		  const unsigned int flags)
+{
+	m_nickName = nickName;
+	m_prefixStr = prefix;
+	m_flags = flags;
+	m_outputFileName = outputFileName;
+	FILE* const filePtr = fopen(m_outputFileName, "w");
+	if (filePtr)
+	{
+		fclose(filePtr);
+	}
 }
 
 LES_LoggerChannel::~LES_LoggerChannel()

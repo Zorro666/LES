@@ -19,7 +19,7 @@ public:
 										CHANNEL_ERROR = 1,
 										CHANNEL_WARNING = 2,
 										CHANNEL_LOG = 3,
-										LOG_NUM_CHANNELS = 4,
+										LOGGER_NUM_DEFAULT_CHANNELS = 4,
 									};
 
 public:
@@ -32,7 +32,7 @@ public:
 	static LES_LoggerChannel* CreateChannel(const char* const nickName, const char* const prefix, 
 																					const char* const outputFileName, const unsigned int flags);
 
-	static LES_LoggerChannel* GetChannel(const int channel);
+	static LES_LoggerChannel* GetDefaultChannel(const enum LogChannel channel);
 
 	static void SetChannelOutputFileName(const int channel, const char* const fname);
 	static void SetChannelFlags(const int channel, const int flags);
@@ -51,9 +51,11 @@ private:
 	static void SetErrorStatus(void);
 
 	static bool s_errorFlag;
-	static LES_LoggerChannel* s_channels;
+	static LES_LoggerChannel** s_channelPtrs;
 
 	friend class LES_LoggerChannel;
+
+	static LES_LoggerChannel* s_defaultChannels[LOGGER_NUM_DEFAULT_CHANNELS];
 };
 
 #endif // #ifdef LES_LOG_HH

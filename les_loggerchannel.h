@@ -14,6 +14,7 @@ class LES_LoggerChannel
 {
 public:
 	LES_LoggerChannel();
+	LES_LoggerChannel(const char* const nickName, const char* const prefix, const char* const outputFileName, const unsigned int flags);
 	~LES_LoggerChannel();
 
 	void Error(const char* const fmt, ...);
@@ -33,7 +34,6 @@ private:
 	unsigned int m_flags;
 
 	friend class LES_Logger;
-	bool Create( const char* const nickName, const char* const prefix, const char* const outputFileName, const unsigned int flags);
 	void SetOutputFileName(const char* const fname);
 	void InternalOutput(const char* const fmt, va_list* pArgPtr);
 };
