@@ -32,7 +32,7 @@ public:
 	static LES_LoggerChannel* CreateChannel(const char* const nickName, const char* const prefix, 
 																					const char* const outputFileName, const unsigned int flags);
 
-	static LES_LoggerChannel* GetDefaultChannel(const enum LogChannel channel);
+	static LES_LoggerChannel* GetDefaultChannel(const int channel);
 
 	static void SetChannelOutputFileName(const int channel, const char* const fname);
 	static void SetChannelFlags(const int channel, const int flags);

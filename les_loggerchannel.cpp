@@ -71,7 +71,7 @@ LES_LoggerChannel::LES_LoggerChannel()
 	m_flags = 0;
 }
 
-LES_LoggerChannel::Les_LoggerChannel( const char* const nickName, const char* const prefix, const char* const outputFileName, 
+LES_LoggerChannel::LES_LoggerChannel( const char* const nickName, const char* const prefix, const char* const outputFileName, 
 																		  const unsigned int flags)
 {
 	m_nickName = nickName;

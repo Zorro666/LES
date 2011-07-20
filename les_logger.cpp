@@ -23,8 +23,8 @@ void LES_Logger::Init(void)
 	{
 		return;
 	}
-	memset(s_channelPtrs, 0, sizeof(LES_LoggerChannel*)*LES_LOG_MAX_NUM_CHANNELS);
-	memset(s_defaultChannels, 0, sizeof(LES_LoggerChannel*)*LOGGER_NUM_DEFAULT_CHANNELS);
+	memset(s_channelPtrs, LES_NULL, sizeof(LES_LoggerChannel*)*LES_LOG_MAX_NUM_CHANNELS);
+	memset(s_defaultChannels, LES_NULL, sizeof(LES_LoggerChannel*)*LOGGER_NUM_DEFAULT_CHANNELS);
 
 	//Create default channels
 	unsigned int defaultFlags;
@@ -58,7 +58,7 @@ void LES_Logger::SetErrorStatus(void)
 	s_errorFlag = true;
 }
 
-LES_LoggerChannel* LES_Logger::GetDefaultChannel(const enum LogChannel channel)
+LES_LoggerChannel* LES_Logger::GetDefaultChannel(const int channel)
 {
 	if ((channel < 0) || (channel >= LOGGER_NUM_DEFAULT_CHANNELS))
 	{
@@ -69,7 +69,7 @@ LES_LoggerChannel* LES_Logger::GetDefaultChannel(const enum LogChannel channel)
 
 unsigned int LES_Logger::GetChannelFlags(const int channel)
 {
-	LES_LoggerChannel* const channelPtr = GetDefaultChannel((const enum LogChannel)channel);
+	LES_LoggerChannel* const channelPtr = GetDefaultChannel(channel);
 	if (channelPtr)
 	{
 		return channelPtr->GetFlags();
@@ -79,7 +79,7 @@ unsigned int LES_Logger::GetChannelFlags(const int channel)
 
 void LES_Logger::SetChannelFlags(const int channel, const int flags)
 {
-	LES_LoggerChannel* const channelPtr = GetDefaultChannel((const enum LogChannel)channel);
+	LES_LoggerChannel* const channelPtr = GetDefaultChannel(channel);
 	if (channelPtr)
 	{
 		channelPtr->SetFlags(flags);
@@ -88,7 +88,7 @@ void LES_Logger::SetChannelFlags(const int channel, const int flags)
 
 void LES_Logger::SetFatal(const int channel, const bool fatal)
 {
-	LES_LoggerChannel* const channelPtr = GetDefaultChannel((const enum LogChannel)channel);
+	LES_LoggerChannel* const channelPtr = GetDefaultChannel(channel);
 	if (channelPtr)
 	{
 		channelPtr->ChangeFlags(LES_LOGGERCHANNEL_FLAGS_FATAL, fatal);
@@ -97,7 +97,7 @@ void LES_Logger::SetFatal(const int channel, const bool fatal)
 
 void LES_Logger::SetConsoleOutput(const int channel, const bool consoleOutput)
 {
-	LES_LoggerChannel* const channelPtr = GetDefaultChannel((const enum LogChannel)channel);
+	LES_LoggerChannel* const channelPtr = GetDefaultChannel(channel);
 	if (channelPtr)
 	{
 		channelPtr->ChangeFlags(LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT, consoleOutput);
@@ -106,7 +106,7 @@ void LES_Logger::SetConsoleOutput(const int channel, const bool consoleOutput)
 
 void LES_Logger::SetFileOutput(const int channel, const bool fileOutput)
 {
-	LES_LoggerChannel* const channelPtr = GetDefaultChannel((const enum LogChannel)channel);
+	LES_LoggerChannel* const channelPtr = GetDefaultChannel(channel);
 	if (channelPtr)
 	{
 		channelPtr->ChangeFlags(LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT, fileOutput);
@@ -115,7 +115,7 @@ void LES_Logger::SetFileOutput(const int channel, const bool fileOutput)
 
 void LES_Logger::SetChannelOutputFileName(const int channel, const char* const fname)
 {
-	LES_LoggerChannel* const channelPtr = GetDefaultChannel((const enum LogChannel)channel);
+	LES_LoggerChannel* const channelPtr = GetDefaultChannel(channel);
 	if (channelPtr)
 	{
 		channelPtr->SetOutputFileName(fname);
@@ -175,10 +175,17 @@ void LES_Logger::Log(const char* const fmt, ...)
 LES_LoggerChannel* LES_Logger::CreateChannel(const char* const nickName, const char* const prefix, 
 																						 const char* const outputFileName, const unsigned int flags)
 {
-	LES_LoggerChannel* newChannel = new LES_LoggerChannel(nickName, prefix, outputFileName, flags);
-	JAKE TO DO - ALLOCATE TO THE ARRAY OF CHANNEL PTRS
-	JAKE TO DO - add GetChannel(), add a way to find a channel perhaps by unique ID
-	return newChannel;
+	for (int channel = 0; channel < LES_LOG_MAX_NUM_CHANNELS; channel++)
+	{
+		LES_LoggerChannel* const channelPtr = s_channelPtrs[channel];
+		if (channelPtr == LES_NULL)
+		{
+			LES_LoggerChannel* const newChannel = new LES_LoggerChannel(nickName, prefix, outputFileName, flags);
+			s_channelPtrs[channel] = newChannel;
+			return newChannel;
+		}
+	}
+	return LES_NULL;
 }
 
 
