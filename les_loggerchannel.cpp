@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "les_loggerchannel.h"
+#include "les_logger.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -16,12 +18,12 @@ bool LES_LoggerChannel::Create( const char* const nickName, const char* const pr
 	m_prefixStr = prefix;
 	m_flags = flags;
 	m_outputFileName = outputFileName;
-	m_filePtr = fopen(m_outputFileName, "w");
-	if (m_filePtr == LES_NULL)
+	FILE* const filePtr = fopen(m_outputFileName, "w");
+	if (filePtr == LES_NULL)
 	{
 		return false;
 	}
-	fclose(m_filePtr);
+	fclose(filePtr);
 
 	return true;
 }
@@ -31,12 +33,44 @@ void LES_LoggerChannel::SetOutputFileName(const char* const fname)
 	if (strcmp(m_outputFileName, fname) != 0)
 	{
 		m_outputFileName = fname;
-		m_filePtr = fopen(m_outputFileName, "w");
-		if (m_filePtr == LES_NULL)
+		FILE* const filePtr = fopen(m_outputFileName, "w");
+		if (filePtr == LES_NULL)
 		{
 			return;
 		}
-		fclose(m_filePtr);
+		fclose(filePtr);
+	}
+}
+
+void LES_LoggerChannel::InternalOutput(const char* const fmt, va_list* pArgPtr)
+{
+	char outputBuffer[1024];
+	va_list argPtr = *pArgPtr;
+
+	vsnprintf(outputBuffer, sizeof(outputBuffer), fmt, argPtr);
+	va_end(argPtr);
+
+	const unsigned int flags = m_flags;
+	const char* const prefix = m_prefixStr;
+	if (flags & LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT)
+	{
+		fprintf(stdout, "%s%s", prefix, outputBuffer);
+	}
+	if (flags & LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT)
+	{
+		const char* const fileName = m_outputFileName;
+		FILE* const filePtr = fopen(fileName, "a");
+		if (filePtr)
+		{
+			fprintf(filePtr, "%s%s", prefix, outputBuffer);
+			fflush(filePtr);
+			fclose(filePtr);
+		}
+	}
+	if (flags & LES_LOGGERCHANNEL_FLAGS_FATAL)
+	{
+		LES_Logger::SetErrorStatus();
+		exit(-1);
 	}
 }
 
@@ -52,7 +86,6 @@ LES_LoggerChannel::LES_LoggerChannel()
 	m_prefixStr = LES_NULL;
 	m_outputFileName = LES_NULL;
 	m_flags = 0;
-	m_filePtr = LES_NULL;
 }
 
 LES_LoggerChannel::~LES_LoggerChannel()
@@ -61,9 +94,22 @@ LES_LoggerChannel::~LES_LoggerChannel()
 	m_prefixStr = LES_NULL;
 	m_outputFileName = LES_NULL;
 	m_flags = 0;
-	if (m_filePtr)
-	{
-		fclose(m_filePtr);
-	}
-	m_filePtr = LES_NULL;
 }
+
+void LES_LoggerChannel::SetFlags(unsigned int flags)
+{
+	m_flags = flags;
+}
+
+unsigned int LES_LoggerChannel::GetFlags(void)
+{
+	return m_flags;
+}
+
+void LES_LoggerChannel::ChangeFlags(const int flags, const bool enable)
+{
+	const unsigned int currentFlags = m_flags;
+	const unsigned int newFlags = (currentFlags & ~flags) | (enable ? flags : 0);
+	m_flags = newFlags;
+}
+
