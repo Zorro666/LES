@@ -5,13 +5,12 @@
 #include <stdio.h>
 
 #include "les_base.h"
+#include "les_loggerchannel.h"
 
 #define LES_FATAL_ERROR LES_Logger::FatalError
 #define LES_ERROR LES_Logger::Error
 #define LES_WARNING LES_Logger::Warning
 #define LES_LOG LES_Logger::Log
-
-struct LES_LoggerChannel;
 
 class LES_Logger
 {
@@ -35,6 +34,10 @@ public:
 	static bool GetErrorStatus(void);
 	static void ClearErrorStatus(void);
 
+	static LES_LoggerChannel* CreateChannel(const char* const nickName, const char* const prefix, 
+																					const char* const outputFileName, const unsigned int flags);
+
+	static void SetChannelOutputFileName(const int channel, const char* const fname);
 	static void SetChannelFlags(const int channel, const int flags);
 	static unsigned int GetChannelFlags(const int channel);
 	static LES_LoggerChannel* GetChannel(const int channel);
@@ -42,7 +45,6 @@ public:
 	static void SetFatal(const int channel, const bool fatal);
 	static void SetConsoleOutput(const int channel, const bool consoleOutput);
 	static void SetFileOutput(const int channel, const bool fileOutput);
-	static void SetOutputFileName(const int channel, const char* const fname);
 
 	static void FatalError(const char* const fmt, ...);
 	static void Error(const char* const fmt, ...);

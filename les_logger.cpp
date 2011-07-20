@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdarg.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "les_logger.h"
 
@@ -10,54 +7,6 @@
 #define DEFAULT_LOG_OUTPUT_FILE "log.txt"
 LES_LoggerChannel* LES_Logger::s_channels = LES_NULL;
 bool LES_Logger::s_errorFlag = false;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Private internal data and functions
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////
-
-struct LES_LoggerChannel
-{
-	const char* m_nickName;
-	const char* m_prefixStr;
-	const char* m_outputFileName;
-	unsigned int m_flags;
-	FILE* m_filePtr;
-	bool Create( const char* const nickName, const char* const prefix, const char* const outputFileName, const unsigned int flags);
-	void SetOutputFileName(const char* const fname);
-};
-
-bool LES_LoggerChannel::Create( const char* const nickName, const char* const prefix, const char* const outputFileName, 
-																const unsigned int flags)
-{
-	m_nickName = nickName;
-	m_prefixStr = prefix;
-	m_flags = flags;
-	m_outputFileName = outputFileName;
-	m_filePtr = fopen(m_outputFileName, "w");
-	if (m_filePtr == LES_NULL)
-	{
-		return false;
-	}
-	fclose(m_filePtr);
-
-	return true;
-}
-
-void LES_LoggerChannel::SetOutputFileName(const char* const fname)
-{
-	if (strcmp(m_outputFileName, fname) != 0)
-	{
-		m_outputFileName = fname;
-		m_filePtr = fopen(m_outputFileName, "w");
-		if (m_filePtr == LES_NULL)
-		{
-			return;
-		}
-		fclose(m_filePtr);
-	}
-}
 
 void LES_Logger::InternalOutput(const LES_LoggerChannel* const channelPtr, const char* const fmt, va_list* pArgPtr)
 {
@@ -183,7 +132,7 @@ void LES_Logger::SetFileOutput(const int channel, const bool fileOutput)
 	SetChannelFlags(channel, newFlags);
 }
 
-void LES_Logger::SetOutputFileName(const int channel, const char* const fname)
+void LES_Logger::SetChannelOutputFileName(const int channel, const char* const fname)
 {
 	LES_LoggerChannel* const channelPtr = GetChannel(channel);
 	if (channelPtr)

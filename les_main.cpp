@@ -119,9 +119,9 @@ int main(const int argc, const char* const argv[])
 		LES_jakeInit(666, 123);
 	}
 
-	LES_Logger::SetOutputFileName(LES_Logger::CHANNEL_WARNING, "warning.txt");
-	LES_Logger::SetOutputFileName(LES_Logger::CHANNEL_ERROR, "error.txt");
-	LES_Logger::SetOutputFileName(LES_Logger::CHANNEL_LOG, "console.txt");
+	LES_Logger::SetChannelOutputFileName(LES_Logger::CHANNEL_WARNING, "warning.txt");
+	LES_Logger::SetChannelOutputFileName(LES_Logger::CHANNEL_ERROR, "error.txt");
+	LES_Logger::SetChannelOutputFileName(LES_Logger::CHANNEL_LOG, "console.txt");
 
 	LES_Logger::SetFileOutput(LES_Logger::CHANNEL_LOG, true);
 	LES_Logger::SetConsoleOutput(LES_Logger::CHANNEL_LOG, true);
