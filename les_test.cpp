@@ -14,7 +14,8 @@
 #define LES_TEST_DEBUG 0
 
 extern int LES_AddStringEntry(const char* const str);
-extern int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags, const char* const aliasedName);
+extern int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags, 
+											 const char* const aliasedName, const int numElements);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1275,7 +1276,7 @@ void LES_TestSetup(void)
 	LES_TEST_ADD_TYPE_POD_REFERENCE(char, LES_TYPE_INPUT_OUTPUT);
 	LES_TEST_ADD_TYPE_POD_REFERENCE(float, LES_TYPE_INPUT_OUTPUT);
 	
-	LES_TEST_ADD_TYPE_EX(output_only, 4, LES_TYPE_OUTPUT|LES_TYPE_POD,output_only);
+	LES_TEST_ADD_TYPE_EX(output_only, 4, LES_TYPE_OUTPUT|LES_TYPE_POD, output_only, 0);
 
 	LES_TEST_STRUCT_START(TestStruct1, 5);
 	LES_TEST_STRUCT_ADD_MEMBER(long long int, m_longlong);
@@ -1814,11 +1815,11 @@ void LES_TestSetup(void)
 	/* Add Type tests */
 	LES_LOG("#### Add Type tests ####\n");
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
-	LES_TEST_ADD_TYPE_EX(unsigned char, 2, LES_TYPE_POD|LES_TYPE_INPUT, unsigned char);
+	LES_TEST_ADD_TYPE_EX(unsigned char, 2, LES_TYPE_POD|LES_TYPE_INPUT, unsigned char, 0);
 	LES_LOG("\n");
-	LES_TEST_ADD_TYPE_EX(unsigned char, 1, LES_TYPE_POINTER|LES_TYPE_OUTPUT, unsigned char);
+	LES_TEST_ADD_TYPE_EX(unsigned char, 1, LES_TYPE_POINTER|LES_TYPE_OUTPUT, unsigned char, 0);
 	LES_LOG("\n");
-	LES_TEST_ADD_TYPE_EX(unsigned char, 1, LES_TYPE_POD|LES_TYPE_INPUT, unsigned int);
+	LES_TEST_ADD_TYPE_EX(unsigned char, 1, LES_TYPE_POD|LES_TYPE_INPUT, unsigned int, 0);
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 	LES_LOG("\n");
 

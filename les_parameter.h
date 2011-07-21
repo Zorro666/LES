@@ -32,6 +32,8 @@ private:
 
 	int WriteInternal(const LES_StringEntry* const typeStringEntry, const LES_TypeEntry* const rawTypeEntryPtr, 
 										const void* const parameterDataPtr);
+	int WriteItem(const LES_StringEntry* const typeStringEntry, const LES_TypeEntry* const rawTypeEntryPtr, 
+								const void* const parameterDataPtr);
 
 	char* const m_bufferPtr;
 	char* m_currentWriteBufferPtr;

@@ -122,13 +122,13 @@ FATAL_ERROR: 'LES_Test_OutputParamUsedAsInput' : Error adding Input parameter 0 
 
 #### Add Type tests ####
 WARNING: AddType 'unsigned char' hash 0x6E40A25D already in list and dataSize doesn't match Existing:1 New:2
-FATAL_ERROR: TEST AddType 'unsigned char' 0x6E40A25D Alias 'unsigned char' failed
+FATAL_ERROR: TEST AddType 'unsigned char' NumElements:0 0x6E40A25D Alias 'unsigned char' failed
 
 WARNING: AddType 'unsigned char' hash 0x6E40A25D already in list and flags doesn't match Existing:0x5 New:0x12
-FATAL_ERROR: TEST AddType 'unsigned char' 0x6E40A25D Alias 'unsigned char' failed
+FATAL_ERROR: TEST AddType 'unsigned char' NumElements:0 0x6E40A25D Alias 'unsigned char' failed
 
 WARNING: AddType 'unsigned char' hash 0x6E40A25D already in list and aliasedTypeID doesn't match Existing:0 New:2
-FATAL_ERROR: TEST AddType 'unsigned char' 0x6E40A25D Alias 'unsigned int' failed
+FATAL_ERROR: TEST AddType 'unsigned char' NumElements:0 0x6E40A25D Alias 'unsigned int' failed
 
 #### Read Parameter tests ####
 LES_Test_ReadInputParameters: input_0:102 value_0:102

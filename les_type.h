@@ -14,6 +14,7 @@ struct LES_StringEntry;
 #define LES_TYPE_POINTER 			(1 << 4)
 #define LES_TYPE_REFERENCE 		(1 << 5)
 #define LES_TYPE_ALIAS 				(1 << 6)
+#define LES_TYPE_ARRAY 				(1 << 7)
 
 struct LES_TypeEntry
 {
@@ -21,6 +22,7 @@ struct LES_TypeEntry
 	unsigned int m_dataSize;
 	unsigned int m_flags;
 	int m_aliasedTypeID;
+	int m_numElements;
 
 public:
 	int ComputeDataStorageSize(void) const;

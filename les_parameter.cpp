@@ -117,19 +117,38 @@ int LES_FunctionParameterData::GetNumBytesWritten(void) const
 int LES_FunctionParameterData::WriteInternal(const LES_StringEntry* const typeStringEntry, const LES_TypeEntry* const inputTypeEntryPtr, 
 																						 const void* const parameterDataPtr)
 {
-#if LES_PARAMETER_DEBUG
-	LES_LOG("WriteInternal type:'%s'\n", typeStringEntry->m_str);
-#endif // #if LES_PARAMETER_DEBUG
 	if (inputTypeEntryPtr == NULL)
 	{
-		LES_WARNING("LES_FunctionParameterData::WriteInternal type:'%s' not found\n", typeStringEntry->m_str);
+		LES_WARNING("LES_FunctionParameterData::WriteItem type:'%s' not found\n", typeStringEntry->m_str);
 		return LES_RETURN_ERROR;
 	}
 	if (parameterDataPtr == NULL)
 	{
-		LES_WARNING("LES_FunctionParameterData::WriteInternal type:'%s' parameterDataPtr is NULL\n", typeStringEntry->m_str);
+		LES_WARNING("LES_FunctionParameterData::WriteItem type:'%s' parameterDataPtr is NULL\n", typeStringEntry->m_str);
 		return LES_RETURN_ERROR;
 	}
+
+	unsigned int typeFlags = inputTypeEntryPtr->m_flags;
+	if ((typeFlags & LES_TYPE_ARRAY) == 0)
+	{
+		const LES_StringEntry* const itemTypeStringEntry = typeStringEntry;
+		const LES_TypeEntry* const itemTypeEntryPtr = inputTypeEntryPtr;
+		const void* const itemParameterDataPtr = parameterDataPtr;
+
+		return WriteItem(itemTypeStringEntry, itemTypeEntryPtr, itemParameterDataPtr);
+	}
+	// Loop over the elements Writing each item 1 by 1
+	//const int numElements = inputTypeEntryPtr->m_numElements;
+	LES_WARNING("WriteInternal: '%s' ARRAY TYPES NOT SUPPORTED YET\n", typeStringEntry->m_str);
+	return LES_RETURN_ERROR;
+}
+
+int LES_FunctionParameterData::WriteItem(const LES_StringEntry* const typeStringEntry, const LES_TypeEntry* const inputTypeEntryPtr, 
+																				 const void* const parameterDataPtr)
+{
+#if LES_PARAMETER_DEBUG
+	LES_LOG("WriteInternal type:'%s'\n", typeStringEntry->m_str);
+#endif // #if LES_PARAMETER_DEBUG
 	const unsigned int inputTypeFlags = inputTypeEntryPtr->m_flags;
 	const LES_TypeEntry* typeEntryPtr = inputTypeEntryPtr;
 	unsigned int typeFlags = typeEntryPtr->m_flags;
