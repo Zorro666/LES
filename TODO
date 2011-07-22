@@ -1,7 +1,7 @@
 High Priority:
-TEST: ERROR - add array type but not aliased
-TEST: ERROR - add an existing ype but num elements don't match
-TEST: ERROR - can't find the existing aliased type for array types
+HMMMMMMM: should arrays be aliased to their base type - makes moving handling the pointer parameter easier
+HMMMMMMM: should arrays be aliased to their base type pointer - can't decide which is best
+TYPE: array types need to be handled in ComputeDataStorageSize()
 
 FEATURE: type definition add count e.g. int[3] means int * 3 : wow you can do sizeof(int[3])
 FEATURE: make pod types alias to byte[sizeOfDataType], so byte is the final base pure type

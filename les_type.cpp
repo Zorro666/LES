@@ -135,7 +135,7 @@ void LES_TypeShutdown(void)
 	delete[] les_typeEntryArray;
 }
 
-int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags, 
+int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int inputFlags, 
 								const char* const aliasedName, const int numElements)
 {
 	LES_AddStringEntry(name);
@@ -152,6 +152,24 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 #endif // #if LES_TYPE_DEBUG
 
 	const LES_Hash hash = LES_GenerateHashCaseSensitive(name);
+
+	unsigned int flags = inputFlags;
+	if (numElements > 0)
+	{
+		flags = inputFlags | LES_TYPE_ARRAY;
+#if LES_TYPE_DEBUG
+		LES_LOG("Type '%s' is an array with %d elements\n", name, numElements);
+#endif // #if LES_TYPE_DEBUG
+	}
+	const LES_Hash aliasedHash = LES_GenerateHashCaseSensitive(aliasedName);
+	if (aliasedHash != hash)
+	{
+		flags |= LES_TYPE_ALIAS;
+#if LES_TYPE_DEBUG
+		LES_LOG("Type '%s' has an alias to '%s'\n", name, aliasedName);
+#endif // #if LES_TYPE_DEBUG
+	}
+
 	int index = LES_GetTypeEntrySlow(hash);
 	if ((index < 0) || (index >= les_numTypeEntries))
 	{
@@ -164,24 +182,12 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		typeEntryPtr->m_aliasedTypeID = aliasedTypeID;
 		typeEntryPtr->m_numElements = numElements;
 
-		const LES_Hash aliasedHash = LES_GenerateHashCaseSensitive(aliasedName);
-		if (aliasedHash != hash)
-		{
-			typeEntryPtr->m_flags |= LES_TYPE_ALIAS;
-#if LES_TYPE_DEBUG
-			LES_LOG("Type '%s' has an alias to '%s'\n", name, aliasedName);
-#endif // #if LES_TYPE_DEBUG
-		}
 		if (numElements > 0)
 		{
-			typeEntryPtr->m_flags |= LES_TYPE_ARRAY;
-#if LES_TYPE_DEBUG
-			LES_LOG("Type '%s' is an array with %d elements\n", name, numElements);
-#endif // #if LES_TYPE_DEBUG
 			// Array types must be aliased to the pointer type
 			if ((typeEntryPtr->m_flags & LES_TYPE_ALIAS) == 0)
 			{
-				LES_WARNING("AddType '%s' hash 0x%X is an array %d elements but not aliased, arrays must be aliased to pointer typed\n",
+				LES_WARNING("AddType '%s' hash 0x%X is an array %d elements but not aliased, arrays must be aliased to a pointer type\n",
 										name, hash, numElements);
 				return LES_RETURN_ERROR;
 			}

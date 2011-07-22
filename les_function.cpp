@@ -328,7 +328,7 @@ void LES_FunctionDefinition::ComputeParameterDataSize(void)
 		{
 			return;
 		}
-		// Need to make this recursively on structs, looping over the members
+		// This function is recursive following aliases and also looping over the members in structs
 		paramDataSize += typeEntryPtr->ComputeDataStorageSize();
 	}
 	m_parameterDataSize = paramDataSize;

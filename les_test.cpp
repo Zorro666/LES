@@ -1276,6 +1276,8 @@ void LES_TestSetup(void)
 	LES_TEST_ADD_TYPE_POD_REFERENCE(char, LES_TYPE_INPUT_OUTPUT);
 	LES_TEST_ADD_TYPE_POD_REFERENCE(float, LES_TYPE_INPUT_OUTPUT);
 	
+	LES_TEST_ADD_TYPE_POD_ARRAY(int, 3);
+
 	LES_TEST_ADD_TYPE_EX(output_only, 4, LES_TYPE_OUTPUT|LES_TYPE_POD, output_only, 0);
 
 	LES_TEST_STRUCT_START(TestStruct1, 5);
@@ -1992,5 +1994,18 @@ void LES_TestSetup(void)
 
 	LES_Test_DecodeOutputParameters(ref_char);
 	LES_LOG("\n");
+
+	LES_LOG("#### Array tests ####\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
+	LES_TEST_ADD_TYPE_EX(arrayNotAliasedToPtr[4], sizeof(int), LES_TYPE_INPUT|LES_TYPE_POD, int, 4);
+	LES_LOG("\n");
+	LES_TEST_ADD_TYPE_EX(arrayNotAliased[5], sizeof(int), LES_TYPE_INPUT|LES_TYPE_POD, arrayNotAliased[5], 4);
+	LES_LOG("\n");
+	LES_TEST_ADD_TYPE_EX(arrayExistsWrongNumberOfElements[1], sizeof(int), LES_TYPE_INPUT|LES_TYPE_POD, int*, 1);
+	LES_TEST_ADD_TYPE_EX(arrayExistsWrongNumberOfElements[1], sizeof(int), LES_TYPE_INPUT|LES_TYPE_POD, int*, 2);
+	LES_LOG("\n");
+	LES_TEST_ADD_TYPE_EX(arrayCantFindAlias[1], sizeof(int), LES_TYPE_INPUT|LES_TYPE_POD, jake*, 1);
+	LES_LOG("\n");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
