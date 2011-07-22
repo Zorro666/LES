@@ -1,5 +1,4 @@
 High Priority:
-TEST: test output parameter as a POD array
 TEST: test input parameter as a structure array
 TEST: test output parameter as a structure array
 TEST: test input parameter as a reference array

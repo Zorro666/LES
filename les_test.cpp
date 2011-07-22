@@ -1275,6 +1275,46 @@ void LES_Test_DecodeInputArrayPOD(char input_0[3], short input_1[3])
 	return;
 }
 
+void LES_Test_DecodeOutputArrayPOD(short output_0[3], int output_1[3])
+{
+	LES_FunctionParameterData* parameterData = LES_NULL;
+
+	LES_FUNCTION_START(LES_Test_DecodeOutputArrayPOD, void);
+	LES_FUNCTION_ADD_OUTPUT(short[3], output_0);
+	LES_FUNCTION_ADD_OUTPUT(int[3], output_1);
+	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
+	LES_FUNCTION_END();
+
+	if (parameterData == LES_NULL)
+	{
+		LES_FATAL_ERROR("LES_Test_DecodeOutputArrayPOD: parameterData is NULL\n");
+		return;
+	}
+
+	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_DecodeOutputArrayPOD");
+	if (functionDefinitionPtr == LES_NULL)
+	{
+		LES_FATAL_ERROR("LES_Test_DecodeOutputArrayPOD: can't find the function definition\n");
+		return;
+	}
+	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
+	const int realParameterDataSize = sizeof(int) * 3 + sizeof(short) * 3;
+	if (parameterDataSize != realParameterDataSize)
+	{
+		LES_FATAL_ERROR("LES_Test_DecodeOutputArrayPOD: parameterDataSize is wrong Code:%d Should be:%d\n",
+						parameterDataSize, realParameterDataSize);
+		return;
+	}
+
+	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
+	{
+		LES_FATAL_ERROR("LES_Test_DecodeOutputArrayPOD: Decode failed\n");
+		return;
+	}
+	LES_LOG("LES_Test_DecodeOutputArrayPOD: parameterDataSize:%d\n", parameterDataSize);
+	return;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // External functions
@@ -1316,9 +1356,9 @@ void LES_TestSetup(void)
 	LES_TEST_ADD_TYPE_POD_REFERENCE(char, LES_TYPE_INPUT_OUTPUT);
 	LES_TEST_ADD_TYPE_POD_REFERENCE(float, LES_TYPE_INPUT_OUTPUT);
 	
-	LES_TEST_ADD_TYPE_POD_ARRAY(int, 3);
 	LES_TEST_ADD_TYPE_POD_ARRAY(char, 3);
 	LES_TEST_ADD_TYPE_POD_ARRAY(short, 3);
+	LES_TEST_ADD_TYPE_POD_ARRAY(int, 3);
 
 	LES_TEST_ADD_TYPE_EX(output_only, 4, LES_TYPE_OUTPUT|LES_TYPE_POD, output_only, 0);
 
@@ -1734,6 +1774,11 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_INPUT(short[3], input_1);
 	LES_TEST_FUNCTION_END();
 
+	LES_TEST_FUNCTION_START(LES_Test_DecodeOutputArrayPOD, void, 0, 2);
+	LES_TEST_FUNCTION_ADD_OUTPUT(short[3], output_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int[3], output_1);
+	LES_TEST_FUNCTION_END();
+
 	/* Run specific tests */
 	/* Function header definition tests */
 	LES_LOG("#### Function header definition tests ####\n");
@@ -2062,6 +2107,16 @@ void LES_TestSetup(void)
 	arrpod_in_1[1] = 3142;
 	arrpod_in_1[2] = 3143;
 	LES_Test_DecodeInputArrayPOD(arrpod_in_0, arrpod_in_1);
+	LES_LOG("\n");
+	short arrpod_out_0[3];
+	arrpod_out_0[0] = 2713;
+	arrpod_out_0[1] = 2714;
+	arrpod_out_0[2] = 2715;
+	int arrpod_out_1[3];
+	arrpod_out_1[0] = -1954;
+	arrpod_out_1[1] = -1955;
+	arrpod_out_1[2] = -1956;
+	LES_Test_DecodeOutputArrayPOD(arrpod_out_0, arrpod_out_1);
 	LES_LOG("\n");
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
