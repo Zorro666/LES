@@ -73,11 +73,13 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' type can't be found\n", parameterIndex, nameStr, typeStr);
 		return LES_RETURN_ERROR;
 	}
+	const int numElements = typeDataPtr->m_numElements;
+	int aliasedTypeID = typeDataPtr->m_aliasedTypeID;
 
 	unsigned int typeFlags = typeDataPtr->m_flags;
 	while ( typeFlags & LES_TYPE_ALIAS)
 	{
-		const int aliasedTypeID = typeDataPtr->m_aliasedTypeID;
+		aliasedTypeID = typeDataPtr->m_aliasedTypeID;
 		const LES_StringEntry* const aliasedTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
 		if (aliasedTypeEntry == LES_NULL)
 		{
@@ -124,6 +126,25 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		}
 		return returnCode;
 	}
+	if (numElements > 0)
+	{
+		int returnCode = LES_RETURN_OK;
+		LES_LOG("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d ARRAY numELements:%d\n", 
+						parameterIndex, nameStr, typeStr, typeDataSize, numElements);
+		const int elementNameID = nameID;
+		const int elementTypeID = aliasedTypeID;
+		const int newDepth = depth + 1;
+		for (int i = 0; i < numElements; i++)
+		{
+			returnCode = DecodeSingle(functionParameterData, i, elementNameID, elementTypeID, parameterIndex, newDepth);
+			if (returnCode == LES_RETURN_ERROR)
+			{
+				return LES_RETURN_ERROR;
+			}
+		}
+		return returnCode;
+	}
+
 	const LES_Hash typeHash = typeDataPtr->m_hash;
 
 	long long int longlongValue;

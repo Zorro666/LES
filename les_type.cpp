@@ -64,6 +64,7 @@ int LES_TypeEntry::ComputeDataStorageSize(void) const
 {
 	const LES_TypeEntry* typeEntryPtr = this;
 	unsigned int flags = typeEntryPtr->m_flags;
+	const int numElements = typeEntryPtr->m_numElements;
 	while (flags & LES_TYPE_ALIAS)
 	{
 		const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
@@ -113,7 +114,11 @@ int LES_TypeEntry::ComputeDataStorageSize(void) const
 		}
 		return totalDataSize;
 	}
-	const int dataSize = typeEntryPtr->m_dataSize;
+	int dataSize = typeEntryPtr->m_dataSize;
+	if (numElements > 0)
+	{
+		dataSize *= numElements;
+	}
 	return dataSize;
 }
 

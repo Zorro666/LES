@@ -136,8 +136,6 @@ int LES_FunctionParameterData::WriteInternal(const LES_StringEntry* const typeSt
 
 	// Loop over the elements of the array writing each item 1 by 1
 	const int numElements = inputTypeEntryPtr->m_numElements;
-	LES_WARNING("WriteInternal: '%s[%d]' ARRAY TYPES NOT SUPPORTED YET\n", typeStringEntry->m_str, numElements);
-
 	const int aliasedTypeID = inputTypeEntryPtr->m_aliasedTypeID;
 	const LES_StringEntry* const aliasedTypeStringEntry = LES_GetStringEntryForID(aliasedTypeID);
 	if (aliasedTypeStringEntry == LES_NULL)
@@ -154,21 +152,26 @@ int LES_FunctionParameterData::WriteInternal(const LES_StringEntry* const typeSt
 		LES_WARNING("WriteInternal: Type:'%s' type can't be found\n", aliasedTypeStringEntry->m_str);
 		return LES_RETURN_ERROR;
 	}
-	LES_FATAL_ERROR("JAKE - THE PASSED IN parameterDataPtr for an array type is of a pointer type");
-	LES_FATAL_ERROR("JAKE - MOVE ALONG THE PARAMETER DATA PTR BY CORRECT NUMBER OF BYTES - WHICH IS sizeof(type) which isn't the same as ComputeStorageDataSize()");
+	const unsigned int parameterDataSize = inputTypeEntryPtr->m_dataSize; 
 	const LES_StringEntry* const itemTypeStringEntry = typeStringEntry;
 	const LES_TypeEntry* const itemTypeEntryPtr = inputTypeEntryPtr;
+	const void** pointerAddress = (const void**)parameterDataPtr;
+	const char* itemParameterDataPtr = (const char*)*pointerAddress;
 	for (int element = 0; element < numElements; element++)
 	{
-		const void* const itemParameterDataPtr = parameterDataPtr;
+		const void* const voidParameterDataPtr = itemParameterDataPtr;
 
-		const int retError = WriteItem(itemTypeStringEntry, itemTypeEntryPtr, itemParameterDataPtr);
+		const int retError = WriteItem(itemTypeStringEntry, itemTypeEntryPtr, voidParameterDataPtr);
+#if LES_PARAMETER_DEBUG
+		LES_LOG("WriteItem[%d] %p 0x%X\n", element, voidParameterDataPtr, *itemParameterDataPtr);
+#endif // #if LES_PARAMETER_DEBUG
 		if (retError == LES_RETURN_ERROR)
 		{
 			return LES_RETURN_ERROR;
 		}
+		itemParameterDataPtr += parameterDataSize;
 	}
-	return LES_RETURN_ERROR;
+	return LES_RETURN_OK;
 }
 
 int LES_FunctionParameterData::WriteItem(const LES_StringEntry* const typeStringEntry, const LES_TypeEntry* const inputTypeEntryPtr, 
