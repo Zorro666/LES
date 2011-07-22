@@ -1,7 +1,17 @@
 #! /bin/bash
 
 make
+if [ $? -gt 0 ]; then
+    echo -e ""
+    echo -e "###########"
+    echo -e "MAKE FAILED"
+    echo -e "###########"
+    echo -e ""
+		exit
+fi
+
 les_test -verbose -tests 
+
 diff log.txt correctTestOutput.txt
 if [ $? -gt 0 ]; then
     echo -e ""
@@ -9,10 +19,12 @@ if [ $? -gt 0 ]; then
     echo -e "TESTS FAILED"
     echo -e "###########"
     echo -e ""
+		exit
 else
     echo -e ""
     echo -e "###########"
     echo -e "TESTS PASSED"
     echo -e "###########"
     echo -e ""
+		exit
 fi
