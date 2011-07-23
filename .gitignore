@@ -3,6 +3,8 @@
 *.o
 *.d
 *.orig
+.cproject
+.project
 jake.txt
 temp.txt
 test.txt
