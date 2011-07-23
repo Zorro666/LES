@@ -1090,6 +1090,27 @@ void LES_Test_DecodeInputArraySTRUCTB(TestStruct1 input_0[2], TestStruct2 input_
 	return;
 }
 
+void LES_Test_DecodeOutputArraySTRUCT(TestStruct3 output_0[2], TestStruct4 output_1[1])
+{
+	const char* const testFuncName = "LES_Test_DecodeOutputArraySTRUCT";
+	LES_FunctionParameterData* parameterData = LES_NULL;
+
+	LES_FUNCTION_START(LES_Test_DecodeOutputArraySTRUCT, void);
+	LES_FUNCTION_ADD_OUTPUT(TestStruct3[2], output_0);
+	LES_FUNCTION_ADD_OUTPUT(TestStruct4[1], output_1);
+	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
+	LES_FUNCTION_END();
+
+	const int realParameterDataSize = 0 +
+												2 * (sizeof(short) + sizeof(float) + sizeof(int) + sizeof(char)) +
+											 	1 * (sizeof(float) + sizeof(int) + sizeof(char) + sizeof(short) +
+															(sizeof(short) + sizeof(float) + sizeof(int) + sizeof(char))) +
+												0;
+
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
+	return;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // External functions
@@ -1221,10 +1242,13 @@ void LES_TestSetup(void)
 	LES_TEST_ADD_TYPE_POD_ARRAY(char, 3);
 	LES_TEST_ADD_TYPE_POD_ARRAY(short, 3);
 	LES_TEST_ADD_TYPE_POD_ARRAY(int, 3);
+
 	LES_TEST_ADD_TYPE_STRUCT_ARRAY(TestStruct1, 1);
 	LES_TEST_ADD_TYPE_STRUCT_ARRAY(TestStruct1, 2);
 	LES_TEST_ADD_TYPE_STRUCT_ARRAY(TestStruct2, 1);
 	LES_TEST_ADD_TYPE_STRUCT_ARRAY(TestStruct2, 2);
+	LES_TEST_ADD_TYPE_STRUCT_ARRAY(TestStruct3, 2);
+	LES_TEST_ADD_TYPE_STRUCT_ARRAY(TestStruct4, 1);
 
 	/* Sample functions for development */
 	LES_TEST_FUNCTION_START(jakeInit, void, 2, 1);
@@ -1566,6 +1590,11 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_START(LES_Test_DecodeInputArraySTRUCTB, void, 2, 0);
 	LES_TEST_FUNCTION_ADD_INPUT(TestStruct1[2], input_0);
 	LES_TEST_FUNCTION_ADD_INPUT(TestStruct2[1], input_1);
+	LES_TEST_FUNCTION_END();
+
+	LES_TEST_FUNCTION_START(LES_Test_DecodeOutputArraySTRUCT, void, 0, 2);
+	LES_TEST_FUNCTION_ADD_OUTPUT(TestStruct3[2], output_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(TestStruct4[1], output_1);
 	LES_TEST_FUNCTION_END();
 
 	/* Run specific tests */
@@ -1948,6 +1977,23 @@ void LES_TestSetup(void)
 	arrstrb_in_1[0].m_short = 2627;
 	arrstrb_in_1[0].m_int = 21412932;
 	LES_Test_DecodeInputArraySTRUCTB(arrstrb_in_0, arrstrb_in_1);
+	LES_LOG("\n");
+	TestStruct3 arrstra_out_0[2];
+	arrstra_out_0[0].m_short = 1953;
+	arrstra_out_0[0].m_float = 29.30f;
+	arrstra_out_0[0].m_int = 230810;
+	arrstra_out_0[0].m_char = '<';
+	arrstra_out_0[1].m_short = 1954;
+	arrstra_out_0[1].m_float = 29.40f;
+	arrstra_out_0[1].m_int = 230811;
+	arrstra_out_0[1].m_char = '>';
+	TestStruct4 arrstra_out_1[1];
+	arrstra_out_1[0].m_float = 19.63f;
+	arrstra_out_1[0].m_int = 1963;
+	arrstra_out_1[0].m_char = '#';
+	arrstra_out_1[0].m_short = 2930;
+	arrstra_out_1[0].m_testStruct3 = arrstra_out_0[1];
+	LES_Test_DecodeOutputArraySTRUCT(arrstra_out_0, arrstra_out_1);
 	LES_LOG("\n");
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }

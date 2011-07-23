@@ -1,12 +1,15 @@
 High Priority:
 BUG: what is the 3rd AddType test it shows same error as the 2nd test - no point to that test
 
-TEST: test output parameter as a structure array
 TEST: test input parameter as a reference array
 TEST: test output parameter as a reference array
+
 TEST: test POD array as member in a struct
+
 TEST: test struct array as member in a struct
+
 TEST: test POD reference array as member in a struct
+
 TEST: test struct reference array as member in a struct
 
 Medium Priority:
