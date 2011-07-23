@@ -1111,6 +1111,23 @@ void LES_Test_DecodeOutputArraySTRUCT(TestStruct3 output_0[2], TestStruct4 outpu
 	return;
 }
 
+void LES_Test_DecodeInputArrayReference(char (&input_0)[3], short (&input_1)[3])
+{
+	const char* const testFuncName = "LES_Test_DecodeInputArrayReference";
+	LES_FunctionParameterData* parameterData = LES_NULL;
+
+	LES_FUNCTION_START(LES_Test_DecodeInputArrayReference, void);
+	LES_FUNCTION_ADD_INPUT(char&[3], input_0);
+	LES_FUNCTION_ADD_INPUT(short&[3], input_1);
+	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
+	LES_FUNCTION_END();
+
+	const int realParameterDataSize = sizeof(char) * 3 + sizeof(short) * 3;
+
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
+	return;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // External functions
@@ -1249,6 +1266,10 @@ void LES_TestSetup(void)
 	LES_TEST_ADD_TYPE_STRUCT_ARRAY(TestStruct2, 2);
 	LES_TEST_ADD_TYPE_STRUCT_ARRAY(TestStruct3, 2);
 	LES_TEST_ADD_TYPE_STRUCT_ARRAY(TestStruct4, 1);
+
+	LES_TEST_ADD_TYPE_POD_REFERENCE_ARRAY(char, 3, LES_TYPE_INPUT_OUTPUT);
+	LES_TEST_ADD_TYPE_POD_REFERENCE_ARRAY(short, 3, LES_TYPE_INPUT_OUTPUT);
+	LES_TEST_ADD_TYPE_POD_REFERENCE_ARRAY(int, 3, LES_TYPE_INPUT_OUTPUT);
 
 	/* Sample functions for development */
 	LES_TEST_FUNCTION_START(jakeInit, void, 2, 1);
@@ -1597,6 +1618,11 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_OUTPUT(TestStruct4[1], output_1);
 	LES_TEST_FUNCTION_END();
 
+	LES_TEST_FUNCTION_START(LES_Test_DecodeInputArrayReference, void, 2, 0);
+	LES_TEST_FUNCTION_ADD_INPUT(char&[3], input_0);
+	LES_TEST_FUNCTION_ADD_INPUT(short&[3], input_1);
+	LES_TEST_FUNCTION_END();
+
 	/* Run specific tests */
 	/* Function header definition tests */
 	LES_LOG("#### Function header definition tests ####\n");
@@ -1918,6 +1944,7 @@ void LES_TestSetup(void)
 	LES_TEST_ADD_TYPE_EX(arrayCantFindAlias[1], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, jake*, 1);
 	LES_LOG("\n");
 	LES_TEST_ADD_TYPE_EX(arrayInvalidNumElements[1], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, int*, 0);
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 	LES_LOG("\n");
 	char arrpod_in_0[3];
 	arrpod_in_0[0] = '0';
@@ -1995,6 +2022,7 @@ void LES_TestSetup(void)
 	arrstra_out_1[0].m_testStruct3 = arrstra_out_0[1];
 	LES_Test_DecodeOutputArraySTRUCT(arrstra_out_0, arrstra_out_1);
 	LES_LOG("\n");
-	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
+	LES_Test_DecodeInputArrayReference(arrpod_in_0, arrpod_in_1);
+	LES_LOG("\n");
 }
 

@@ -1,14 +1,13 @@
 High Priority:
-TEST: test input parameter as a reference array
-TEST: test output parameter as a reference array
+TEST: test output parameter as a reference to an array
 
 TEST: test POD array as member in a struct
 
 TEST: test struct array as member in a struct
 
-TEST: test POD reference array as member in a struct
+TEST: test POD reference to an array as member in a struct
 
-TEST: test struct reference array as member in a struct
+TEST: test struct reference to an array as member in a struct
 
 Medium Priority:
 FUNCTION: error handling run out of memory when adding new function or new type e.g. array limit reached

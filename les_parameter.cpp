@@ -156,10 +156,16 @@ int LES_FunctionParameterData::WriteInternal(const LES_StringEntry* const typeSt
 	const LES_StringEntry* const itemTypeStringEntry = typeStringEntry;
 	const LES_TypeEntry* const itemTypeEntryPtr = inputTypeEntryPtr;
 	const void** pointerAddress = (const void**)parameterDataPtr;
-	const char* itemParameterDataPtr = (const char*)*pointerAddress;
+	const void* paramDataPtr = parameterDataPtr;
+	if ((typeFlags & LES_TYPE_REFERENCE) == 0)
+	{
+		pointerAddress = (const void**)parameterDataPtr;
+		paramDataPtr = *pointerAddress;
+	}
+	const char* itemParameterDataPtr = (const char*)paramDataPtr;
 	for (int element = 0; element < numElements; element++)
 	{
-		const void* const voidParameterDataPtr = itemParameterDataPtr;
+		const void* const voidParameterDataPtr = (const void*)itemParameterDataPtr;
 
 		const int retError = WriteItem(itemTypeStringEntry, itemTypeEntryPtr, voidParameterDataPtr);
 #if LES_PARAMETER_DEBUG
