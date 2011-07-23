@@ -108,13 +108,13 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		{
 			localNumElements = 1;
 		}
-		else
-		{
-			LES_LOG("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d ARRAY numELements:%d\n", 
-							parameterIndex, nameStr, typeStr, typeDataSize, numElements);
-		}
-		int returnCode = LES_RETURN_OK;
+
+#if LES_FUNCTION_DEBUG
+		LES_LOG("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d ARRAY numELements:%d\n", 
+						parameterIndex, nameStr, typeStr, typeDataSize, numElements);
 		LES_LOG("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d STRUCT\n", parameterIndex, nameStr, typeStr, typeDataSize);
+#endif // #if LES_FUNCTION_DEBUG
+		int returnCode = LES_RETURN_OK;
 		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeDataPtr->m_hash);
 		if (structDefinition == LES_NULL)
 		{
@@ -125,25 +125,27 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		const int newDepth = depth + 1;
 		for (int e = 0; e < localNumElements; e++)
 		{
-		for (int i = 0; i < numMembers; i++)
-		{
-			const LES_StructMember* const structMember = structDefinition->GetMemberByIndex(i);
-			const int memberNameID = structMember->m_nameID;
-			const int memberTypeID = structMember->m_typeID;
-			returnCode = DecodeSingle(functionParameterData, i, memberNameID, memberTypeID, parameterIndex, newDepth);
-			if (returnCode == LES_RETURN_ERROR)
+			for (int i = 0; i < numMembers; i++)
 			{
-				return LES_RETURN_ERROR;
+				const LES_StructMember* const structMember = structDefinition->GetMemberByIndex(i);
+				const int memberNameID = structMember->m_nameID;
+				const int memberTypeID = structMember->m_typeID;
+				returnCode = DecodeSingle(functionParameterData, i, memberNameID, memberTypeID, parameterIndex, newDepth);
+				if (returnCode == LES_RETURN_ERROR)
+				{
+					return LES_RETURN_ERROR;
+				}
 			}
-		}
 		}
 		return returnCode;
 	}
 	if (numElements > 0)
 	{
 		int returnCode = LES_RETURN_OK;
+#if LES_FUNCTION_DEBUG
 		LES_LOG("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d ARRAY numELements:%d\n", 
 						parameterIndex, nameStr, typeStr, typeDataSize, numElements);
+#endif // #if LES_FUNCTION_DEBUG
 		const int elementNameID = nameID;
 		const int elementTypeID = aliasedTypeID;
 		const int newDepth = depth + 1;
@@ -276,7 +278,6 @@ LES_FunctionParameterData* LES_GetFunctionParameterData(const int functionNameID
 	}
 	const LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[index];
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
-	//char* parameterBuffer = new char[parameterDataSize + 16 * 1024];
 	char* parameterBuffer = new char[parameterDataSize];
 	LES_FunctionParameterData* parameterData = new LES_FunctionParameterData(parameterBuffer);
 

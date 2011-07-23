@@ -128,18 +128,30 @@ bool LES_TestStructAddMember(const char* const type, const char* const name,
 		LES_FATAL_ERROR("TEST struct '%s' : member '%s' type '%s' not found\n", testStructDataPtr->structName, name, type);
 		return false;
 	}
-	const int memberDataSize = typeEntryPtr->m_dataSize;
+	int memberDataSize = typeEntryPtr->m_dataSize;
+	if (typeEntryPtr->m_flags & LES_TYPE_ARRAY)
+	{
+		/* Member variables which are arrays aren't not pointers but are N * TYPE */
+		const int numElements = typeEntryPtr->m_numElements;
+		int dataSize = typeEntryPtr->ComputeDataStorageSize();
+		memberDataSize = dataSize * numElements;
+		memberDataSize = dataSize;
+	}
 	const int globalMemberIndex = testStructDataPtr->globalMemberIndex;
 	LES_StructMember* const structMemberPtr = (LES_StructMember* const)(structDefinitionPtr->GetMemberByIndex(globalMemberIndex));
 	structMemberPtr->m_hash = nameHash;
 	structMemberPtr->m_nameID = LES_AddStringEntry(name);
 	structMemberPtr->m_typeID = typeID;
 	structMemberPtr->m_dataSize = memberDataSize;
-	const int alignmentPadding = LES_StructComputeAlignmentPadding(testStructDataPtr->totalMemberSizeWithPadding, memberDataSize);
+	const int memberAlignment = typeEntryPtr->ComputeAlignment();
+	const int alignmentPadding = LES_StructComputeAlignmentPadding(testStructDataPtr->totalMemberSizeWithPadding, memberAlignment);
 	structMemberPtr->m_alignmentPadding = alignmentPadding;
 	testStructDataPtr->totalMemberSizeWithPadding += (memberDataSize + alignmentPadding);
 	testStructDataPtr->globalMemberIndex++;
-	//LES_LOG("%s %s DataSize:%d aligmentPadding:%d\n", testStructDataPtr->structName, name, memberDataSize, alignmentPadding);
+#if 0
+	LES_LOG("Struct:%s Member:%s Type:%s 0x%X DataSize:%d aligmentPadding:%d\n", 
+					testStructDataPtr->structName, name, type, LES_GenerateHashCaseSensitive(type), memberDataSize, alignmentPadding);
+#endif //#if 0
 
 	return true;
 }

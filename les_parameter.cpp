@@ -97,7 +97,16 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 								typeStringEntry->m_str, typeFlags, paramMode);
 		return LES_RETURN_ERROR;
 	}
-	return WriteInternal(typeStringEntry, typeEntryPtr, parameterDataPtr);
+	const void* valueAddress = parameterDataPtr;
+	if (typeFlags & LES_TYPE_POINTER)
+	{
+#if LES_PARAMETER_DEBUG
+		LES_LOG("%s ptr address changing %p\n", typeStringEntry->m_str, parameterDataPtr);
+#endif // #if LES_PARAMETER_DEBUG
+		const void** pointerAddress = (const void**)parameterDataPtr;
+		valueAddress = *pointerAddress;
+	}
+	return WriteInternal(typeStringEntry, typeEntryPtr, valueAddress);
 }
 
 int LES_FunctionParameterData::GetNumBytesWritten(void) const
@@ -128,36 +137,52 @@ int LES_FunctionParameterData::WriteInternal(const LES_StringEntry* const typeSt
 		return LES_RETURN_ERROR;
 	}
 
-	unsigned int typeFlags = inputTypeEntryPtr->m_flags;
-	if ((typeFlags & LES_TYPE_ARRAY) == 0)
+	unsigned int inputTypeFlags = inputTypeEntryPtr->m_flags;
+	if ((inputTypeFlags & LES_TYPE_ARRAY) == 0)
 	{
 		return WriteItem(typeStringEntry, inputTypeEntryPtr, parameterDataPtr);
 	}
 
 	// Loop over the elements of the array writing each item 1 by 1
+	unsigned int typeFlags = inputTypeFlags;
 	const int numElements = inputTypeEntryPtr->m_numElements;
-	const int aliasedTypeID = inputTypeEntryPtr->m_aliasedTypeID;
-	const LES_StringEntry* const aliasedTypeStringEntry = LES_GetStringEntryForID(aliasedTypeID);
-	if (aliasedTypeStringEntry == LES_NULL)
+	const LES_StringEntry* aliasedTypeStringEntry = LES_NULL;
+	const LES_TypeEntry* typeEntryPtr = inputTypeEntryPtr;
+	const char* typeNameStr = typeStringEntry->m_str;
+	while (typeFlags & LES_TYPE_ALIAS)
 	{
-		LES_WARNING("WriteInternal: Type:'%s' aliased type:%d entry can't be found\n", typeStringEntry->m_str, aliasedTypeID);
-		return LES_RETURN_ERROR;
-	}
+		const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
+		aliasedTypeStringEntry = LES_GetStringEntryForID(aliasedTypeID);
+		if (aliasedTypeStringEntry == LES_NULL)
+		{
+			LES_WARNING("WriteInternal type:'%s' aliased type:%d entry can't be found\n", typeNameStr, aliasedTypeID);
+			return LES_RETURN_ERROR;
+		}
 #if LES_PARAMETER_DEBUG
-	LES_LOG("WriteInternal: Type:'%s' aliased to '%s'\n", typeStringEntry->m_str, aliasedTypeStringEntry->m_str);
+		LES_LOG("WriteItem: Type:'%s' aliased to '%s'\n", typeNameStr, aliasedTypeStringEntry->m_str);
 #endif // #if LES_PARAMETER_DEBUG
-	const LES_TypeEntry* const aliasedTypeEntryPtr = LES_GetTypeEntry(aliasedTypeStringEntry);
-	if (aliasedTypeEntryPtr == LES_NULL)
-	{
-		LES_WARNING("WriteInternal: Type:'%s' type can't be found\n", aliasedTypeStringEntry->m_str);
-		return LES_RETURN_ERROR;
+		typeEntryPtr = LES_GetTypeEntry(aliasedTypeStringEntry);
+		if (typeEntryPtr == LES_NULL)
+		{
+			LES_WARNING("WriteInternal type:'%s' type can't be found\n", aliasedTypeStringEntry->m_str);
+			return LES_RETURN_ERROR;
+		}
+#if LES_PARAMETER_DEBUG
+		LES_LOG("WriteItem: Type:'%s' aliased to 0x%X\n", typeNameStr, aliasedTypeStringEntry->m_hash);
+#endif // #if LES_PARAMETER_DEBUG
+		typeFlags = typeEntryPtr->m_flags;
+		typeNameStr = (const char*)aliasedTypeStringEntry->m_str;
 	}
-	const unsigned int parameterDataSize = inputTypeEntryPtr->m_dataSize; 
+
+	unsigned int parameterDataSize = inputTypeEntryPtr->m_dataSize;
+	parameterDataSize = typeEntryPtr->m_dataSize;
+
 	const LES_StringEntry* const itemTypeStringEntry = typeStringEntry;
 	const LES_TypeEntry* const itemTypeEntryPtr = inputTypeEntryPtr;
+	//const unsigned int parameterDataSize = itemTypeEntryPtr->m_dataSize; 
 	const void** pointerAddress = (const void**)parameterDataPtr;
 	const void* paramDataPtr = parameterDataPtr;
-	if ((typeFlags & LES_TYPE_REFERENCE) == 0)
+	if ((inputTypeFlags & LES_TYPE_REFERENCE) == 0)
 	{
 		pointerAddress = (const void**)parameterDataPtr;
 		paramDataPtr = *pointerAddress;
@@ -186,7 +211,7 @@ int LES_FunctionParameterData::WriteItem(const LES_StringEntry* const typeString
 #if LES_PARAMETER_DEBUG
 	LES_LOG("WriteItem type:'%s'\n", typeStringEntry->m_str);
 #endif // #if LES_PARAMETER_DEBUG
-	const unsigned int inputTypeFlags = inputTypeEntryPtr->m_flags;
+	//const unsigned int inputTypeFlags = inputTypeEntryPtr->m_flags;
 	const LES_TypeEntry* typeEntryPtr = inputTypeEntryPtr;
 	unsigned int typeFlags = typeEntryPtr->m_flags;
 
@@ -217,6 +242,7 @@ int LES_FunctionParameterData::WriteItem(const LES_StringEntry* const typeString
 	}
 
 	const void* valueAddress = parameterDataPtr;
+#if 0
 	if (inputTypeFlags & LES_TYPE_POINTER)
 	{
 #if LES_PARAMETER_DEBUG
@@ -225,6 +251,7 @@ int LES_FunctionParameterData::WriteItem(const LES_StringEntry* const typeString
 		const void** pointerAddress = (const void**)parameterDataPtr;
 		valueAddress = *pointerAddress;
 	}
+#endif // #if 0
 
 	const int typeDataSize = typeEntryPtr->m_dataSize;
 
@@ -259,13 +286,19 @@ int LES_FunctionParameterData::WriteItem(const LES_StringEntry* const typeString
 			memberDataPtr += memberAlignmentPadding;
 			//struct members which are references are really pointers to the data
 			const void* paramDataPtr = (void*)memberDataPtr;
-			if (memberTypeEntryPtr->m_flags & LES_TYPE_POINTER)
+
+			const unsigned int memberFlags = memberTypeEntryPtr->m_flags;
+			const bool isArray = (memberFlags & LES_TYPE_ARRAY);
+			const bool isPointer = (memberFlags & LES_TYPE_POINTER);
+			const bool isReference = (memberFlags & LES_TYPE_REFERENCE);
+			const bool deferencePtr = (!isArray & (isPointer | isReference));
+			if (isArray)
 			{
-#if LES_PARAMETER_DEBUG
-				LES_LOG("Member[%d] %s %d %p\n", i, memberTypeStringEntry->m_str, structMember->m_alignmentPadding, memberDataPtr);
-#endif // #if LES_PARAMETER_DEBUG
+				// The function below expects ptr to the array e.g. it dereferences it
+				const void* pointerAddress = (const void*)memberDataPtr;
+				paramDataPtr = (const void*)&pointerAddress;
 			}
-			if (memberTypeEntryPtr->m_flags & LES_TYPE_REFERENCE)
+			else if (deferencePtr)
 			{
 				const void** pointerAddress = (const void**)memberDataPtr;
 				paramDataPtr = *pointerAddress;
@@ -274,6 +307,12 @@ int LES_FunctionParameterData::WriteItem(const LES_StringEntry* const typeString
 								structMember->m_alignmentPadding, memberTypeStringEntry->m_str, memberDataPtr, paramDataPtr);
 #endif // #if LES_PARAMETER_DEBUG
 			}
+#if LES_PARAMETER_DEBUG
+			LES_LOG("Member[%d] Type:%s 0x%X Padding:%d Name:%s Member Ptr:%p Datasize:%d\n", i, 
+								memberTypeStringEntry->m_str, memberTypeStringEntry->m_hash, 
+								structMember->m_alignmentPadding, memberTypeStringEntry->m_str, 
+								memberDataPtr, structMember->m_dataSize);
+#endif // #if LES_PARAMETER_DEBUG
 			returnCode = WriteInternal(memberTypeStringEntry, memberTypeEntryPtr, paramDataPtr);
 			if (returnCode == LES_RETURN_ERROR)
 			{

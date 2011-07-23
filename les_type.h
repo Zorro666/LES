@@ -26,6 +26,7 @@ struct LES_TypeEntry
 
 public:
 	int ComputeDataStorageSize(void) const;
+	int ComputeAlignment(void) const;
 
 public:
 	static LES_Hash s_longlongHash;

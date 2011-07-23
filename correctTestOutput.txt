@@ -40,20 +40,20 @@ FATAL_ERROR: 'LES_Test_InputNameDoesntExist' : Error adding Input parameter 0 'i
 WARNING: 'LES_Test_InputNameIDNotFound' : Can't find parameter name for ID:-1 parameter:'input_0' type:'int'
 FATAL_ERROR: 'LES_Test_InputNameIDNotFound' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputNameHashIsWrong' : Adding parameter 'input_0' name hash doesn't match for ID:89 0x480D993 != 0x97A0017 Code:'input_0' Definition:'wrongHash'
+WARNING: 'LES_Test_InputNameHashIsWrong' : Adding parameter 'input_0' name hash doesn't match for ID:95 0x480D993 != 0x97A0017 Code:'input_0' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_InputNameHashIsWrong' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputNameStringIsWrong' : Adding parameter 'InputNameBrokenHash' name string doesn't match for ID:91 'InputNameBrokenHash' != 'brokenString' 0x99F1870C : 0x99F1870C
+WARNING: 'LES_Test_InputNameStringIsWrong' : Adding parameter 'InputNameBrokenHash' name string doesn't match for ID:97 'InputNameBrokenHash' != 'brokenString' 0x99F1870C : 0x99F1870C
 FATAL_ERROR: 'LES_Test_InputNameStringIsWrong' : Error adding Input parameter 0 'InputNameBrokenHash' type:'int'
 
 #### Input type tests ####
 WARNING: 'LES_Test_InputTypeIDNotFound' : Can't find Input parameter type for ID:-1 parameter:'input_0' type:'int'
 FATAL_ERROR: 'LES_Test_InputTypeIDNotFound' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputTypeHashIsWrong' : parameter:0 'input_0' (Input) type hash doesn't match for ID:89 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
+WARNING: 'LES_Test_InputTypeHashIsWrong' : parameter:0 'input_0' (Input) type hash doesn't match for ID:95 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_InputTypeHashIsWrong' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputTypeStringIsWrong' : Adding parameter 'input_0' type string doesn't match for ID:95 'InputTypeBrokenHash' != 'brokenString' 0x7EF15B07 : 0x7EF15B07
+WARNING: 'LES_Test_InputTypeStringIsWrong' : Adding parameter 'input_0' type string doesn't match for ID:101 'InputTypeBrokenHash' != 'brokenString' 0x7EF15B07 : 0x7EF15B07
 FATAL_ERROR: 'LES_Test_InputTypeStringIsWrong' : Error adding Input parameter 0 'input_0' type:'InputTypeBrokenHash'
 
 #### Output parameter tests ####
@@ -83,20 +83,20 @@ FATAL_ERROR: 'LES_Test_OutputNameDoesntExist' : Error adding Output parameter 0 
 WARNING: 'LES_Test_OutputNameIDNotFound' : Can't find parameter name for ID:-1 parameter:'output_0' type:'int'
 FATAL_ERROR: 'LES_Test_OutputNameIDNotFound' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputNameHashIsWrong' : Adding parameter 'output_0' name hash doesn't match for ID:89 0x1D1CA836 != 0x97A0017 Code:'output_0' Definition:'wrongHash'
+WARNING: 'LES_Test_OutputNameHashIsWrong' : Adding parameter 'output_0' name hash doesn't match for ID:95 0x1D1CA836 != 0x97A0017 Code:'output_0' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_OutputNameHashIsWrong' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputNameStringIsWrong' : Adding parameter 'OutputNameBrokenHash' name string doesn't match for ID:108 'OutputNameBrokenHash' != 'brokenString' 0x61782F3F : 0x61782F3F
+WARNING: 'LES_Test_OutputNameStringIsWrong' : Adding parameter 'OutputNameBrokenHash' name string doesn't match for ID:114 'OutputNameBrokenHash' != 'brokenString' 0x61782F3F : 0x61782F3F
 FATAL_ERROR: 'LES_Test_OutputNameStringIsWrong' : Error adding Output parameter 0 'OutputNameBrokenHash' type:'int'
 
 #### Output type tests ####
 WARNING: 'LES_Test_OutputTypeIDNotFound' : Can't find Output parameter type for ID:-1 parameter:'output_0' type:'int'
 FATAL_ERROR: 'LES_Test_OutputTypeIDNotFound' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputTypeHashIsWrong' : parameter:0 'output_0' (Output) type hash doesn't match for ID:89 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
+WARNING: 'LES_Test_OutputTypeHashIsWrong' : parameter:0 'output_0' (Output) type hash doesn't match for ID:95 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_OutputTypeHashIsWrong' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputTypeStringIsWrong' : Adding parameter 'output_0' type string doesn't match for ID:112 'OutputTypeBrokenHash' != 'brokenString' 0x4678033A : 0x4678033A
+WARNING: 'LES_Test_OutputTypeStringIsWrong' : Adding parameter 'output_0' type string doesn't match for ID:118 'OutputTypeBrokenHash' != 'brokenString' 0x4678033A : 0x4678033A
 FATAL_ERROR: 'LES_Test_OutputTypeStringIsWrong' : Error adding Output parameter 0 'output_0' type:'OutputTypeBrokenHash'
 
 #### Parameter already exists tests ####
@@ -176,9 +176,7 @@ FATAL_ERROR: TEST struct 'LES_Struct_MemberAlreadyExists' : ERROR cannot create 
 FATAL_ERROR: TEST struct 'LES_Struct_NotEnoughMembers' : ERROR not the right number of members Added:2 Should be:3
 FATAL_ERROR: TEST struct 'LES_Struct_NotEnoughMembers' : ERROR cannot create definition
 
-DecodeSingle parameter[0]:'input_0' type:'TestStruct2' size:36 STRUCT
 DecodeSingle   parameter[0] member[0]:'m_float' type:'float' value:666.987000
-DecodeSingle parameter[1]:'m_testStruct1' type:'TestStruct1' size:24 STRUCT
 DecodeSingle     parameter[1] member[0]:'m_longlong' type:'long long int' value:-100048
 DecodeSingle     parameter[1] member[1]:'m_char' type:'char' value:'A'
 DecodeSingle     parameter[1] member[2]:'m_int' type:'int' value:65
@@ -188,52 +186,44 @@ DecodeSingle   parameter[0] member[2]:'m_char' type:'char' value:'B'
 DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:-123
 DecodeSingle   parameter[0] member[4]:'m_int' type:'int' value:65
 DecodeSingle parameter[1]:'input_1' type:'int' value:7243
-DecodeSingle parameter[2]:'input_2' type:'TestStruct1' size:24 STRUCT
 DecodeSingle   parameter[2] member[0]:'m_longlong' type:'long long int' value:-100048
 DecodeSingle   parameter[2] member[1]:'m_char' type:'char' value:'A'
 DecodeSingle   parameter[2] member[2]:'m_int' type:'int' value:65
 DecodeSingle   parameter[2] member[3]:'m_short' type:'short' value:-123
 DecodeSingle   parameter[2] member[4]:'m_float' type:'float' value:666.987000
-DecodeSingle parameter[3]:'input_3' type:'TestStruct3' size:16 STRUCT
 DecodeSingle   parameter[3] member[0]:'m_short' type:'short' value:209
 DecodeSingle   parameter[3] member[1]:'m_float' type:'float' value:2.173000
 DecodeSingle   parameter[3] member[2]:'m_int' type:'int' value:-542
 DecodeSingle   parameter[3] member[3]:'m_char' type:'char' value:'J'
-DecodeSingle parameter[4]:'input_4' type:'TestStruct4*' size:28 STRUCT
 DecodeSingle   parameter[4] member[0]:'m_float' type:'float' value:987.122986
 DecodeSingle   parameter[4] member[1]:'m_int' type:'int' value:12
 DecodeSingle   parameter[4] member[2]:'m_char' type:'char' value:'L'
 DecodeSingle   parameter[4] member[3]:'m_short' type:'short' value:321
-DecodeSingle parameter[4]:'m_testStruct3' type:'TestStruct3' size:16 STRUCT
-DecodeSingle     parameter[4] member[0]:'m_short' type:'short' value:3
-DecodeSingle     parameter[4] member[1]:'m_float' type:'float' value:3.141000
-DecodeSingle     parameter[4] member[2]:'m_int' type:'int' value:2
-DecodeSingle     parameter[4] member[3]:'m_char' type:'char' value:'#'
-LES_Test_StructInputParam: parameterDataSize:86
+DecodeSingle   parameter[4] member[4]:'m_short2' type:'short' value:322
+DecodeSingle     parameter[5] member[0]:'m_short' type:'short' value:3
+DecodeSingle     parameter[5] member[1]:'m_float' type:'float' value:3.141000
+DecodeSingle     parameter[5] member[2]:'m_int' type:'int' value:2
+DecodeSingle     parameter[5] member[3]:'m_char' type:'char' value:'#'
+LES_Test_StructInputParam: parameterDataSize:88
 
-DecodeSingle parameter[0]:'out_0' type:'TestStruct3*' size:16 STRUCT
 DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:1718
 DecodeSingle   parameter[0] member[1]:'m_float' type:'float' value:271.386993
 DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:14
 DecodeSingle   parameter[0] member[3]:'m_char' type:'char' value:'a'
-DecodeSingle parameter[1]:'out_1' type:'TestStruct4*' size:28 STRUCT
 DecodeSingle   parameter[1] member[0]:'m_float' type:'float' value:1414.987061
 DecodeSingle   parameter[1] member[1]:'m_int' type:'int' value:-2713
 DecodeSingle   parameter[1] member[2]:'m_char' type:'char' value:'Z'
 DecodeSingle   parameter[1] member[3]:'m_short' type:'short' value:321
-DecodeSingle parameter[4]:'m_testStruct3' type:'TestStruct3' size:16 STRUCT
-DecodeSingle     parameter[4] member[0]:'m_short' type:'short' value:1718
-DecodeSingle     parameter[4] member[1]:'m_float' type:'float' value:271.386993
-DecodeSingle     parameter[4] member[2]:'m_int' type:'int' value:14
-DecodeSingle     parameter[4] member[3]:'m_char' type:'char' value:'a'
-LES_Test_StructOutputParam: parameterDataSize:33
+DecodeSingle   parameter[1] member[4]:'m_short2' type:'short' value:322
+DecodeSingle     parameter[5] member[0]:'m_short' type:'short' value:1718
+DecodeSingle     parameter[5] member[1]:'m_float' type:'float' value:271.386993
+DecodeSingle     parameter[5] member[2]:'m_int' type:'int' value:14
+DecodeSingle     parameter[5] member[3]:'m_char' type:'char' value:'a'
+LES_Test_StructOutputParam: parameterDataSize:35
 
-DecodeSingle parameter[0]:'in_0' type:'TestStruct5*' size:8 STRUCT
 DecodeSingle   parameter[0] member[0]:'m_char' type:'char' value:'5'
 DecodeSingle   parameter[0] member[1]:'m_shortPtr' type:'short*' value:4242
-DecodeSingle parameter[1]:'out_0' type:'TestStruct6*' size:12 STRUCT
 DecodeSingle   parameter[1] member[0]:'m_short' type:'short' value:-5656
-DecodeSingle parameter[1]:'m_testStructPtr' type:'TestStruct5*' size:8 STRUCT
 DecodeSingle     parameter[1] member[0]:'m_char' type:'char' value:'5'
 DecodeSingle     parameter[1] member[1]:'m_shortPtr' type:'short*' value:4242
 DecodeSingle   parameter[1] member[2]:'m_charPtr' type:'char*' value:'6'
@@ -243,7 +233,6 @@ LES_Test_StructInputOutputParam: parameterDataSize:9
 DecodeSingle parameter[0]:'input_0' type:'int&' value:954
 LES_Test_ReferenceInputPODParam: parameterDataSize:4
 
-DecodeSingle parameter[0]:'input_0' type:'TestStruct1&' size:24 STRUCT
 DecodeSingle   parameter[0] member[0]:'m_longlong' type:'long long int' value:162132
 DecodeSingle   parameter[0] member[1]:'m_char' type:'char' value:'1'
 DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:14
@@ -254,9 +243,7 @@ LES_Test_ReferenceInputStructParam: parameterDataSize:19
 DecodeSingle parameter[0]:'output_0' type:'char&' value:'R'
 LES_Test_ReferenceOutputPODParam: parameterDataSize:1
 
-DecodeSingle parameter[0]:'output_0' type:'TestStruct2&' size:36 STRUCT
 DecodeSingle   parameter[0] member[0]:'m_float' type:'float' value:2131.159912
-DecodeSingle parameter[1]:'m_testStruct1' type:'TestStruct1' size:24 STRUCT
 DecodeSingle     parameter[1] member[0]:'m_longlong' type:'long long int' value:162132
 DecodeSingle     parameter[1] member[1]:'m_char' type:'char' value:'1'
 DecodeSingle     parameter[1] member[2]:'m_int' type:'int' value:14
@@ -267,7 +254,6 @@ DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:2526
 DecodeSingle   parameter[0] member[4]:'m_int' type:'int' value:1564
 LES_Test_ReferenceOutputStructParam: parameterDataSize:30
 
-DecodeSingle parameter[0]:'input_0' type:'TestStruct7&' size:20 STRUCT
 DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:936
 DecodeSingle   parameter[0] member[1]:'m_floatRef' type:'float&' value:76.123199
 DecodeSingle   parameter[0] member[2]:'m_char' type:'char' value:'A'
@@ -275,9 +261,7 @@ DecodeSingle   parameter[0] member[3]:'m_charRef' type:'char&' value:'C'
 DecodeSingle   parameter[0] member[4]:'m_charPtr' type:'char*' value:'R'
 LES_Test_ReferenceStructInputParam: parameterDataSize:9
 
-DecodeSingle parameter[0]:'output_0' type:'TestStruct8&' size:12 STRUCT
 DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:2526
-DecodeSingle parameter[1]:'m_testStruct5Ref' type:'TestStruct5&' size:8 STRUCT
 DecodeSingle     parameter[1] member[0]:'m_char' type:'char' value:'5'
 DecodeSingle     parameter[1] member[1]:'m_shortPtr' type:'short*' value:4242
 DecodeSingle   parameter[0] member[2]:'m_charPtr' type:'char*' value:'R'
@@ -287,8 +271,6 @@ DecodeSingle parameter[0]:'output_0' type:'char&' value:'C'
 LES_Test_DecodeOutputParameters: parameterDataSize:1
 
 #### Array tests ####
-WARNING: AddType 'arrayNotAliasedToPtr[4]' hash 0xDFB3C16A array types must be aliased to a pointer type Alias:'int' Flags:0x5
-FATAL_ERROR: TEST AddType 'arrayNotAliasedToPtr[4]' NumElements:4 0xDFB3C16A Alias 'int' failed
 
 WARNING: AddType 'arrayNotAliased[5]' hash 0x521D60A is an array 4 elements but not aliased, arrays must be aliased to a pointer type
 FATAL_ERROR: TEST AddType 'arrayNotAliased[5]' NumElements:4 0x521D60A Alias 'arrayNotAliased[5]' failed
@@ -302,30 +284,23 @@ FATAL_ERROR: TEST AddType 'arrayCantFindAlias[1]' NumElements:1 0xED709A25 Alias
 WARNING: AddType 'arrayInvalidNumElements[1]' NumELements:0 Invalid number of elements must be > 0
 FATAL_ERROR: TEST AddType 'arrayInvalidNumElements[1]' NumElements:0 0x859E7150 Alias 'int*' failed
 
-DecodeSingle parameter[0]:'input_0' type:'char[3]' size:1 ARRAY numELements:3
 DecodeSingle   parameter[0] member[0]:'input_0' type:'char' value:'0'
 DecodeSingle   parameter[0] member[1]:'input_0' type:'char' value:'1'
 DecodeSingle   parameter[0] member[2]:'input_0' type:'char' value:'2'
-DecodeSingle parameter[1]:'input_1' type:'short[3]' size:2 ARRAY numELements:3
 DecodeSingle   parameter[1] member[0]:'input_1' type:'short' value:3141
 DecodeSingle   parameter[1] member[1]:'input_1' type:'short' value:3142
 DecodeSingle   parameter[1] member[2]:'input_1' type:'short' value:3143
 LES_Test_DecodeInputArrayPOD: parameterDataSize:9
 
-DecodeSingle parameter[0]:'output_0' type:'short[3]' size:2 ARRAY numELements:3
 DecodeSingle   parameter[0] member[0]:'output_0' type:'short' value:2713
 DecodeSingle   parameter[0] member[1]:'output_0' type:'short' value:2714
 DecodeSingle   parameter[0] member[2]:'output_0' type:'short' value:2715
-DecodeSingle parameter[1]:'output_1' type:'int[3]' size:4 ARRAY numELements:3
 DecodeSingle   parameter[1] member[0]:'output_1' type:'int' value:-1954
 DecodeSingle   parameter[1] member[1]:'output_1' type:'int' value:-1955
 DecodeSingle   parameter[1] member[2]:'output_1' type:'int' value:-1956
 LES_Test_DecodeOutputArrayPOD: parameterDataSize:18
 
-DecodeSingle parameter[0]:'input_0' type:'TestStruct2[2]' size:36 ARRAY numELements:2
-DecodeSingle parameter[0]:'input_0' type:'TestStruct2[2]' size:36 STRUCT
 DecodeSingle   parameter[0] member[0]:'m_float' type:'float' value:2137.000000
-DecodeSingle parameter[1]:'m_testStruct1' type:'TestStruct1' size:24 STRUCT
 DecodeSingle     parameter[1] member[0]:'m_longlong' type:'long long int' value:18
 DecodeSingle     parameter[1] member[1]:'m_char' type:'char' value:'M'
 DecodeSingle     parameter[1] member[2]:'m_int' type:'int' value:230421
@@ -335,7 +310,6 @@ DecodeSingle   parameter[0] member[2]:'m_char' type:'char' value:'Y'
 DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:2627
 DecodeSingle   parameter[0] member[4]:'m_int' type:'int' value:21412932
 DecodeSingle   parameter[0] member[0]:'m_float' type:'float' value:2138.000000
-DecodeSingle parameter[1]:'m_testStruct1' type:'TestStruct1' size:24 STRUCT
 DecodeSingle     parameter[1] member[0]:'m_longlong' type:'long long int' value:18
 DecodeSingle     parameter[1] member[1]:'m_char' type:'char' value:'M'
 DecodeSingle     parameter[1] member[2]:'m_int' type:'int' value:230421
@@ -344,8 +318,6 @@ DecodeSingle     parameter[1] member[4]:'m_float' type:'float' value:1525.000000
 DecodeSingle   parameter[0] member[2]:'m_char' type:'char' value:'Z'
 DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:2628
 DecodeSingle   parameter[0] member[4]:'m_int' type:'int' value:21412933
-DecodeSingle parameter[1]:'input_1' type:'TestStruct1[1]' size:24 ARRAY numELements:1
-DecodeSingle parameter[1]:'input_1' type:'TestStruct1[1]' size:24 STRUCT
 DecodeSingle   parameter[1] member[0]:'m_longlong' type:'long long int' value:18
 DecodeSingle   parameter[1] member[1]:'m_char' type:'char' value:'M'
 DecodeSingle   parameter[1] member[2]:'m_int' type:'int' value:230421
@@ -353,8 +325,6 @@ DecodeSingle   parameter[1] member[3]:'m_short' type:'short' value:421
 DecodeSingle   parameter[1] member[4]:'m_float' type:'float' value:1525.000000
 LES_Test_DecodeInputArraySTRUCTA: parameterDataSize:79
 
-DecodeSingle parameter[0]:'input_0' type:'TestStruct1[2]' size:24 ARRAY numELements:2
-DecodeSingle parameter[0]:'input_0' type:'TestStruct1[2]' size:24 STRUCT
 DecodeSingle   parameter[0] member[0]:'m_longlong' type:'long long int' value:18
 DecodeSingle   parameter[0] member[1]:'m_char' type:'char' value:'M'
 DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:230421
@@ -365,10 +335,7 @@ DecodeSingle   parameter[0] member[1]:'m_char' type:'char' value:'N'
 DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:230422
 DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:422
 DecodeSingle   parameter[0] member[4]:'m_float' type:'float' value:1526.000000
-DecodeSingle parameter[1]:'input_1' type:'TestStruct2[1]' size:36 ARRAY numELements:1
-DecodeSingle parameter[1]:'input_1' type:'TestStruct2[1]' size:36 STRUCT
 DecodeSingle   parameter[1] member[0]:'m_float' type:'float' value:2137.000000
-DecodeSingle parameter[1]:'m_testStruct1' type:'TestStruct1' size:24 STRUCT
 DecodeSingle     parameter[1] member[0]:'m_longlong' type:'long long int' value:19
 DecodeSingle     parameter[1] member[1]:'m_char' type:'char' value:'N'
 DecodeSingle     parameter[1] member[2]:'m_int' type:'int' value:230422
@@ -379,8 +346,6 @@ DecodeSingle   parameter[1] member[3]:'m_short' type:'short' value:2627
 DecodeSingle   parameter[1] member[4]:'m_int' type:'int' value:21412932
 LES_Test_DecodeInputArraySTRUCTB: parameterDataSize:68
 
-DecodeSingle parameter[0]:'output_0' type:'TestStruct3[2]' size:16 ARRAY numELements:2
-DecodeSingle parameter[0]:'output_0' type:'TestStruct3[2]' size:16 STRUCT
 DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:1953
 DecodeSingle   parameter[0] member[1]:'m_float' type:'float' value:29.299999
 DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:230810
@@ -389,36 +354,46 @@ DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:1954
 DecodeSingle   parameter[0] member[1]:'m_float' type:'float' value:29.400000
 DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:230811
 DecodeSingle   parameter[0] member[3]:'m_char' type:'char' value:'>'
-DecodeSingle parameter[1]:'output_1' type:'TestStruct4[1]' size:28 ARRAY numELements:1
-DecodeSingle parameter[1]:'output_1' type:'TestStruct4[1]' size:28 STRUCT
 DecodeSingle   parameter[1] member[0]:'m_float' type:'float' value:19.629999
 DecodeSingle   parameter[1] member[1]:'m_int' type:'int' value:1963
 DecodeSingle   parameter[1] member[2]:'m_char' type:'char' value:'#'
 DecodeSingle   parameter[1] member[3]:'m_short' type:'short' value:2930
-DecodeSingle parameter[4]:'m_testStruct3' type:'TestStruct3' size:16 STRUCT
-DecodeSingle     parameter[4] member[0]:'m_short' type:'short' value:1954
-DecodeSingle     parameter[4] member[1]:'m_float' type:'float' value:29.400000
-DecodeSingle     parameter[4] member[2]:'m_int' type:'int' value:230811
-DecodeSingle     parameter[4] member[3]:'m_char' type:'char' value:'>'
-LES_Test_DecodeOutputArraySTRUCT: parameterDataSize:44
+DecodeSingle   parameter[1] member[4]:'m_short2' type:'short' value:2931
+DecodeSingle     parameter[5] member[0]:'m_short' type:'short' value:1954
+DecodeSingle     parameter[5] member[1]:'m_float' type:'float' value:29.400000
+DecodeSingle     parameter[5] member[2]:'m_int' type:'int' value:230811
+DecodeSingle     parameter[5] member[3]:'m_char' type:'char' value:'>'
+LES_Test_DecodeOutputArraySTRUCT: parameterDataSize:46
 
-DecodeSingle parameter[0]:'input_0' type:'char&[3]' size:1 ARRAY numELements:3
 DecodeSingle   parameter[0] member[0]:'input_0' type:'char' value:'0'
 DecodeSingle   parameter[0] member[1]:'input_0' type:'char' value:'1'
 DecodeSingle   parameter[0] member[2]:'input_0' type:'char' value:'2'
-DecodeSingle parameter[1]:'input_1' type:'short&[3]' size:2 ARRAY numELements:3
 DecodeSingle   parameter[1] member[0]:'input_1' type:'short' value:3141
 DecodeSingle   parameter[1] member[1]:'input_1' type:'short' value:3142
 DecodeSingle   parameter[1] member[2]:'input_1' type:'short' value:3143
 LES_Test_DecodeInputArrayReference: parameterDataSize:9
 
-DecodeSingle parameter[0]:'output_0' type:'short&[3]' size:2 ARRAY numELements:3
 DecodeSingle   parameter[0] member[0]:'output_0' type:'short' value:2713
 DecodeSingle   parameter[0] member[1]:'output_0' type:'short' value:2714
 DecodeSingle   parameter[0] member[2]:'output_0' type:'short' value:2715
-DecodeSingle parameter[1]:'output_1' type:'int&[3]' size:4 ARRAY numELements:3
 DecodeSingle   parameter[1] member[0]:'output_1' type:'int' value:-1954
 DecodeSingle   parameter[1] member[1]:'output_1' type:'int' value:-1955
 DecodeSingle   parameter[1] member[2]:'output_1' type:'int' value:-1956
 LES_Test_DecodeOutputArrayReference: parameterDataSize:18
+
+DecodeSingle     parameter[0] member[0]:'m_short' type:'short' value:2063
+DecodeSingle     parameter[0] member[1]:'m_short' type:'short' value:2064
+DecodeSingle     parameter[0] member[2]:'m_short' type:'short' value:2065
+LES_Test_DecodeInputStructPODArray: parameterDataSize:6
+
+DecodeSingle     parameter[0] member[0]:'m_short' type:'short' value:3435
+DecodeSingle     parameter[0] member[1]:'m_short' type:'short' value:3436
+DecodeSingle     parameter[0] member[2]:'m_short' type:'short' value:3437
+DecodeSingle       parameter[0] member[0]:'m_short' type:'short' value:2063
+DecodeSingle       parameter[0] member[1]:'m_short' type:'short' value:2064
+DecodeSingle       parameter[0] member[2]:'m_short' type:'short' value:2065
+DecodeSingle       parameter[0] member[0]:'m_short' type:'short' value:2071
+DecodeSingle       parameter[0] member[1]:'m_short' type:'short' value:2072
+DecodeSingle       parameter[0] member[2]:'m_short' type:'short' value:2073
+LES_Test_DecodeInputStructStructArray: parameterDataSize:18
 
