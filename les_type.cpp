@@ -159,13 +159,7 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 	const LES_Hash hash = LES_GenerateHashCaseSensitive(name);
 
 	unsigned int flags = inputFlags;
-	if (numElements > 0)
-	{
-		flags = inputFlags | LES_TYPE_ARRAY;
-#if LES_TYPE_DEBUG
-		LES_LOG("Type '%s' is an array with %d elements\n", name, numElements);
-#endif // #if LES_TYPE_DEBUG
-	}
+	const bool isArray = flags & LES_TYPE_ARRAY;
 	const LES_Hash aliasedHash = LES_GenerateHashCaseSensitive(aliasedName);
 	if (aliasedHash != hash)
 	{
@@ -173,6 +167,14 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 #if LES_TYPE_DEBUG
 		LES_LOG("Type '%s' has an alias to '%s'\n", name, aliasedName);
 #endif // #if LES_TYPE_DEBUG
+	}
+	if (isArray)
+	{
+		if (numElements <= 0)
+		{
+			LES_WARNING("AddType '%s' NumELements:%d Invalid number of elements must be > 0\n", name, numElements);
+			return LES_RETURN_ERROR;
+		}
 	}
 
 	int index = LES_GetTypeEntrySlow(hash);
@@ -187,7 +189,7 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		typeEntryPtr->m_aliasedTypeID = aliasedTypeID;
 		typeEntryPtr->m_numElements = numElements;
 
-		if (numElements > 0)
+		if (isArray)
 		{
 			// Array types must be aliased to the pointer type
 			if ((typeEntryPtr->m_flags & LES_TYPE_ALIAS) == 0)

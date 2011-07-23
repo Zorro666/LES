@@ -40,20 +40,20 @@ FATAL_ERROR: 'LES_Test_InputNameDoesntExist' : Error adding Input parameter 0 'i
 WARNING: 'LES_Test_InputNameIDNotFound' : Can't find parameter name for ID:-1 parameter:'input_0' type:'int'
 FATAL_ERROR: 'LES_Test_InputNameIDNotFound' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputNameHashIsWrong' : Adding parameter 'input_0' name hash doesn't match for ID:77 0x480D993 != 0x97A0017 Code:'input_0' Definition:'wrongHash'
+WARNING: 'LES_Test_InputNameHashIsWrong' : Adding parameter 'input_0' name hash doesn't match for ID:81 0x480D993 != 0x97A0017 Code:'input_0' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_InputNameHashIsWrong' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputNameStringIsWrong' : Adding parameter 'InputNameBrokenHash' name string doesn't match for ID:79 'InputNameBrokenHash' != 'brokenString' 0x99F1870C : 0x99F1870C
+WARNING: 'LES_Test_InputNameStringIsWrong' : Adding parameter 'InputNameBrokenHash' name string doesn't match for ID:83 'InputNameBrokenHash' != 'brokenString' 0x99F1870C : 0x99F1870C
 FATAL_ERROR: 'LES_Test_InputNameStringIsWrong' : Error adding Input parameter 0 'InputNameBrokenHash' type:'int'
 
 #### Input type tests ####
 WARNING: 'LES_Test_InputTypeIDNotFound' : Can't find Input parameter type for ID:-1 parameter:'input_0' type:'int'
 FATAL_ERROR: 'LES_Test_InputTypeIDNotFound' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputTypeHashIsWrong' : parameter:0 'input_0' (Input) type hash doesn't match for ID:77 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
+WARNING: 'LES_Test_InputTypeHashIsWrong' : parameter:0 'input_0' (Input) type hash doesn't match for ID:81 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_InputTypeHashIsWrong' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputTypeStringIsWrong' : Adding parameter 'input_0' type string doesn't match for ID:83 'InputTypeBrokenHash' != 'brokenString' 0x7EF15B07 : 0x7EF15B07
+WARNING: 'LES_Test_InputTypeStringIsWrong' : Adding parameter 'input_0' type string doesn't match for ID:87 'InputTypeBrokenHash' != 'brokenString' 0x7EF15B07 : 0x7EF15B07
 FATAL_ERROR: 'LES_Test_InputTypeStringIsWrong' : Error adding Input parameter 0 'input_0' type:'InputTypeBrokenHash'
 
 #### Output parameter tests ####
@@ -83,20 +83,20 @@ FATAL_ERROR: 'LES_Test_OutputNameDoesntExist' : Error adding Output parameter 0 
 WARNING: 'LES_Test_OutputNameIDNotFound' : Can't find parameter name for ID:-1 parameter:'output_0' type:'int'
 FATAL_ERROR: 'LES_Test_OutputNameIDNotFound' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputNameHashIsWrong' : Adding parameter 'output_0' name hash doesn't match for ID:77 0x1D1CA836 != 0x97A0017 Code:'output_0' Definition:'wrongHash'
+WARNING: 'LES_Test_OutputNameHashIsWrong' : Adding parameter 'output_0' name hash doesn't match for ID:81 0x1D1CA836 != 0x97A0017 Code:'output_0' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_OutputNameHashIsWrong' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputNameStringIsWrong' : Adding parameter 'OutputNameBrokenHash' name string doesn't match for ID:96 'OutputNameBrokenHash' != 'brokenString' 0x61782F3F : 0x61782F3F
+WARNING: 'LES_Test_OutputNameStringIsWrong' : Adding parameter 'OutputNameBrokenHash' name string doesn't match for ID:100 'OutputNameBrokenHash' != 'brokenString' 0x61782F3F : 0x61782F3F
 FATAL_ERROR: 'LES_Test_OutputNameStringIsWrong' : Error adding Output parameter 0 'OutputNameBrokenHash' type:'int'
 
 #### Output type tests ####
 WARNING: 'LES_Test_OutputTypeIDNotFound' : Can't find Output parameter type for ID:-1 parameter:'output_0' type:'int'
 FATAL_ERROR: 'LES_Test_OutputTypeIDNotFound' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputTypeHashIsWrong' : parameter:0 'output_0' (Output) type hash doesn't match for ID:77 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
+WARNING: 'LES_Test_OutputTypeHashIsWrong' : parameter:0 'output_0' (Output) type hash doesn't match for ID:81 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_OutputTypeHashIsWrong' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputTypeStringIsWrong' : Adding parameter 'output_0' type string doesn't match for ID:100 'OutputTypeBrokenHash' != 'brokenString' 0x4678033A : 0x4678033A
+WARNING: 'LES_Test_OutputTypeStringIsWrong' : Adding parameter 'output_0' type string doesn't match for ID:104 'OutputTypeBrokenHash' != 'brokenString' 0x4678033A : 0x4678033A
 FATAL_ERROR: 'LES_Test_OutputTypeStringIsWrong' : Error adding Output parameter 0 'output_0' type:'OutputTypeBrokenHash'
 
 #### Parameter already exists tests ####
@@ -127,7 +127,7 @@ FATAL_ERROR: TEST AddType 'unsigned char' NumElements:0 0x6E40A25D Alias 'unsign
 WARNING: AddType 'unsigned char' hash 0x6E40A25D already in list and flags doesn't match Existing:0x5 New:0x12
 FATAL_ERROR: TEST AddType 'unsigned char' NumElements:0 0x6E40A25D Alias 'unsigned char' failed
 
-WARNING: AddType 'unsigned char' hash 0x6E40A25D already in list and aliasedTypeID doesn't match Existing:0 New:2
+WARNING: AddType 'unsigned char' hash 0x6E40A25D already in list and flags doesn't match Existing:0x5 New:0x45
 FATAL_ERROR: TEST AddType 'unsigned char' NumElements:0 0x6E40A25D Alias 'unsigned int' failed
 
 #### Read Parameter tests ####
@@ -285,4 +285,40 @@ LES_Test_ReferenceStructOutputParam: parameterDataSize:6
 
 DecodeSingle parameter[0]:'output_0' type:'char&' value:'C'
 LES_Test_ReadInputOutputParameters: parameterDataSize:1
+
+#### Array tests ####
+WARNING: AddType 'arrayNotAliasedToPtr[4]' hash 0xDFB3C16A array types must be aliased to a pointer type Alias:'int' Flags:0x5
+FATAL_ERROR: TEST AddType 'arrayNotAliasedToPtr[4]' NumElements:4 0xDFB3C16A Alias 'int' failed
+
+WARNING: AddType 'arrayNotAliased[5]' hash 0x521D60A is an array 4 elements but not aliased, arrays must be aliased to a pointer type
+FATAL_ERROR: TEST AddType 'arrayNotAliased[5]' NumElements:4 0x521D60A Alias 'arrayNotAliased[5]' failed
+
+WARNING: AddType 'arrayExistsWrongNumberOfElements[1]' hash 0x5429AC10 already in list and numElements doesn't match Existing:1 New:2
+FATAL_ERROR: TEST AddType 'arrayExistsWrongNumberOfElements[1]' NumElements:2 0x5429AC10 Alias 'int*' failed
+
+WARNING: AddType 'arrayCantFindAlias[1]' : aliasedEntry 'jake*' not found
+FATAL_ERROR: TEST AddType 'arrayCantFindAlias[1]' NumElements:1 0xED709A25 Alias 'jake*' failed
+
+WARNING: AddType 'arrayInvalidNumElements[1]' NumELements:0 Invalid number of elements must be > 0
+FATAL_ERROR: TEST AddType 'arrayInvalidNumElements[1]' NumElements:0 0x859E7150 Alias 'int*' failed
+
+DecodeSingle parameter[0]:'input_0' type:'char[3]' size:1 ARRAY numELements:3
+DecodeSingle   parameter[0] member[0]:'input_0' type:'char' value:'0'
+DecodeSingle   parameter[0] member[1]:'input_0' type:'char' value:'1'
+DecodeSingle   parameter[0] member[2]:'input_0' type:'char' value:'2'
+DecodeSingle parameter[1]:'input_1' type:'short[3]' size:2 ARRAY numELements:3
+DecodeSingle   parameter[1] member[0]:'input_1' type:'short' value:3141
+DecodeSingle   parameter[1] member[1]:'input_1' type:'short' value:3142
+DecodeSingle   parameter[1] member[2]:'input_1' type:'short' value:3143
+LES_Test_DecodeInputArrayPOD: parameterDataSize:9
+
+DecodeSingle parameter[0]:'output_0' type:'short[3]' size:2 ARRAY numELements:3
+DecodeSingle   parameter[0] member[0]:'output_0' type:'short' value:2713
+DecodeSingle   parameter[0] member[1]:'output_0' type:'short' value:2714
+DecodeSingle   parameter[0] member[2]:'output_0' type:'short' value:2715
+DecodeSingle parameter[1]:'output_1' type:'int[3]' size:4 ARRAY numELements:3
+DecodeSingle   parameter[1] member[0]:'output_1' type:'int' value:-1954
+DecodeSingle   parameter[1] member[1]:'output_1' type:'int' value:-1955
+DecodeSingle   parameter[1] member[2]:'output_1' type:'int' value:-1956
+LES_Test_DecodeOutputArrayPOD: parameterDataSize:18
 
