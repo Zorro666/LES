@@ -412,3 +412,13 @@ DecodeSingle   parameter[1] member[1]:'input_1' type:'short' value:3142
 DecodeSingle   parameter[1] member[2]:'input_1' type:'short' value:3143
 LES_Test_DecodeInputArrayReference: parameterDataSize:9
 
+DecodeSingle parameter[0]:'output_0' type:'short&[3]' size:2 ARRAY numELements:3
+DecodeSingle   parameter[0] member[0]:'output_0' type:'short' value:2713
+DecodeSingle   parameter[0] member[1]:'output_0' type:'short' value:2714
+DecodeSingle   parameter[0] member[2]:'output_0' type:'short' value:2715
+DecodeSingle parameter[1]:'output_1' type:'int&[3]' size:4 ARRAY numELements:3
+DecodeSingle   parameter[1] member[0]:'output_1' type:'int' value:-1954
+DecodeSingle   parameter[1] member[1]:'output_1' type:'int' value:-1955
+DecodeSingle   parameter[1] member[2]:'output_1' type:'int' value:-1956
+LES_Test_DecodeOutputArrayReference: parameterDataSize:18
+

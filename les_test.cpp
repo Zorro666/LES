@@ -1128,6 +1128,23 @@ void LES_Test_DecodeInputArrayReference(char (&input_0)[3], short (&input_1)[3])
 	return;
 }
 
+void LES_Test_DecodeOutputArrayReference(short (&output_0)[3], int (&output_1)[3])
+{
+	const char* const testFuncName = "LES_Test_DecodeOutputArrayReference";
+	LES_FunctionParameterData* parameterData = LES_NULL;
+
+	LES_FUNCTION_START(LES_Test_DecodeOutputArrayReference, void);
+	LES_FUNCTION_ADD_OUTPUT(short&[3], output_0);
+	LES_FUNCTION_ADD_OUTPUT(int&[3], output_1);
+	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
+	LES_FUNCTION_END();
+
+	const int realParameterDataSize = sizeof(short) * 3 + sizeof(int) * 3;
+
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
+	return;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // External functions
@@ -1623,6 +1640,11 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_INPUT(short&[3], input_1);
 	LES_TEST_FUNCTION_END();
 
+	LES_TEST_FUNCTION_START(LES_Test_DecodeOutputArrayReference, void, 0, 2);
+	LES_TEST_FUNCTION_ADD_OUTPUT(short&[3], output_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int&[3], output_1);
+	LES_TEST_FUNCTION_END();
+
 	/* Run specific tests */
 	/* Function header definition tests */
 	LES_LOG("#### Function header definition tests ####\n");
@@ -2023,6 +2045,8 @@ void LES_TestSetup(void)
 	LES_Test_DecodeOutputArraySTRUCT(arrstra_out_0, arrstra_out_1);
 	LES_LOG("\n");
 	LES_Test_DecodeInputArrayReference(arrpod_in_0, arrpod_in_1);
+	LES_LOG("\n");
+	LES_Test_DecodeOutputArrayReference(arrpod_out_0, arrpod_out_1);
 	LES_LOG("\n");
 }
 
