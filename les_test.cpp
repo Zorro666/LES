@@ -1048,14 +1048,14 @@ void LES_Test_DecodeOutputArrayPOD(short output_0[3], int output_1[3])
 	return;
 }
 
-void LES_Test_DecodeInputArraySTRUCT(TestStruct1 input_0[2]) //, TestStruct2 input_1[1])
+void LES_Test_DecodeInputArraySTRUCT(TestStruct1 input_0[2], TestStruct2 input_1[1])
 {
 	const char* const testFuncName = "LES_Test_DecodeInputArraySTRUCT";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_DecodeInputArraySTRUCT, void);
 	LES_FUNCTION_ADD_INPUT(TestStruct1[2], input_0);
-	//LES_FUNCTION_ADD_INPUT(TestStruct2[1], input_1);
+	LES_FUNCTION_ADD_INPUT(TestStruct2[1], input_1);
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
@@ -1535,9 +1535,9 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_OUTPUT(int[3], output_1);
 	LES_TEST_FUNCTION_END();
 
-	LES_TEST_FUNCTION_START(LES_Test_DecodeInputArraySTRUCT, void, 1, 0);
+	LES_TEST_FUNCTION_START(LES_Test_DecodeInputArraySTRUCT, void, 2, 0);
 	LES_TEST_FUNCTION_ADD_INPUT(TestStruct1[2], input_0);
-	//LES_TEST_FUNCTION_ADD_INPUT(TestStruct2[1], input_1);
+	LES_TEST_FUNCTION_ADD_INPUT(TestStruct2[1], input_1);
 	LES_TEST_FUNCTION_END();
 
 	/* Run specific tests */
@@ -1900,7 +1900,7 @@ void LES_TestSetup(void)
 	arrstr_in_1[1].m_char = 'Z';
 	arrstr_in_1[1].m_short = 2627;
 	arrstr_in_1[1].m_int = 21412932;
-	LES_Test_DecodeInputArraySTRUCT(arrstr_in_0); //, arrstr_in_1);
+	LES_Test_DecodeInputArraySTRUCT(arrstr_in_0, arrstr_in_1);
 	LES_LOG("\n");
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }

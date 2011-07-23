@@ -112,6 +112,10 @@ int LES_TypeEntry::ComputeDataStorageSize(void) const
 			}
 			totalDataSize += dataSize;
 		}
+		if (numElements > 0)
+		{
+			totalDataSize *= numElements;
+		}
 		return totalDataSize;
 	}
 	int dataSize = typeEntryPtr->m_dataSize;
