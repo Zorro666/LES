@@ -1731,7 +1731,7 @@ void LES_TestSetup(void)
 	LES_LOG("\n");
 	LES_TEST_ADD_TYPE_EX(unsigned char, 1, LES_TYPE_POINTER|LES_TYPE_OUTPUT, unsigned char, 0);
 	LES_LOG("\n");
-	LES_TEST_ADD_TYPE_EX(unsigned char, 1, LES_TYPE_POD|LES_TYPE_INPUT, unsigned int, 0);
+	LES_TEST_ADD_TYPE_EX(unsigned char*, 4, LES_TYPE_POINTER|LES_TYPE_POD|LES_TYPE_INPUT|LES_TYPE_OUTPUT, unsigned int, 0);
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 	LES_LOG("\n");
 
