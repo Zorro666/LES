@@ -103,8 +103,18 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	const int typeDataSize = typeDataPtr->m_dataSize;
 	if (typeFlags & LES_TYPE_STRUCT)
 	{
-		LES_LOG("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d STRUCT\n", parameterIndex, nameStr, typeStr, typeDataSize);
+		int localNumElements = numElements;
+		if (localNumElements < 1)
+		{
+			localNumElements = 1;
+		}
+		else
+		{
+			LES_LOG("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d ARRAY numELements:%d\n", 
+							parameterIndex, nameStr, typeStr, typeDataSize, numElements);
+		}
 		int returnCode = LES_RETURN_OK;
+		LES_LOG("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d STRUCT\n", parameterIndex, nameStr, typeStr, typeDataSize);
 		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeDataPtr->m_hash);
 		if (structDefinition == LES_NULL)
 		{
@@ -113,6 +123,8 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		}
 		const int numMembers = structDefinition->GetNumMembers();
 		const int newDepth = depth + 1;
+		for (int e = 0; e < localNumElements; e++)
+		{
 		for (int i = 0; i < numMembers; i++)
 		{
 			const LES_StructMember* const structMember = structDefinition->GetMemberByIndex(i);
@@ -123,6 +135,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 			{
 				return LES_RETURN_ERROR;
 			}
+		}
 		}
 		return returnCode;
 	}

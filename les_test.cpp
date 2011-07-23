@@ -717,7 +717,7 @@ static int LES_Test_GenericDecodeHelper(const char* const testFuncName, LES_Func
 	if (parameterDataSize != realParameterDataSize)
 	{
 		LES_FATAL_ERROR("%s: parameterDataSize is wrong Code:%d Should be:%d\n", testFuncName, parameterDataSize, realParameterDataSize);
-		//return LES_RETURN_ERROR;
+		return LES_RETURN_ERROR;
 	}
 
 	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
@@ -1048,12 +1048,33 @@ void LES_Test_DecodeOutputArrayPOD(short output_0[3], int output_1[3])
 	return;
 }
 
-void LES_Test_DecodeInputArraySTRUCT(TestStruct1 input_0[2], TestStruct2 input_1[1])
+void LES_Test_DecodeInputArraySTRUCTA(TestStruct2 input_0[2], TestStruct1 input_1[1])
 {
-	const char* const testFuncName = "LES_Test_DecodeInputArraySTRUCT";
+	const char* const testFuncName = "LES_Test_DecodeInputArraySTRUCTA";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
-	LES_FUNCTION_START(LES_Test_DecodeInputArraySTRUCT, void);
+	LES_FUNCTION_START(LES_Test_DecodeInputArraySTRUCTA, void);
+	LES_FUNCTION_ADD_INPUT(TestStruct2[2], input_0);
+	LES_FUNCTION_ADD_INPUT(TestStruct1[1], input_1);
+	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
+	LES_FUNCTION_END();
+
+	const int realParameterDataSize = 0 +
+												2 * (sizeof(float)+
+														 sizeof(long long int)+sizeof(char)+sizeof(int)+sizeof(short)+sizeof(float)+
+														 sizeof(char)+ sizeof(short)+ sizeof(int)) +
+												1 * (sizeof(long long int)+sizeof(char)+sizeof(int)+sizeof(short)+sizeof(float));
+
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
+	return;
+}
+
+void LES_Test_DecodeInputArraySTRUCTB(TestStruct1 input_0[2], TestStruct2 input_1[1])
+{
+	const char* const testFuncName = "LES_Test_DecodeInputArraySTRUCTB";
+	LES_FunctionParameterData* parameterData = LES_NULL;
+
+	LES_FUNCTION_START(LES_Test_DecodeInputArraySTRUCTB, void);
 	LES_FUNCTION_ADD_INPUT(TestStruct1[2], input_0);
 	LES_FUNCTION_ADD_INPUT(TestStruct2[1], input_1);
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
@@ -1200,8 +1221,10 @@ void LES_TestSetup(void)
 	LES_TEST_ADD_TYPE_POD_ARRAY(char, 3);
 	LES_TEST_ADD_TYPE_POD_ARRAY(short, 3);
 	LES_TEST_ADD_TYPE_POD_ARRAY(int, 3);
+	LES_TEST_ADD_TYPE_STRUCT_ARRAY(TestStruct1, 1);
 	LES_TEST_ADD_TYPE_STRUCT_ARRAY(TestStruct1, 2);
 	LES_TEST_ADD_TYPE_STRUCT_ARRAY(TestStruct2, 1);
+	LES_TEST_ADD_TYPE_STRUCT_ARRAY(TestStruct2, 2);
 
 	/* Sample functions for development */
 	LES_TEST_FUNCTION_START(jakeInit, void, 2, 1);
@@ -1535,7 +1558,12 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_OUTPUT(int[3], output_1);
 	LES_TEST_FUNCTION_END();
 
-	LES_TEST_FUNCTION_START(LES_Test_DecodeInputArraySTRUCT, void, 2, 0);
+	LES_TEST_FUNCTION_START(LES_Test_DecodeInputArraySTRUCTA, void, 2, 0);
+	LES_TEST_FUNCTION_ADD_INPUT(TestStruct2[2], input_0);
+	LES_TEST_FUNCTION_ADD_INPUT(TestStruct1[1], input_1);
+	LES_TEST_FUNCTION_END();
+
+	LES_TEST_FUNCTION_START(LES_Test_DecodeInputArraySTRUCTB, void, 2, 0);
 	LES_TEST_FUNCTION_ADD_INPUT(TestStruct1[2], input_0);
 	LES_TEST_FUNCTION_ADD_INPUT(TestStruct2[1], input_1);
 	LES_TEST_FUNCTION_END();
@@ -1883,24 +1911,43 @@ void LES_TestSetup(void)
 	LES_Test_DecodeOutputArrayPOD(arrpod_out_0, arrpod_out_1);
 	LES_LOG("\n");
 
-	TestStruct1 arrstr_in_0[2];
-	arrstr_in_0[0].m_longlong = 18;
-	arrstr_in_0[0].m_char = 'M';
-	arrstr_in_0[0].m_int = 230421;
-	arrstr_in_0[0].m_short = 421;
-	arrstr_in_0[0].m_float = 1525.0f;
-	arrstr_in_0[1].m_longlong = 19;
-	arrstr_in_0[1].m_char = 'N';
-	arrstr_in_0[1].m_int = 230422;
-	arrstr_in_0[1].m_short = 422;
-	arrstr_in_0[1].m_float = 1526.0f;
-	TestStruct2 arrstr_in_1[1];
-	arrstr_in_1[1].m_float = 2137.0f;
-	arrstr_in_1[1].m_testStruct1 = arrstr_in_0[1];
-	arrstr_in_1[1].m_char = 'Z';
-	arrstr_in_1[1].m_short = 2627;
-	arrstr_in_1[1].m_int = 21412932;
-	LES_Test_DecodeInputArraySTRUCT(arrstr_in_0, arrstr_in_1);
+	TestStruct1 arrstra_in_1[1];
+	arrstra_in_1[0].m_longlong = 18;
+	arrstra_in_1[0].m_char = 'M';
+	arrstra_in_1[0].m_int = 230421;
+	arrstra_in_1[0].m_short = 421;
+	arrstra_in_1[0].m_float = 1525.0f;
+	TestStruct2 arrstra_in_0[2];
+	arrstra_in_0[0].m_float = 2137.0f;
+	arrstra_in_0[0].m_testStruct1 = arrstra_in_1[0];
+	arrstra_in_0[0].m_char = 'Y';
+	arrstra_in_0[0].m_short = 2627;
+	arrstra_in_0[0].m_int = 21412932;
+	arrstra_in_0[1].m_float = 2138.0f;
+	arrstra_in_0[1].m_testStruct1 = arrstra_in_1[0];
+	arrstra_in_0[1].m_char = 'Z';
+	arrstra_in_0[1].m_short = 2628;
+	arrstra_in_0[1].m_int = 21412933;
+	LES_Test_DecodeInputArraySTRUCTA(arrstra_in_0, arrstra_in_1);
+	LES_LOG("\n");
+	TestStruct1 arrstrb_in_0[2];
+	arrstrb_in_0[0].m_longlong = 18;
+	arrstrb_in_0[0].m_char = 'M';
+	arrstrb_in_0[0].m_int = 230421;
+	arrstrb_in_0[0].m_short = 421;
+	arrstrb_in_0[0].m_float = 1525.0f;
+	arrstrb_in_0[1].m_longlong = 19;
+	arrstrb_in_0[1].m_char = 'N';
+	arrstrb_in_0[1].m_int = 230422;
+	arrstrb_in_0[1].m_short = 422;
+	arrstrb_in_0[1].m_float = 1526.0f;
+	TestStruct2 arrstrb_in_1[1];
+	arrstrb_in_1[0].m_float = 2137.0f;
+	arrstrb_in_1[0].m_testStruct1 = arrstrb_in_0[1];
+	arrstrb_in_1[0].m_char = 'Y';
+	arrstrb_in_1[0].m_short = 2627;
+	arrstrb_in_1[0].m_int = 21412932;
+	LES_Test_DecodeInputArraySTRUCTB(arrstrb_in_0, arrstrb_in_1);
 	LES_LOG("\n");
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
