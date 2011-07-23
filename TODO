@@ -1,4 +1,7 @@
 High Priority:
+BUG: what is the 3rd AddType test it shows same error as the 2nd test - no point to that test
+BUG: input parameter as a structure array has the wrong parameter data block size
+
 TEST: test input parameter as a structure array
 TEST: test output parameter as a structure array
 TEST: test input parameter as a reference array

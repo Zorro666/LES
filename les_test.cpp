@@ -340,6 +340,7 @@ static void LES_Test_OutputParamUsedAsInput(unsigned int input_0, unsigned short
 
 static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_2, float input_3, int* input_4)
 {
+	const char* const testFuncName = "LES_Test_ReadInputParameters";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_ReadInputParameters, void);
@@ -353,7 +354,7 @@ static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_
 
 	if (parameterData == LES_NULL)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputParameters: parameterData is NULL\n");
+		LES_FATAL_ERROR("%s: parameterData is NULL\n", testFuncName);
 		return;
 	}
 	const LES_StringEntry* typeEntry = LES_NULL;
@@ -364,12 +365,12 @@ static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_
 	errorCode = parameterData->Read(typeEntry, (void*)&value_0);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputParameters: Read failed for input_0\n");
+		LES_FATAL_ERROR("%s: Read failed for input_0\n", testFuncName);
 		return;
 	}
 	if (input_0 != value_0)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputParameters: parameter data is wrong input_0:%d value_0:%d\n", input_0, value_0);
+		LES_FATAL_ERROR("%s: parameter data is wrong input_0:%d value_0:%d\n", testFuncName, input_0, value_0);
 	}
 
 	typeEntry = LES_GetStringEntry("short");
@@ -377,12 +378,12 @@ static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_
 	errorCode = parameterData->Read(typeEntry, (void*)&value_1);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputParameters: Read failed for input_1\n");
+		LES_FATAL_ERROR("%s: Read failed for input_1\n", testFuncName);
 		return;
 	}
 	if (input_1 != value_1)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputParameters: parameter data is wrong input_1:%d value_1:%d\n", input_1, value_1);
+		LES_FATAL_ERROR("%s: parameter data is wrong input_1:%d value_1:%d\n", testFuncName, input_1, value_1);
 	}
 
 	typeEntry = LES_GetStringEntry("char");
@@ -390,12 +391,12 @@ static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_
 	errorCode = parameterData->Read(typeEntry, (void*)&value_2);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputParameters: Read failed for input_2\n");
+		LES_FATAL_ERROR("%s: Read failed for input_2\n", testFuncName);
 		return;
 	}
 	if (input_2 != value_2)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputParameters: parameter data is wrong input_2:%d value_2:%d\n", input_2, value_2);
+		LES_FATAL_ERROR("%s: parameter data is wrong input_2:%d value_2:%d\n", testFuncName, input_2, value_2);
 	}
 
 	typeEntry = LES_GetStringEntry("float");
@@ -403,12 +404,12 @@ static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_
 	errorCode = parameterData->Read(typeEntry, (void*)&value_3);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputParameters: Read failed for input_3\n");
+		LES_FATAL_ERROR("%s: Read failed for input_3\n", testFuncName);
 		return;
 	}
 	if (fabsf(input_3-value_3) > 1.0e-6f)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputParameters: parameter data is wrong input_3:%f value_3:%f\n", input_3, value_3);
+		LES_FATAL_ERROR("%s: parameter data is wrong input_3:%f value_3:%f\n", testFuncName, input_3, value_3);
 	}
 
 	typeEntry = LES_GetStringEntry("int*");
@@ -416,22 +417,23 @@ static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_
 	errorCode = parameterData->Read(typeEntry, (void*)&value_4);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputParameters: Read failed for input_4\n");
+		LES_FATAL_ERROR("%s: Read failed for input_4\n", testFuncName);
 		return;
 	}
 	if (*input_4 != value_4)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputParameters: parameter data is wrong input_4:%d value_4:%d\n", *input_4, value_4);
+		LES_FATAL_ERROR("LES_Test_ReadInputParameters: parameter data is wrong input_4:%d value_4:%d\n", testFuncName, *input_4, value_4);
 	}
-	LES_LOG("LES_Test_ReadInputParameters: input_0:%d value_0:%d\n", input_0, value_0);
-	LES_LOG("LES_Test_ReadInputParameters: input_1:%d value_1:%d\n", input_1, value_1);
-	LES_LOG("LES_Test_ReadInputParameters: input_2:%d value_2:%d\n", input_2, value_2);
-	LES_LOG("LES_Test_ReadInputParameters: input_3:%f value_3:%f\n", input_3, value_3);
-	LES_LOG("LES_Test_ReadInputParameters: input_4:%d value_4:%d\n", *input_4, value_4);
+	LES_LOG("%s: input_0:%d value_0:%d\n", testFuncName, input_0, value_0);
+	LES_LOG("%s: input_1:%d value_1:%d\n", testFuncName, input_1, value_1);
+	LES_LOG("%s: input_2:%d value_2:%d\n", testFuncName, input_2, value_2);
+	LES_LOG("%s: input_3:%f value_3:%f\n", testFuncName, input_3, value_3);
+	LES_LOG("%s: input_4:%d value_4:%d\n", testFuncName, *input_4, value_4);
 }
 
 static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short* output_1, unsigned char* output_2, float* output_3)
 {
+	const char* const testFuncName = "LES_Test_ReadOutputParameters";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_ReadOutputParameters, void);
@@ -444,7 +446,7 @@ static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short
 
 	if (parameterData == LES_NULL)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadOutputParameters: parameterData is NULL\n");
+		LES_FATAL_ERROR("%s: parameterData is NULL\n", testFuncName);
 		return;
 	}
 	const LES_StringEntry* typeEntry = LES_NULL;
@@ -455,12 +457,12 @@ static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short
 	errorCode = parameterData->Read(typeEntry, (void*)&value_0);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadOutputParameters: Read failed for output_0\n");
+		LES_FATAL_ERROR("%s: Read failed for output_0\n", testFuncName);
 		return;
 	}
 	if (*output_0 != value_0)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadOutputParameters: parameter data is wrong output_0:%d value_0:%d\n", *output_0, value_0);
+		LES_FATAL_ERROR("%s: parameter data is wrong output_0:%d value_0:%d\n", testFuncName, *output_0, value_0);
 		return;
 	}
 
@@ -469,12 +471,12 @@ static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short
 	errorCode = parameterData->Read(typeEntry, (void*)&value_1);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadOutputParameters: Read failed for output_1\n");
+		LES_FATAL_ERROR("%s: Read failed for output_1\n", testFuncName);
 		return;
 	}
 	if (*output_1 != value_1)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadOutputParameters: parameter data is wrong output_1:%d value_1:%d\n", *output_1, value_1);
+		LES_FATAL_ERROR("%s: parameter data is wrong output_1:%d value_1:%d\n", testFuncName, *output_1, value_1);
 		return;
 	}
 
@@ -483,12 +485,12 @@ static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short
 	errorCode = parameterData->Read(typeEntry, (void*)&value_2);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadOutputParameters: Read failed for output_2\n");
+		LES_FATAL_ERROR("%s: Read failed for output_2\n", testFuncName);
 		return;
 	}
 	if (*output_2 != value_2)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadOutputParameters: parameter data is wrong output_2:%d value_2:%d\n", *output_2, value_2);
+		LES_FATAL_ERROR("%s: parameter data is wrong output_2:%d value_2:%d\n", testFuncName, *output_2, value_2);
 		return;
 	}
 
@@ -497,24 +499,25 @@ static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short
 	errorCode = parameterData->Read(typeEntry, (void*)&value_3);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadOutputParameters: Read failed for output_3\n");
+		LES_FATAL_ERROR("%s: Read failed for output_3\n", testFuncName);
 		return;
 	}
 	if (fabsf(*output_3-value_3) > 1.0e-6f)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadOutputParameters: parameter data is wrong output_3:%f value_3:%f\n", *output_3, value_3);
+		LES_FATAL_ERROR("%s: parameter data is wrong output_3:%f value_3:%f\n", testFuncName, *output_3, value_3);
 		return;
 	}
 
-	LES_LOG("LES_Test_ReadOutputParameters: output_0:%d value_0:%d\n", *output_0, value_0);
-	LES_LOG("LES_Test_ReadOutputParameters: output_1:%d value_1:%d\n", *output_1, value_1);
-	LES_LOG("LES_Test_ReadOutputParameters: output_2:%d value_2:%d\n", *output_2, value_2);
-	LES_LOG("LES_Test_ReadOutputParameters: output_3:%f value_3:%f\n", *output_3, value_3);
+	LES_LOG("%s: output_0:%d value_0:%d\n", testFuncName, *output_0, value_0);
+	LES_LOG("%s: output_1:%d value_1:%d\n", testFuncName, *output_1, value_1);
+	LES_LOG("%s: output_2:%d value_2:%d\n", testFuncName, *output_2, value_2);
+	LES_LOG("%s: output_3:%f value_3:%f\n", testFuncName, *output_3, value_3);
 }
 
 static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char input_2, float input_3, int* input_4,
 																							 unsigned int* output_0, unsigned short* output_1, unsigned char* output_2, float* output_3)
 {
+	const char* const testFuncName = "LES_Test_ReadInputOutputParameters";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_ReadInputOutputParameters, void);
@@ -532,7 +535,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 
 	if (parameterData == LES_NULL)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: parameterData is NULL\n");
+		LES_FATAL_ERROR("%s: parameterData is NULL\n", testFuncName);
 		return;
 	}
 
@@ -544,13 +547,12 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	errorCode = parameterData->Read(typeEntry, (void*)&input_value_0);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: Read failed for input_0\n");
+		LES_FATAL_ERROR("%s: Read failed for input_0\n", testFuncName);
 		return;
 	}
 	if (input_0 != input_value_0)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: parameter data is wrong input_0:%d value_0:%d\n",
-						input_0, input_value_0);
+		LES_FATAL_ERROR("%s: parameter data is wrong input_0:%d value_0:%d\n", testFuncName, input_0, input_value_0);
 		return;
 	}
 
@@ -559,13 +561,12 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	errorCode = parameterData->Read(typeEntry, (void*)&output_value_0);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: Read failed for output_0\n");
+		LES_FATAL_ERROR("%s: Read failed for output_0\n", testFuncName);
 		return;
 	}
 	if (*output_0 != output_value_0)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: parameter data is wrong output_0:%d value_0:%d\n",
-						*output_0, output_value_0);
+		LES_FATAL_ERROR("%s: parameter data is wrong output_0:%d value_0:%d\n", testFuncName, *output_0, output_value_0);
 		return;
 	}
 
@@ -574,13 +575,12 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	errorCode = parameterData->Read(typeEntry, (void*)&input_value_1);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: Read failed for input_1\n");
+		LES_FATAL_ERROR("%s: Read failed for input_1\n", testFuncName);
 		return;
 	}
 	if (input_1 != input_value_1)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: parameter data is wrong input_1:%d value_1:%d\n",
-						input_1, input_value_1);
+		LES_FATAL_ERROR("%s: parameter data is wrong input_1:%d value_1:%d\n", testFuncName, input_1, input_value_1);
 		return;
 	}
 
@@ -589,13 +589,12 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	errorCode = parameterData->Read(typeEntry, (void*)&output_value_1);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: Read failed for output_1\n");
+		LES_FATAL_ERROR("%s: Read failed for output_1\n", testFuncName);
 		return;
 	}
 	if (*output_1 != output_value_1)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: parameter data is wrong output_1:%d value_1:%d\n",
-						*output_1, output_value_1);
+		LES_FATAL_ERROR("%s: parameter data is wrong output_1:%d value_1:%d\n", testFuncName, *output_1, output_value_1);
 		return;
 	}
 
@@ -604,13 +603,12 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	errorCode = parameterData->Read(typeEntry, (void*)&input_value_2);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: Read failed for input_2\n");
+		LES_FATAL_ERROR("%s: Read failed for input_2\n", testFuncName);
 		return;
 	}
 	if (input_2 != input_value_2)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: parameter data is wrong input_2:%d value_2:%d\n",
-						input_2, input_value_2);
+		LES_FATAL_ERROR("%s: parameter data is wrong input_2:%d value_2:%d\n", testFuncName, input_2, input_value_2);
 		return;
 	}
 
@@ -619,13 +617,12 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	errorCode = parameterData->Read(typeEntry, (void*)&output_value_2);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: Read failed for output_2\n");
+		LES_FATAL_ERROR("%s: Read failed for output_2\n", testFuncName);
 		return;
 	}
 	if (*output_2 != output_value_2)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: parameter data is wrong output_2:%d value_2:%d\n",
-						*output_2, output_value_2);
+		LES_FATAL_ERROR("%s: parameter data is wrong output_2:%d value_2:%d\n", testFuncName, *output_2, output_value_2);
 		return;
 	}
 
@@ -634,13 +631,12 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	errorCode = parameterData->Read(typeEntry, (void*)&input_value_3);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: Read failed for input_3\n");
+		LES_FATAL_ERROR("%s: Read failed for input_3\n", testFuncName);
 		return;
 	}
 	if (fabsf(input_3-input_value_3) > 1.0e-6f)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: parameter data is wrong input_3:%f value_3:%f\n",
-						input_3, input_value_3);
+		LES_FATAL_ERROR("%s: parameter data is wrong input_3:%f value_3:%f\n", testFuncName, input_3, input_value_3);
 		return;
 	}
 
@@ -649,13 +645,12 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	errorCode = parameterData->Read(typeEntry, (void*)&output_value_3);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: Read failed for output_3\n");
+		LES_FATAL_ERROR("%s: Read failed for output_3\n", testFuncName);
 		return;
 	}
 	if (fabsf(*output_3-output_value_3) > 1.0e-6f)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: parameter data is wrong output_3:%f value_3:%f\n",
-						*output_3, output_value_3);
+		LES_FATAL_ERROR("%s: parameter data is wrong output_3:%f value_3:%f\n", testFuncName, *output_3, output_value_3);
 		return;
 	}
 
@@ -664,20 +659,19 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	errorCode = parameterData->Read(typeEntry, (void*)&input_value_4);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: Read failed for input_4\n");
+		LES_FATAL_ERROR("%s: Read failed for input_4\n", testFuncName);
 		return;
 	}
 	if (*input_4 != input_value_4)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: parameter data is wrong input_4:%d value_4:%d\n",
-						*input_4, input_value_4);
+		LES_FATAL_ERROR("%s: parameter data is wrong input_4:%d value_4:%d\n", testFuncName, *input_4, input_value_4);
 		return;
 	}
 
-	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_ReadInputOutputParameters");
+	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition(testFuncName);
 	if (functionDefinitionPtr == LES_NULL)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: can't find the function definition\n");
+		LES_FATAL_ERROR("%s: can't find the function definition\n", testFuncName);
 		return;
 	}
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
@@ -688,27 +682,59 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 																		sizeof(int);
 	if (parameterDataSize != realParameterDataSize)
 	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: parameterDataSize is wrong Code:%d Should be:%d\n",
-						parameterDataSize, realParameterDataSize);
+		LES_FATAL_ERROR("%s: parameterDataSize is wrong Code:%d Should be:%d\n", testFuncName, parameterDataSize, realParameterDataSize);
 		return;
 	}
 
-	LES_LOG("LES_Test_ReadInputOutputParameters: input_0:%d value_0:%d\n", input_0, input_value_0);
-	LES_LOG("LES_Test_ReadInputOutputParameters: output_0:%d value_0:%d\n", *output_0, output_value_0);
-	LES_LOG("LES_Test_ReadInputOutputParameters: input_1:%d value_1:%d\n", input_1, input_value_1);
-	LES_LOG("LES_Test_ReadInputOutputParameters: output_1:%d value_1:%d\n", *output_1, output_value_1);
-	LES_LOG("LES_Test_ReadInputOutputParameters: input_2:'%c' value_2:'%c'\n", input_2, input_value_2);
-	LES_LOG("LES_Test_ReadInputOutputParameters: output_2:'%c' value_2:'%c'\n", *output_2, output_value_2);
-	LES_LOG("LES_Test_ReadInputOutputParameters: input_3:%f value_3:%f\n", input_3, input_value_3);
-	LES_LOG("LES_Test_ReadInputOutputParameters: output_3:%f value_3:%f\n", *output_3, output_value_3);
-	LES_LOG("LES_Test_ReadInputOutputParameters: input_4:%d value_4:%d\n", *input_4, input_value_4);
-	LES_LOG("LES_Test_ReadInputOutputParameters: parameterDataSize:%d\n", parameterDataSize);
+	LES_LOG("%s: input_0:%d value_0:%d\n", testFuncName, input_0, input_value_0, testFuncName);
+	LES_LOG("%s: output_0:%d value_0:%d\n", testFuncName, *output_0, output_value_0, testFuncName);
+	LES_LOG("%s: input_1:%d value_1:%d\n", testFuncName, input_1, input_value_1, testFuncName);
+	LES_LOG("%s: output_1:%d value_1:%d\n", testFuncName, *output_1, output_value_1, testFuncName);
+	LES_LOG("%s: input_2:'%c' value_2:'%c'\n", testFuncName, input_2, input_value_2, testFuncName);
+	LES_LOG("%s: output_2:'%c' value_2:'%c'\n", testFuncName, *output_2, output_value_2, testFuncName);
+	LES_LOG("%s: input_3:%f value_3:%f\n", testFuncName, input_3, input_value_3, testFuncName);
+	LES_LOG("%s: output_3:%f value_3:%f\n", testFuncName, *output_3, output_value_3, testFuncName);
+	LES_LOG("%s: input_4:%d value_4:%d\n", testFuncName, *input_4, input_value_4, testFuncName);
+	LES_LOG("%s: parameterDataSize:%d\n", testFuncName, parameterDataSize, testFuncName);
+}
+
+static int LES_Test_GenericDecodeHelper(const char* const testFuncName, LES_FunctionParameterData* parameterData, 
+																				const int realParameterDataSize)
+{
+	if (parameterData == LES_NULL)
+	{
+		LES_FATAL_ERROR("%s: parameterData is NULL\n", testFuncName);
+		return LES_RETURN_ERROR;
+	}
+
+	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition(testFuncName);
+	if (functionDefinitionPtr == LES_NULL)
+	{
+		LES_FATAL_ERROR("%s: can't find the function definition\n", testFuncName);
+		return LES_RETURN_ERROR;
+	}
+	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
+	if (parameterDataSize != realParameterDataSize)
+	{
+		LES_FATAL_ERROR("%s: parameterDataSize is wrong Code:%d Should be:%d\n", testFuncName, parameterDataSize, realParameterDataSize);
+		//return LES_RETURN_ERROR;
+	}
+
+	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
+	{
+		LES_FATAL_ERROR("%s: Decode failed\n", testFuncName);
+		return LES_RETURN_ERROR;
+	}
+	LES_LOG("%s: parameterDataSize:%d\n", testFuncName, parameterDataSize);
+
+	return LES_RETURN_OK;
 }
 
 static void LES_Test_DecodeInputOutputParameters(int input_0, short input_1, char input_2, float input_3, 
 																								 int* input_4, short* input_5, char* input_6,
 																							   unsigned int* output_0, unsigned short* output_1, unsigned char* output_2, float* output_3)
 {
+	const char* const testFuncName = "LES_Test_DecodeInputOutputParameters";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_DecodeInputOutputParameters, void);
@@ -726,42 +752,19 @@ static void LES_Test_DecodeInputOutputParameters(int input_0, short input_1, cha
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
-	if (parameterData == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_DecodeInputOutputParameters: parameterData is NULL\n");
-		return;
-	}
-
-	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_DecodeInputOutputParameters");
-	if (functionDefinitionPtr == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_DecodeInputOutputParameters: can't find the function definition\n");
-		return;
-	}
-	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
 	const int realParameterDataSize = sizeof(int)+sizeof(unsigned int)+
 																		sizeof(short)+sizeof(unsigned short)+
 																		sizeof(char)+sizeof(unsigned char)+
 																		sizeof(float)+sizeof(float)+
 																		sizeof(int)+sizeof(short)+sizeof(char);
-	if (parameterDataSize != realParameterDataSize)
-	{
-		LES_FATAL_ERROR("LES_Test_DecodeInputOutputParameters: parameterDataSize is wrong Code:%d Should be:%d\n",
-						parameterDataSize, realParameterDataSize);
-		return;
-	}
 
-	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
-	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: Decode failed\n");
-		return;
-	}
-	LES_LOG("LES_Test_ReadInputOutputParameters: parameterDataSize:%d\n", parameterDataSize);
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
 	return;
 }
 
 static void LES_Test_DecodeOutputParameters(char& output_0)
 {
+	const char* const testFuncName = "LES_Test_DecodeOutputParameters";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_DecodeOutputParameters, void);
@@ -769,32 +772,9 @@ static void LES_Test_DecodeOutputParameters(char& output_0)
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
-	if (parameterData == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_DecodeOutputParameters: parameterData is NULL\n");
-		return;
-	}
-
-	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_DecodeOutputParameters");
-	if (functionDefinitionPtr == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_DecodeOutputParameters: can't find the function definition\n");
-		return;
-	}
-	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
 	const int realParameterDataSize = sizeof(char);
-	if (parameterDataSize != realParameterDataSize)
-	{
-		LES_FATAL_ERROR("LES_Test_DecodeOutputParameters: parameterDataSize is wrong Code:%d Should be:%d\n",
-						parameterDataSize, realParameterDataSize);
-	}
 
-	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
-	{
-		LES_FATAL_ERROR("LES_Test_ReadInputOutputParameters: Decode failed\n");
-		return;
-	}
-	LES_LOG("LES_Test_ReadInputOutputParameters: parameterDataSize:%d\n", parameterDataSize);
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
 	return;
 }
 
@@ -864,6 +844,7 @@ struct TestStruct8
 
 void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 input_2, TestStruct3 input_3, TestStruct4* input_4)
 {
+	const char* const testFuncName = "LES_Test_StructInputParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_StructInputParam, void);
@@ -875,19 +856,6 @@ void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 inp
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
-	if (parameterData == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_StructInputParam: parameterData is NULL\n");
-		return;
-	}
-
-	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_StructInputParam");
-	if (functionDefinitionPtr == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_StructInputParam: can't find the function definition\n");
-		return;
-	}
-	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
 	const int realParameterDataSize = sizeof(float)+
 																		sizeof(long long int)+sizeof(char)+sizeof(int)+sizeof(short)+sizeof(float)+
 																		sizeof(char)+sizeof(short)+sizeof(int)+
@@ -896,24 +864,14 @@ void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 inp
 																		sizeof(short)+sizeof(float)+sizeof(int)+sizeof(char)+
 																		sizeof(float)+sizeof(int)+sizeof(char)+sizeof(short)+
 																		sizeof(short)+sizeof(float)+sizeof(int)+sizeof(char);
-	if (parameterDataSize != realParameterDataSize)
-	{
-		LES_FATAL_ERROR("LES_Test_StructInputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
-						parameterDataSize, realParameterDataSize);
-		return;
-	}
 
-	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
-	{
-		LES_FATAL_ERROR("LES_Test_StructInputParam: Decode failed\n");
-		return;
-	}
-	LES_LOG("LES_Test_StructInputParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
 	return;
 }
 
 void LES_Test_StructOutputParam(TestStruct3* out_0, TestStruct4* out_1)
 {
+	const char* const testFuncName = "LES_Test_StructOutputParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_StructOutputParam, void);
@@ -922,40 +880,17 @@ void LES_Test_StructOutputParam(TestStruct3* out_0, TestStruct4* out_1)
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
-	if (parameterData == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_StructOutputParam: parameterData is NULL\n");
-		return;
-	}
-
-	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_StructOutputParam");
-	if (functionDefinitionPtr == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_StructOutputParam: can't find the function definition\n");
-		return;
-	}
-	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
 	const int realParameterDataSize = sizeof(short)+sizeof(float)+sizeof(int)+sizeof(char)+
 																		sizeof(float)+sizeof(int)+sizeof(char)+sizeof(short)+
 																		sizeof(short)+sizeof(float)+sizeof(int)+sizeof(char);
-	if (parameterDataSize != realParameterDataSize)
-	{
-		LES_FATAL_ERROR("LES_Test_StructOutputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
-						parameterDataSize, realParameterDataSize);
-		return;
-	}
 
-	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
-	{
-		LES_FATAL_ERROR("LES_Test_StructOutputParam: Decode failed\n");
-		return;
-	}
-	LES_LOG("LES_Test_StructOutputParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
 	return;
 }
 
 void LES_Test_StructInputOutputParam(TestStruct5* in_0, TestStruct6* out_0)
 {
+	const char* const testFuncName = "LES_Test_StructInputOutputParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_StructInputOutputParam, void);
@@ -964,41 +899,18 @@ void LES_Test_StructInputOutputParam(TestStruct5* in_0, TestStruct6* out_0)
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
-	if (parameterData == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_StructInputOutputParam: parameterData is NULL\n");
-		return;
-	}
-
-	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_StructInputOutputParam");
-	if (functionDefinitionPtr == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_StructInputOutputParam: can't find the function definition\n");
-		return;
-	}
-	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
 	const int realParameterDataSize = sizeof(char)+sizeof(short)+
 																		sizeof(short)+
 																		sizeof(char)+sizeof(short)+
 																		sizeof(char);
-	if (parameterDataSize != realParameterDataSize)
-	{
-		LES_FATAL_ERROR("LES_Test_StructInputOutputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
-						parameterDataSize, realParameterDataSize);
-		return;
-	}
 
-	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
-	{
-		LES_FATAL_ERROR("LES_Test_StructInputOutputParam: Decode failed\n");
-		return;
-	}
-	LES_LOG("LES_Test_StructInputOutputParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
 	return;
 }
 
 void LES_Test_ReferenceInputPODParam(int& input_0)
 {
+	const char* const testFuncName = "LES_Test_ReferenceInputPODParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_ReferenceInputPODParam, void);
@@ -1008,36 +920,19 @@ void LES_Test_ReferenceInputPODParam(int& input_0)
 
 	if (parameterData == LES_NULL)
 	{
-		LES_FATAL_ERROR("LES_Test_ReferenceInputPODParam: parameterData is NULL\n");
+		LES_FATAL_ERROR("%s: parameterData is NULL\n", testFuncName);
 		return;
 	}
 
-	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_ReferenceInputPODParam");
-	if (functionDefinitionPtr == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceInputPODParam: can't find the function definition\n");
-		return;
-	}
-	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
 	const int realParameterDataSize = sizeof(int);
-	if (parameterDataSize != realParameterDataSize)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceInputPODParam: parameterDataSize is wrong Code:%d Should be:%d\n",
-						parameterDataSize, realParameterDataSize);
-		return;
-	}
 
-	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceInputPODParam: Decode failed\n");
-		return;
-	}
-	LES_LOG("LES_Test_ReferenceInputPODParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
 	return;
 }
 
 void LES_Test_ReferenceInputStructParam(TestStruct1& input_0)
 {
+	const char* const testFuncName = "LES_Test_ReferenceInputStructParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_ReferenceInputStructParam, void);
@@ -1045,38 +940,15 @@ void LES_Test_ReferenceInputStructParam(TestStruct1& input_0)
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
-	if (parameterData == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceInputStructParam: parameterData is NULL\n");
-		return;
-	}
-
-	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_ReferenceInputStructParam");
-	if (functionDefinitionPtr == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceInputStructParam: can't find the function definition\n");
-		return;
-	}
-	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
 	const int realParameterDataSize = sizeof(long long int)+sizeof(char)+sizeof(int)+sizeof(short)+sizeof(float);
-	if (parameterDataSize != realParameterDataSize)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceInputStructParam: parameterDataSize is wrong Code:%d Should be:%d\n",
-						parameterDataSize, realParameterDataSize);
-		return;
-	}
 
-	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceInputStructParam: Decode failed\n");
-		return;
-	}
-	LES_LOG("LES_Test_ReferenceInputStructParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
 	return;
 }
 
 void LES_Test_ReferenceOutputPODParam(char& output_0)
 {
+	const char* const testFuncName = "LES_Test_ReferenceOutputPODParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_ReferenceOutputPODParam, void);
@@ -1084,38 +956,15 @@ void LES_Test_ReferenceOutputPODParam(char& output_0)
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
-	if (parameterData == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceOutputPODParam: parameterData is NULL\n");
-		return;
-	}
-
-	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_ReferenceOutputPODParam");
-	if (functionDefinitionPtr == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceOutputPODParam: can't find the function definition\n");
-		return;
-	}
-	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
 	const int realParameterDataSize = sizeof(char);
-	if (parameterDataSize != realParameterDataSize)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceOutputPODParam: parameterDataSize is wrong Code:%d Should be:%d\n",
-						parameterDataSize, realParameterDataSize);
-		return;
-	}
 
-	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceOutputPODParam: Decode failed\n");
-		return;
-	}
-	LES_LOG("LES_Test_ReferenceOutputPODParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
 	return;
 }
 
 void LES_Test_ReferenceOutputStructParam(TestStruct2& output_0)
 {
+	const char* const testFuncName = "LES_Test_ReferenceOutputStructParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_ReferenceOutputStructParam, void);
@@ -1123,40 +972,17 @@ void LES_Test_ReferenceOutputStructParam(TestStruct2& output_0)
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
-	if (parameterData == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceOutputStructParam: parameterData is NULL\n");
-		return;
-	}
-
-	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_ReferenceOutputStructParam");
-	if (functionDefinitionPtr == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceOutputStructParam: can't find the function definition\n");
-		return;
-	}
-	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
 	const int realParameterDataSize = sizeof(float)+
 																		sizeof(long long int)+sizeof(char)+sizeof(int)+sizeof(short)+sizeof(float)+
 																		sizeof(char)+ sizeof(short)+ sizeof(int);
-	if (parameterDataSize != realParameterDataSize)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceOutputStructParam: parameterDataSize is wrong Code:%d Should be:%d\n",
-						parameterDataSize, realParameterDataSize);
-		return;
-	}
 
-	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceOutputStructParam: Decode failed\n");
-		return;
-	}
-	LES_LOG("LES_Test_ReferenceOutputStructParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
 	return;
 }
 
 void LES_Test_ReferenceStructInputParam(TestStruct7& input_0)
 {
+	const char* const testFuncName = "LES_Test_ReferenceStructInputParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_ReferenceStructInputParam, void);
@@ -1164,38 +990,15 @@ void LES_Test_ReferenceStructInputParam(TestStruct7& input_0)
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
-	if (parameterData == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceStructInputParam: parameterData is NULL\n");
-		return;
-	}
-
-	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_ReferenceStructInputParam");
-	if (functionDefinitionPtr == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceStructInputParam: can't find the function definition\n");
-		return;
-	}
-	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
 	const int realParameterDataSize = sizeof(short)+ sizeof(float)+ sizeof(char)+ sizeof(char)+ sizeof(char);
-	if (parameterDataSize != realParameterDataSize)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceStructInputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
-						parameterDataSize, realParameterDataSize);
-		return;
-	}
 
-	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceStructInputParam: Decode failed\n");
-		return;
-	}
-	LES_LOG("LES_Test_ReferenceStructInputParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
 	return;
 }
 
 void LES_Test_ReferenceStructOutputParam(TestStruct8& output_0)
 {
+	const char* const testFuncName = "LES_Test_ReferenceStructOutputParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_ReferenceStructOutputParam, void);
@@ -1203,40 +1006,17 @@ void LES_Test_ReferenceStructOutputParam(TestStruct8& output_0)
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
-	if (parameterData == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceStructOutputParam: parameterData is NULL\n");
-		return;
-	}
-
-	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_ReferenceStructOutputParam");
-	if (functionDefinitionPtr == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceStructOutputParam: can't find the function definition\n");
-		return;
-	}
-	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
 	const int realParameterDataSize = sizeof(short)+
 																		sizeof(char)+ sizeof(short)+
 																		sizeof(char);
-	if (parameterDataSize != realParameterDataSize)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceStructOutputParam: parameterDataSize is wrong Code:%d Should be:%d\n",
-						parameterDataSize, realParameterDataSize);
-		return;
-	}
 
-	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
-	{
-		LES_FATAL_ERROR("LES_Test_ReferenceStructOutputParam: Decode failed\n");
-		return;
-	}
-	LES_LOG("LES_Test_ReferenceStructOutputParam: parameterDataSize:%d\n", parameterDataSize);
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
 	return;
 }
 
 void LES_Test_DecodeInputArrayPOD(char input_0[3], short input_1[3])
 {
+	const char* const testFuncName = "LES_Test_DecodeInputArrayPOD";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_DecodeInputArrayPOD, void);
@@ -1245,38 +1025,15 @@ void LES_Test_DecodeInputArrayPOD(char input_0[3], short input_1[3])
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
-	if (parameterData == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_DecodeInputArrayPOD: parameterData is NULL\n");
-		return;
-	}
-
-	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_DecodeInputArrayPOD");
-	if (functionDefinitionPtr == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_DecodeInputArrayPOD: can't find the function definition\n");
-		return;
-	}
-	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
 	const int realParameterDataSize = sizeof(char) * 3 + sizeof(short) * 3;
-	if (parameterDataSize != realParameterDataSize)
-	{
-		LES_FATAL_ERROR("LES_Test_DecodeInputArrayPOD: parameterDataSize is wrong Code:%d Should be:%d\n",
-						parameterDataSize, realParameterDataSize);
-		return;
-	}
 
-	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
-	{
-		LES_FATAL_ERROR("LES_Test_DecodeInputArrayPOD: Decode failed\n");
-		return;
-	}
-	LES_LOG("LES_Test_DecodeInputArrayPOD: parameterDataSize:%d\n", parameterDataSize);
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
 	return;
 }
 
 void LES_Test_DecodeOutputArrayPOD(short output_0[3], int output_1[3])
 {
+	const char* const testFuncName = "LES_Test_DecodeOutputArrayPOD";
 	LES_FunctionParameterData* parameterData = LES_NULL;
 
 	LES_FUNCTION_START(LES_Test_DecodeOutputArrayPOD, void);
@@ -1285,33 +1042,30 @@ void LES_Test_DecodeOutputArrayPOD(short output_0[3], int output_1[3])
 	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
 	LES_FUNCTION_END();
 
-	if (parameterData == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_DecodeOutputArrayPOD: parameterData is NULL\n");
-		return;
-	}
-
-	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinition("LES_Test_DecodeOutputArrayPOD");
-	if (functionDefinitionPtr == LES_NULL)
-	{
-		LES_FATAL_ERROR("LES_Test_DecodeOutputArrayPOD: can't find the function definition\n");
-		return;
-	}
-	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
 	const int realParameterDataSize = sizeof(int) * 3 + sizeof(short) * 3;
-	if (parameterDataSize != realParameterDataSize)
-	{
-		LES_FATAL_ERROR("LES_Test_DecodeOutputArrayPOD: parameterDataSize is wrong Code:%d Should be:%d\n",
-						parameterDataSize, realParameterDataSize);
-		return;
-	}
 
-	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
-	{
-		LES_FATAL_ERROR("LES_Test_DecodeOutputArrayPOD: Decode failed\n");
-		return;
-	}
-	LES_LOG("LES_Test_DecodeOutputArrayPOD: parameterDataSize:%d\n", parameterDataSize);
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
+	return;
+}
+
+void LES_Test_DecodeInputArraySTRUCT(TestStruct1 input_0[2]) //, TestStruct2 input_1[1])
+{
+	const char* const testFuncName = "LES_Test_DecodeInputArraySTRUCT";
+	LES_FunctionParameterData* parameterData = LES_NULL;
+
+	LES_FUNCTION_START(LES_Test_DecodeInputArraySTRUCT, void);
+	LES_FUNCTION_ADD_INPUT(TestStruct1[2], input_0);
+	//LES_FUNCTION_ADD_INPUT(TestStruct2[1], input_1);
+	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
+	LES_FUNCTION_END();
+
+	const int realParameterDataSize = 0 +
+												2 * (sizeof(long long int)+sizeof(char)+sizeof(int)+sizeof(short)+sizeof(float)) +
+												1 * (sizeof(float)+
+														 sizeof(long long int)+sizeof(char)+sizeof(int)+sizeof(short)+sizeof(float)+
+														 sizeof(char)+ sizeof(short)+ sizeof(int));
+
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
 	return;
 }
 
@@ -1446,7 +1200,8 @@ void LES_TestSetup(void)
 	LES_TEST_ADD_TYPE_POD_ARRAY(char, 3);
 	LES_TEST_ADD_TYPE_POD_ARRAY(short, 3);
 	LES_TEST_ADD_TYPE_POD_ARRAY(int, 3);
-	LES_TEST_ADD_TYPE_POD_ARRAY(TestStruct1, 1);
+	LES_TEST_ADD_TYPE_STRUCT_ARRAY(TestStruct1, 2);
+	LES_TEST_ADD_TYPE_STRUCT_ARRAY(TestStruct2, 1);
 
 	/* Sample functions for development */
 	LES_TEST_FUNCTION_START(jakeInit, void, 2, 1);
@@ -1780,6 +1535,11 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_ADD_OUTPUT(int[3], output_1);
 	LES_TEST_FUNCTION_END();
 
+	LES_TEST_FUNCTION_START(LES_Test_DecodeInputArraySTRUCT, void, 1, 0);
+	LES_TEST_FUNCTION_ADD_INPUT(TestStruct1[2], input_0);
+	//LES_TEST_FUNCTION_ADD_INPUT(TestStruct2[1], input_1);
+	LES_TEST_FUNCTION_END();
+
 	/* Run specific tests */
 	/* Function header definition tests */
 	LES_LOG("#### Function header definition tests ####\n");
@@ -1956,6 +1716,7 @@ void LES_TestSetup(void)
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 	LES_LOG("\n");
 
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	TestStruct1 in_2;
 	in_2.m_longlong = -100048;
 	in_2.m_int = 65;
@@ -2120,6 +1881,26 @@ void LES_TestSetup(void)
 	arrpod_out_1[1] = -1955;
 	arrpod_out_1[2] = -1956;
 	LES_Test_DecodeOutputArrayPOD(arrpod_out_0, arrpod_out_1);
+	LES_LOG("\n");
+
+	TestStruct1 arrstr_in_0[2];
+	arrstr_in_0[0].m_longlong = 18;
+	arrstr_in_0[0].m_char = 'M';
+	arrstr_in_0[0].m_int = 230421;
+	arrstr_in_0[0].m_short = 421;
+	arrstr_in_0[0].m_float = 1525.0f;
+	arrstr_in_0[1].m_longlong = 19;
+	arrstr_in_0[1].m_char = 'N';
+	arrstr_in_0[1].m_int = 230422;
+	arrstr_in_0[1].m_short = 422;
+	arrstr_in_0[1].m_float = 1526.0f;
+	TestStruct2 arrstr_in_1[1];
+	arrstr_in_1[1].m_float = 2137.0f;
+	arrstr_in_1[1].m_testStruct1 = arrstr_in_0[1];
+	arrstr_in_1[1].m_char = 'Z';
+	arrstr_in_1[1].m_short = 2627;
+	arrstr_in_1[1].m_int = 21412932;
+	LES_Test_DecodeInputArraySTRUCT(arrstr_in_0); //, arrstr_in_1);
 	LES_LOG("\n");
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
