@@ -11,20 +11,28 @@ if [ $? -gt 0 ]; then
 fi
 
 les_test -verbose -tests 
+if [ $? -gt 0 ]; then
+    echo -e ""
+    echo -e "###############"
+    echo -e "PROGRAM CRASHED"
+    echo -e "###############"
+    echo -e ""
+		exit
+fi
 
 diff log.txt correctTestOutput.txt
 if [ $? -gt 0 ]; then
     echo -e ""
-    echo -e "###########"
+    echo -e "############"
     echo -e "TESTS FAILED"
-    echo -e "###########"
+    echo -e "############"
     echo -e ""
 		exit
 else
     echo -e ""
-    echo -e "###########"
+    echo -e "############"
     echo -e "TESTS PASSED"
-    echo -e "###########"
+    echo -e "############"
     echo -e ""
 		exit
 fi
