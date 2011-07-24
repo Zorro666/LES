@@ -88,6 +88,14 @@ FORCE:
 tags:
 	@ctags -R --exclude=makefile --c++-kinds=+p --fields=+iaS --extra=+q .
 
+update_tests:
+	@cp -vf log.txt correctTestOutput.txt
+
+testit: all
+	les_test -tests
+
+runtests: testit
+
 clean: FORCE
 	@$(RM) -vf $(OBJFILES)
 	@$(RM) -vf $(DFILES)
