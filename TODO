@@ -1,7 +1,4 @@
 High Priority:
-TEST: test POD reference to an array as member in a struct
-
-TEST: test struct reference to an array as member in a struct
 
 Medium Priority:
 FUNCTION: error handling run out of memory when adding new function or new type e.g. array limit reached

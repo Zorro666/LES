@@ -865,9 +865,10 @@ struct TestStruct12
 {
 	short (&m_short)[3];
 	TestStruct9 (&m_testStruct9)[2];
+	TestStruct11 (&m_testStruct11)[1];
 };
 
-void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 input_2, TestStruct3 input_3, TestStruct4* input_4)
+static void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 input_2, TestStruct3 input_3, TestStruct4* input_4)
 {
 	const char* const testFuncName = "LES_Test_StructInputParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -894,7 +895,7 @@ void LES_Test_StructInputParam(TestStruct2 input_0, int input_1, TestStruct1 inp
 	return;
 }
 
-void LES_Test_StructOutputParam(TestStruct3* out_0, TestStruct4* out_1)
+static void LES_Test_StructOutputParam(TestStruct3* out_0, TestStruct4* out_1)
 {
 	const char* const testFuncName = "LES_Test_StructOutputParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -913,7 +914,7 @@ void LES_Test_StructOutputParam(TestStruct3* out_0, TestStruct4* out_1)
 	return;
 }
 
-void LES_Test_StructInputOutputParam(TestStruct5* in_0, TestStruct6* out_0)
+static void LES_Test_StructInputOutputParam(TestStruct5* in_0, TestStruct6* out_0)
 {
 	const char* const testFuncName = "LES_Test_StructInputOutputParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -933,7 +934,7 @@ void LES_Test_StructInputOutputParam(TestStruct5* in_0, TestStruct6* out_0)
 	return;
 }
 
-void LES_Test_ReferenceInputPODParam(int& input_0)
+static void LES_Test_ReferenceInputPODParam(int& input_0)
 {
 	const char* const testFuncName = "LES_Test_ReferenceInputPODParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -955,7 +956,7 @@ void LES_Test_ReferenceInputPODParam(int& input_0)
 	return;
 }
 
-void LES_Test_ReferenceInputStructParam(TestStruct1& input_0)
+static void LES_Test_ReferenceInputStructParam(TestStruct1& input_0)
 {
 	const char* const testFuncName = "LES_Test_ReferenceInputStructParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -971,7 +972,7 @@ void LES_Test_ReferenceInputStructParam(TestStruct1& input_0)
 	return;
 }
 
-void LES_Test_ReferenceOutputPODParam(char& output_0)
+static void LES_Test_ReferenceOutputPODParam(char& output_0)
 {
 	const char* const testFuncName = "LES_Test_ReferenceOutputPODParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -987,7 +988,7 @@ void LES_Test_ReferenceOutputPODParam(char& output_0)
 	return;
 }
 
-void LES_Test_ReferenceOutputStructParam(TestStruct2& output_0)
+static void LES_Test_ReferenceOutputStructParam(TestStruct2& output_0)
 {
 	const char* const testFuncName = "LES_Test_ReferenceOutputStructParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -1005,7 +1006,7 @@ void LES_Test_ReferenceOutputStructParam(TestStruct2& output_0)
 	return;
 }
 
-void LES_Test_ReferenceStructInputParam(TestStruct7& input_0)
+static void LES_Test_ReferenceStructInputParam(TestStruct7& input_0)
 {
 	const char* const testFuncName = "LES_Test_ReferenceStructInputParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -1021,7 +1022,7 @@ void LES_Test_ReferenceStructInputParam(TestStruct7& input_0)
 	return;
 }
 
-void LES_Test_ReferenceStructOutputParam(TestStruct8& output_0)
+static void LES_Test_ReferenceStructOutputParam(TestStruct8& output_0)
 {
 	const char* const testFuncName = "LES_Test_ReferenceStructOutputParam";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -1039,7 +1040,7 @@ void LES_Test_ReferenceStructOutputParam(TestStruct8& output_0)
 	return;
 }
 
-void LES_Test_DecodeInputArrayPOD(char input_0[3], short input_1[3])
+static void LES_Test_DecodeInputArrayPOD(char input_0[3], short input_1[3])
 {
 	const char* const testFuncName = "LES_Test_DecodeInputArrayPOD";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -1056,7 +1057,7 @@ void LES_Test_DecodeInputArrayPOD(char input_0[3], short input_1[3])
 	return;
 }
 
-void LES_Test_DecodeOutputArrayPOD(short output_0[3], int output_1[3])
+static void LES_Test_DecodeOutputArrayPOD(short output_0[3], int output_1[3])
 {
 	const char* const testFuncName = "LES_Test_DecodeOutputArrayPOD";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -1073,7 +1074,7 @@ void LES_Test_DecodeOutputArrayPOD(short output_0[3], int output_1[3])
 	return;
 }
 
-void LES_Test_DecodeInputArraySTRUCTA(TestStruct2 input_0[2], TestStruct1 input_1[1])
+static void LES_Test_DecodeInputArraySTRUCTA(TestStruct2 input_0[2], TestStruct1 input_1[1])
 {
 	const char* const testFuncName = "LES_Test_DecodeInputArraySTRUCTA";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -1094,7 +1095,7 @@ void LES_Test_DecodeInputArraySTRUCTA(TestStruct2 input_0[2], TestStruct1 input_
 	return;
 }
 
-void LES_Test_DecodeInputArraySTRUCTB(TestStruct1 input_0[2], TestStruct2 input_1[1])
+static void LES_Test_DecodeInputArraySTRUCTB(TestStruct1 input_0[2], TestStruct2 input_1[1])
 {
 	const char* const testFuncName = "LES_Test_DecodeInputArraySTRUCTB";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -1115,7 +1116,7 @@ void LES_Test_DecodeInputArraySTRUCTB(TestStruct1 input_0[2], TestStruct2 input_
 	return;
 }
 
-void LES_Test_DecodeOutputArraySTRUCT(TestStruct3 output_0[2], TestStruct4 output_1[1])
+static void LES_Test_DecodeOutputArraySTRUCT(TestStruct3 output_0[2], TestStruct4 output_1[1])
 {
 	const char* const testFuncName = "LES_Test_DecodeOutputArraySTRUCT";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -1136,7 +1137,7 @@ void LES_Test_DecodeOutputArraySTRUCT(TestStruct3 output_0[2], TestStruct4 outpu
 	return;
 }
 
-void LES_Test_DecodeInputArrayReference(char (&input_0)[3], short (&input_1)[3])
+static void LES_Test_DecodeInputArrayReference(char (&input_0)[3], short (&input_1)[3])
 {
 	const char* const testFuncName = "LES_Test_DecodeInputArrayReference";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -1153,7 +1154,7 @@ void LES_Test_DecodeInputArrayReference(char (&input_0)[3], short (&input_1)[3])
 	return;
 }
 
-void LES_Test_DecodeOutputArrayReference(short (&output_0)[3], int (&output_1)[3])
+static void LES_Test_DecodeOutputArrayReference(short (&output_0)[3], int (&output_1)[3])
 {
 	const char* const testFuncName = "LES_Test_DecodeOutputArrayReference";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -1170,7 +1171,7 @@ void LES_Test_DecodeOutputArrayReference(short (&output_0)[3], int (&output_1)[3
 	return;
 }
 
-void LES_Test_DecodeInputStructPODArray(TestStruct9 input_0)
+static void LES_Test_DecodeInputStructPODArray(TestStruct9 input_0)
 {
 	const char* const testFuncName = "LES_Test_DecodeInputStructPODArray";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -1186,7 +1187,7 @@ void LES_Test_DecodeInputStructPODArray(TestStruct9 input_0)
 	return;
 }
 
-void LES_Test_DecodeInputStructStructArray(TestStruct10 input_0)
+static void LES_Test_DecodeInputStructStructArray(TestStruct10 input_0)
 {
 	const char* const testFuncName = "LES_Test_DecodeInputStructStructArray";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -1216,7 +1217,7 @@ void LES_Test_DecodeInputStructStructArray(TestStruct10 input_0)
 	return;
 }
 
-void LES_Test_DecodeInputStructPODArrayReference(TestStruct11 input_0)
+static void LES_Test_DecodeInputStructPODArrayReference(TestStruct11 input_0)
 {
 	const char* const testFuncName = "LES_Test_DecodeInputStructPODArrayReference";
 	LES_FunctionParameterData* parameterData = LES_NULL;
@@ -1227,6 +1228,24 @@ void LES_Test_DecodeInputStructPODArrayReference(TestStruct11 input_0)
 	LES_FUNCTION_END();
 
 	const int realParameterDataSize = 3 * sizeof(short) + 2 * sizeof(int) + 5 * sizeof(char);
+
+	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
+	return;
+}
+
+static void LES_Test_DecodeInputStructStructArrayReference(TestStruct12 input_0)
+{
+	const char* const testFuncName = "LES_Test_DecodeInputStructStructArrayReference";
+	LES_FunctionParameterData* parameterData = LES_NULL;
+
+	LES_FUNCTION_START(LES_Test_DecodeInputStructStructArrayReference, void);
+	LES_FUNCTION_ADD_INPUT(TestStruct12, input_0);
+	LES_FUNCTION_GET_PARAMETER_DATA(parameterData);
+	LES_FUNCTION_END();
+
+	const int realParameterDataSize = 3 * sizeof(short) +
+																		2 * (3 * sizeof(short)) +
+																		1 * (3 * sizeof(short) + 2 * sizeof(int) + 5 * sizeof(char));
 
 	LES_Test_GenericDecodeHelper(testFuncName, parameterData, realParameterDataSize);
 	return;
@@ -1384,6 +1403,7 @@ void LES_TestSetup(void)
 	LES_TEST_ADD_TYPE_STRUCT(TestStruct9);
 	LES_TEST_ADD_TYPE_STRUCT_POINTER(TestStruct9, LES_TYPE_INPUT_OUTPUT);
 	LES_TEST_ADD_TYPE_STRUCT_ARRAY(TestStruct9, 2);
+	LES_TEST_ADD_TYPE_STRUCT_REFERENCE_ARRAY(TestStruct9, 2, LES_TYPE_INPUT_OUTPUT);
 
 	LES_TEST_STRUCT_START(TestStruct10, 2);
 	LES_TEST_STRUCT_ADD_MEMBER(short[3], m_short);
@@ -1399,6 +1419,16 @@ void LES_TestSetup(void)
 	LES_TEST_STRUCT_END();
 
 	LES_TEST_ADD_TYPE_STRUCT(TestStruct11);
+	LES_TEST_ADD_TYPE_STRUCT_POINTER(TestStruct11, LES_TYPE_INPUT_OUTPUT);
+	LES_TEST_ADD_TYPE_STRUCT_REFERENCE_ARRAY(TestStruct11, 1, LES_TYPE_INPUT_OUTPUT);
+
+	LES_TEST_STRUCT_START(TestStruct12, 3);
+	LES_TEST_STRUCT_ADD_MEMBER(short&[3], m_short);
+	LES_TEST_STRUCT_ADD_MEMBER(TestStruct9&[2], m_testStruct9);
+	LES_TEST_STRUCT_ADD_MEMBER(TestStruct11&[1], m_testStruct11);
+	LES_TEST_STRUCT_END();
+
+	LES_TEST_ADD_TYPE_STRUCT(TestStruct12);
 
 	/* Sample functions for development */
 	LES_TEST_FUNCTION_START(jakeInit, void, 2, 1);
@@ -1767,6 +1797,10 @@ void LES_TestSetup(void)
 
 	LES_TEST_FUNCTION_START(LES_Test_DecodeInputStructPODArrayReference, void, 1, 0);
 	LES_TEST_FUNCTION_ADD_INPUT(TestStruct11, input_0);
+	LES_TEST_FUNCTION_END();
+
+	LES_TEST_FUNCTION_START(LES_Test_DecodeInputStructStructArrayReference, void, 1, 0);
+	LES_TEST_FUNCTION_ADD_INPUT(TestStruct12, input_0);
 	LES_TEST_FUNCTION_END();
 
 	/* Run specific tests */
@@ -2197,6 +2231,20 @@ void LES_TestSetup(void)
  	char rowan[5] = { 'R', 'O', 'W', 'A', 'M' };
 	TestStruct11 struct_arrpodref_in_0 = {jake, chris, rowan};
 	LES_Test_DecodeInputStructPODArrayReference(struct_arrpodref_in_0);
+	LES_LOG("\n");
+
+	TestStruct9 struct_arrpod_in_02;
+	struct_arrpod_in_02.m_short[0] = 24705;
+	struct_arrpod_in_02.m_short[1] = 24706;
+	struct_arrpod_in_02.m_short[2] = 24707;
+	TestStruct9 mufasa[2] = {struct_arrpod_in_0, struct_arrpod_in_02};
+	short jake2[3] = { 2224, 2225, 2226 };
+ 	int chris2[2] = { 2198, 2199 };
+ 	char rowan2[5] = { 'L', 'I', 'Z', 'Z', 'Y' };
+	TestStruct11 struct_arrpodref_in_02 = {jake2, chris2, rowan2};
+	TestStruct11 liz[1] = {struct_arrpodref_in_02};
+	TestStruct12 struct_arrstrref_in_0 = {jake2, mufasa, liz};
+	LES_Test_DecodeInputStructStructArrayReference(struct_arrstrref_in_0);
 	LES_LOG("\n");
 
 #if 0
