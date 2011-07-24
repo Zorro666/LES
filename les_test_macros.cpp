@@ -129,9 +129,9 @@ bool LES_TestStructAddMember(const char* const type, const char* const name,
 		return false;
 	}
 	int memberDataSize = typeEntryPtr->m_dataSize;
-	if (typeEntryPtr->m_flags & LES_TYPE_ARRAY)
+	if ((typeEntryPtr->m_flags & LES_TYPE_ARRAY) && ((typeEntryPtr->m_flags & LES_TYPE_REFERENCE) == 0))
 	{
-		/* Member variables which are arrays aren't not pointers but are N * TYPE */
+		// Member variables which are arrays and not references are not pointers but are N * TYPE
 		const int numElements = typeEntryPtr->m_numElements;
 		int dataSize = typeEntryPtr->ComputeDataStorageSize();
 		memberDataSize = dataSize * numElements;

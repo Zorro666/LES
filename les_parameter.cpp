@@ -291,10 +291,14 @@ int LES_FunctionParameterData::WriteItem(const LES_StringEntry* const typeString
 			const bool isArray = (memberFlags & LES_TYPE_ARRAY);
 			const bool isPointer = (memberFlags & LES_TYPE_POINTER);
 			const bool isReference = (memberFlags & LES_TYPE_REFERENCE);
-			const bool deferencePtr = (!isArray & (isPointer | isReference));
-			if (isArray)
+			bool deferencePtr = (!isArray & (isPointer | isReference));
+			if (isArray && isReference)
 			{
-				// The function below expects ptr to the array e.g. it dereferences it
+				deferencePtr = true;
+			}
+			if (isArray && (deferencePtr==false))
+			{
+				// The function below expects ptr to the array e.g. it dereferences it (if it isn't a reference)
 				const void* pointerAddress = (const void*)memberDataPtr;
 				paramDataPtr = (const void*)&pointerAddress;
 			}
