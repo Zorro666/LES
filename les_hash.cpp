@@ -29,9 +29,9 @@ LES_Hash LES_GenerateHash(const char* const str)
 			chr = '/';
 		}
 
-		hash += (hash << 7); // hash=hash+128*hash
-		hash += (hash << 1); // hash=hash+128*hash+2*hash=131*hash
-		hash += (LES_Hash)chr; // hash=131*hash+char
+		hash += (hash << 7); // hash=hash+128*hash=129*hash
+		hash += (hash << 1); // hash=129*hash+(129*hash)*2=3*129*hash=387*hash
+		hash += (LES_Hash)chr; // hash=387*hash+char
 		read++;
 	}
 
@@ -53,9 +53,9 @@ LES_Hash LES_GenerateHashCaseSensitive(const char* const str)
 
 	while ((chr = *read) != 0)
 	{
-		hash += (hash << 7); // hash=hash+128*hash
-		hash += (hash << 1); // hash=hash+128*hash+2*hash=131*hash
-		hash += (LES_Hash)chr; // hash=131*hash+char
+		hash += (hash << 7); // hash=hash+128*hash=129*hash
+		hash += (hash << 1); // hash=129*hash+(129*hash)*2=3*129*hash=387*hash
+		hash += (LES_Hash)chr; // hash=387*hash+char
 		read++;
 	}
 
