@@ -1,4 +1,16 @@
 High Priority:
+CLIENT: Put functions, types, structs definitions into external XML file
+CLIENT: Load and parse definition file
+CLIENT: Convert XML file to binary version, load and just use the binary version as if it came over network
+SERVER: Up and running ready for client to connect
+CLIENT: Connect to server
+SERVER: Load and parse definition file
+SERVER: Convert XML file to binary version, and send to client over network
+CLIENT: use binary version from over the network
+CLIENT: send function data to server as network message
+SERVER: process function data send response
+CLIENT: support for async function calls, error queue, potential threading issues
+SERVER: support for async function calls, error queue
 
 Medium Priority:
 FUNCTION: error handling run out of memory when adding new function or new type e.g. array limit reached
