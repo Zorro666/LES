@@ -1,12 +1,18 @@
 High Priority:
-CLIENT: Put functions, types, structs definitions into external XML file
-CLIENT: Load and parse definition file
-CLIENT: Convert XML file to binary version, load and just use the binary version as if it came over network
+SERVER: string table and hashing function in python
+SERVER: Load and parse XML definition file for Types
+SERVER: generate string table and type data as binary block from XML file -> chunked data structure with array of offsets i.e. string table offset, type data offset, struct data offset, function data offset etc. (simple enum per data chunk type)
+
 SERVER: Up and running ready for client to connect
 CLIENT: Connect to server
-SERVER: Load and parse definition file
-SERVER: Convert XML file to binary version, and send to client over network
-CLIENT: use binary version from over the network
+
+CLIENT: use binary version of string table and type data from over the network
+SERVER: add structs, function defintiions to binary data and XML parsing
+CLIENT: use binary version of definition data
+
+SERVER: at some point test and implement endian swapping for the binary data
+CLIENT: test endian swapped binary data
+
 CLIENT: send function data to server as network message
 SERVER: process function data send response
 CLIENT: support for async function calls, error queue, potential threading issues
