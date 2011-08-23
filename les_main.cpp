@@ -86,6 +86,21 @@ void JAKE_Test(void)
 }
 #endif // #if 0
 
+void JAKE_Test()
+{
+	const char* read = "Jake";
+	char chr;
+	int hash = 0;
+	while ((chr = *read) != 0)
+	{
+		hash += (hash << 7); // hash=hash+128*hash
+		hash += (hash << 1); // hash=hash+128*hash+2*hash=131*hash
+		hash += (int)chr; // hash=131*hash+char
+		printf("hashValue=%u c=%c %d\n",hash, chr, chr);
+		read++;
+	}
+}
+
 int main(const int argc, const char* const argv[])
 {
 	bool verbose = true;
@@ -109,7 +124,7 @@ int main(const int argc, const char* const argv[])
 			runTests = false;
 		}
 	}
-	//JAKE_Test();
+	JAKE_Test();
 	LES_Logger::Init();
 	LES_Logger::SetConsoleOutput(LES_Logger::CHANNEL_LOG, verbose);
 	LES_Init();
