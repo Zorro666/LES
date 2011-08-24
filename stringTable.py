@@ -73,12 +73,8 @@ class LES_StringTable():
 		for hashValue in self.hashes:
 			hValue = ctypes.c_uint32(hashValue).value
 			print "Hash= %x" % hValue
-			t = struct.pack("=I", hValue)
-			for c in t:
-				print "%x" % ord(c)
-				fh.write(c)
-				fh.flush()
-
+			t = struct.pack(">I", hValue)
+			fh.write(t)
 
 		#		char stringData[];	- total string table size in bytes
 		for string in self.strings:
@@ -110,15 +106,8 @@ def runTest():
 	print "Hash(rowan)=3756861831 %x" % 3756861831
 	print "Hash(Jake)=8686429 %x" % 8686429
 
-	fh = open("stringTable.bin", mode="wb")
-	this.writeFile(fh)
-
-	for i in range(255):
-		c = chr(i)
-		fh.write(c)
-		print "%x" % ord(c)
-
-	fh.close()
+	with open("stringTable.bin", mode="wb") as fh:
+		this.writeFile(fh)
 
 if __name__ == '__main__':
 	runTest()
