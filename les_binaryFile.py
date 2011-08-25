@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import struct
 
 class LES_BinaryFile():	
@@ -40,3 +42,22 @@ class LES_BinaryFile():
 	def close(self):
 		self.fh.close()
 
+def runTest():
+	this = LES_BinaryFile("testLittle.bin")
+	this.setLittleEndian()
+	this.writeInt(15)
+	this.writeInt(0x987654)
+	this.writeUint(0xDEADBEAF)
+	this.writeString("testLit")
+	this.close()
+
+	this = LES_BinaryFile("testBig.bin")
+	this.setBigEndian()
+	this.writeInt(15)
+	this.writeInt(0x987654)
+	this.writeUint(0xDEADBEAF)
+	this.writeString("testBig")
+	this.close()
+
+if __name__ == '__main__':
+	runTest()
