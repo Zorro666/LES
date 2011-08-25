@@ -5,7 +5,7 @@ import struct
 class LES_BinaryFile():	
 	def __init__(self, fname):
 		self.fname = fname
-		self.fh= open(fname, mode="wb")
+		self.fh = open(fname, mode="wb")
 		self.endianFormat = ""
 		self.setBigEndian()
 
@@ -30,14 +30,23 @@ class LES_BinaryFile():
 		self.fh.write(temp)
 
 	def writeString(self, value):
-		stringLen = len(value)
-		strFmt = self.endianFormat + str(stringLen) + "s"
+		numChars = len(value)
+		strFmt = self.endianFormat + str(numChars) + "s"
 		temp = struct.pack(strFmt, value)
 		self.fh.write(temp)
+
+	def writeCstring(self, value):
+		self.writeString(value)
 		# null terminate the string
 		strFmt = self.endianFormat + "1c"
 		temp = struct.pack(strFmt, chr(0))
 		self.fh.write(temp)
+
+	def getIndex(self):
+		return self.fh.tell()
+
+	def seek(self, index):
+		self.fh.seek(index)
 
 	def close(self):
 		self.fh.close()
