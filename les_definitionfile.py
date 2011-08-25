@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import les_chunkFile.py
+import les_chunkfile
 
 #{
 #	STRING TABLE_CHUNK
@@ -10,7 +10,7 @@ import les_chunkFile.py
 #}
 
 def runTest():
-	this = les_ChunkFile.LES_ChunkFile("chunkTest.bin", "BAGA", 2)
+	this = les_chunkfile.LES_ChunkFile("chunkTest.bin", "BAGA", 2)
 
 if __name__ == '__main__':
 	runTest()

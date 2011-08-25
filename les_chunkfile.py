@@ -1,11 +1,11 @@
 #!/usr/bin/python
 
-import les_binaryFile
+import les_binaryfile
 
 class LES_ChunkFile():	
 	def __init__(self, fname, magicName, numChunks, bigEndian=True):
 		self.fname = fname
-		self.binFile = les_binaryFile.LES_BinaryFile(fname)
+		self.binFile = les_binaryfile.LES_BinaryFile(fname)
 		self.chunkNames = []
 		self.chunkOffsetValues = []
 		self.chunkOffsetIndexes = []

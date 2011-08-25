@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import les_hash
-import les_binaryFile
+import les_binaryfile
 
 class LES_StringTable():
 	def __init__(self ):
@@ -82,12 +82,12 @@ def runTest():
 	index = this.addString("Jake")
 	print "Index[Jake]= %d " % index
 
-	binFile = les_binaryFile.LES_BinaryFile("stringTableBig.bin")
+	binFile = les_binaryfile.LES_BinaryFile("stringTableBig.bin")
 	binFile.setBigEndian()
 	this.writeFile(binFile)
 	binFile.close()
 
-	binFile = les_binaryFile.LES_BinaryFile("stringTableLittle.bin")
+	binFile = les_binaryfile.LES_BinaryFile("stringTableLittle.bin")
 	binFile.setLittleEndian()
 	this.writeFile(binFile)
 	binFile.close()
