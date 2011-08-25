@@ -75,6 +75,7 @@ def runTest():
 
 	binFile = this.startChunk("TypeData")
 	binFile.writeCstring("type data")
+	this.startChunk("ChunkNotFinished")
 	this.endChunk()
 
 	binFile = this.startChunk("TooManyChunks")
