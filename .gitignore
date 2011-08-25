@@ -18,4 +18,5 @@ core
 les_test
 les_test.exe
 Session.vim
-stringTable.bin
+stringTableLittle.bin
+stringTableBig.bin
