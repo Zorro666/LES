@@ -82,14 +82,6 @@ def runTest():
 	index = this.addString("Jake")
 	print "Index[Jake]= %d " % index
 
-	print "Hash[jake]= %x" % this.getHash(0)
-	print "Hash[rowan]= %x" % this.getHash(1)
-	print "Hash[Jake]= %x" % this.getHash(2)
-
-	print "Hash(jake)=1863425725 %x" % 1863425725
-	print "Hash(rowan)=3756861831 %x" % 3756861831
-	print "Hash(Jake)=8686429 %x" % 8686429
-
 	binFile = binaryFile.LES_BinaryFile("stringTable.bin")
 	this.writeFile(binFile)
 	binFile.close()
