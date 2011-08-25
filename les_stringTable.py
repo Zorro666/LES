@@ -1,24 +1,13 @@
 #!/usr/bin/python
 
-import ctypes
-import struct
-import array
-
-def GenerateHashCaseSensitive(string):
-	hashValue = int(0)
-	for c in string:
-		hashValue += (hashValue << 7)		# hashValue=hashValue+128*hasValue=129*hashValue
-		hashValue += (hashValue << 1)		# hashValue=hashValue+(hashValue+128*hashValue)*2=(129+129*2)*hashValue=387*hashValue
-		hashValue += ord(c)							# hashValue=387*hashValue+char
-		hashValue = ctypes.c_uint32(hashValue).value
-#		print "hashValue=",hashValue, "c=",c, ord(c)
-
-	return hashValue
+import les_hash
+import binaryFile
 
 class LES_StringTable():
 	def __init__(self ):
 		self.strings = []
 		self.hashes = []
+		self.stringOffsets = []
 
 	def addString(self, string):
 		index = -1
@@ -31,8 +20,20 @@ class LES_StringTable():
 
 		index = len(self.strings)
 		self.strings.append(string)
-		hashValue = GenerateHashCaseSensitive(string)
+
+		hashValue = les_hash.GenerateHashCaseSensitive(string)
 		self.hashes.append(hashValue)
+
+		stringOffset = 0
+		if index > 0:
+			stringOffset = self.stringOffsets[index-1]
+
+		stringLen = len(string)
+		stringOffset += stringLen
+		# include the null terminator
+		stringOffset += 1
+		self.stringOffsets.append(stringOffset)
+
 		return index
 
 	def getString(self, index):
@@ -45,7 +46,7 @@ class LES_StringTable():
 			return self.hashes[index]
 		return -1
 
-	def writeFile(self, fh):
+	def writeFile(self, binFile):
 		# LES_StringTable
 		# {
 		# 	int m_numStrings; - 4 bytes
@@ -56,36 +57,19 @@ class LES_StringTable():
 
 		numStrings = len(self.strings)
 		# 	int m_numStrings; - 4 bytes
-		temp = struct.pack("=i", numStrings)
-		fh.write(temp)
+		binFile.writeInt(numStrings)	
 
 		# 	int m_stringOffsets[numStrings]; - 4 bytes * numStrings
-		stringOffset = int(0)
-		for string in self.strings:
-			temp = struct.pack("=i", stringOffset)
-			fh.write(temp)
-			stringLen = len(string)
-			stringOffset += stringLen
-			# include the null terminator
-			stringOffset += 1
+		for stringOffset in self.stringOffsets:
+			binFile.writeInt(stringOffset)	
 
 		# 	u_int m_hashes[numStrings]; - 4 bytes * numStrings
 		for hashValue in self.hashes:
-			hValue = ctypes.c_uint32(hashValue).value
-			print "Hash= %x" % hValue
-			t = struct.pack(">I", hValue)
-			fh.write(t)
+			binFile.writeUint(hashValue)	
 
 		#		char stringData[];	- total string table size in bytes
 		for string in self.strings:
-			stringLen = len(string)
-			strFmt="="+str(stringLen)+"s"
-			temp = struct.pack(strFmt, string)
-			print "stringLen=", stringLen, "len(temp)=", len(temp)
-			fh.write(temp)
-			# null terminate the string
-			temp = struct.pack("=1c", chr(0))
-			fh.write(temp)
+			binFile.writeString(string)	
 
 def runTest():
 	this = LES_StringTable()
@@ -106,8 +90,9 @@ def runTest():
 	print "Hash(rowan)=3756861831 %x" % 3756861831
 	print "Hash(Jake)=8686429 %x" % 8686429
 
-	with open("stringTable.bin", mode="wb") as fh:
-		this.writeFile(fh)
+	binFile = binaryFile.LES_BinaryFile("stringTable.bin")
+	this.writeFile(binFile)
+	binFile.close()
 
 if __name__ == '__main__':
 	runTest()
