@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import ctypes
 
 def GenerateHashCaseSensitive(string):
@@ -10,4 +12,29 @@ def GenerateHashCaseSensitive(string):
 #		print "hashValue=",hashValue, "c=",c, ord(c)
 
 	return hashValue
+
+def runTest():
+	hash1 = GenerateHashCaseSensitive("jake")
+	hash2 = GenerateHashCaseSensitive("rowan")
+	hash3 = GenerateHashCaseSensitive("Jake")
+
+	realHash1 = 1863425725
+	realHash2 = 3756861831
+	realHash3 = 8686429
+
+	print "Hash[jake]= %x realHash1 = %x" % (hash1, realHash1)
+	print "Hash[rowan]= %x realHash2 = %x" % (hash2, realHash2)
+	print "Hash[Jake]= %x realHash3 = %x" % (hash3, realHash3)
+
+	if hash1 != realHash1:
+		print "hash1 != realHash1"
+
+	if hash2 != realHash2:
+		print "hash2 != realHash2"
+
+	if hash3 != realHash3:
+		print "hash3 != realHash3"
+
+if __name__ == '__main__':
+	runTest()
 
