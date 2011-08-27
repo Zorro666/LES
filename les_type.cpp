@@ -267,6 +267,14 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 	const LES_Hash hash = LES_GenerateHashCaseSensitive(name);
 
 	unsigned int flags = inputFlags;
+	if (numElements >= 1)
+	{
+		if ((flags & LES_TYPE_ARRAY) == 0)
+		{
+			LES_ERROR("Type '%s' numElements:%d but not an array\n", name, numElements);
+		}
+		flags |= LES_TYPE_ARRAY;
+	}
 	const bool isArray = flags & LES_TYPE_ARRAY;
 	const LES_Hash aliasedHash = LES_GenerateHashCaseSensitive(aliasedName);
 	if (aliasedHash != hash)
