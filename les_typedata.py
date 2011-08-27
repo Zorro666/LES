@@ -4,6 +4,16 @@ import les_hash
 import les_binaryfile
 import les_stringtable
 
+LES_TYPE_INPUT 				= (1 << 0)
+LES_TYPE_OUTPUT 			= (1 << 1)
+LES_TYPE_INPUT_OUTPUT = (LES_TYPE_INPUT|LES_TYPE_OUTPUT)
+LES_TYPE_POD 					= (1 << 2)
+LES_TYPE_STRUCT  			= (1 << 3)
+LES_TYPE_POINTER 			= (1 << 4)
+LES_TYPE_REFERENCE 		= (1 << 5)
+LES_TYPE_ALIAS 				= (1 << 6)
+LES_TYPE_ARRAY 				= (1 << 7)
+
 # struct LES_TypeEntry
 # {
 #		unsigned int m_hash;											- 4 bytes
@@ -100,12 +110,12 @@ class LES_TypeData():
 def runTest():
 	stringTable = les_stringtable.LES_StringTable()
 	this = LES_TypeData(stringTable)
-	index = this.addType("int", 4, 0x1)
+	index = this.addType("int", 4, LES_TYPE_INPUT|LES_TYPE_POD)
 	print "Index[int]= %d" % index
 	index = this.addType("int", 2, 0x2)
 	print "ERROR: Index[int]= %d" % index
-	index = this.addType("int*", 4, 0x1, "int")
-	index = this.addType("int[3]", 4*3, 0x1, "int*", 3)
+	index = this.addType("int*", 4, LES_TYPE_INPUT_OUTPUT|LES_TYPE_POINTER|LES_TYPE_ALIAS, "int")
+	index = this.addType("int[3]", 4*3, LES_TYPE_INPUT_OUTPUT|LES_TYPE_ARRAY|LES_TYPE_ALIAS, "int*", 3)
 
 	binFile = les_binaryfile.LES_BinaryFile("typeDataLittle.bin")
 	binFile.setLittleEndian()
