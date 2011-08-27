@@ -2274,8 +2274,10 @@ struct TestStruct66
 	LES_LOG("TestStruct66.m_testStruct3.m_char %p\n", &(in_66.m_testStruct3[0].m_char));
 #endif // #if 0
 
+#if 0
 	LES_LOG("Hash(jake)=%u\n", LES_GenerateHashCaseSensitive("jake"));
 	LES_LOG("Hash(rowan)=%u\n", LES_GenerateHashCaseSensitive("rowan"));
 	LES_LOG("Hash(Jake)=%u\n", LES_GenerateHashCaseSensitive("Jake"));
+#endif // #if 0
 }
 
