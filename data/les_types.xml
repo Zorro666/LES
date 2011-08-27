@@ -1,0 +1,9 @@
+<?xml version='1.0' ?>
+<LES_TYPES>
+	<LES_TYPE name="short" dataSize="4" flags="INPUT|OUTPUT|POD" />
+	<LES_TYPE name="char*" dataSize="1" flags="INPUT|OUTPUT|POINTER" aliasedName="char" />
+	<LES_TYPE name="double*" dataSize="2" flags="INPUT|OUTPUT|STRUCT" aliasedName="int" />
+	<LES_TYPE name="short*" dataSize="4" flags="INPUT|OUTPUT|POD|ARRAY" aliasedName="int" numElements="2" />
+	<LES_TYPE name="float*" dataSize="4" flags="INPUT|OUTPUT|REFERENCE" aliasedName="int" numElements="1" />
+</LES_TYPES>
+
