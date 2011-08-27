@@ -3,11 +3,28 @@
 import les_hash
 import les_binaryfile
 
+#	struct LES_StringEntry
+#	{
+#		unsigned int m_hash;													- 4 bytes
+#		const char* m_str;														- 4 bytes : saved as offset into stringTable, ptr settled on load
+#	};
+#
+class LES_StringEntry():
+	def __init__(self, hashValue, offset):
+		self.hashValue = hashValue
+		self.offset = offset
+
+# LES_StringTable
+# {
+# 	int m_numStrings; 														- 4 bytes
+#		LES_StringEntry m_stringEntries[numStrings]; 	- 8 bytes * m_numStrings
+#		char stringData[];														- total string table size in bytes
+# };
+
 class LES_StringTable():
-	def __init__(self ):
+	def __init__(self):
 		self.strings = []
-		self.hashes = []
-		self.stringOffsets = []
+		self.stringEntries = []
 
 	def addString(self, string):
 		index = -1
@@ -22,17 +39,20 @@ class LES_StringTable():
 		self.strings.append(string)
 
 		hashValue = les_hash.GenerateHashCaseSensitive(string)
-		self.hashes.append(hashValue)
 
-		stringOffset = 0
+		offset = 0
 		if index > 0:
-			stringOffset = self.stringOffsets[index-1]
+			offset = self.stringEntries[index-1].offset
 
-		stringLen = len(string)
-		stringOffset += stringLen
-		# include the null terminator
-		stringOffset += 1
-		self.stringOffsets.append(stringOffset)
+			# Add on the length of the previous string
+			prevStringLen = len(self.strings[index-1])
+
+			# include the null terminator
+			prevStringLen += 1
+			offset += prevStringLen
+
+		stringEntry = LES_StringEntry(hashValue, offset)
+		self.stringEntries.append(stringEntry)
 
 		return index
 
@@ -43,33 +63,38 @@ class LES_StringTable():
 
 	def getHash(self, index):
 		if index < len(self.hashes):
-			return self.hashes[index]
+			return self.stringEntries[index].hashValue
 		return -1
 
 	def writeFile(self, binFile):
 		# LES_StringTable
 		# {
-		# 	int m_numStrings; - 4 bytes
-		# 	int m_stringOffsets[numStrings]; - 4 bytes * numStrings
-		# 	u_int m_hashes[numStrings]; - 4 bytes * numStrings
-		#		char stringData[];	- total string table size in bytes
-		# }
+		# 	int m_numStrings; 														- 4 bytes
+		#		LES_StringEntry m_stringEntries[numStrings]; 	- 8 bytes * m_numStrings
+		#		char stringData[];														- total string table size in bytes
+		# };
 
+		#	int m_numStrings; - 4 bytes
 		numStrings = len(self.strings)
-		# 	int m_numStrings; - 4 bytes
 		binFile.writeInt(numStrings)	
 
-		# 	int m_stringOffsets[numStrings]; - 4 bytes * numStrings
-		for stringOffset in self.stringOffsets:
-			binFile.writeInt(stringOffset)	
+		#	LES_StringEntry stringEntry[numStrings]; 				- 8 bytes * numStrings
+		for stringEntry in self.stringEntries:
+			#	struct LES_StringEntry
+			#	{
+			#		unsigned int m_hash;												- 4 bytes
+			#		const char* m_str;													- 4 bytes : saved as offset into stringTable, ptr settled on load
+			#	};
 
-		# 	u_int m_hashes[numStrings]; - 4 bytes * numStrings
-		for hashValue in self.hashes:
-			binFile.writeUint(hashValue)	
+			#		unsigned int m_hash;												- 4 bytes
+			binFile.writeUint(stringEntry.hashValue)	
 
-		#		char stringData[];	- total string table size in bytes
+			#		const char* m_str;													- 4 bytes : saved as offset into stringTable, ptr settled on load
+			binFile.writeInt(stringEntry.offset)	
+
+		#	char stringData[];															- total string table size in bytes
 		for string in self.strings:
-			binFile.writeString(string)	
+			binFile.writeCstring(string)	
 
 def runTest():
 	this = LES_StringTable()
