@@ -65,6 +65,16 @@ class LES_ChunkFile():
 		self.activeChunkIndex = -1
 		self.activeChunkName = "__NOT_ACTIVE__"
 
+	def close(self):
+		if self.activeChunkIndex != -1:
+			print "ERROR LES_ChunkFile::close current chunk isn't closed '%s'" % (self.activeChunkName)
+			return
+
+		if self.currentChunkIndex != self.numChunks:
+			print "ERROR LES_ChunkFile::close not all chunks have been written %d numChunks %d" % (self.currentChunkIndex, self.numChunks)
+			return
+
+		self.binFile.close()
 
 def runTest():
 	this = LES_ChunkFile("chunkTest.bin", "BAGA", 2)
@@ -72,6 +82,7 @@ def runTest():
 	binFile = this.startChunk("StringTable")
 	binFile.writeCstring("string table data")
 	this.endChunk()
+	this.close()
 
 	binFile = this.startChunk("TypeData")
 	binFile.writeCstring("type data")
