@@ -86,6 +86,7 @@ void JAKE_Test(void)
 }
 #endif // #if 0
 
+#if 0
 void JAKE_Test()
 {
 	const char* read = "Jake";
@@ -99,6 +100,11 @@ void JAKE_Test()
 		printf("hashValue=%u c=%c %d\n",hash, chr, chr);
 		read++;
 	}
+}
+#endif
+
+void JAKE_Test()
+{
 }
 
 int main(const int argc, const char* const argv[])
