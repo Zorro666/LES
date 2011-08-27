@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import les_chunkfile
+import les_stringtable
 
 #{
 #	STRING TABLE_CHUNK
@@ -10,7 +11,18 @@ import les_chunkfile
 #}
 
 def runTest():
-	this = les_chunkfile.LES_ChunkFile("chunkTest.bin", "BAGA", 2)
+	stringTable = les_stringtable.LES_StringTable()
+	stringTable.addString("jake")
+	stringTable.addString("rowan")
+	stringTable.addString("Jake")
+
+	chunkFile = les_chunkfile.LES_ChunkFile("chunkTest.bin", "LESD", 1)
+
+	binFile = chunkFile.startChunk("StringTable")
+	stringTable.writeFile(binFile)
+	chunkFile.endChunk()
+
+	chunkFile.close()
 
 if __name__ == '__main__':
 	runTest()
