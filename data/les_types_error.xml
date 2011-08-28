@@ -1,0 +1,13 @@
+<?xml version='1.0' ?>
+<LES_TYPES>
+	<!-- LES_TEST_ADD_TYPE_EX(unsigned char, 2, LES_TYPE_POD|LES_TYPE_INPUT, unsigned char, 0); -->
+	<!-- LES_TEST_ADD_TYPE_EX(unsigned char, 1, LES_TYPE_POINTER|LES_TYPE_OUTPUT, unsigned char, 0); -->
+	<!-- LES_TEST_ADD_TYPE_EX(unsigned char*, 4, LES_TYPE_POINTER|LES_TYPE_POD|LES_TYPE_INPUT|LES_TYPE_OUTPUT, unsigned int, 0); -->
+
+	<!-- LES_TEST_ADD_TYPE_EX(arrayNotAliasedToPtr[4], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, int, 4); -->
+	<!-- LES_TEST_ADD_TYPE_EX(arrayNotAliased[5], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, arrayNotAliased[5], 4); -->
+	<!-- LES_TEST_ADD_TYPE_EX(arrayExistsWrongNumberOfElements[1], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, int*, 1); -->
+	<!-- LES_TEST_ADD_TYPE_EX(arrayExistsWrongNumberOfElements[1], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, int*, 2); -->
+	<!-- LES_TEST_ADD_TYPE_EX(arrayCantFindAlias[1], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, jake*, 1); -->
+	<!-- LES_TEST_ADD_TYPE_EX(arrayInvalidNumElements[1], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, int*, 0); -->
+</LES_TYPES>
