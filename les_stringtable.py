@@ -27,11 +27,7 @@ class LES_StringTable():
 		self.stringEntries = []
 
 	def addString(self, string):
-		index = -1
-		try:
-			index = self.strings.index(string)
-		except ValueError:
-			index = -1
+		index = self.getStringID(string)
 		if index >= 0:
 		 return index
 
@@ -65,6 +61,15 @@ class LES_StringTable():
 		if index < len(self.hashes):
 			return self.stringEntries[index].hashValue
 		return -1
+
+	def getStringID(self, string):
+		index = -1
+		try:
+			index = self.strings.index(string)
+		except ValueError:
+			index = -1
+
+		return index
 
 	def writeFile(self, binFile):
 		# LES_StringTable
