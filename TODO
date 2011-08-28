@@ -1,5 +1,7 @@
 High Priority:
-SERVER: load and parse XML definition file for Types
+LES_TYPEDATA.PY: debug output - decode flags -> human readable
+
+SERVER: load and parse XML definition file for Types: basic file, test file, errors file
 SERVER: generate string table and type data as binary block from XML file -> chunked data file
 
 Medium Priority:
