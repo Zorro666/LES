@@ -71,6 +71,16 @@ class LES_TypeData():
 
 		return index
 
+	def doesTypeExist(self, name):
+		return name in self.typeNames
+
+	def getTypeData(self, name):
+		try:
+			index = self.typeNames.index(name)
+		except ValueError:
+			return None
+		return self.typeEntries[index]
+
 	def writeFile(self, binFile):
 		# LES_TypeData
 		# {
@@ -110,50 +120,131 @@ class LES_TypeData():
 	def loadXML(self, xmlSource):
 		#<?xml version='1.0' ?>
 		#<LES_TYPES>
-		#	<LES_TYPE name="int*" dataSize="4" flags="INPUT|OUTPUT|POD" />
+		#
 		#	<LES_TYPE name="int*" dataSize="4" flags="INPUT|OUTPUT|POD|ARRAY" aliasedName="int" numElements="2" />
-		# aliasedName = optional, default is name
-		# numELements = optional, default is 0
-		# flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY
+		#		aliasedName is optional, default is value of name
+		#		numElements is optional, default is 0
+		# 	flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY
+		#
+		# <LES_TYPE_POD name="unsigned char" dataSize="1" />
+		#		flags = INPUT|POD, fixed can't be specified
+		#		aliasedName = name, fixed can't be specified
+		#		numElements = 0, fixed can't be specified
+		# <LES_TYPE_POD_POINTER name="unsigned char" dataSize="4" />
+		#		name = name + "*"
+		#		flags = INPUT|OUTPUT|POD|POINTER, fixed can't be specified
+		#		aliasedName = name, fixed can't be specified
+		#		numElements = 0, fixed can't be specified
+		# <LES_TYPE_POD_REFERENCE name="int" />
+		#		name = name + "&"
+		#		dataSize = dataSize value of type with the aliasedName
+		#		flags = INPUT|OUTPUT|POD|REFERENCE, fixed can't be specified
+		#		aliasedName = name + "*", fixed can't be specified
+		#		numElements = 0, fixed can't be specified
 		typesXML = xml.etree.ElementTree.XML(xmlSource)
 		if typesXML.tag != "LES_TYPES":
 			print "ERROR les_typedata::loadXML root tag should be LES_TYPES found %d" % (typesXML.tag)
-			return False
+			return 1
 
+		numErrors = 0
 		for typeXML in typesXML:
-			if typeXML.tag != "LES_TYPE":
-				print "ERROR les_typedata::loadXML invalid node tag should be LES_TYPE found %d" % (typeXML.tag)
-				return False
+			needsDataSize = True
+			needsFlags = False
+			needsAlias = False
+			needsNumElements = False
+
+			dataSizeData = ""
+			flagsData = ""
+			nameSuffix = ""
+			aliasSuffix = ""
+
+			if typeXML.tag == "LES_TYPE":
+				needsFlags = True
+				needsAlias = True
+				needsNumElements = True
+			elif typeXML.tag == "LES_TYPE_POD":
+				flagsData = "INPUT|POD"
+			elif typeXML.tag == "LES_TYPE_POD_POINTER":
+				flagsData = "INPUT|OUTPUT|POINTER|POD"
+				nameSuffix = "*"
+			elif typeXML.tag == "LES_TYPE_POD_REFERENCE":
+				needsDataSize = False
+				flagsData = "INPUT|OUTPUT|REFERENCE|POD"
+				nameSuffix = "&"
+				aliasSuffix = "*"
+			else:
+				print "ERROR les_typedata::loadXML invalid node tag should be LES_TYPE found %s" % (typeXML.tag)
+				numErrors += 1
+				continue
 
 			nameData = typeXML.get("name")
 			if nameData == None:
 				print "ERROR les_typedata::loadXML LES_TYPE missing 'name' attribute:%s" % (xml.etree.ElementTree.tostring(typeXML))
-				return False
+				numErrors += 1
+				continue
 
-			dataSizeData = typeXML.get("dataSize")
-			if dataSizeData == None:
-				print "ERROR les_typedata::loadXML LES_TYPE missing 'dataSize' attribute:%s" % (xml.etree.ElementTree.tostring(typeXML))
-				return False
+			if needsDataSize:
+				dataSizeData = typeXML.get("dataSize")
+				if dataSizeData == None:
+					print "ERROR les_typedata::loadXML LES_TYPE '%s' missing 'dataSize' attribute:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+					numErrors += 1
+					continue
+			else:
+				if typeXML.get("dataSize") != None:
+					print "ERROR les_typedata::loadXML LES_TYPE '%s' 'dataSize' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+					numErrors += 1
+					continue
 
-			flagsData = typeXML.get("flags")
-			if flagsData == None:
-				print "ERROR les_typedata::loadXML LES_TYPE missing 'flags' attribute:%s" % (xml.etree.ElementTree.tostring(typeXML))
-				return False
+			if needsFlags:
+				flagsData = typeXML.get("flags")
+				if flagsData == None:
+					print "ERROR les_typedata::loadXML LES_TYPE '%s' missing 'flags' attribute:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+					numErrors += 1
+					continue
+			else:
+				if typeXML.get("flags") != None:
+					print "ERROR les_typedata::loadXML LES_TYPE '%s' 'flags' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+					numErrors += 1
+					continue
 
-			aliasedNameData = typeXML.get("aliasedName", nameData)
-			numElementsData = typeXML.get("numElements", "0")
+			if flagsData == "":
+				print "ERROR les_typedata::loadXML LES_TYPE '%s' invalid 'flags' attribute:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+				numErrors += 1
+				continue
+
+			if needsAlias:
+				aliasedNameData = typeXML.get("aliasedName", nameData)
+			else:
+				if typeXML.get("aliasedName") != None:
+					print "ERROR les_typedata::loadXML LES_TYPE '%s' 'aliasedName' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+					numErrors += 1
+					continue
+				aliasedNameData = nameData + aliasSuffix
+
+			if needsNumElements:
+				numElementsData = typeXML.get("numElements", "0")
+			else:
+				if typeXML.get("numElements") != None:
+					print "ERROR les_typedata::loadXML LES_TYPE '%s' 'numElements' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+					numErrors += 1
+					continue
+				numElementsData = "0"
 					
-			name = nameData
+			aliasedName = aliasedNameData
+			name = nameData + nameSuffix
 
-			try:
-				dataSize = int(dataSizeData)
-			except ValueError:
-				print "ERROR les_typedata::loadXML LES_TYPE invalid dataSize value:%s (must be >= 1)" % (dataSizeData)
-				return False
-
-			if dataSize < 1:
-				print "ERROR les_typedata::loadXML LES_TYPE invalid dataSize value:%d (must be >= 1)" % (dataSize)
-				return False
+			if needsDataSize:
+				try:
+					dataSize = int(dataSizeData)
+				except ValueError:
+					print "ERROR les_typedata::loadXML LES_TYPE '%s' invalid dataSize value:'%s' (must be >= 1)" % (name, dataSizeData)
+					numErrors += 1
+					continue
+			else:
+				# Get it from the data size of the alias - the rule
+				if self.doesTypeExist(aliasedName):
+					typeData = self.getTypeData(aliasedName)
+					dataSize = typeData.dataSize
 
 			# flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY, delimiter is | e.g. "INPUT|POD"
 			#flags = flagsData
@@ -177,27 +268,67 @@ class LES_TypeData():
 				elif flag == "ARRAY":
 					flags |= LES_TYPE_ARRAY
 				else:
-					print "ERROR les_typedata::loadXML LES_TYPE invalid flag:'%s' flags:'%s'" % (flag, flagsData)
-					return False
-
-			aliasedName = aliasedNameData
+					print "ERROR les_typedata::loadXML LES_TYPE '%s' invalid flag:'%s' flags:'%s'" % (name, flag, flagsData)
+					numErrors += 1
+					continue
 
 			try:
 				numElements = int(numElementsData)
 			except ValueError:
-				print "ERROR les_typedata::loadXML LES_TYPE invalid numElements value:%s (must be >= 0)" % (numElementsData)
-				return False
+				print "ERROR les_typedata::loadXML LES_TYPE '%s' invalid numElements value:%s (must be >= 0)" % (name, numElementsData)
+				numErrors += 1
+				continue
 
-			if numElements < 0:
-				print "ERROR les_typedata::loadXML LES_TYPE invalid numElements value:%d (must be >= 0)" % (numElements)
-				return False
+			if aliasedName != name:
+				flags |= LES_TYPE_ALIAS
 
 			print "Type '%s' size:%d flags:0x%X aliasedName:'%s' numElements:%d" % (name, dataSize, flags, aliasedName, numElements)
+
+			if self.doesTypeExist(name):
+				print "ERROR les_typedata::loadXML can't add type:'%s' it already exists" % (name)
+				numErrors += 1
+				continue
+
+			if dataSize < 1:
+				print "ERROR les_typedata::loadXML LES_TYPE '%s' invalid dataSize value:%d (must be >= 1)" % (name, dataSize)
+				numErrors += 1
+				continue
+
+			if flags == 0:
+				print "ERROR les_typedata::loadXML LES_TYPE '%s' invalid flags value:%d (must be >= 0)" % (name, flags)
+				numErrors += 1
+				continue
+
+			if flags & LES_TYPE_ALIAS:
+				if self.doesTypeExist(aliasedName) == False:
+					print "ERROR les_typedata::loadXML can't add type:'%s' aliasedName:'%s' doesn't exist" % (name, aliasedName)
+					numErrors += 1
+					continue
+
+			if numElements > 0:
+				if (flags & LES_TYPE_ARRAY) == 0:
+					print "ERROR les_typedata::loadXML LES_TYPE '%s' numElements > 0 but ARRAY not in flags:'%s'" % (name, flagsData)
+					numErrors += 1
+					continue
+
+			if numElements < 0:
+				print "ERROR les_typedata::loadXML LES_TYPE '%s' invalid numElements value:%d (must be >= 0)" % (name, numElements)
+				numErrors += 1
+				continue
+
+			if numElements <= 0:
+				if flags & LES_TYPE_ARRAY:
+					print "ERROR les_typedata::loadXML LES_TYPE '%s' invalid numElements value:%d (must be >= 0)" % (name, numElements)
+					numErrors += 1
+					continue
 
 			index = self.addType(name, dataSize, flags, aliasedName, numElements)
 			if index == -1:
 				print "ERROR les_typedata::loadXML failed to add type:'%s'" % (name)
-				return False
+				numErrors += 1
+				continue
+
+		return numErrors
 
 def runTest():
 	stringTable = les_stringtable.LES_StringTable()
@@ -213,6 +344,9 @@ def runTest():
 	binFile.setLittleEndian()
 	this.writeFile(binFile)
 	binFile.close()
+
+	stringTable = les_stringtable.LES_StringTable()
+	this = LES_TypeData(stringTable)
 
 	fh = open("data/les_types.xml")
 	xmlData = fh.read()
