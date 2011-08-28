@@ -1,13 +1,14 @@
 <?xml version='1.0' ?>
 <LES_TYPES>
-	<!-- LES_TEST_ADD_TYPE_EX(unsigned char, 2, LES_TYPE_POD|LES_TYPE_INPUT, unsigned char, 0); -->
-	<!-- LES_TEST_ADD_TYPE_EX(unsigned char, 1, LES_TYPE_POINTER|LES_TYPE_OUTPUT, unsigned char, 0); -->
-	<!-- LES_TEST_ADD_TYPE_EX(unsigned char*, 4, LES_TYPE_POINTER|LES_TYPE_POD|LES_TYPE_INPUT|LES_TYPE_OUTPUT, unsigned int, 0); -->
+	<LES_TYPE name="unsigned char" dataSize="2" flags="POD|INPUT" />
+	<LES_TYPE name="unsigned char" dataSize="1" flags="POINTER|OUTPUT" />
+	<LES_TYPE name="unsigned char*" dataSize="4" flags="POINTER|POD|INPUT|OUTPUT" aliasedName="unsigned int" />
 
-	<!-- LES_TEST_ADD_TYPE_EX(arrayNotAliasedToPtr[4], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, int, 4); -->
-	<!-- LES_TEST_ADD_TYPE_EX(arrayNotAliased[5], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, arrayNotAliased[5], 4); -->
-	<!-- LES_TEST_ADD_TYPE_EX(arrayExistsWrongNumberOfElements[1], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, int*, 1); -->
-	<!-- LES_TEST_ADD_TYPE_EX(arrayExistsWrongNumberOfElements[1], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, int*, 2); -->
-	<!-- LES_TEST_ADD_TYPE_EX(arrayCantFindAlias[1], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, jake*, 1); -->
-	<!-- LES_TEST_ADD_TYPE_EX(arrayInvalidNumElements[1], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, int*, 0); -->
+	<LES_TYPE name="arrayNotAliasedToPtr[4]" dataSize="4" flags="ARRAY|INPUT|POD" aliasedName="int*" numElements="4" />
+	<LES_TYPE name="arrayNotAliasedToRef[4]" dataSize="4" flags="ARRAY|INPUT|POD" aliasedName="int&amp;" numElements="4" />
+	<LES_TYPE name="arrayNotAliased[5]" dataSize="4" flags="ARRAY|INPUT|POD" aliasedName="arrayNotAliased[5]" numElements="4" />
+	<LES_TYPE name="arrayExistsWrongNumberOfElements[1]" dataSize="4" flags="ARRAY|INPUT|POD" aliasedName="int" numElements="1" />
+	<LES_TYPE name="arrayExistsWrongNumberOfElements[1]" dataSize="4" flags="ARRAY|INPUT|POD" aliasedName="int" numElements="2" />
+	<LES_TYPE name="arrayCantFindAlias[1]" dataSize="4" flags="ARRAY|INPUT|POD" aliasedName="jake*" numElements="1" />
+	<LES_TYPE name="arrayInvalidNumElements[1]" dataSize="4" flags="ARRAY|INPUT|POD" aliasedName="int*" />
 </LES_TYPES>
