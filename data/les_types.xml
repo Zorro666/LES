@@ -1,9 +1,34 @@
 <?xml version='1.0' ?>
 <LES_TYPES>
-	<LES_TYPE name="short" dataSize="4" flags="INPUT|OUTPUT|POD" />
-	<LES_TYPE name="char*" dataSize="1" flags="INPUT|OUTPUT|POINTER" aliasedName="char" />
-	<LES_TYPE name="double*" dataSize="2" flags="INPUT|OUTPUT|STRUCT" aliasedName="int" />
-	<LES_TYPE name="short*" dataSize="4" flags="INPUT|OUTPUT|POD|ARRAY" aliasedName="int" numElements="2" />
-	<LES_TYPE name="float*" dataSize="4" flags="INPUT|OUTPUT|REFERENCE" aliasedName="int" numElements="1" />
-</LES_TYPES>
+	<LES_TYPE_POD name="unsigned char" dataSize="1" />
+	<LES_TYPE_POD name="unsigned short" dataSize="2" />
+	<LES_TYPE_POD name="unsigned int" dataSize="4" />
+	<LES_TYPE_POD name="unsigned long" dataSize="4" />
 
+	<LES_TYPE_POD name="char" dataSize="1" />
+	<LES_TYPE_POD name="short" dataSize="2" />
+	<LES_TYPE_POD name="int" dataSize="4" />
+	<LES_TYPE_POD name="long" dataSize="4" />
+	<LES_TYPE_POD name="long long int" dataSize="8" />
+
+	<LES_TYPE_POD name="float" dataSize="4" />
+	<LES_TYPE_POD name="double" dataSize="8" />
+
+	<LES_TYPE_POD_POINTER name="unsigned char" dataSize="4" />
+	<LES_TYPE_POD_POINTER name="unsigned short" dataSize="4" />
+	<LES_TYPE_POD_POINTER name="unsigned int" dataSize="4" />
+	<LES_TYPE_POD_POINTER name="unsigned long" dataSize="4" />
+
+	<LES_TYPE_POD_POINTER name="char" dataSize="4" />
+	<LES_TYPE_POD_POINTER name="short" dataSize="4" />
+	<LES_TYPE_POD_POINTER name="int" dataSize="4" />
+	<LES_TYPE_POD_POINTER name="long" dataSize="4" />
+
+	<LES_TYPE_POD_POINTER name="float" dataSize="4" />
+	<LES_TYPE_POD_POINTER name="double" dataSize="4" />
+
+	<LES_TYPE_POD_REFERENCE name="int" />
+	<LES_TYPE_POD_REFERENCE name="short" />
+	<LES_TYPE_POD_REFERENCE name="char" />
+	<LES_TYPE_POD_REFERENCE name="float" />
+</LES_TYPES>
