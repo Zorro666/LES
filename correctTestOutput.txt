@@ -271,12 +271,17 @@ DecodeSingle parameter[0]:'output_0' type:'char&' value:'C'
 LES_Test_DecodeOutputParameters: parameterDataSize:1
 
 #### Array tests ####
+WARNING: AddType 'arrayNotAliasedToNonPtr[4]' hash 0xFEF71683 non-reference array types must be aliased to a non-pointer, non-reference type Alias:'int*' Flags:0x57
+FATAL_ERROR: TEST AddType 'arrayNotAliasedToNonPtr[4]' NumElements:4 0xFEF71683 Alias 'int*' failed
 
-WARNING: AddType 'arrayNotAliased[5]' hash 0x521D60A is an array 4 elements but not aliased, arrays must be aliased to a pointer type
+WARNING: AddType 'arrayNotAliasedToNonReference[4]' hash 0x20C82642 non-reference array types must be aliased to a non-pointer, non-reference type Alias:'int&' Flags:0x67
+FATAL_ERROR: TEST AddType 'arrayNotAliasedToNonReference[4]' NumElements:4 0x20C82642 Alias 'int&' failed
+
+WARNING: AddType 'arrayNotAliased[5]' hash 0x521D60A is an array with 4 elements but not aliased, arrays must be aliased
 FATAL_ERROR: TEST AddType 'arrayNotAliased[5]' NumElements:4 0x521D60A Alias 'arrayNotAliased[5]' failed
 
 WARNING: AddType 'arrayExistsWrongNumberOfElements[1]' hash 0x5429AC10 already in list and numElements doesn't match Existing:1 New:2
-FATAL_ERROR: TEST AddType 'arrayExistsWrongNumberOfElements[1]' NumElements:2 0x5429AC10 Alias 'int*' failed
+FATAL_ERROR: TEST AddType 'arrayExistsWrongNumberOfElements[1]' NumElements:2 0x5429AC10 Alias 'int' failed
 
 WARNING: AddType 'arrayCantFindAlias[1]' : aliasedEntry 'jake*' not found
 FATAL_ERROR: TEST AddType 'arrayCantFindAlias[1]' NumElements:1 0xED709A25 Alias 'jake*' failed

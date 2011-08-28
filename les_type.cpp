@@ -307,10 +307,10 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 
 		if (isArray)
 		{
-			// Array types must be aliased to the pointer type
+			// Array types must be aliased to something
 			if ((typeEntryPtr->m_flags & LES_TYPE_ALIAS) == 0)
 			{
-				LES_WARNING("AddType '%s' hash 0x%X is an array %d elements but not aliased, arrays must be aliased to a pointer type\n",
+				LES_WARNING("AddType '%s' hash 0x%X is an array with %d elements but not aliased, arrays must be aliased\n",
 										name, hash, numElements);
 				return LES_RETURN_ERROR;
 			}
@@ -322,9 +322,17 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 			}
 			LES_TypeEntry* const aliasedTypeEntryPtr = &les_typeEntryArray[aliasedIndex];
 			const unsigned int aliasedFlags = aliasedTypeEntryPtr->m_flags;
-			if (((aliasedFlags & LES_TYPE_POINTER) == 1) || (aliasedFlags & LES_TYPE_REFERENCE) == 1)
+			// Arrays of non-references must not be aliased to pointer or reference
+			if (((typeEntryPtr->m_flags & LES_TYPE_REFERENCE) == 0) && ((aliasedFlags & LES_TYPE_POINTER) || (aliasedFlags & LES_TYPE_REFERENCE)))
 			{
-				LES_WARNING("AddType '%s' hash 0x%X array types must be aliased to a non-pointer, non-reference type Alias:'%s' Flags:0x%X\n", 
+				LES_WARNING("AddType '%s' hash 0x%X non-reference array types must be aliased to a non-pointer, non-reference type Alias:'%s' Flags:0x%X\n", 
+										name, hash, aliasedName, aliasedFlags);
+				return LES_RETURN_ERROR;
+			}
+			// Arrays of references must be aliased to pointer 
+			if (((typeEntryPtr->m_flags & LES_TYPE_REFERENCE) == 1) && (((aliasedFlags & LES_TYPE_POINTER) == 0) || (aliasedFlags & LES_TYPE_REFERENCE)))
+			{
+				LES_WARNING("AddType '%s' hash 0x%X non-reference array types must be aliased to a pointer type Alias:'%s' Flags:0x%X\n", 
 										name, hash, aliasedName, aliasedFlags);
 				return LES_RETURN_ERROR;
 			}

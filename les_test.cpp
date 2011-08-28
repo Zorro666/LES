@@ -2117,12 +2117,14 @@ void LES_TestSetup(void)
 
 	LES_LOG("#### Array tests ####\n");
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
-	LES_TEST_ADD_TYPE_EX(arrayNotAliasedToPtr[4], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, int, 4);
+	LES_TEST_ADD_TYPE_EX(arrayNotAliasedToNonPtr[4], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, int*, 4);
+	LES_LOG("\n");
+	LES_TEST_ADD_TYPE_EX(arrayNotAliasedToNonReference[4], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, int&, 4);
 	LES_LOG("\n");
 	LES_TEST_ADD_TYPE_EX(arrayNotAliased[5], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, arrayNotAliased[5], 4);
 	LES_LOG("\n");
-	LES_TEST_ADD_TYPE_EX(arrayExistsWrongNumberOfElements[1], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, int*, 1);
-	LES_TEST_ADD_TYPE_EX(arrayExistsWrongNumberOfElements[1], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, int*, 2);
+	LES_TEST_ADD_TYPE_EX(arrayExistsWrongNumberOfElements[1], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, int, 1);
+	LES_TEST_ADD_TYPE_EX(arrayExistsWrongNumberOfElements[1], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, int, 2);
 	LES_LOG("\n");
 	LES_TEST_ADD_TYPE_EX(arrayCantFindAlias[1], sizeof(int), LES_TYPE_ARRAY|LES_TYPE_INPUT|LES_TYPE_POD, jake*, 1);
 	LES_LOG("\n");
