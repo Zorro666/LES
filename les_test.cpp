@@ -2281,5 +2281,6 @@ struct TestStruct66
 	LES_LOG("Hash(rowan)=%u\n", LES_GenerateHashCaseSensitive("rowan"));
 	LES_LOG("Hash(Jake)=%u\n", LES_GenerateHashCaseSensitive("Jake"));
 #endif // #if 0
+	LES_DebugOutputTypes();
 }
 
