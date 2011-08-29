@@ -206,25 +206,71 @@ class LES_TypeData():
 		#<LES_TYPES>
 		#
 		#	<LES_TYPE name="int*" dataSize="4" flags="INPUT|OUTPUT|POD|ARRAY" aliasedName="int" numElements="2" />
+		# 	flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY
 		#		aliasedName is optional, default is value of name
 		#		numElements is optional, default is 0
-		# 	flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY
 		#
 		# <LES_TYPE_POD name="unsigned char" dataSize="1" />
 		#		flags = INPUT|POD, fixed can't be specified
-		#		aliasedName = name, fixed can't be specified
+		#		aliasedName = input_name, fixed can't be specified
 		#		numElements = 0, fixed can't be specified
-		# <LES_TYPE_POD_POINTER name="unsigned char" dataSize="4" />
-		#		name = name + "*"
+
+		# <LES_TYPE_POD_POINTER name="unsigned char" />
+		#		name = input_name + "*"
+		#		dataSize = 4 by default : this could be set by some global params in the XML in the future
 		#		flags = INPUT|OUTPUT|POD|POINTER, fixed can't be specified
-		#		aliasedName = name, fixed can't be specified
+		#		aliasedName = input_name, fixed can't be specified
 		#		numElements = 0, fixed can't be specified
+
 		# <LES_TYPE_POD_REFERENCE name="int" />
-		#		name = name + "&"
+		#		name = input_name + "&"
 		#		dataSize = dataSize value of type with the aliasedName
 		#		flags = INPUT|OUTPUT|POD|REFERENCE, fixed can't be specified
-		#		aliasedName = name + "*", fixed can't be specified
+		#		aliasedName = input_name + "*", fixed can't be specified
 		#		numElements = 0, fixed can't be specified
+
+		# <LES_TYPE_POD_ARRAY name="int" numElements="4" />
+		#		name = input_name + "[<numElements>]"
+		#		dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
+		#		flags = INPUT|OUTPUT|POD|ARRAY, fixed can't be specified
+		#		aliasedName = input_name
+
+		# <LES_TYPE_POD_REFERENCE_ARRAY name="int" numElements="4" />
+		#		name = input_name + "&[<numElements>]"
+		#		dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
+		#		flags = INPUT|OUTPUT|POD|REFERENCE|ARRAY, fixed can't be specified
+		#		aliasedName = input_name+"*"
+
+		# <LES_TYPE_STRUCT name="TestStruct1" dataSize="10" />
+		#		flags = INPUT|STRUCT, fixed can't be specified
+		#		aliasedName = input_name
+
+		# <LES_TYPE_STRUCT_POINTER name="TestStruct1" />
+		#		name = input_name + "*"
+		#		dataSize = 4 by default : this could be set by some global params in the XML in the future
+		#		flags = INPUT|OUTPUT|STRUCT|POINTER, fixed can't be specified
+		#		aliasedName = input_name, fixed can't be specified
+		#		numElements = 0, fixed can't be specified
+
+		# <LES_TYPE_STRUCT_REFERNCE name="TestStruct1" />
+		#		name = input_name + "&"
+		#		dataSize = dataSize value of type with the aliasedName
+		#		flags = INPUT|OUTPUT|STRUCT|REFERENCE, fixed can't be specified
+		#		aliasedName = input_name + "*", fixed can't be specified
+		#		numElements = 0, fixed can't be specified
+
+		# <LES_TYPE_STRUCT_ARRAY
+		#		name = input_name + "[<numElements>]"
+		#		dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
+		#		flags = INPUT|OUTPUT|STRUCT|ARRAY, fixed can't be specified
+		#		aliasedName = input_name
+
+		# <LES_TYPE_STRUCT_REFERENCE_ARRAY name="TestStruct2" numElements="5" />
+		#		name = input_name + "&[<numElements>]"
+		#		dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
+		#		flags = INPUT|OUTPUT|STRUCT|REFERENCE|ARRAY, fixed can't be specified
+		#		aliasedName = input_name+"*"
+
 		typesXML = xml.etree.ElementTree.XML(xmlSource)
 		if typesXML.tag != "LES_TYPES":
 			print "ERROR: LES_TypeData::loadXML root tag should be LES_TYPES found %d" % (typesXML.tag)
@@ -238,9 +284,11 @@ class LES_TypeData():
 			needsNumElements = False
 
 			dataSizeData = ""
+			dataSizeDataDefault = None
 			flagsData = ""
 			nameSuffix = ""
 			aliasSuffix = ""
+			nameSuffixAddNumElements = False
 
 			if typeXML.tag == "LES_TYPE":
 				needsFlags = True
@@ -249,13 +297,28 @@ class LES_TypeData():
 			elif typeXML.tag == "LES_TYPE_POD":
 				flagsData = "INPUT|POD"
 			elif typeXML.tag == "LES_TYPE_POD_POINTER":
-				flagsData = "INPUT|OUTPUT|POINTER|POD"
+				flagsData = "INPUT|OUTPUT|POD|POINTER"
 				nameSuffix = "*"
+				dataSizeDataDefault = "4"
 			elif typeXML.tag == "LES_TYPE_POD_REFERENCE":
 				needsDataSize = False
-				flagsData = "INPUT|OUTPUT|REFERENCE|POD"
+				flagsData = "INPUT|OUTPUT|POD|REFERENCE"
 				nameSuffix = "&"
 				aliasSuffix = "*"
+			elif typeXML.tag == "LES_TYPE_POD_ARRAY":
+				needsDataSize = False
+				flagsData = "INPUT|OUTPUT|POD|ARRAY"
+				nameSuffix = ""
+				nameSuffixAddNumElements = True
+				aliasSuffix = ""
+				needsNumElements = True
+			elif typeXML.tag == "LES_TYPE_POD_REFERENCE_ARRAY":
+				needsDataSize = False
+				flagsData = "INPUT|OUTPUT|POD|REFERENCE|ARRAY"
+				nameSuffix = "&"
+				nameSuffixAddNumElements = True
+				aliasSuffix = "*"
+				needsNumElements = True
 			else:
 				print "ERROR: LES_TypeData::loadXML invalid node tag should be LES_TYPE, LES_TYPE_POD, LES_TYPE_POD_POINTER, LES_TYPE_POD_REFERENCE found %s" % (typeXML.tag)
 				numErrors += 1
@@ -266,13 +329,16 @@ class LES_TypeData():
 				print "ERROR: LES_TypeData::loadXML missing 'name' attribute:%s" % (xml.etree.ElementTree.tostring(typeXML))
 				numErrors += 1
 				continue
+			name = nameData
 
 			if needsDataSize:
 				dataSizeData = typeXML.get("dataSize")
 				if dataSizeData == None:
-					print "ERROR: LES_TypeData::loadXML '%s' missing 'dataSize' attribute:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
-					numErrors += 1
-					continue
+					dataSizeData = dataSizeDataDefault
+					if dataSizeData == None:
+						print "ERROR: LES_TypeData::loadXML '%s' missing 'dataSize' attribute:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+						numErrors += 1
+						continue
 			else:
 				if typeXML.get("dataSize") != None:
 					print "ERROR: LES_TypeData::loadXML '%s' 'dataSize' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
@@ -325,9 +391,17 @@ class LES_TypeData():
 					numErrors += 1
 					continue
 			else:
-				# Get it from the data size of the alias - the rule
-				if self.doesTypeExist(aliasedName):
-					typeData = self.getTypeData(aliasedName)
+				if typeXML.tag == "LES_TYPE_POD_REFERENCE":
+					# Get it from the data size of the alias - the rule
+						typeNameForDataSize = aliasedName
+				elif typeXML.tag == "LES_TYPE_POD_ARRAY":
+					# dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
+					typeNameForDataSize = name +"*"
+				elif typeXML.tag == "LES_TYPE_POD_REFERENCE_ARRAY":
+					# dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
+					typeNameForDataSize = name +"*"
+				if self.doesTypeExist(typeNameForDataSize):
+					typeData = self.getTypeData(typeNameForDataSize)
 					dataSize = typeData.dataSize
 
 			# flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY, delimiter is | e.g. "INPUT|POD"
@@ -360,7 +434,12 @@ class LES_TypeData():
 			except ValueError:
 				print "ERROR: LES_TypeData::loadXML '%s' invalid numElements value:%s (must be >= 0)" % (name, numElementsData)
 				numErrors += 1
+				numElements = -1
 				continue
+
+			if nameSuffixAddNumElements:
+				# name = name + "[<numELements>]"
+				name = name + "[" + str(numElements) + "]"
 
 			if aliasedName != name:
 				flags |= LES_TYPE_ALIAS
