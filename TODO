@@ -1,8 +1,11 @@
 High Priority:
-SERVER: load and parse XML definition file for Types: basic file, test file, errors file
+PYTHON: add a logger class
+TEST: output the types test data to a separate file in C++ 
+PYTHON: output the types test data to a separate file 
 SERVER: generate string table and type data as binary block from XML file -> chunked data file
 
 Medium Priority:
+STRUCT: the struct size shouldn't be required -C++ set it to 0 and see what happens
 TEST: output the types test data to a separate file in C++ & python
 SERVER: up and running ready for client to connect
 CLIENT: connect to server
