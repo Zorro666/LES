@@ -319,8 +319,33 @@ class LES_TypeData():
 				nameSuffixAddNumElements = True
 				aliasSuffix = "*"
 				needsNumElements = True
+			elif typeXML.tag == "LES_TYPE_STRUCT":
+				flagsData = "INPUT|STRUCT"
+			elif typeXML.tag == "LES_TYPE_STRUCT_POINTER":
+				flagsData = "INPUT|OUTPUT|STRUCT|POINTER"
+				nameSuffix = "*"
+				dataSizeDataDefault = "4"
+			elif typeXML.tag == "LES_TYPE_STRUCT_REFERENCE":
+				needsDataSize = False
+				flagsData = "INPUT|OUTPUT|STRUCT|REFERENCE"
+				nameSuffix = "&"
+				aliasSuffix = "*"
+			elif typeXML.tag == "LES_TYPE_STRUCT_ARRAY":
+				needsDataSize = False
+				flagsData = "INPUT|OUTPUT|STRUCT|ARRAY"
+				nameSuffix = ""
+				nameSuffixAddNumElements = True
+				aliasSuffix = ""
+				needsNumElements = True
+			elif typeXML.tag == "LES_TYPE_STRUCT_REFERENCE_ARRAY":
+				needsDataSize = False
+				flagsData = "INPUT|OUTPUT|STRUCT|REFERENCE|ARRAY"
+				nameSuffix = "&"
+				nameSuffixAddNumElements = True
+				aliasSuffix = "*"
+				needsNumElements = True
 			else:
-				print "ERROR: LES_TypeData::loadXML invalid node tag should be LES_TYPE, LES_TYPE_POD, LES_TYPE_POD_POINTER, LES_TYPE_POD_REFERENCE found %s" % (typeXML.tag)
+				print "ERROR: LES_TypeData::loadXML invalid node tag should be LES_TYPE, LES_TYPE_POD, LES_TYPE_POD_POINTER, LES_TYPE_POD_REFERENCE, LES_TYPE_POD_ARRAY, LES_TYPE_POD_REFERENCE_ARRAY, LES_TYPE_STRUCT, LES_TYPE_STRUCT_POINTER, LES_TYPE_STRUCT_REFERENCE, LES_TYPE_STRUCT_ARRAY, LES_TYPE_STRUCT_REFERNCE_ARRAY found %s" % (typeXML.tag)
 				numErrors += 1
 				continue
 
@@ -396,10 +421,19 @@ class LES_TypeData():
 						typeNameForDataSize = aliasedName
 				elif typeXML.tag == "LES_TYPE_POD_ARRAY":
 					# dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
-					typeNameForDataSize = name +"*"
+					typeNameForDataSize = name + "*"
+				elif typeXML.tag == "LES_TYPE_STRUCT_REFERENCE":
+					# Get it from the data size of the alias - the rule
+						typeNameForDataSize = aliasedName
 				elif typeXML.tag == "LES_TYPE_POD_REFERENCE_ARRAY":
 					# dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
-					typeNameForDataSize = name +"*"
+					typeNameForDataSize = name + "*"
+				elif typeXML.tag == "LES_TYPE_STRUCT_ARRAY":
+					# dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
+					typeNameForDataSize = name + "*"
+				elif typeXML.tag == "LES_TYPE_STRUCT_REFERENCE_ARRAY":
+					# dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
+					typeNameForDataSize = name + "*"
 				if self.doesTypeExist(typeNameForDataSize):
 					typeData = self.getTypeData(typeNameForDataSize)
 					dataSize = typeData.dataSize
