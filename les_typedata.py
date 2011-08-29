@@ -201,7 +201,7 @@ class LES_TypeData():
 			#		int m_numElements;												- 4 bytes
 			binFile.writeUint(typeEntry.numElements)
 
-	def loadXML(self, xmlSource):
+	def parseXML(self, xmlSource):
 		#<?xml version='1.0' ?>
 		#<LES_TYPES>
 		#
@@ -273,7 +273,7 @@ class LES_TypeData():
 
 		typesXML = xml.etree.ElementTree.XML(xmlSource)
 		if typesXML.tag != "LES_TYPES":
-			print "ERROR: LES_TypeData::loadXML root tag should be LES_TYPES found %d" % (typesXML.tag)
+			print "ERROR: LES_TypeData::parseXML root tag should be LES_TYPES found %d" % (typesXML.tag)
 			return 1
 
 		numErrors = 0
@@ -345,13 +345,13 @@ class LES_TypeData():
 				aliasSuffix = "*"
 				needsNumElements = True
 			else:
-				print "ERROR: LES_TypeData::loadXML invalid node tag should be LES_TYPE, LES_TYPE_POD, LES_TYPE_POD_POINTER, LES_TYPE_POD_REFERENCE, LES_TYPE_POD_ARRAY, LES_TYPE_POD_REFERENCE_ARRAY, LES_TYPE_STRUCT, LES_TYPE_STRUCT_POINTER, LES_TYPE_STRUCT_REFERENCE, LES_TYPE_STRUCT_ARRAY, LES_TYPE_STRUCT_REFERNCE_ARRAY found %s" % (typeXML.tag)
+				print "ERROR: LES_TypeData::parseXML invalid node tag should be LES_TYPE, LES_TYPE_POD, LES_TYPE_POD_POINTER, LES_TYPE_POD_REFERENCE, LES_TYPE_POD_ARRAY, LES_TYPE_POD_REFERENCE_ARRAY, LES_TYPE_STRUCT, LES_TYPE_STRUCT_POINTER, LES_TYPE_STRUCT_REFERENCE, LES_TYPE_STRUCT_ARRAY, LES_TYPE_STRUCT_REFERNCE_ARRAY found %s" % (typeXML.tag)
 				numErrors += 1
 				continue
 
 			nameData = typeXML.get("name")
 			if nameData == None:
-				print "ERROR: LES_TypeData::loadXML missing 'name' attribute:%s" % (xml.etree.ElementTree.tostring(typeXML))
+				print "ERROR: LES_TypeData::parseXML missing 'name' attribute:%s" % (xml.etree.ElementTree.tostring(typeXML))
 				numErrors += 1
 				continue
 			name = nameData
@@ -361,29 +361,29 @@ class LES_TypeData():
 				if dataSizeData == None:
 					dataSizeData = dataSizeDataDefault
 					if dataSizeData == None:
-						print "ERROR: LES_TypeData::loadXML '%s' missing 'dataSize' attribute:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+						print "ERROR: LES_TypeData::parseXML '%s' missing 'dataSize' attribute:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
 						numErrors += 1
 						continue
 			else:
 				if typeXML.get("dataSize") != None:
-					print "ERROR: LES_TypeData::loadXML '%s' 'dataSize' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+					print "ERROR: LES_TypeData::parseXML '%s' 'dataSize' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
 					numErrors += 1
 					continue
 
 			if needsFlags:
 				flagsData = typeXML.get("flags")
 				if flagsData == None:
-					print "ERROR: LES_TypeData::loadXML '%s' missing 'flags' attribute:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+					print "ERROR: LES_TypeData::parseXML '%s' missing 'flags' attribute:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
 					numErrors += 1
 					continue
 			else:
 				if typeXML.get("flags") != None:
-					print "ERROR: LES_TypeData::loadXML '%s' 'flags' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+					print "ERROR: LES_TypeData::parseXML '%s' 'flags' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
 					numErrors += 1
 					continue
 
 			if flagsData == "":
-				print "ERROR: LES_TypeData::loadXML '%s' invalid 'flags' attribute:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+				print "ERROR: LES_TypeData::parseXML '%s' invalid 'flags' attribute:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
 				numErrors += 1
 				continue
 
@@ -391,7 +391,7 @@ class LES_TypeData():
 				aliasedNameData = typeXML.get("aliasedName", nameData)
 			else:
 				if typeXML.get("aliasedName") != None:
-					print "ERROR: LES_TypeData::loadXML '%s' 'aliasedName' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+					print "ERROR: LES_TypeData::parseXML '%s' 'aliasedName' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
 					numErrors += 1
 					continue
 				aliasedNameData = nameData + aliasSuffix
@@ -400,7 +400,7 @@ class LES_TypeData():
 				numElementsData = typeXML.get("numElements", "0")
 			else:
 				if typeXML.get("numElements") != None:
-					print "ERROR: LES_TypeData::loadXML '%s' 'numElements' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+					print "ERROR: LES_TypeData::parseXML '%s' 'numElements' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
 					numErrors += 1
 					continue
 				numElementsData = "0"
@@ -412,7 +412,7 @@ class LES_TypeData():
 				try:
 					dataSize = int(dataSizeData)
 				except ValueError:
-					print "ERROR: LES_TypeData::loadXML '%s' invalid dataSize value:'%s' (must be >= 1)" % (name, dataSizeData)
+					print "ERROR: LES_TypeData::parseXML '%s' invalid dataSize value:'%s' (must be >= 1)" % (name, dataSizeData)
 					numErrors += 1
 					continue
 			else:
@@ -459,14 +459,14 @@ class LES_TypeData():
 				elif flag == "ARRAY":
 					flags |= LES_TYPE_ARRAY
 				else:
-					print "ERROR: LES_TypeData::loadXML '%s' invalid flag:'%s' flags:'%s'" % (name, flag, flagsData)
+					print "ERROR: LES_TypeData::parseXML '%s' invalid flag:'%s' flags:'%s'" % (name, flag, flagsData)
 					numErrors += 1
 					continue
 
 			try:
 				numElements = int(numElementsData)
 			except ValueError:
-				print "ERROR: LES_TypeData::loadXML '%s' invalid numElements value:%s (must be >= 0)" % (name, numElementsData)
+				print "ERROR: LES_TypeData::parseXML '%s' invalid numElements value:%s (must be >= 0)" % (name, numElementsData)
 				numErrors += 1
 				numElements = -1
 				continue
@@ -482,15 +482,29 @@ class LES_TypeData():
 			print "Type '%s' size:%d flags:0x%X %s aliasedName:'%s' numElements:%d" % (name, dataSize, flags, flagsDecoded, aliasedName, numElements)
 
 			if self.doesTypeExist(name):
-				print "WARNING: LES_TypeData::loadXML '%s' already exists" % (name)
+				print "WARNING: LES_TypeData::parseXML '%s' already exists" % (name)
 
 			index = self.addType(name, dataSize, flags, aliasedName, numElements)
 			if index == -1:
-				print "ERROR: LES_TypeData::loadXML '%s' failed to add type" % (name)
+				print "ERROR: LES_TypeData::parseXML '%s' failed to add type" % (name)
 				numErrors += 1
 				continue
 
 		return numErrors
+
+	def loadXML(self, fname):
+		print ""
+		print "#####################"
+		print "Loading %s" % fname
+		print "#####################"
+		print ""
+ 		fh = open(fname)
+		xmlData = fh.read()
+		numErrors = self.parseXML(xmlData)
+		if numErrors == 0:
+			print "SUCCESS"
+		else:
+			print "ERROR numErrors=%d" % (numErrors)
 
 def runTest():
 	stringTable = les_stringtable.LES_StringTable()
@@ -510,44 +524,9 @@ def runTest():
 	stringTable = les_stringtable.LES_StringTable()
 	this = LES_TypeData(stringTable)
 
-	print ""
-	print "#####################"
-	print "Loading data/les_types_basic.xml"
-	print "#####################"
-	print ""
- 	fh = open("data/les_types_basic.xml")
-	xmlData = fh.read()
-	numErrors = this.loadXML(xmlData)
-	if numErrors == 0:
-		print "SUCCESS"
-	else:
-		print "ERROR numErrors=%d" % (numErrors)
-
-	print ""
-	print "#####################"
-	print "Loading data/les_types_test.xml"
-	print "#####################"
-	print ""
-	fh = open("data/les_types_test.xml")
-	xmlData = fh.read()
-	numErrors = this.loadXML(xmlData)
-	if numErrors == 0:
-		print "SUCCESS"
-	else:
-		print "ERROR numErrors=%d" % (numErrors)
-
-	print ""
-	print "#####################"
-	print "Loading data/les_types_errors.xml"
-	print "#####################"
-	print ""
-	fh = open("data/les_types_errors.xml")
-	xmlData = fh.read()
-	numErrors = this.loadXML(xmlData)
-	if numErrors == 0:
-		print "SUCCESS"
-	else:
-		print "ERROR numErrors=%d" % (numErrors)
+	this.loadXML("data/les_types_basic.xml")
+	this.loadXML("data/les_types_test.xml")
+	this.loadXML("data/les_types_errors.xml")
 
 if __name__ == '__main__':
 	runTest()
