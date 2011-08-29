@@ -1,6 +1,7 @@
 #include "les_type.h"
 #include "les_core.h"
 #include "les_logger.h"
+#include "les_loggerchannel.h"
 #include "les_stringentry.h"
 #include "les_struct.h"
 
@@ -374,7 +375,7 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 	return index;
 }
 
-void LES_DebugOutputTypes(void)
+void LES_DebugOutputTypes(LES_LoggerChannel* const pLogChannel)
 {
 	for (int i=0; i<les_numTypeEntries; i++)
 	{
@@ -458,7 +459,7 @@ void LES_DebugOutputTypes(void)
 			strcat(flagsDecoded, "ARRAY");
 			needsPipe = true;
 		}
-		LES_LOG("Type '%s' size:%d flags:0x%X %s aliasedName:'%s' numElements:%d\n",
+		pLogChannel->Print("Type '%s' size:%d flags:0x%X %s aliasedName:'%s' numElements:%d\n",
 			 			name, dataSize, flags, flagsDecoded, aliasedName, numElements);
 	}
 }

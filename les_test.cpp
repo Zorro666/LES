@@ -2281,6 +2281,7 @@ struct TestStruct66
 	LES_LOG("Hash(rowan)=%u\n", LES_GenerateHashCaseSensitive("rowan"));
 	LES_LOG("Hash(Jake)=%u\n", LES_GenerateHashCaseSensitive("Jake"));
 #endif // #if 0
-	LES_DebugOutputTypes();
+	LES_LoggerChannel* const typeDebugChan = LES_Logger::CreateChannel("TypeDebug", "", "typeDebug.txt", LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT|LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT);
+	LES_DebugOutputTypes(typeDebugChan);
 }
 

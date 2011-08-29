@@ -5,6 +5,7 @@
 #include "les_hash.h"
 
 struct LES_StringEntry;
+class LES_LoggerChannel;
 
 #define LES_TYPE_INPUT 				(1<< 0)
 #define LES_TYPE_OUTPUT 			(1<< 1)
@@ -42,6 +43,6 @@ public:
 };
 
 const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEntry);
-void LES_DebugOutputTypes(void);
+void LES_DebugOutputTypes(LES_LoggerChannel* const pLogChannel);
 
 #endif // #ifndef LES_TYPE_HH
