@@ -14,18 +14,18 @@
 	<LES_TYPE_POD name="float" dataSize="4" />
 	<LES_TYPE_POD name="double" dataSize="8" />
 
-	<LES_TYPE_POD_POINTER name="unsigned char" dataSize="4" />
-	<LES_TYPE_POD_POINTER name="unsigned short" dataSize="4" />
-	<LES_TYPE_POD_POINTER name="unsigned int" dataSize="4" />
-	<LES_TYPE_POD_POINTER name="unsigned long" dataSize="4" />
+	<LES_TYPE_POD_POINTER name="unsigned char" />
+	<LES_TYPE_POD_POINTER name="unsigned short" />
+	<LES_TYPE_POD_POINTER name="unsigned int" />
+	<LES_TYPE_POD_POINTER name="unsigned long" />
 
-	<LES_TYPE_POD_POINTER name="char" dataSize="4" />
-	<LES_TYPE_POD_POINTER name="short" dataSize="4" />
-	<LES_TYPE_POD_POINTER name="int" dataSize="4" />
-	<LES_TYPE_POD_POINTER name="long" dataSize="4" />
+	<LES_TYPE_POD_POINTER name="char" />
+	<LES_TYPE_POD_POINTER name="short" />
+	<LES_TYPE_POD_POINTER name="int" />
+	<LES_TYPE_POD_POINTER name="long" />
 
-	<LES_TYPE_POD_POINTER name="float" dataSize="4" />
-	<LES_TYPE_POD_POINTER name="double" dataSize="4" />
+	<LES_TYPE_POD_POINTER name="float" />
+	<LES_TYPE_POD_POINTER name="double" />
 
 	<LES_TYPE_POD_REFERENCE name="int" />
 	<LES_TYPE_POD_REFERENCE name="short" />
