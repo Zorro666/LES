@@ -62,20 +62,19 @@ class LES_TypeEntry():
 
 class LES_TypeData():
 	def __init__(self, stringTable):
-		self.typeEntries = []
-		self.typeNames = []
-		self.typeAliasedNames = []
-		self.stringTable = stringTable
+		self.__m_typeEntries__ = []
+		self.__m_typeNames__ = []
+		self.__m_stringTable__ = stringTable
 
 	def addType(self, name, dataSize, flags, aliasedName=None, numElements=1):
 		try:
-			index = self.typeNames.index(name)
+			index = self.__m_typeNames__.index(name)
 		except ValueError:
 			index = -1
 
 		if index >= 0:
 			les_logger.Warning("LES_TypeData::addType '%s' but type already exists", name)
-			typeEntry = self.typeEntries[index]
+			typeEntry = self.__m_typeEntries__[index]
 			# Check the existing type data matches the new type data
 			if typeEntry.dataSize != dataSize:
 				les_logger.Error("LES_TypeData::addType '%s' already in list and dataSize doesn't match Existing:%d New:%d", name, typeEntry.dataSize, dataSize)
@@ -85,9 +84,9 @@ class LES_TypeData():
 				les_logger.Error("LES_TypeData::addType '%s' already in list and flags doesn't match Existing:0x%X %s New:0x%X %s", name, typeEntry.flags, decodeFlags(typeEntry.flags), flags, decodeFlags(flags))
 				return -1
 
-			aliasedTypeID = self.stringTable.getStringID(aliasedName)
+			aliasedTypeID = self.__m_stringTable__.getStringID(aliasedName)
 			if typeEntry.aliasedTypeID != aliasedTypeID:
-				existingAliasedName = self.stringTable.getString(typeEntry.aliasedTypeID)
+				existingAliasedName = self.__m_stringTable__.getString(typeEntry.aliasedTypeID)
 				les_logger.Error("LES_TypeData::addType '%s' already in list and aliasedTypeID doesn't match Existing:%d '%s' New:%d '%s' ", name, typeEntry.aliasedTypeID, existingAliasedName, aliasedTypeID, aliasedName)
 				return -1
 
@@ -139,32 +138,32 @@ class LES_TypeData():
 				return -1
 
 		# Add the type name to the string table for good measure
-		self.stringTable.addString(name)
+		self.__m_stringTable__.addString(name)
 
 		# compute the aliasedTypeNameID which is an index into the string table (future this could be a type ID into the type array)
 		aliasedTypeID = 0xFFFFFFFF 
 		if aliasedName != None:
-			aliasedTypeID = self.stringTable.addString(aliasedName)
+			aliasedTypeID = self.__m_stringTable__.addString(aliasedName)
 
 		nameHash = les_hash.GenerateHashCaseSensitive(name)
 
 		typeEntry = LES_TypeEntry(nameHash, dataSize, flags, aliasedTypeID, numElements)
 
-		index = len(self.typeEntries)
-		self.typeEntries.append(typeEntry)
-		self.typeNames.append(name)
+		index = len(self.__m_typeEntries__)
+		self.__m_typeEntries__.append(typeEntry)
+		self.__m_typeNames__.append(name)
 
 		return index
 
 	def doesTypeExist(self, name):
-		return name in self.typeNames
+		return name in self.__m_typeNames__
 
 	def getTypeData(self, name):
 		try:
-			index = self.typeNames.index(name)
+			index = self.__m_typeNames__.index(name)
 		except ValueError:
 			return None
-		return self.typeEntries[index]
+		return self.__m_typeEntries__[index]
 
 	def writeFile(self, binFile):
 		# LES_TypeData
@@ -174,10 +173,10 @@ class LES_TypeData():
 		# };
 
 		# 	int m_numTypes; 													- 4 bytes
-		numTypes = len(self.typeEntries)
+		numTypes = len(self.__m_typeEntries__)
 		binFile.writeInt(numTypes)
 
-		for typeEntry in self.typeEntries:
+		for typeEntry in self.__m_typeEntries__:
 			# struct LES_TypeEntry
 			# {
 			#		unsigned int m_hash;											- 4 bytes
@@ -507,6 +506,19 @@ class LES_TypeData():
 		else:
 			les_logger.Error("numErrors=%d", numErrors)
 
+	def DebugOutputTypes(self, loggerChannel):
+		for typeEntry in self.__m_typeEntries__:
+			hashValue = typeEntry.hashValue
+			dataSize = typeEntry.dataSize
+			flags = typeEntry.flags
+			aliasedTypeID = typeEntry.aliasedTypeID
+			numElements = typeEntry.numElements
+
+			name = self.__m_stringTable__.getStringByHash(hashValue)
+			flagsDecoded = decodeFlags(flags)
+			aliasedName = self.__m_stringTable__.getString(aliasedTypeID)
+			loggerChannel.Print("Type '%s' size:%d flags:0x%X %s aliasedName:'%s' numElements:%d", name, dataSize, flags, flagsDecoded, aliasedName, numElements)
+
 def runTest():
 	les_logger.Init()
 
@@ -530,6 +542,9 @@ def runTest():
 	this.loadXML("data/les_types_basic.xml")
 	this.loadXML("data/les_types_test.xml")
 	this.loadXML("data/les_types_errors.xml")
+
+	testTypeChan = les_logger.CreateChannel("TypeDebug", "", "typeDebug_py.txt", les_logger.LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT | les_logger.LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT)
+	this.DebugOutputTypes(testTypeChan)
 
 if __name__ == '__main__':
 	runTest()
