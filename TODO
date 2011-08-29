@@ -1,10 +1,9 @@
 High Priority:
-TEST: output the type array to compare against the XML loaded data
-
 SERVER: load and parse XML definition file for Types: basic file, test file, errors file
 SERVER: generate string table and type data as binary block from XML file -> chunked data file
 
 Medium Priority:
+TEST: output the types test data to a separate file in C++ & python
 SERVER: up and running ready for client to connect
 CLIENT: connect to server
 
