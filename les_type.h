@@ -42,5 +42,6 @@ public:
 };
 
 const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEntry);
+void LES_DebugOutputTypes(void);
 
 #endif // #ifndef LES_TYPE_HH
