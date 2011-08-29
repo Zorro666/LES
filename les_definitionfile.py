@@ -11,6 +11,11 @@ import les_typedata
 #	FUNCTION_DATA_CHUNK
 #}
 
+def loadTypeData(typeData):
+	typeData.loadXML("data/les_types_basic.xml")
+	typeData.loadXML("data/les_types_test.xml")
+	typeData.loadXML("data/les_types_errors.xml")
+
 class LES_DefinitionFile():
 	def __init__(self):
 		self.fname = ""
@@ -37,20 +42,17 @@ class LES_DefinitionFile():
 
 		chunkFile.close()
 
+	def create(self):
+		stringTable = les_stringtable.LES_StringTable()
+		typeData = les_typedata.LES_TypeData(stringTable)
+		loadTypeData(typeData)
+
+		self.addChunk("StringTable", stringTable)
+		self.addChunk("TypeData", typeData)
+
 def runTest():
-	stringTable = les_stringtable.LES_StringTable()
-	stringTable.addString("jake")
-	stringTable.addString("rowan")
-	stringTable.addString("Jake")
-
-	typeData = les_typedata.LES_TypeData(stringTable)
-	index = typeData.addType("int", 4, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD)
-	index = typeData.addType("int*", 4, les_typedata.LES_TYPE_INPUT_OUTPUT|les_typedata.LES_TYPE_POINTER|les_typedata.LES_TYPE_ALIAS, "int")
-	index = typeData.addType("int[3]", 4*3, les_typedata.LES_TYPE_INPUT_OUTPUT|les_typedata.LES_TYPE_ARRAY|les_typedata.LES_TYPE_ALIAS, "int*", 3)
-
 	this = LES_DefinitionFile()
-	this.addChunk("StringTable", stringTable)
-	this.addChunk("TypeData", typeData)
+	this.create()
 	this.writeFile("defTest.bin")
 
 if __name__ == '__main__':
