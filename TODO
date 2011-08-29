@@ -1,12 +1,9 @@
 High Priority:
-PYTHON: add a logger class
-TEST: output the types test data to a separate file in C++ 
-PYTHON: output the types test data to a separate file 
 SERVER: generate string table and type data as binary block from XML file -> chunked data file
+CORE: C++ API/classes to use the chunked data file, switch the type data system to use it, use file 1st, fallback to global in the interim
 
 Medium Priority:
 STRUCT: the struct size shouldn't be required -C++ set it to 0 and see what happens
-TEST: output the types test data to a separate file in C++ & python
 SERVER: up and running ready for client to connect
 CLIENT: connect to server
 
