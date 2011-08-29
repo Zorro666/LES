@@ -1,0 +1,89 @@
+ERROR: LES_TypeData::addType 'int' aliasedName:'None' doesn't exist
+Index[int]= -1
+ERROR: LES_TypeData::addType 'int' aliasedName:'None' doesn't exist
+ERROR: Index[int]= -1
+ERROR: LES_TypeData::addType 'int*' aliasedName:'int' doesn't exist
+ERROR: LES_TypeData::addType 'int[3]' aliasedName:'int*' doesn't exist
+
+#####################
+Loading data/les_types_basic.xml
+#####################
+
+Type 'unsigned char' size:1 flags:0x5 INPUT|POD aliasedName:'unsigned char' numElements:0
+Type 'unsigned short' size:2 flags:0x5 INPUT|POD aliasedName:'unsigned short' numElements:0
+Type 'unsigned int' size:4 flags:0x5 INPUT|POD aliasedName:'unsigned int' numElements:0
+Type 'unsigned long' size:4 flags:0x5 INPUT|POD aliasedName:'unsigned long' numElements:0
+Type 'char' size:1 flags:0x5 INPUT|POD aliasedName:'char' numElements:0
+Type 'short' size:2 flags:0x5 INPUT|POD aliasedName:'short' numElements:0
+Type 'int' size:4 flags:0x5 INPUT|POD aliasedName:'int' numElements:0
+Type 'long' size:4 flags:0x5 INPUT|POD aliasedName:'long' numElements:0
+Type 'long long int' size:8 flags:0x5 INPUT|POD aliasedName:'long long int' numElements:0
+Type 'float' size:4 flags:0x5 INPUT|POD aliasedName:'float' numElements:0
+Type 'double' size:8 flags:0x5 INPUT|POD aliasedName:'double' numElements:0
+Type 'unsigned char*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned char' numElements:0
+Type 'unsigned short*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned short' numElements:0
+Type 'unsigned int*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned int' numElements:0
+Type 'unsigned long*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned long' numElements:0
+Type 'char*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'char' numElements:0
+Type 'short*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'short' numElements:0
+Type 'int*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'int' numElements:0
+Type 'long*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'long' numElements:0
+Type 'float*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'float' numElements:0
+Type 'double*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'double' numElements:0
+Type 'int&' size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'int*' numElements:0
+Type 'short&' size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'short*' numElements:0
+Type 'char&' size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'char*' numElements:0
+Type 'float&' size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'float*' numElements:0
+SUCCESS
+
+#####################
+Loading data/les_types_test.xml
+#####################
+
+Type 'char[3]' size:4 flags:0xC7 INPUT|OUTPUT|POD|ALIAS|ARRAY aliasedName:'char' numElements:3
+Type 'short[3]' size:4 flags:0xC7 INPUT|OUTPUT|POD|ALIAS|ARRAY aliasedName:'short' numElements:3
+Type 'int[3]' size:4 flags:0xC7 INPUT|OUTPUT|POD|ALIAS|ARRAY aliasedName:'int' numElements:3
+Type 'char&[3]' size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'char*' numElements:3
+SUCCESS
+
+#####################
+Loading data/les_types_errors.xml
+#####################
+
+Type 'unsigned char' size:2 flags:0x5 INPUT|POD aliasedName:'unsigned char' numElements:0
+WARNING: LES_TypeData::loadXML 'unsigned char' already exists
+WARNING: LES_TypeData::addType 'unsigned char' but type already exists
+ERROR: LES_TypeData::addType 'unsigned char' already in list and dataSize doesn't match Existing:1 New:2
+ERROR: LES_TypeData::loadXML 'unsigned char' failed to add type
+Type 'unsigned char' size:1 flags:0x12 OUTPUT|POINTER aliasedName:'unsigned char' numElements:0
+WARNING: LES_TypeData::loadXML 'unsigned char' already exists
+WARNING: LES_TypeData::addType 'unsigned char' but type already exists
+ERROR: LES_TypeData::addType 'unsigned char' already in list and flags doesn't match Existing:0x5 INPUT|POD New:0x12 OUTPUT|POINTER
+ERROR: LES_TypeData::loadXML 'unsigned char' failed to add type
+Type 'unsigned char*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned int' numElements:0
+WARNING: LES_TypeData::loadXML 'unsigned char*' already exists
+WARNING: LES_TypeData::addType 'unsigned char*' but type already exists
+ERROR: LES_TypeData::addType 'unsigned char*' already in list and aliasedTypeID doesn't match Existing:0 'unsigned char' New:2 'unsigned int' 
+ERROR: LES_TypeData::loadXML 'unsigned char*' failed to add type
+Type 'arrayNotAliasedToPtr[4]' size:4 flags:0xC5 INPUT|POD|ALIAS|ARRAY aliasedName:'int*' numElements:4
+ERROR: LES_TyepData::addType 'arrayNotAliasedToPtr[4]' non-reference array types must be aliased to a non-pointer, non-reference type Alias:'int*' Flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS
+ERROR: LES_TypeData::loadXML 'arrayNotAliasedToPtr[4]' failed to add type
+Type 'arrayNotAliasedToRef[4]' size:4 flags:0xC5 INPUT|POD|ALIAS|ARRAY aliasedName:'int&' numElements:4
+ERROR: LES_TyepData::addType 'arrayNotAliasedToRef[4]' non-reference array types must be aliased to a non-pointer, non-reference type Alias:'int&' Flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS
+ERROR: LES_TypeData::loadXML 'arrayNotAliasedToRef[4]' failed to add type
+Type 'arrayNotAliased[5]' size:4 flags:0x85 INPUT|POD|ARRAY aliasedName:'arrayNotAliased[5]' numElements:4
+ERROR: LES_TypeData::addType 'arrayNotAliased[5]' is an array with 4 elements but not aliased, arrays must be aliased
+ERROR: LES_TypeData::loadXML 'arrayNotAliased[5]' failed to add type
+Type 'arrayExistsWrongNumberOfElements[1]' size:4 flags:0xC5 INPUT|POD|ALIAS|ARRAY aliasedName:'int' numElements:1
+Type 'arrayExistsWrongNumberOfElements[1]' size:4 flags:0xC5 INPUT|POD|ALIAS|ARRAY aliasedName:'int' numElements:2
+WARNING: LES_TypeData::loadXML 'arrayExistsWrongNumberOfElements[1]' already exists
+WARNING: LES_TypeData::addType 'arrayExistsWrongNumberOfElements[1]' but type already exists
+ERROR: LES_TypeData::addType 'arrayExistsWrongNumberOfElements[1]' already in list and numElements doesn't match Existing:1 New:2
+ERROR: LES_TypeData::loadXML 'arrayExistsWrongNumberOfElements[1]' failed to add type
+Type 'arrayCantFindAlias[1]' size:4 flags:0xC5 INPUT|POD|ALIAS|ARRAY aliasedName:'jake*' numElements:1
+ERROR: LES_TypeData::addType 'arrayCantFindAlias[1]' aliasedName:'jake*' doesn't exist
+ERROR: LES_TypeData::loadXML 'arrayCantFindAlias[1]' failed to add type
+Type 'arrayInvalidNumElements[1]' size:4 flags:0xC5 INPUT|POD|ALIAS|ARRAY aliasedName:'int*' numElements:0
+ERROR: LES_TypeData::addType 'arrayInvalidNumElements[1]' invalid numElements value:0 (must be >= 0)
+ERROR: LES_TypeData::loadXML 'arrayInvalidNumElements[1]' failed to add type
+ERROR numErrors=9
