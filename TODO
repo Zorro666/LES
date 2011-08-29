@@ -27,6 +27,8 @@ SERVER: process function data send response
 CLIENT: support for async function calls, error queue, potential threading issues
 SERVER: support for async function calls, error queue
 
+LES_TYPEDATA.PY: in the future have a global params block e.g. pointer data size default
+
 FUNCTION: error handling run out of memory when adding new function or new type e.g. array limit reached
 
 CORE: error handling run out of memory when adding new string e.g. array limit reached
@@ -47,4 +49,3 @@ LES: need to list the data storage that is required by the global data
 LES: server send global test data instead of building it internally?
 LES: might want to save ptr values for later instead of taking the value from them?????????????
 
-FEATURE: make pod types alias to byte[sizeOfDataType], so byte is the final base pure type, waste of CPU cycles
