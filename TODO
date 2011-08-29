@@ -1,12 +1,5 @@
 High Priority:
-LES_TYPEDATA.PY: add support for declaring POD_ARRAY types LES_TYPE_POD_ARRAY
-LES_TYPEDATA.PY: add support for declaring POD_REFERENCE_ARRAY types LES_TYPE_POD_REFERENCE_ARRAY
-LES_TYPEDATA.PY: add support for declaring STRUCT types LES_TYPE_STRUCT
-LES_TYPEDATA.PY: add support for declaring STRUCT_POINTER types LES_TYPE_STRUCT_POINTER
-LES_TYPEDATA.PY: add support for declaring STRUCT_REFERNCE types LES_TYPE_STRUCT_REFERNCE
-LES_TYPEDATA.PY: add support for declaring STRUCT_ARRAY types LES_TYPE_STRUCT_ARRAY
-LES_TYPEDATA.PY: add support for declaring STRUCT_REFERENCE_ARRAY types LES_TYPE_STRUCT_REFERENCE_ARRAY
-LES_TYPEDATA.PY: laod the test file
+TEST: output the type array to compare against the XML loaded data
 
 SERVER: load and parse XML definition file for Types: basic file, test file, errors file
 SERVER: generate string table and type data as binary block from XML file -> chunked data file
