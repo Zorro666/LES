@@ -83,9 +83,7 @@ def SetConsoleOutput(channel, consoleOutput):
 def SetFileOutput(channel, fileOutput):
 	channelObj = GetDefaultChannel(channel)
 	if channelObj != None:
-		print "oldFlags=0x%X" % channelObj.GetFlags()
 		channelObj.ChangeFlags(LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT, fileOutput)
-		print "newFlags=0x%X" % channelObj.GetFlags()
 
 def FatalError(fmt, *args):
 	__SetErrorStatus__()
@@ -152,8 +150,6 @@ class LES_LoggerChannel():
 			fh.close()
 
 	def __InternalOutput__(self, fmt, argsList):
-#		print "fmt=%s", fmt
-#		print "argsList=", argsList
 		flags = self.__m_flags__
 		prefix = self.__m_prefixStr__
 		outputBuffer = prefix + fmt % argsList
@@ -166,6 +162,7 @@ class LES_LoggerChannel():
 			fh = open(fileName, "a")
 			if fh != None:
 				fh.write(outputBuffer)
+				fh.write("\n")
 				fh.flush()
 				fh.close()
 
@@ -189,31 +186,31 @@ def runTest():
 	jakeChannel.Print("Jake %d %f %s", 10, 10, "Hello")
 
 	ClearErrorStatus()
-	Log("0 ErrorStatus:%d\n", GetErrorStatus())
+	Log("0 ErrorStatus:%d", GetErrorStatus())
 	argv = []
 	for i in range(10):
 		argv.append("Jake " + str(i))
-		jakeChannel.Print("arg[%d] '%s'\n", i, argv[i])
-		Log("arg[%d] '%s'\n", i, argv[i])
+		jakeChannel.Print("arg[%d] '%s'", i, argv[i])
+		Log("arg[%d] '%s'", i, argv[i])
 
-	Log("0 ErrorStatus:%d\n", GetErrorStatus())
+	Log("0 ErrorStatus:%d", GetErrorStatus())
 	SetFatal(CHANNEL_WARNING, False)
 	SetFileOutput(CHANNEL_WARNING, True)
-	Warning("A test warning\n")
-	Log("0 ErrorStatus:%d\n", GetErrorStatus())
+	Warning("A test warning")
+	Log("0 ErrorStatus:%d", GetErrorStatus())
 
 	SetFatal(CHANNEL_ERROR, False)
 	SetFileOutput(CHANNEL_ERROR, True)
-	Error("A test error\n")
-	Log("1 ErrorStatus:%d\n", GetErrorStatus())
+	Error("A test error")
+	Log("1 ErrorStatus:%d", GetErrorStatus())
 	ClearErrorStatus()
-	Log("0 ErrorStatus:%d\n", GetErrorStatus())
+	Log("0 ErrorStatus:%d", GetErrorStatus())
 
 	SetFatal(CHANNEL_FATAL_ERROR, False)
 	SetFileOutput(CHANNEL_FATAL_ERROR, False)
-	Log("0 ErrorStatus:%d\n", GetErrorStatus())
-	FatalError("A test fatal error\n")
-	Log("1 ErrorStatus:%d\n", GetErrorStatus())
+	Log("0 ErrorStatus:%d", GetErrorStatus())
+	FatalError("A test fatal error")
+	Log("1 ErrorStatus:%d", GetErrorStatus())
 
 	SetFatal(CHANNEL_FATAL_ERROR, True)
 
