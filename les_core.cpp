@@ -104,6 +104,20 @@ const LES_StringEntry* LES_GetStringEntry(const char* const str)
 	return LES_GetStringEntryForID(index);
 }
 
+const LES_StringEntry* LES_GetStringEntryByHash(unsigned int hash)
+{
+	/* This is horribly slow - need hash lookup table */
+	for (int i=0; i<les_numStringEntries; i++)
+	{
+		const LES_StringEntry* const stringEntryPtr = &les_stringEntryArray[i];
+		if (stringEntryPtr->m_hash == hash)
+		{
+			return stringEntryPtr;
+		}
+	}
+	return NULL;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Private External functions
