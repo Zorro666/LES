@@ -13,23 +13,23 @@
 
 	<LES_TYPE name="output_only" dataSize="4" flags="OUTPUT|POD" />
 
-	<LES_TYPE_STRUCT name="TestStruct1" dataSize="12" />
+	<LES_TYPE_STRUCT name="TestStruct1" dataSize="24" />
 	<LES_TYPE_STRUCT_POINTER name="TestStruct1" />
 	<LES_TYPE_STRUCT_REFERENCE name="TestStruct1" />
 	<LES_TYPE_STRUCT_ARRAY name="TestStruct1" numElements="1" />
 	<LES_TYPE_STRUCT_ARRAY name="TestStruct1" numElements="2" />
 
-	<LES_TYPE_STRUCT name="TestStruct2" dataSize="16" />
+	<LES_TYPE_STRUCT name="TestStruct2" dataSize="36" />
 	<LES_TYPE_STRUCT_POINTER name="TestStruct2" />
 	<LES_TYPE_STRUCT_REFERENCE name="TestStruct2" />
 	<LES_TYPE_STRUCT_ARRAY name="TestStruct2" numElements="1" />
 	<LES_TYPE_STRUCT_ARRAY name="TestStruct2" numElements="2" />
 
-	<LES_TYPE_STRUCT name="TestStruct3" dataSize="44" />
+	<LES_TYPE_STRUCT name="TestStruct3" dataSize="16" />
 	<LES_TYPE_STRUCT_POINTER name="TestStruct3" />
 	<LES_TYPE_STRUCT_ARRAY name="TestStruct3" numElements="2" />
 
-	<LES_TYPE_STRUCT name="TestStruct4" dataSize="24" />
+	<LES_TYPE_STRUCT name="TestStruct4" dataSize="32" />
 	<LES_TYPE_STRUCT_POINTER name="TestStruct4" />
 	<LES_TYPE_STRUCT_ARRAY name="TestStruct4" numElements="1" />
 
@@ -37,28 +37,28 @@
 	<LES_TYPE_STRUCT_POINTER name="TestStruct5" />
 	<LES_TYPE_STRUCT_REFERENCE name="TestStruct5" />
 
-	<LES_TYPE_STRUCT name="TestStruct6" dataSize="8" />
+	<LES_TYPE_STRUCT name="TestStruct6" dataSize="12" />
 	<LES_TYPE_STRUCT_POINTER name="TestStruct6" />
 
-	<LES_TYPE_STRUCT name="TestStruct7" dataSize="8" />
+	<LES_TYPE_STRUCT name="TestStruct7" dataSize="20" />
 	<LES_TYPE_STRUCT_POINTER name="TestStruct7" />
 	<LES_TYPE_STRUCT_REFERENCE name="TestStruct7" />
 
-	<LES_TYPE_STRUCT name="TestStruct8" dataSize="8" />
+	<LES_TYPE_STRUCT name="TestStruct8" dataSize="12" />
 	<LES_TYPE_STRUCT_POINTER name="TestStruct8" />
 	<LES_TYPE_STRUCT_REFERENCE name="TestStruct8" />
 
-	<LES_TYPE_STRUCT name="TestStruct9" dataSize="8" />
+	<LES_TYPE_STRUCT name="TestStruct9" dataSize="6" />
 	<LES_TYPE_STRUCT_POINTER name="TestStruct9" />
 	<LES_TYPE_STRUCT_ARRAY name="TestStruct9" numElements="2" />
 	<LES_TYPE_STRUCT_REFERENCE_ARRAY name="TestStruct9" numElements="2" />
 
-	<LES_TYPE_STRUCT name="TestStruct10" dataSize="8" />
+	<LES_TYPE_STRUCT name="TestStruct10" dataSize="18" />
 
-	<LES_TYPE_STRUCT name="TestStruct11" dataSize="8" />
+	<LES_TYPE_STRUCT name="TestStruct11" dataSize="12" />
 	<LES_TYPE_STRUCT_POINTER name="TestStruct11" />
 	<LES_TYPE_STRUCT_REFERENCE_ARRAY name="TestStruct11" numElements="1" />
 
-	<LES_TYPE_STRUCT name="TestStruct12" dataSize="8" />
+	<LES_TYPE_STRUCT name="TestStruct12" dataSize="12" />
 
 </LES_TYPES>
