@@ -26,3 +26,5 @@ else
     echo -e ""
 		exit
 fi
+
+diff typeDebug.txt typeDebug_py.txt
