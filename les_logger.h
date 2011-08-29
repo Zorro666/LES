@@ -47,7 +47,6 @@ public:
 	static void Warning(const char* const fmt, ...);
 	static void Log(const char* const fmt, ...);
 private:
-	static void InternalOutput(const LES_LoggerChannel* const channelPtr, const char* const fmt, va_list* pArgPtr);
 	static void SetErrorStatus(void);
 
 	static bool s_errorFlag;
