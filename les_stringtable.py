@@ -2,6 +2,7 @@
 
 import les_hash
 import les_binaryfile
+import les_logger
 
 #	struct LES_StringEntry
 #	{
@@ -102,15 +103,16 @@ class LES_StringTable():
 			binFile.writeCstring(string)	
 
 def runTest():
+	les_logger.Init()
 	this = LES_StringTable()
 	index = this.addString("jake")
-	print "Index[jake]= %d" % index
+	les_logger.Log("Index[jake]= %d", index)
 	index = this.addString("rowan")
-	print "Index[rowan]= %d" % index
+	les_logger.Log("Index[rowan]= %d", index)
 	index = this.addString("jake")
-	print "Index[jake]= %d" % index
+	les_logger.Log("Index[jake]= %d", index)
 	index = this.addString("Jake")
-	print "Index[Jake]= %d " % index
+	les_logger.Log("Index[Jake]= %d", index)
 
 	binFile = les_binaryfile.LES_BinaryFile("stringTableBig.bin")
 	binFile.setBigEndian()

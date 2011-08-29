@@ -4,6 +4,7 @@ import les_hash
 import les_binaryfile
 import les_stringtable
 import xml.etree.ElementTree
+import les_logger
 
 LES_TYPE_INPUT 				= (1 << 0)
 LES_TYPE_OUTPUT 			= (1 << 1)
@@ -73,25 +74,25 @@ class LES_TypeData():
 			index = -1
 
 		if index >= 0:
-			print "WARNING: LES_TypeData::addType '%s' but type already exists" % (name)
+			les_logger.Warning("LES_TypeData::addType '%s' but type already exists", name)
 			typeEntry = self.typeEntries[index]
 			# Check the existing type data matches the new type data
 			if typeEntry.dataSize != dataSize:
-				print "ERROR: LES_TypeData::addType '%s' already in list and dataSize doesn't match Existing:%d New:%d" % (name, typeEntry.dataSize, dataSize)
+				les_logger.Error("LES_TypeData::addType '%s' already in list and dataSize doesn't match Existing:%d New:%d", name, typeEntry.dataSize, dataSize)
 				return -1
 
 			if typeEntry.flags != flags:
-				print "ERROR: LES_TypeData::addType '%s' already in list and flags doesn't match Existing:0x%X %s New:0x%X %s" % (name, typeEntry.flags, decodeFlags(typeEntry.flags), flags, decodeFlags(flags))
+				les_logger.Error("LES_TypeData::addType '%s' already in list and flags doesn't match Existing:0x%X %s New:0x%X %s", name, typeEntry.flags, decodeFlags(typeEntry.flags), flags, decodeFlags(flags))
 				return -1
 
 			aliasedTypeID = self.stringTable.getStringID(aliasedName)
 			if typeEntry.aliasedTypeID != aliasedTypeID:
 				existingAliasedName = self.stringTable.getString(typeEntry.aliasedTypeID)
-				print "ERROR: LES_TypeData::addType '%s' already in list and aliasedTypeID doesn't match Existing:%d '%s' New:%d '%s' " % (name, typeEntry.aliasedTypeID, existingAliasedName, aliasedTypeID, aliasedName)
+				les_logger.Error("LES_TypeData::addType '%s' already in list and aliasedTypeID doesn't match Existing:%d '%s' New:%d '%s' ", name, typeEntry.aliasedTypeID, existingAliasedName, aliasedTypeID, aliasedName)
 				return -1
 
 			if typeEntry.numElements != numElements:
-				print "ERROR: LES_TypeData::addType '%s' already in list and numElements doesn't match Existing:%d New:%d" % (name, typeEntry.numElements, numElements)
+				les_logger.Error("LES_TypeData::addType '%s' already in list and numElements doesn't match Existing:%d New:%d", name, typeEntry.numElements, numElements)
 				return -1
 
 		# Validate the input values for this type
@@ -99,42 +100,42 @@ class LES_TypeData():
 			flags |= LES_TYPE_ALIAS
 
 		if dataSize < 1:
-			print "ERROR: LES_TypeData::addType '%s' invalid dataSize value:%d (must be >= 1)" % (name, dataSize)
+			les_logger.Error("LES_TypeData::addType '%s' invalid dataSize value:%d (must be >= 1)", name, dataSize)
 			return -1
 
 		if flags == 0:
-			print "ERROR: LES_TypeData::addType '%s' invalid flags value:0x%X (must be >= 0)" % (name, flags)
+			les_logger.Error("LES_TypeData::addType '%s' invalid flags value:0x%X (must be >= 0)", name, flags)
 			return -1
 
 		if flags & LES_TYPE_ALIAS:
 			if self.doesTypeExist(aliasedName) == False:
-				print "ERROR: LES_TypeData::addType '%s' aliasedName:'%s' doesn't exist" % (name, aliasedName)
+				les_logger.Error("LES_TypeData::addType '%s' aliasedName:'%s' doesn't exist", name, aliasedName)
 				return -1
 
 		if numElements > 0:
 			if (flags & LES_TYPE_ARRAY) == 0:
-				print "ERROR: LES_TypeData::addType '%s' numElements > 0 but ARRAY not in flags:'%s'" % (name, decodeFlags(flags))
+				les_logger.Error("LES_TypeData::addType '%s' numElements > 0 but ARRAY not in flags:'%s'", name, decodeFlags(flags))
 				return -1
 
 		if numElements < 0:
-			print "ERROR: LES_TypeData::addType '%s' invalid numElements value:%d (must be >= 0)" % (name, numElements)
+			les_logger.Error("LES_TypeData::addType '%s' invalid numElements value:%d (must be >= 0)", name, numElements)
 			return -1
 
 		if numElements <= 0:
 			if flags & LES_TYPE_ARRAY:
-				print "ERROR: LES_TypeData::addType '%s' invalid numElements value:%d (must be >= 0)" % (name, numElements)
+				les_logger.Error("LES_TypeData::addType '%s' invalid numElements value:%d (must be >= 0)", name, numElements)
 				return -1
 
 		if flags & LES_TYPE_ARRAY:
 			# Array types must be aliased to non-pointer, non-reference type
 			if flags & LES_TYPE_ALIAS == 0:
-				print "ERROR: LES_TypeData::addType '%s' is an array with %d elements but not aliased, arrays must be aliased" % (name, numElements)
+				les_logger.Error("LES_TypeData::addType '%s' is an array with %d elements but not aliased, arrays must be aliased", name, numElements)
 				return -1
 			typeEntry = self.getTypeData(aliasedName)
 			aliasedFlags = typeEntry.flags
 			# Arrays of non-references must not be aliased to pointer or reference
 			if ((flags & LES_TYPE_REFERENCE) == 0) and (aliasedFlags & LES_TYPE_POINTER) or (aliasedFlags & LES_TYPE_REFERENCE):
-				print "ERROR: LES_TyepData::addType '%s' non-reference array types must be aliased to a non-pointer, non-reference type Alias:'%s' Flags:0x%X %s" % (name, aliasedName, aliasedFlags, decodeFlags(aliasedFlags))
+				les_logger.Error("LES_TyepData::addType '%s' non-reference array types must be aliased to a non-pointer, non-reference type Alias:'%s' Flags:0x%X %s", name, aliasedName, aliasedFlags, decodeFlags(aliasedFlags))
 				return -1
 
 		# Add the type name to the string table for good measure
@@ -273,7 +274,7 @@ class LES_TypeData():
 
 		typesXML = xml.etree.ElementTree.XML(xmlSource)
 		if typesXML.tag != "LES_TYPES":
-			print "ERROR: LES_TypeData::parseXML root tag should be LES_TYPES found %d" % (typesXML.tag)
+			les_logger.Error("LES_TypeData::parseXML root tag should be LES_TYPES found %d", typesXML.tag)
 			return 1
 
 		numErrors = 0
@@ -345,13 +346,13 @@ class LES_TypeData():
 				aliasSuffix = "*"
 				needsNumElements = True
 			else:
-				print "ERROR: LES_TypeData::parseXML invalid node tag should be LES_TYPE, LES_TYPE_POD, LES_TYPE_POD_POINTER, LES_TYPE_POD_REFERENCE, LES_TYPE_POD_ARRAY, LES_TYPE_POD_REFERENCE_ARRAY, LES_TYPE_STRUCT, LES_TYPE_STRUCT_POINTER, LES_TYPE_STRUCT_REFERENCE, LES_TYPE_STRUCT_ARRAY, LES_TYPE_STRUCT_REFERNCE_ARRAY found %s" % (typeXML.tag)
+				les_logger.Error("LES_TypeData::parseXML invalid node tag should be LES_TYPE, LES_TYPE_POD, LES_TYPE_POD_POINTER, LES_TYPE_POD_REFERENCE, LES_TYPE_POD_ARRAY, LES_TYPE_POD_REFERENCE_ARRAY, LES_TYPE_STRUCT, LES_TYPE_STRUCT_POINTER, LES_TYPE_STRUCT_REFERENCE, LES_TYPE_STRUCT_ARRAY, LES_TYPE_STRUCT_REFERNCE_ARRAY found %s", typeXML.tag)
 				numErrors += 1
 				continue
 
 			nameData = typeXML.get("name")
 			if nameData == None:
-				print "ERROR: LES_TypeData::parseXML missing 'name' attribute:%s" % (xml.etree.ElementTree.tostring(typeXML))
+				les_logger.Error("LES_TypeData::parseXML missing 'name' attribute:%s", xml.etree.ElementTree.tostring(typeXML))
 				numErrors += 1
 				continue
 			name = nameData
@@ -361,29 +362,29 @@ class LES_TypeData():
 				if dataSizeData == None:
 					dataSizeData = dataSizeDataDefault
 					if dataSizeData == None:
-						print "ERROR: LES_TypeData::parseXML '%s' missing 'dataSize' attribute:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+						les_logger.Error("LES_TypeData::parseXML '%s' missing 'dataSize' attribute:%s", name, xml.etree.ElementTree.tostring(typeXML))
 						numErrors += 1
 						continue
 			else:
 				if typeXML.get("dataSize") != None:
-					print "ERROR: LES_TypeData::parseXML '%s' 'dataSize' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+					les_logger.Error("LES_TypeData::parseXML '%s' 'dataSize' attribute not allowed for this type definition:%s", name, xml.etree.ElementTree.tostring(typeXML))
 					numErrors += 1
 					continue
 
 			if needsFlags:
 				flagsData = typeXML.get("flags")
 				if flagsData == None:
-					print "ERROR: LES_TypeData::parseXML '%s' missing 'flags' attribute:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+					les_logger.Error("LES_TypeData::parseXML '%s' missing 'flags' attribute:%s", name, xml.etree.ElementTree.tostring(typeXML))
 					numErrors += 1
 					continue
 			else:
 				if typeXML.get("flags") != None:
-					print "ERROR: LES_TypeData::parseXML '%s' 'flags' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+					les_logger.Error("LES_TypeData::parseXML '%s' 'flags' attribute not allowed for this type definition:%s", name, xml.etree.ElementTree.tostring(typeXML))
 					numErrors += 1
 					continue
 
 			if flagsData == "":
-				print "ERROR: LES_TypeData::parseXML '%s' invalid 'flags' attribute:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+				les_logger.Error("LES_TypeData::parseXML '%s' invalid 'flags' attribute:%s", name, xml.etree.ElementTree.tostring(typeXML))
 				numErrors += 1
 				continue
 
@@ -391,7 +392,7 @@ class LES_TypeData():
 				aliasedNameData = typeXML.get("aliasedName", nameData)
 			else:
 				if typeXML.get("aliasedName") != None:
-					print "ERROR: LES_TypeData::parseXML '%s' 'aliasedName' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+					les_logger.Error("LES_TypeData::parseXML '%s' 'aliasedName' attribute not allowed for this type definition:%s", name, xml.etree.ElementTree.tostring(typeXML))
 					numErrors += 1
 					continue
 				aliasedNameData = nameData + aliasSuffix
@@ -400,7 +401,7 @@ class LES_TypeData():
 				numElementsData = typeXML.get("numElements", "0")
 			else:
 				if typeXML.get("numElements") != None:
-					print "ERROR: LES_TypeData::parseXML '%s' 'numElements' attribute not allowed for this type definition:%s" % (name, xml.etree.ElementTree.tostring(typeXML))
+					les_logger.Error("LES_TypeData::parseXML '%s' 'numElements' attribute not allowed for this type definition:%s", name, xml.etree.ElementTree.tostring(typeXML))
 					numErrors += 1
 					continue
 				numElementsData = "0"
@@ -412,7 +413,7 @@ class LES_TypeData():
 				try:
 					dataSize = int(dataSizeData)
 				except ValueError:
-					print "ERROR: LES_TypeData::parseXML '%s' invalid dataSize value:'%s' (must be >= 1)" % (name, dataSizeData)
+					les_logger.Error("LES_TypeData::parseXML '%s' invalid dataSize value:'%s' (must be >= 1)", name, dataSizeData)
 					numErrors += 1
 					continue
 			else:
@@ -459,14 +460,14 @@ class LES_TypeData():
 				elif flag == "ARRAY":
 					flags |= LES_TYPE_ARRAY
 				else:
-					print "ERROR: LES_TypeData::parseXML '%s' invalid flag:'%s' flags:'%s'" % (name, flag, flagsData)
+					les_logger.Error("LES_TypeData::parseXML '%s' invalid flag:'%s' flags:'%s'", name, flag, flagsData)
 					numErrors += 1
 					continue
 
 			try:
 				numElements = int(numElementsData)
 			except ValueError:
-				print "ERROR: LES_TypeData::parseXML '%s' invalid numElements value:%s (must be >= 0)" % (name, numElementsData)
+				les_logger.Error("LES_TypeData::parseXML '%s' invalid numElements value:%s (must be >= 0)", name, numElementsData)
 				numErrors += 1
 				numElements = -1
 				continue
@@ -479,40 +480,42 @@ class LES_TypeData():
 				flags |= LES_TYPE_ALIAS
 
 			flagsDecoded = decodeFlags(flags)
-			print "Type '%s' size:%d flags:0x%X %s aliasedName:'%s' numElements:%d" % (name, dataSize, flags, flagsDecoded, aliasedName, numElements)
+			les_logger.Log("Type '%s' size:%d flags:0x%X %s aliasedName:'%s' numElements:%d", name, dataSize, flags, flagsDecoded, aliasedName, numElements)
 
 			if self.doesTypeExist(name):
-				print "WARNING: LES_TypeData::parseXML '%s' already exists" % (name)
+				les_logger.Warning("LES_TypeData::parseXML '%s' already exists", name)
 
 			index = self.addType(name, dataSize, flags, aliasedName, numElements)
 			if index == -1:
-				print "ERROR: LES_TypeData::parseXML '%s' failed to add type" % (name)
+				les_logger.Error("LES_TypeData::parseXML '%s' failed to add type", name)
 				numErrors += 1
 				continue
 
 		return numErrors
 
 	def loadXML(self, fname):
-		print ""
-		print "#####################"
-		print "Loading %s" % fname
-		print "#####################"
-		print ""
+		les_logger.Log("")
+		les_logger.Log("#####################")
+		les_logger.Log("Loading %s", fname)
+		les_logger.Log("#####################")
+		les_logger.Log("")
  		fh = open(fname)
 		xmlData = fh.read()
 		numErrors = self.parseXML(xmlData)
 		if numErrors == 0:
-			print "SUCCESS"
+			les_logger.Log("SUCCESS")
 		else:
-			print "ERROR numErrors=%d" % (numErrors)
+			les_logger.Error("numErrors=%d", numErrors)
 
 def runTest():
+	les_logger.Init()
+
 	stringTable = les_stringtable.LES_StringTable()
 	this = LES_TypeData(stringTable)
 	index = this.addType("int", 4, LES_TYPE_INPUT|LES_TYPE_POD)
-	print "Index[int]= %d" % index
+	les_logger.Log("Index[int]= %d", index)
 	index = this.addType("int", 2, 0x2)
-	print "ERROR: Index[int]= %d" % index
+	les_logger.Error("Index[int]= %d", index)
 	index = this.addType("int*", 4, LES_TYPE_INPUT|LES_TYPE_OUTPUT|LES_TYPE_POINTER|LES_TYPE_ALIAS, "int")
 	index = this.addType("int[3]", 4*3, LES_TYPE_INPUT|LES_TYPE_OUTPUT|LES_TYPE_ARRAY|LES_TYPE_ALIAS, "int*", 3)
 

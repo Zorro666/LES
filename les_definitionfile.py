@@ -3,6 +3,7 @@
 import les_chunkfile
 import les_stringtable
 import les_typedata
+import les_logger
 
 #{
 #	STRING TABLE_CHUNK
@@ -51,6 +52,7 @@ class LES_DefinitionFile():
 		self.addChunk("TypeData", typeData)
 
 def runTest():
+	les_logger.Init()
 	this = LES_DefinitionFile()
 	this.create()
 	this.writeFile("defTest.bin")

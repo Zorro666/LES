@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import les_binaryfile
+import les_logger
 
 class LES_ChunkFile():	
 	def __init__(self, fname, magicName, numChunks, bigEndian=True):
@@ -35,11 +36,11 @@ class LES_ChunkFile():
 
 	def startChunk(self, chunkName):
 		if self.activeChunkIndex != -1:
-			print "ERROR LES_ChunkFile::startChunk '%s' can't start a new chunk inside an existing chunk '%s'" % (chunkName, self.activeChunkName)
+			les_logger.Error("LES_ChunkFile::startChunk '%s' can't start a new chunk inside an existing chunk '%s'", chunkName, self.activeChunkName)
 			return None
 
 		if self.currentChunkIndex >= self.numChunks:
-			print "ERROR LES_ChunkFile::startChunk '%s' all chunks have been written" % (chunkName)
+			les_logger.Error("LES_ChunkFile::startChunk '%s' all chunks have been written", chunkName)
 			return None
 
 		self.activeChunkName = chunkName
@@ -58,7 +59,7 @@ class LES_ChunkFile():
 
 	def endChunk(self):
 		if self.activeChunkIndex != self.currentChunkIndex:
-			print "ERROR LES_ChunkFile::endChunk chunk not started"
+			les_logger.Error("LES_ChunkFile::endChunk chunk not started"
 			return
 
 		self.currentChunkIndex += 1
@@ -67,16 +68,17 @@ class LES_ChunkFile():
 
 	def close(self):
 		if self.activeChunkIndex != -1:
-			print "ERROR LES_ChunkFile::close current chunk isn't closed '%s'" % (self.activeChunkName)
+			les_logger.Error("LES_ChunkFile::close current chunk isn't closed '%s'", self.activeChunkName)
 			return
 
 		if self.currentChunkIndex != self.numChunks:
-			print "ERROR LES_ChunkFile::close not all chunks have been written %d numChunks %d" % (self.currentChunkIndex, self.numChunks)
+			les_logger.Error("LES_ChunkFile::close not all chunks have been written %d numChunks %d", self.currentChunkIndex, self.numChunks)
 			return
 
 		self.binFile.close()
 
 def runTest():
+	les_logger.Init()
 	this = LES_ChunkFile("chunkTest.bin", "BAGA", 2)
 
 	binFile = this.startChunk("StringTable")

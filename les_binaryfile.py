@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import struct
+import les_logger
 
 class LES_BinaryFile():	
 	def __init__(self, fname):
@@ -52,6 +53,7 @@ class LES_BinaryFile():
 		self.fh.close()
 
 def runTest():
+	les_logger.Init()
 	this = LES_BinaryFile("testLittle.bin")
 	this.setLittleEndian()
 	this.writeInt(15)
