@@ -4,6 +4,7 @@
 #include "les_definitionfile.h"
 #include "les_logger.h"
 #include "les_stringtable.h"
+#include "les_typedata.h"
 
 LES_DefinitionFile::LES_DefinitionFile(const void* chunkFileData, const int dataSize)
 {
@@ -26,15 +27,28 @@ LES_DefinitionFile::LES_DefinitionFile(const void* chunkFileData, const int data
 	{
 		LES_ERROR("LES_DefinitionFile:Invalid id '%c%c%c%c' should be '%c%c%c%c'",
 							id[0], id[1], id[2], id[3], defID[0], defID[1], defID[2], defID[3]);
+		return;
 	}
 	// CHECK numChunks = defNumChunks
 	if (numChunks != defNumChunks)
 	{
 		LES_ERROR("LES_DefinitionFile:Invalid numChunks %d should be %d", numChunks, defNumChunks);
+		return;
 	}
 
 	LES_StringTable* const pStringTable = (LES_StringTable* const)GetStringTable();
-	pStringTable->Settle();
+	if (pStringTable->Settle() == LES_RETURN_ERROR)
+	{
+		LES_ERROR("LES_DefinitionFile::LES_StringTable::Settle() failed");
+		return;
+	}
+
+	LES_TypeData* const pTypeData = (LES_TypeData* const)GetTypeData();
+	if (pTypeData->Settle() == LES_RETURN_ERROR)
+	{
+		LES_ERROR("LES_DefinitionFile::LES_TypeData::Settle() failed");
+		return;
+	}
 }
 
 LES_DefinitionFile::~LES_DefinitionFile()
