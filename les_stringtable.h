@@ -4,8 +4,6 @@
 #include "les_base.h"
 #include "les_stringentry.h"
 
-class LES_StringTable;
-
 struct LES_StringTableEntry
 {
 	LES_uint32 m_hash;								// 4-bytes
@@ -36,8 +34,8 @@ private:
 	LES_StringTable();
 	~LES_StringTable();
 
-	int m_numStrings;
-	int m_settled;
+	LES_int32 m_numStrings;
+	LES_int32 m_settled;
 	LES_StringTableEntry m_stringTableEntries[1];		// m_stringTableEntries[m_numStrings];
 	// char stringData[];									
 };
