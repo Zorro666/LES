@@ -1,8 +1,12 @@
 High Priority:
+CORE: TypeData wrapper const class
+CORE: load definition file -> allocate memory
+CORE: use loaded definitions first then use the global data - have single static global definition file ptr to use
 CORE: C++ API/classes to use the chunked data file, switch the type data system to use it, use file 1st, fallback to global in the interim
 CORE: fixed size typedefs: int8, int16, int32, int64, uint8, uint16, uint32, uint64, float32
 
 Medium Priority:
+CORE: settle string pointers on load or not?
 STRUCT: the struct size shouldn't be required -C++ set it to 0 and see what happens
 SERVER: up and running ready for client to connect
 CLIENT: connect to server
