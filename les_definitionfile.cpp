@@ -7,8 +7,11 @@
 
 LES_DefinitionFile::LES_DefinitionFile(const void* chunkFileData, const int dataSize)
 {
-	m_chunkFileData = (LES_ChunkFile*)new char[dataSize];
-	memcpy((void*)m_chunkFileData, chunkFileData, dataSize);
+	LES_ChunkFile* newChunkFileData = (LES_ChunkFile*)new char[dataSize];
+	memcpy((void*)newChunkFileData, chunkFileData, dataSize);
+
+	newChunkFileData->Settle();
+	m_chunkFileData = newChunkFileData;
 
 	const char* id = m_chunkFileData->GetID();
 	const int numChunks = m_chunkFileData->GetNumChunks();
