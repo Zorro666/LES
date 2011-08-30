@@ -382,84 +382,89 @@ void LES_DebugOutputTypes(LES_LoggerChannel* const pLogChannel)
 		const LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[i];
 		const LES_StringEntry* nameEntry = LES_GetStringEntryByHash(typeEntryPtr->m_hash);
 		const char* const name = nameEntry ? nameEntry->m_str : "NULL";
-		const int dataSize = typeEntryPtr->m_dataSize;
+		const unsigned int dataSize = typeEntryPtr->m_dataSize;
 		const unsigned int flags = typeEntryPtr->m_flags;
 		const LES_StringEntry* const aliasedStringTypeEntry = LES_GetStringEntryForID(typeEntryPtr->m_aliasedTypeID);
 		const char* const aliasedName = aliasedStringTypeEntry ? aliasedStringTypeEntry->m_str : "NULL";
 		const int numElements = typeEntryPtr->m_numElements;
 
 		char flagsDecoded[1024];
-		flagsDecoded[0] = '\0';
-		bool needsPipe = false;
-		if (flags & LES_TYPE_INPUT) 
-		{
-			strcat(flagsDecoded, "INPUT");
-			needsPipe = true;
-		}
-		if (flags & LES_TYPE_OUTPUT)
-		{
-			if (needsPipe)
-			{
-				strcat(flagsDecoded, "|");
-			}
-			strcat(flagsDecoded, "OUTPUT");
-			needsPipe = true;
-		}
-		if (flags & LES_TYPE_POD)
-		{
-			if (needsPipe)
-			{
-				strcat(flagsDecoded, "|");
-			}
-			strcat(flagsDecoded, "POD");
-			needsPipe = true;
-		}
-		if (flags & LES_TYPE_STRUCT)
-		{
-			if (needsPipe)
-			{
-				strcat(flagsDecoded, "|");
-			}
-			strcat(flagsDecoded, "STRUCT");
-			needsPipe = true;
-		}
-		if (flags & LES_TYPE_POINTER)
-		{
-			if (needsPipe)
-			{
-				strcat(flagsDecoded, "|");
-			}
-			strcat(flagsDecoded, "POINTER");
-			needsPipe = true;
-		}
-		if (flags & LES_TYPE_REFERENCE)
-		{
-			if (needsPipe)
-			{
-				strcat(flagsDecoded, "|");
-			}
-			strcat(flagsDecoded, "REFERENCE");
-			needsPipe = true;
-		}
-		if (flags & LES_TYPE_ALIAS)
-		{
-			if (needsPipe)
-			{
-				strcat(flagsDecoded, "|");
-			}
-			strcat(flagsDecoded, "ALIAS");
-			needsPipe = true;
-		}
-		if (flags & LES_TYPE_ARRAY)
-		{
-			if (needsPipe)
-			{
-				strcat(flagsDecoded, "|");
-			}
-			strcat(flagsDecoded, "ARRAY");
-			needsPipe = true;
-		}
+		LES_Type_DecodeFlags(flagsDecoded, flags);
 		pLogChannel->Print("Type '%s' size:%d flags:0x%X %s aliasedName:'%s' numElements:%d",
 			 			name, dataSize, flags, flagsDecoded, aliasedName, numElements);
+	}
+}
+
+void LES_Type_DecodeFlags(char* const flagsDecoded, const LES_uint flags)
+{
+	flagsDecoded[0] = '\0';
+	bool needsPipe = false;
+	if (flags & LES_TYPE_INPUT) 
+	{
+		strcat(flagsDecoded, "INPUT");
+		needsPipe = true;
+	}
+	if (flags & LES_TYPE_OUTPUT)
+	{
+		if (needsPipe)
+		{
+			strcat(flagsDecoded, "|");
+		}
+		strcat(flagsDecoded, "OUTPUT");
+		needsPipe = true;
+	}
+	if (flags & LES_TYPE_POD)
+	{
+		if (needsPipe)
+		{
+			strcat(flagsDecoded, "|");
+		}
+		strcat(flagsDecoded, "POD");
+		needsPipe = true;
+	}
+	if (flags & LES_TYPE_STRUCT)
+	{
+		if (needsPipe)
+		{
+			strcat(flagsDecoded, "|");
+		}
+		strcat(flagsDecoded, "STRUCT");
+		needsPipe = true;
+	}
+	if (flags & LES_TYPE_POINTER)
+	{
+		if (needsPipe)
+		{
+			strcat(flagsDecoded, "|");
+		}
+		strcat(flagsDecoded, "POINTER");
+		needsPipe = true;
+	}
+	if (flags & LES_TYPE_REFERENCE)
+	{
+		if (needsPipe)
+		{
+			strcat(flagsDecoded, "|");
+		}
+		strcat(flagsDecoded, "REFERENCE");
+		needsPipe = true;
+	}
+	if (flags & LES_TYPE_ALIAS)
+	{
+		if (needsPipe)
+		{
+			strcat(flagsDecoded, "|");
+		}
+		strcat(flagsDecoded, "ALIAS");
+		needsPipe = true;
+	}
+	if (flags & LES_TYPE_ARRAY)
+	{
+		if (needsPipe)
+		{
+			strcat(flagsDecoded, "|");
+		}
+		strcat(flagsDecoded, "ARRAY");
+		needsPipe = true;
 	}
 }

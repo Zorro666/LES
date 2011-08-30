@@ -19,11 +19,11 @@ class LES_LoggerChannel;
 
 struct LES_TypeEntry
 {
-	LES_Hash m_hash;
-	unsigned int m_dataSize;
-	unsigned int m_flags;
-	int m_aliasedTypeID;
-	int m_numElements;
+	LES_uint32 m_hash;
+	LES_uint32 m_dataSize;
+	LES_uint32 m_flags;
+	LES_int32 m_aliasedTypeID;
+	LES_int32 m_numElements;
 
 public:
 	int ComputeDataStorageSize(void) const;
@@ -44,5 +44,6 @@ public:
 
 const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEntry);
 void LES_DebugOutputTypes(LES_LoggerChannel* const pLogChannel);
+void LES_Type_DecodeFlags(char* const flagsDecoded, const LES_uint flags);
 
 #endif // #ifndef LES_TYPE_HH
