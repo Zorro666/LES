@@ -39,17 +39,18 @@ def decodeFlags(flags):
 
 # struct LES_TypeEntry
 # {
-#		unsigned int m_hash;											- 4 bytes
-#		unsigned int m_dataSize										- 4 bytes
-#		unsigned int m_flags;											- 4 bytes
-#		int m_aliasedTypeID;											- 4 bytes
-#		int m_numElements;												- 4 bytes
+#		uint32 m_hash;														- 4 bytes
+#		uint32 m_dataSize													- 4 bytes
+#		uint32 m_flags;														- 4 bytes
+#		int32 m_aliasedTypeID;										- 4 bytes
+#		int32 m_numElements;											- 4 bytes
 # };
 #
 # LES_TypeData
 # {
-# 	int m_numTypes; 													- 4 bytes
-#		LES_TypeData m_types[numStrings];					- 20 bytes * m_numTypes
+# 	int32 m_numTypes; 												- 4-bytes
+# 	int32 m_settled; 													- 4-bytes, 0 in file
+#		LES_TypeEntry m_typeEntries[m_numTypes];	- 20 bytes * m_numTypes
 # };
 
 class LES_TypeEntry():
@@ -168,37 +169,42 @@ class LES_TypeData():
 	def writeFile(self, binFile):
 		# LES_TypeData
 		# {
-		# 	int m_numTypes; 													- 4 bytes
-		#		LES_TypeData m_types[numStrings];					- 20 bytes * m_numTypes
+		# 	int32 m_numTypes; 												- 4 bytes
+		# 	int32 m_settled; 													- 4-bytes, 0 in file
+		#		LES_TypeEntry m_typeEntries[m_numTypes];	- 20 bytes * m_numTypes
 		# };
 
-		# 	int m_numTypes; 													- 4 bytes
+		# 	int32 m_numTypes; 												- 4 bytes
 		numTypes = len(self.__m_typeEntries__)
 		binFile.writeInt(numTypes)
+
+		# 	int32 m_settled; 													- 4-bytes, 0 in file
+		settled = 0
+		binFile.writeInt(settled)
 
 		for typeEntry in self.__m_typeEntries__:
 			# struct LES_TypeEntry
 			# {
-			#		unsigned int m_hash;											- 4 bytes
-			#		unsigned int m_dataSize										- 4 bytes
-			#		unsigned int m_flags;											- 4 bytes
-			#		int m_aliasedTypeID;											- 4 bytes
-			#		int m_numElements;												- 4 bytes
+			#		uint32 m_hash;													- 4 bytes
+			#		uint32 m_dataSize												- 4 bytes
+			#		uint32 m_flags;													- 4 bytes
+			#		int32 m_aliasedTypeID;									- 4 bytes
+			#		int32 m_numElements;										- 4 bytes
 			# };
 
-			#		unsigned int m_hash;											- 4 bytes
+			#		uint32 m_hash;													- 4 bytes
 			binFile.writeUint(typeEntry.hashValue)
 
-			#		unsigned int m_dataSize										- 4 bytes
+			#		uint32 m_dataSize												- 4 bytes
 			binFile.writeUint(typeEntry.dataSize)
 
-			#		unsigned int m_flags;											- 4 bytes
+			#		uint32 m_flags;													- 4 bytes
 			binFile.writeUint(typeEntry.flags)
 
-			#		int m_aliasedTypeID;											- 4 bytes
+			#		int32 m_aliasedTypeID;									- 4 bytes
 			binFile.writeUint(typeEntry.aliasedTypeID)
 
-			#		int m_numElements;												- 4 bytes
+			#		int32 m_numElements;										- 4 bytes
 			binFile.writeUint(typeEntry.numElements)
 
 	def parseXML(self, xmlSource):
