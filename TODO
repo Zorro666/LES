@@ -1,6 +1,6 @@
 High Priority:
-SERVER: generate string table and type data as binary block from XML file -> chunked data file
 CORE: C++ API/classes to use the chunked data file, switch the type data system to use it, use file 1st, fallback to global in the interim
+CORE: fixed size typedefs: int8, int16, int32, int64, uint8, uint16, uint32, uint64, float32
 
 Medium Priority:
 STRUCT: the struct size shouldn't be required -C++ set it to 0 and see what happens

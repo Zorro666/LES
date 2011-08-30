@@ -2,6 +2,7 @@
 #define LES_CORE_HH
 
 #include "les_base.h"
+#include "les_definitionfile.h"
 
 struct LES_StringEntry;
 

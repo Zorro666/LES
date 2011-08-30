@@ -6,6 +6,9 @@ import les_typedata
 import les_logger
 
 #{
+# ID: 4-bytes
+# numChunks
+# Chunk Offsets
 #	STRING TABLE_CHUNK
 #	TYPE_DATA_CHUNK
 #	STRUCT_DATA_CHUNK

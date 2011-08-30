@@ -3,6 +3,15 @@
 import les_binaryfile
 import les_logger
 
+# ChunkData file format
+# m_ID											: 4-bytes
+# m_numChunks								: 4-bytes
+# m_chunkOffsets[numChunks]	: 4-bytes * numChunks
+# chunkData[0]
+# chunkData[1]
+# ....
+# chunkData[numChunks-1]]
+
 class LES_ChunkFile():	
 	def __init__(self, fname, magicName, numChunks, bigEndian=True):
 		self.fname = fname
@@ -25,9 +34,14 @@ class LES_ChunkFile():
 				self.chunkOffsetValues.append(0xDEADBEAF)
 
 		# Write the header
+		# m_ID											: 4-bytes
 		self.binFile.writeString(self.magicName)
 
+		# m_numChunks								: 4-bytes
+		self.binFile.writeUint(numChunks)
+
 		# Write out the chunkOffset table
+		# m_chunkOffsets[numChunks]	: 4-bytes * numChunks
 		for offset in self.chunkOffsetValues:
 			currentFileIndex = self.binFile.getIndex()
 			self.chunkOffsetIndexes.append(currentFileIndex)
