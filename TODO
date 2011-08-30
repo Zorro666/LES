@@ -1,5 +1,4 @@
 High Priority:
-CORE: TypeData wrapper const class
 CORE: use loaded definitions first then use the global data - have single static global definition file ptr to use
 CORE: C++ API/classes to use the chunked data file, switch the type data system to use it, use file 1st, fallback to global in the interim
 CORE: fixed size typedefs: int64, uint64, float32
