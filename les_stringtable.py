@@ -17,7 +17,8 @@ class LES_StringTableEntry():
 
 # LES_StringTable
 # {
-# 	int m_numStrings; 																			- 4 bytes
+# 	int m_numStrings; 																			- 4-bytes
+#		int m_settled;																					- 4-bytes : 0 in file
 #		LES_StringTableEntry m_stringTableEntries[numStrings]; 	- 8 bytes * m_numStrings
 #		char stringData[];																			- total string table size in bytes
 # };
@@ -84,6 +85,7 @@ class LES_StringTable():
 		# LES_StringTable
 		# {
 		# 	int m_numStrings; 																			- 4 bytes
+		# 	int m_settled; 																					- 4 bytes : 0 in file
 		#		LES_StringTableEntry m_stringTableEntries[numStrings]; 	- 8 bytes * m_numStrings
 		#		char stringData[];																			- total string table size in bytes
 		# };
@@ -92,18 +94,22 @@ class LES_StringTable():
 		numStrings = len(self.__m_strings__)
 		binFile.writeInt(numStrings)	
 
+		# 	int m_settled; - 4 bytes : 0 in file
+		settled = 0
+		binFile.writeInt(settled)	
+
 		#	LES_StringTableEntry m_stringTableEntries[numStrings]; 		- 8 bytes * m_numStrings
 		for stringTableEntry in self.__m_stringTableEntries__:
 			#	struct LES_StringTableEntry
 			#	{
-			#		unsigned int m_hash;												- 4 bytes
-			#		const char* m_str;													- 4 bytes : saved as offset into stringTable, ptr settled on load
+			#		uint32 int m_hash;													- 4 bytes
+			#		int32 m_offset;															- 4 bytes : saved as offset into stringTable, ptr settled on load
 			#	};
 
-			#		unsigned int m_hash;												- 4 bytes
+			#		uint32 m_hash;															- 4 bytes
 			binFile.writeUint(stringTableEntry.hashValue)	
 
-			#		const char* m_str;													- 4 bytes : saved as offset into stringTable, ptr settled on load
+			#		int32 m_offset;															- 4 bytes : saved as offset into stringTable, ptr settled on load
 			binFile.writeInt(stringTableEntry.offset)	
 
 		#	char stringData[];															- total string table size in bytes
