@@ -7,7 +7,7 @@ import les_logger
 
 #{
 # ID: 4-bytes
-# numChunks
+# int32 numChunks
 # Chunk Offsets
 #	STRING TABLE_CHUNK
 #	TYPE_DATA_CHUNK
