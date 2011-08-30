@@ -2,9 +2,9 @@
 #define LES_CORE_HH
 
 #include "les_base.h"
-#include "les_definitionfile.h"
 
 struct LES_StringEntry;
+class LES_DefinitionFile;
 
 const LES_StringEntry* LES_GetStringEntryForID(const int id);
 const LES_StringEntry* LES_GetStringEntry(const char* const str);
