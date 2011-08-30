@@ -12,9 +12,12 @@ public:
 	int GetNumChunks(void) const;
 	const void* GetChunkData(const int chunk) const;
 
+	friend class LES_DefinitionFile;
+
 private:
 	LES_ChunkFile();
 	~LES_ChunkFile();
+	void Settle(void);
 
 	char m_ID[4];
 	LES_uint32 m_numChunks;
@@ -32,12 +35,12 @@ inline const char* LES_ChunkFile::GetID(void) const
 
 inline int LES_ChunkFile::GetNumChunks(void) const
 {
-	return fromLittleEndian32(m_numChunks);
+	return m_numChunks;
 }
 
 inline const void* LES_ChunkFile::GetChunkData(const int chunk) const
 {
-	const int chunkOffset = fromLittleEndian32(m_chunkOffsets[chunk]);
+	const int chunkOffset = m_chunkOffsets[chunk];
 	const char* basePtr = m_ID;
 	const char* chunkPtr = basePtr + chunkOffset;
 	return chunkPtr;
