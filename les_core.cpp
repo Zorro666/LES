@@ -115,7 +115,7 @@ const LES_StringEntry* LES_GetStringEntryByHash(unsigned int hash)
 			return stringEntryPtr;
 		}
 	}
-	return NULL;
+	return LES_NULL;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
