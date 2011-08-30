@@ -73,7 +73,7 @@ class LES_ChunkFile():
 
 	def endChunk(self):
 		if self.activeChunkIndex != self.currentChunkIndex:
-			les_logger.Error("LES_ChunkFile::endChunk chunk not started"
+			les_logger.Error("LES_ChunkFile::endChunk chunk not started")
 			return
 
 		self.currentChunkIndex += 1
