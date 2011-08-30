@@ -72,24 +72,24 @@ int LES_TypeEntry::ComputeDataStorageSize(void) const
 	{
 		const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
 #if LES_TYPE_DEBUG
-		LES_LOG("Type 0x%X alias:%d flags:0x%X\n", typeEntryPtr->m_hash, aliasedTypeID, flags);
+		LES_LOG("Type 0x%X alias:%d flags:0x%X", typeEntryPtr->m_hash, aliasedTypeID, flags);
 #endif // #if LES_TYPE_DEBUG
 		const LES_StringEntry* const aliasedStringTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
 		if (aliasedStringTypeEntry == LES_NULL)
 		{
-			LES_WARNING("ComputeDataStorageSize aliased type:%d entry can't be found\n", aliasedTypeID);
+			LES_WARNING("ComputeDataStorageSize aliased type:%d entry can't be found", aliasedTypeID);
 			return -1;
 		}
 		const LES_TypeEntry* const aliasedTypeEntryPtr = LES_GetTypeEntry(aliasedStringTypeEntry);
 		if (aliasedTypeEntryPtr == LES_NULL)
 		{
-			LES_WARNING("ComputeDataStorageSize aliased type not found aliased type:'%s'\n", aliasedStringTypeEntry->m_str);
+			LES_WARNING("ComputeDataStorageSize aliased type not found aliased type:'%s'", aliasedStringTypeEntry->m_str);
 			return -1;
 		}
 		typeEntryPtr = (const LES_TypeEntry*)aliasedTypeEntryPtr;
 		flags = typeEntryPtr->m_flags;
 #if LES_TYPE_DEBUG
-		LES_LOG("Alias Type 0x%X flags:0x%X\n", typeEntryPtr->m_hash, flags);
+		LES_LOG("Alias Type 0x%X flags:0x%X", typeEntryPtr->m_hash, flags);
 #endif // #if LES_TYPE_DEBUG
 	}
 	if (flags & LES_TYPE_STRUCT)
@@ -97,7 +97,7 @@ int LES_TypeEntry::ComputeDataStorageSize(void) const
 		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeEntryPtr->m_hash);
 		if (structDefinition == LES_NULL)
 		{
-			LES_WARNING("ComputeDataStorage type:0x%X is a struct but can't be found\n", typeEntryPtr->m_hash);
+			LES_WARNING("ComputeDataStorage type:0x%X is a struct but can't be found", typeEntryPtr->m_hash);
 			return -1;
 		}
 		const int numMembers = structDefinition->GetNumMembers();
@@ -118,7 +118,7 @@ int LES_TypeEntry::ComputeDataStorageSize(void) const
 		if (numElements > 1)
 		{
 #if LES_TYPE_DEBUG
-			LES_LOG("Struct Type:0x%X Size:%d NumELements:%d\n", typeEntryPtr->m_hash, totalDataSize, numElements);
+			LES_LOG("Struct Type:0x%X Size:%d NumELements:%d", typeEntryPtr->m_hash, totalDataSize, numElements);
 #endif // #if LES_TYPE_DEBUG
 			totalDataSize *= numElements;
 		}
@@ -128,7 +128,7 @@ int LES_TypeEntry::ComputeDataStorageSize(void) const
 	if (numElements > 1)
 	{
 #if LES_TYPE_DEBUG
-		LES_LOG("POD Type:0x%X Size:%d NumELements:%d\n", typeEntryPtr->m_hash, dataSize, numElements);
+		LES_LOG("POD Type:0x%X Size:%d NumELements:%d", typeEntryPtr->m_hash, dataSize, numElements);
 #endif // #if LES_TYPE_DEBUG
 		dataSize *= numElements;
 	}
@@ -145,27 +145,27 @@ int LES_TypeEntry::ComputeAlignment(void) const
 		{
 			const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
 #if LES_TYPE_DEBUG
-			LES_LOG("Type 0x%X alias:%d flags:0x%X\n", typeEntryPtr->m_hash, aliasedTypeID, flags);
+			LES_LOG("Type 0x%X alias:%d flags:0x%X", typeEntryPtr->m_hash, aliasedTypeID, flags);
 #endif // #if LES_TYPE_DEBUG
 			const LES_StringEntry* const aliasedStringTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
 			if (aliasedStringTypeEntry == LES_NULL)
 			{
-				LES_FATAL_ERROR("ComputeAlignment aliased type:%d entry can't be found\n", aliasedTypeID);
+				LES_FATAL_ERROR("ComputeAlignment aliased type:%d entry can't be found", aliasedTypeID);
 				return -1;
 			}
 			const LES_TypeEntry* const aliasedTypeEntryPtr = LES_GetTypeEntry(aliasedStringTypeEntry);
 			if (aliasedTypeEntryPtr == LES_NULL)
 			{
-				LES_FATAL_ERROR("ComputeAlignment aliased type not found aliased type:'%s'\n", aliasedStringTypeEntry->m_str);
+				LES_FATAL_ERROR("ComputeAlignment aliased type not found aliased type:'%s'", aliasedStringTypeEntry->m_str);
 				return -1;
 			}
 #if LES_TYPE_DEBUG
-			LES_LOG("Compute Alignment Type 0x%X alias:%s\n", typeEntryPtr->m_hash, aliasedStringTypeEntry->m_str);
+			LES_LOG("Compute Alignment Type 0x%X alias:%s", typeEntryPtr->m_hash, aliasedStringTypeEntry->m_str);
 #endif // #if LES_TYPE_DEBUG
 			typeEntryPtr = (const LES_TypeEntry*)aliasedTypeEntryPtr;
 			flags = typeEntryPtr->m_flags;
 #if LES_TYPE_DEBUG
-			LES_LOG("Alias Type 0x%X flags:0x%X\n", typeEntryPtr->m_hash, flags);
+			LES_LOG("Alias Type 0x%X flags:0x%X", typeEntryPtr->m_hash, flags);
 #endif // #if LES_TYPE_DEBUG
 		}
 	}
@@ -176,34 +176,34 @@ int LES_TypeEntry::ComputeAlignment(void) const
 		{
 			const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
 #if LES_TYPE_DEBUG
-			LES_LOG("Type 0x%X alias:%d flags:0x%X\n", typeEntryPtr->m_hash, aliasedTypeID, flags);
+			LES_LOG("Type 0x%X alias:%d flags:0x%X", typeEntryPtr->m_hash, aliasedTypeID, flags);
 #endif // #if LES_TYPE_DEBUG
 			const LES_StringEntry* const aliasedStringTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
 			if (aliasedStringTypeEntry == LES_NULL)
 			{
-				LES_FATAL_ERROR("ComputeAlignment aliased type:%d entry can't be found\n", aliasedTypeID);
+				LES_FATAL_ERROR("ComputeAlignment aliased type:%d entry can't be found", aliasedTypeID);
 				return -1;
 			}
 			const LES_TypeEntry* const aliasedTypeEntryPtr = LES_GetTypeEntry(aliasedStringTypeEntry);
 			if (aliasedTypeEntryPtr == LES_NULL)
 			{
-				LES_FATAL_ERROR("ComputeAlignment aliased type not found aliased type:'%s'\n", aliasedStringTypeEntry->m_str);
+				LES_FATAL_ERROR("ComputeAlignment aliased type not found aliased type:'%s'", aliasedStringTypeEntry->m_str);
 				return -1;
 			}
 #if LES_TYPE_DEBUG
-			LES_LOG("Compute Alignment Type 0x%X alias:%s\n", typeEntryPtr->m_hash, aliasedStringTypeEntry->m_str);
+			LES_LOG("Compute Alignment Type 0x%X alias:%s", typeEntryPtr->m_hash, aliasedStringTypeEntry->m_str);
 #endif // #if LES_TYPE_DEBUG
 			typeEntryPtr = (const LES_TypeEntry*)aliasedTypeEntryPtr;
 			flags = typeEntryPtr->m_flags;
 #if LES_TYPE_DEBUG
-			LES_LOG("Alias Type 0x%X flags:0x%X\n", typeEntryPtr->m_hash, flags);
+			LES_LOG("Alias Type 0x%X flags:0x%X", typeEntryPtr->m_hash, flags);
 #endif // #if LES_TYPE_DEBUG
 		}
 
 		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeEntryPtr->m_hash);
 		if (structDefinition == LES_NULL)
 		{
-			LES_FATAL_ERROR("ComputeAlignment type:0x%X is a struct but can't be found\n", typeEntryPtr->m_hash);
+			LES_FATAL_ERROR("ComputeAlignment type:0x%X is a struct but can't be found", typeEntryPtr->m_hash);
 			return -1;
 		}
 		const int numMembers = structDefinition->GetNumMembers();
@@ -221,14 +221,14 @@ int LES_TypeEntry::ComputeAlignment(void) const
 			}
 		}
 #if LES_TYPE_DEBUG
-		LES_LOG("Compute Alignment Type 0x%X Struct:%d alignment:%d\n", typeEntryPtr->m_hash, structDefinition->GetNameID(), maxAlignment);
+		LES_LOG("Compute Alignment Type 0x%X Struct:%d alignment:%d", typeEntryPtr->m_hash, structDefinition->GetNameID(), maxAlignment);
 #endif // #if LES_TYPE_DEBUG
 		return maxAlignment;
 	}
 	const int dataSize = typeEntryPtr->m_dataSize;
 	const int alignment = dataSize;
 #if LES_TYPE_DEBUG
-	LES_LOG("Compute Alignment Type 0x%X alignment:%d\n", typeEntryPtr->m_hash, alignment);
+	LES_LOG("Compute Alignment Type 0x%X alignment:%d", typeEntryPtr->m_hash, alignment);
 #endif // #if LES_TYPE_DEBUG
 	return alignment;
 }
@@ -259,12 +259,12 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 	const LES_StringEntry* const aliasedEntryPtr = LES_GetStringEntry(aliasedName);
 	if (aliasedEntryPtr == LES_NULL)
 	{
-		LES_WARNING("AddType '%s' : aliasedEntry '%s' not found\n", name, aliasedName);
+		LES_WARNING("AddType '%s' : aliasedEntry '%s' not found", name, aliasedName);
 		return LES_RETURN_ERROR;
 	}
 	const int aliasedTypeID = LES_AddStringEntry(aliasedName);
 #if LES_TYPE_DEBUG
-	LES_LOG("aliasedTypeID:%d name:'%s' aliasedName:'%s'\n", aliasedTypeID, name, aliasedName);
+	LES_LOG("aliasedTypeID:%d name:'%s' aliasedName:'%s'", aliasedTypeID, name, aliasedName);
 #endif // #if LES_TYPE_DEBUG
 
 	const LES_Hash hash = LES_GenerateHashCaseSensitive(name);
@@ -274,7 +274,7 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 	{
 		if ((flags & LES_TYPE_ARRAY) == 0)
 		{
-			LES_ERROR("Type '%s' numElements:%d but not an array\n", name, numElements);
+			LES_ERROR("Type '%s' numElements:%d but not an array", name, numElements);
 		}
 		flags |= LES_TYPE_ARRAY;
 	}
@@ -284,14 +284,14 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 	{
 		flags |= LES_TYPE_ALIAS;
 #if LES_TYPE_DEBUG
-		LES_LOG("Type '%s' has an alias to '%s'\n", name, aliasedName);
+		LES_LOG("Type '%s' has an alias to '%s'", name, aliasedName);
 #endif // #if LES_TYPE_DEBUG
 	}
 	if (isArray)
 	{
 		if (numElements <= 0)
 		{
-			LES_WARNING("AddType '%s' NumELements:%d Invalid number of elements must be > 0\n", name, numElements);
+			LES_WARNING("AddType '%s' NumELements:%d Invalid number of elements must be > 0", name, numElements);
 			return LES_RETURN_ERROR;
 		}
 	}
@@ -313,14 +313,14 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 			// Array types must be aliased to something
 			if ((typeEntryPtr->m_flags & LES_TYPE_ALIAS) == 0)
 			{
-				LES_WARNING("AddType '%s' hash 0x%X is an array with %d elements but not aliased, arrays must be aliased\n",
+				LES_WARNING("AddType '%s' hash 0x%X is an array with %d elements but not aliased, arrays must be aliased",
 										name, hash, numElements);
 				return LES_RETURN_ERROR;
 			}
 			const int aliasedIndex = LES_GetTypeEntrySlow(aliasedHash);
 			if (aliasedIndex == -1)
 			{
-				LES_WARNING("AddType '%s' hash 0x%X can't find its aliased type '%s'\n", name, hash, aliasedName);
+				LES_WARNING("AddType '%s' hash 0x%X can't find its aliased type '%s'", name, hash, aliasedName);
 				return LES_RETURN_ERROR;
 			}
 			LES_TypeEntry* const aliasedTypeEntryPtr = &les_typeEntryArray[aliasedIndex];
@@ -328,14 +328,14 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 			// Arrays of non-references must not be aliased to pointer or reference
 			if (((typeEntryPtr->m_flags & LES_TYPE_REFERENCE) == 0) && ((aliasedFlags & LES_TYPE_POINTER) || (aliasedFlags & LES_TYPE_REFERENCE)))
 			{
-				LES_WARNING("AddType '%s' hash 0x%X non-reference array types must be aliased to a non-pointer, non-reference type Alias:'%s' Flags:0x%X\n", 
+				LES_WARNING("AddType '%s' hash 0x%X non-reference array types must be aliased to a non-pointer, non-reference type Alias:'%s' Flags:0x%X", 
 										name, hash, aliasedName, aliasedFlags);
 				return LES_RETURN_ERROR;
 			}
 			// Arrays of references must be aliased to pointer 
 			if (((typeEntryPtr->m_flags & LES_TYPE_REFERENCE) == 1) && (((aliasedFlags & LES_TYPE_POINTER) == 0) || (aliasedFlags & LES_TYPE_REFERENCE)))
 			{
-				LES_WARNING("AddType '%s' hash 0x%X non-reference array types must be aliased to a pointer type Alias:'%s' Flags:0x%X\n", 
+				LES_WARNING("AddType '%s' hash 0x%X non-reference array types must be aliased to a pointer type Alias:'%s' Flags:0x%X", 
 										name, hash, aliasedName, aliasedFlags);
 				return LES_RETURN_ERROR;
 			}
@@ -349,25 +349,25 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[index];
 		if (typeEntryPtr->m_dataSize != dataSize)
 		{
-			LES_WARNING("AddType '%s' hash 0x%X already in list and dataSize doesn't match Existing:%d New:%d\n",
+			LES_WARNING("AddType '%s' hash 0x%X already in list and dataSize doesn't match Existing:%d New:%d",
 							name, hash, typeEntryPtr->m_dataSize, dataSize);
 			return LES_RETURN_ERROR;
 		}
 		if (typeEntryPtr->m_flags != flags)
 		{
-			LES_WARNING("AddType '%s' hash 0x%X already in list and flags doesn't match Existing:0x%X New:0x%X\n",
+			LES_WARNING("AddType '%s' hash 0x%X already in list and flags doesn't match Existing:0x%X New:0x%X",
 							name, hash, typeEntryPtr->m_flags, flags);
 			return LES_RETURN_ERROR;
 		}
 		if (typeEntryPtr->m_aliasedTypeID != aliasedTypeID)
 		{
-			LES_WARNING("AddType '%s' hash 0x%X already in list and aliasedTypeID doesn't match Existing:%d New:%d\n",
+			LES_WARNING("AddType '%s' hash 0x%X already in list and aliasedTypeID doesn't match Existing:%d New:%d",
 							name, hash, typeEntryPtr->m_aliasedTypeID, aliasedTypeID);
 			return LES_RETURN_ERROR;
 		}
 		if (typeEntryPtr->m_numElements != numElements)
 		{
-			LES_WARNING("AddType '%s' hash 0x%X already in list and numElements doesn't match Existing:%d New:%d\n",
+			LES_WARNING("AddType '%s' hash 0x%X already in list and numElements doesn't match Existing:%d New:%d",
 							name, hash, typeEntryPtr->m_numElements, numElements);
 			return LES_RETURN_ERROR;
 		}
@@ -459,7 +459,7 @@ void LES_DebugOutputTypes(LES_LoggerChannel* const pLogChannel)
 			strcat(flagsDecoded, "ARRAY");
 			needsPipe = true;
 		}
-		pLogChannel->Print("Type '%s' size:%d flags:0x%X %s aliasedName:'%s' numElements:%d\n",
+		pLogChannel->Print("Type '%s' size:%d flags:0x%X %s aliasedName:'%s' numElements:%d",
 			 			name, dataSize, flags, flagsDecoded, aliasedName, numElements);
 	}
 }

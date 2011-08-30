@@ -37,7 +37,7 @@ void LES_LoggerChannel::InternalOutput(const char* const fmt, va_list* pArgPtr)
 	const char* const prefix = m_prefixStr;
 	if (flags & LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT)
 	{
-		fprintf(stdout, "%s%s", prefix, outputBuffer);
+		fprintf(stdout, "%s%s\n", prefix, outputBuffer);
 	}
 	if (flags & LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT)
 	{
@@ -45,7 +45,7 @@ void LES_LoggerChannel::InternalOutput(const char* const fmt, va_list* pArgPtr)
 		FILE* const filePtr = fopen(fileName, "a");
 		if (filePtr)
 		{
-			fprintf(filePtr, "%s%s", prefix, outputBuffer);
+			fprintf(filePtr, "%s%s\n", prefix, outputBuffer);
 			fflush(filePtr);
 			fclose(filePtr);
 		}

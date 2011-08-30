@@ -62,7 +62,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	const LES_TypeEntry* typeDataPtr = LES_GetTypeEntry(typeEntry);
 
 #if LES_FUNCTION_DEBUG
-	LES_LOG("DecodeSingle: '%s' '%s' %d\n", nameEntry->m_str, typeEntry->m_str, typeID);
+	LES_LOG("DecodeSingle: '%s' '%s' %d", nameEntry->m_str, typeEntry->m_str, typeID);
 #endif // #if LES_FUNCTION_DEBUG
 
 	const char* const nameStr = nameEntry->m_str;
@@ -70,7 +70,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 
 	if (typeDataPtr == LES_NULL)
 	{
-		LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' type can't be found\n", parameterIndex, nameStr, typeStr);
+		LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' type can't be found", parameterIndex, nameStr, typeStr);
 		return LES_RETURN_ERROR;
 	}
 	const int numElements = typeDataPtr->m_numElements;
@@ -83,17 +83,17 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		const LES_StringEntry* const aliasedTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
 		if (aliasedTypeEntry == LES_NULL)
 		{
-			LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' aliased type:%d entry can't be found\n", 
+			LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' aliased type:%d entry can't be found", 
 									parameterIndex, nameStr, typeStr, aliasedTypeID);
 			return LES_RETURN_ERROR;
 		}
 #if LES_FUNCTION_DEBUG
-		LES_LOG("Type:'%s' aliased to '%s'\n", typeEntry->m_str, aliasedTypeEntry->m_str);
+		LES_LOG("Type:'%s' aliased to '%s'", typeEntry->m_str, aliasedTypeEntry->m_str);
 #endif // #if LES_FUNCTION_DEBUG
 		typeDataPtr = LES_GetTypeEntry(aliasedTypeEntry);
 		if (typeDataPtr == LES_NULL)
 		{
-			LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' type can't be found\n", parameterIndex, nameStr, typeStr);
+			LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' type can't be found", parameterIndex, nameStr, typeStr);
 			return LES_RETURN_ERROR;
 		}
 		typeFlags = typeDataPtr->m_flags;
@@ -110,15 +110,15 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		}
 
 #if LES_FUNCTION_DEBUG
-		LES_LOG("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d ARRAY numELements:%d\n", 
+		LES_LOG("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d ARRAY numELements:%d", 
 						parameterIndex, nameStr, typeStr, typeDataSize, numElements);
-		LES_LOG("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d STRUCT\n", parameterIndex, nameStr, typeStr, typeDataSize);
+		LES_LOG("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d STRUCT", parameterIndex, nameStr, typeStr, typeDataSize);
 #endif // #if LES_FUNCTION_DEBUG
 		int returnCode = LES_RETURN_OK;
 		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeDataPtr->m_hash);
 		if (structDefinition == LES_NULL)
 		{
-			LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' is a struct but can't be found\n", parameterIndex, nameStr, typeStr);
+			LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' is a struct but can't be found", parameterIndex, nameStr, typeStr);
 			return LES_RETURN_ERROR;
 		}
 		const int numMembers = structDefinition->GetNumMembers();
@@ -143,7 +143,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	{
 		int returnCode = LES_RETURN_OK;
 #if LES_FUNCTION_DEBUG
-		LES_LOG("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d ARRAY numELements:%d\n", 
+		LES_LOG("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d ARRAY numELements:%d", 
 						parameterIndex, nameStr, typeStr, typeDataSize, numElements);
 #endif // #if LES_FUNCTION_DEBUG
 		const int elementNameID = nameID;
@@ -203,52 +203,56 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	}
 	if (valuePtr == LES_NULL)
 	{
-		LES_WARNING("DecodeSingle valuePtr = LES_NULL parameter[%d]:'%s'\n", parameterIndex, nameStr);
+		LES_WARNING("DecodeSingle valuePtr = LES_NULL parameter[%d]:'%s'", parameterIndex, nameStr);
 		return LES_RETURN_ERROR;
 	}
 	int errorCode = functionParameterData->Read(typeEntry, valuePtr);
 	if (errorCode == LES_RETURN_ERROR)
 	{
-		LES_WARNING("DecodeSingle Read failed for parameter[%d]:%s;\n", parameterIndex, nameStr);
+		LES_WARNING("DecodeSingle Read failed for parameter[%d]:%s;", parameterIndex, nameStr);
 		return LES_RETURN_ERROR;
 	}
-	LES_LOG("DecodeSingle ");
+	char output[1024];
+	output[0] = '\0';
+	sprintf(output, "%sDecodeSingle ", output);
 	for (int i = 0; i < depth*2; i++)
 	{
-		LES_LOG(" ");
+		sprintf(output, "%s ", output);
 	}
-	LES_LOG("parameter");
+	sprintf(output, "%s%s", output, "parameter");
 	if (parentParameterIndex >= 0)
 	{
-		LES_LOG("[%d] member", parentParameterIndex);
+		sprintf(output, "%s[%d] member", output, parentParameterIndex);
 	}
-	LES_LOG("[%d]:'%s' type:'%s' value:", parameterIndex, nameStr, typeStr);
+	sprintf(output, "%s[%d]:'%s' type:'%s' value:", output, parameterIndex, nameStr, typeStr);
 
+	char tempString[1024];
 	if (typeHash == LES_TypeEntry::s_longlongHash)
 	{
-		LES_LOG(fmtStr, longlongValue);
+		sprintf(tempString, fmtStr, longlongValue);
 	}
 	else if ((typeHash == LES_TypeEntry::s_intHash) || (typeHash == LES_TypeEntry::s_uintHash))
 	{
-		LES_LOG(fmtStr, intValue);
+		sprintf(tempString, fmtStr, intValue);
 	}
 	else if ((typeHash == LES_TypeEntry::s_shortHash) || (typeHash == LES_TypeEntry::s_ushortHash))
 	{
-		LES_LOG(fmtStr, shortValue);
+		sprintf(tempString, fmtStr, shortValue);
 	}
 	else if ((typeHash == LES_TypeEntry::s_charHash) || (typeHash == LES_TypeEntry::s_ucharHash))
 	{
-		LES_LOG(fmtStr, charValue);
+		sprintf(tempString, fmtStr, charValue);
 	}
 	else if (typeHash == LES_TypeEntry::s_floatHash)
 	{
-		LES_LOG(fmtStr, floatValue);
+		sprintf(tempString, fmtStr, floatValue);
 	}
 	else
 	{
-		LES_LOG(":UNKNOWN typeDataSize:%d struct:%d", typeDataSize, (typeDataPtr->m_flags&LES_TYPE_STRUCT));
+		sprintf(tempString, ":UNKNOWN typeDataSize:%d struct:%d", typeDataSize, (typeDataPtr->m_flags&LES_TYPE_STRUCT));
 	}
-	LES_LOG("\n");
+	sprintf(output, "%s%s", output, tempString);
+	LES_LOG(output);
 	return LES_RETURN_OK;
 }
 

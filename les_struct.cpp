@@ -169,10 +169,10 @@ int LES_StructComputeAlignmentPadding(const int totalMemberSize, const int membe
 	const int alignedOffset = ((totalMemberSize + memberAlignmentSizeMinus1) & ~memberAlignmentSizeMinus1);
 	const int alignmentPadding = alignedOffset - totalMemberSize;
 
-	//LES_LOG("TotalMemberSize:0x%X MemberDataSize:0x%X Alignment:%d\n", totalMemberSize, memberDataSize, alignmentPadding);
+	//LES_LOG("TotalMemberSize:0x%X MemberDataSize:0x%X Alignment:%d", totalMemberSize, memberDataSize, alignmentPadding);
 	if (alignmentPadding < 0)
 	{
-		LES_FATAL_ERROR("HELP\n");
+		LES_FATAL_ERROR("HELP");
 	}
 
 	return alignmentPadding;
