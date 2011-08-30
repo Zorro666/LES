@@ -9,10 +9,10 @@
 	ID: 4-bytes
 	numChunks
 	Chunk Offsets
-	STRING TABLE_CHUNK
-	TYPE_DATA_CHUNK
-	STRUCT_DATA_CHUNK
-	FUNCTION_DATA_CHUNK
+	STRINGTABLE_CHUNK
+	TYPEDATA_CHUNK
+	STRUCTDATA_CHUNK
+	FUNCTIONDATA_CHUNK
 }
 */
 
@@ -25,26 +25,29 @@ public:
 	LES_DefinitionFile(const void* chunkFileData, const int dataSize);
 	~LES_DefinitionFile();
 
-	const LES_StringTable* GetStringTable(void);
-	const LES_TypeData* GetTypeData(void);
+	const LES_StringTable* GetStringTable(void) const;
+	const LES_TypeData* GetTypeData(void) const;
 
 private:
 	const LES_ChunkFile* m_chunkFileData;
-	
 	enum { 
-					LES_DEFINITION_STRING_TABLE = 0,
-				 	LES_DEFINITION_TYPE_DATA = 1,
+					LES_DEFINITION_STRINGTABLE = 0,
+				 	LES_DEFINITION_TYPEDATA = 1,
 			 };
 };
 
-inline const LES_StringTable* LES_DefinitionFile::GetStringTable(void)
+inline const LES_StringTable* LES_DefinitionFile::GetStringTable(void) const
 {
-	void* chunkDataPtr = m_chunkFileData->GetChunkData(LES_DEFINITION_STRING_TABLE);
+	const void* chunkDataPtr = m_chunkFileData->GetChunkData(LES_DEFINITION_STRINGTABLE);
+	const LES_StringTable* stringTablePtr = (const LES_StringTable*)chunkDataPtr;
+	return stringTablePtr;
 }
 
-inline const LES_TypeData* LES_DefinitionFile::GetTypeData(void)
+inline const LES_TypeData* LES_DefinitionFile::GetTypeData(void) const
 {
-	void* chunkDataPtr = m_chunkFileData->GetChunkData(LES_DEFINTIION_TYPE_DATA);
+	const void* chunkDataPtr = m_chunkFileData->GetChunkData(LES_DEFINITION_TYPEDATA);
+	const LES_TypeData* typeDataPtr = (const LES_TypeData*)chunkDataPtr;
+	return typeDataPtr;
 }
 
 #endif // #ifndef LES_DEFINITIONFILE_HH
