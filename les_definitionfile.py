@@ -34,7 +34,7 @@ class LES_DefinitionFile():
 
 	def writeFile(self, fname):
 		self.fname = fname
-		chunkFile = les_chunkfile.LES_ChunkFile(self.fname, "LESD", self.numChunks)
+		chunkFile = les_chunkfile.LES_ChunkFile(self.fname, "LESD", self.numChunks, bigEndian=True)
 
 		for i in range(self.numChunks):
 			chunkData = self.chunkDatas[i]
