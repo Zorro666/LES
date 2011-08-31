@@ -92,7 +92,7 @@ int LES_StructDefinition::GetNumMembers(void) const
 
 const LES_StructMember* LES_StructDefinition::GetMemberByIndex(const int index) const
 {
-	if ((index >=0) && (index < m_numMembers))
+	if ((index >= 0) && (index < m_numMembers))
 	{
 		const LES_StructMember* const memberPtr = &m_members[index];
 		return memberPtr;
