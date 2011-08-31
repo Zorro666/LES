@@ -34,7 +34,7 @@ extern int LES_AddStringEntry(const char* const str);
 static int LES_GetTypeEntrySlow(const LES_Hash hash)
 {
 	/* This is horribly slow - need hash lookup table */
-	for (int i=0; i<les_numTypeEntries; i++)
+	for (int i = 0; i < les_numTypeEntries; i++)
 	{
 		const LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[i];
 		if (typeEntryPtr->m_hash == hash)
@@ -377,7 +377,7 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 
 void LES_DebugOutputTypes(LES_LoggerChannel* const pLogChannel)
 {
-	for (int i=0; i<les_numTypeEntries; i++)
+	for (int i = 0; i < les_numTypeEntries; i++)
 	{
 		const LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[i];
 		const LES_StringEntry* nameEntry = LES_GetStringEntryByHash(typeEntryPtr->m_hash);

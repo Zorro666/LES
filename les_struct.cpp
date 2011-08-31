@@ -17,7 +17,7 @@ static int les_numStructDefinitions = 0;
 static int LES_GetStructDefinitionIndex(const LES_Hash nameHash)
 {
 	/* This is horribly slow - need hash lookup table */
-	for (int i=0; i<les_numStructDefinitions; i++)
+	for (int i = 0; i < les_numStructDefinitions; i++)
 	{
 		const LES_StructDefinition* const structDefinitionPtr = &les_structDefinitionArray[i];
 		const LES_StringEntry* const structNameStringEntryPtr = LES_GetStringEntryForID(structDefinitionPtr->GetNameID());

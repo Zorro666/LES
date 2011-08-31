@@ -22,7 +22,7 @@ static int les_numFunctionDefinitions = 0;
 static int LES_GetFunctionDefinitionIndexByNameID(const int nameID)
 {
 	/* This is horribly slow - need hash lookup table */
-	for (int i=0; i<les_numFunctionDefinitions; i++)
+	for (int i = 0; i < les_numFunctionDefinitions; i++)
 	{
 		const LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[i];
 		if (functionDefinitionPtr->GetNameID() == nameID)
@@ -38,7 +38,7 @@ static int LES_GetFunctionDefinitionIndex(const char* const name)
 	const LES_Hash functionNameHash = LES_GenerateHashCaseSensitive(name);
 
 	/* This is horribly slow - need hash lookup table */
-	for (int i=0; i<les_numFunctionDefinitions; i++)
+	for (int i = 0; i < les_numFunctionDefinitions; i++)
 	{
 		const LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[i];
 		const LES_StringEntry* const functionNameStringEntryPtr = LES_GetStringEntryForID(functionDefinitionPtr->GetNameID());
