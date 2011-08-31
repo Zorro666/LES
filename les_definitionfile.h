@@ -35,6 +35,7 @@ public:
 	const LES_StringTable* GetStringTable(void) const;
 	const LES_TypeData* GetTypeData(void) const;
 
+	bool Loaded(void) const;
 private:
 	LES_DefinitionFile(const LES_DefinitionFile& other);
 	LES_DefinitionFile& operator =(const LES_DefinitionFile& other);

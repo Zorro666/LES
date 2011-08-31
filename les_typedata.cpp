@@ -27,3 +27,18 @@ int LES_TypeData::Settle(void)
 	return LES_RETURN_OK;
 }
 
+int LES_TypeData::GetTypeEntrySlow(const LES_uint hash) const
+{
+	/* This is horribly slow - need hash lookup table */
+	const int numTypes = m_numTypes;
+	for (int i = 0; i < numTypes; i++)
+	{
+		const LES_TypeEntry* const typeEntryPtr = GetTypeEntry(i);
+		if (typeEntryPtr->m_hash == hash)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+

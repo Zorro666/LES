@@ -18,6 +18,7 @@ class LES_TypeData
 public:
 	int GetNumTypes(void) const;
 	const LES_TypeEntry* GetTypeEntry(const int index) const;
+	int GetTypeEntrySlow(const LES_uint hash) const;
 
 	friend class LES_DefinitionFile;
 private:

@@ -103,3 +103,8 @@ int LES_DefinitionFile::GetNumChunks(void)
 	const int numChunks = m_chunkFileData->GetNumChunks();
 	return numChunks;
 }
+
+bool LES_DefinitionFile::Loaded(void) const
+{
+	return (m_chunkFileData != LES_NULL);
+}

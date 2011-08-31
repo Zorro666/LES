@@ -17,9 +17,6 @@ static LES_DefinitionFile les_definitionFile;
 static const LES_StringTable* les_pStringTable = LES_NULL;
 static int les_stringTableNumStrings = 0;
 
-static const LES_TypeData* les_pTypeData = LES_NULL;
-static int les_typeDataNumTypes = 0;
-
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Internal Static functions
@@ -28,10 +25,13 @@ static int les_typeDataNumTypes = 0;
 
 static int LES_GetStringEntrySlow(const LES_Hash hash, const char* const str)
 {
-	const int index = les_pStringTable->GetStringEntrySlow(hash, str);
-	if (index >=0)
+	if (les_pStringTable)
 	{
-		return index;
+		const int index = les_pStringTable->GetStringEntrySlow(hash, str);
+		if (index >= 0)
+		{
+			return index;
+		}
 	}
 	/* This is horribly slow - need hash lookup table */
 	const int numStrings = les_numStringEntries;
@@ -67,6 +67,13 @@ static int LES_AddStringEntry(const LES_Hash hash, const char* const str)
 	index += les_stringTableNumStrings;
 
 	return index;
+}
+
+static void LES_SetStringTablePtr(const LES_StringTable* const pStringTable)
+{
+	les_pStringTable = pStringTable;
+	const int numStrings = pStringTable->GetNumStrings();
+	les_stringTableNumStrings = numStrings;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,10 +138,13 @@ const LES_StringEntry* LES_GetStringEntry(const char* const str)
 
 const LES_StringEntry* LES_GetStringEntryByHash(const unsigned int hash)
 {
-	const LES_StringEntry* const pStringTableEntry = les_pStringTable->GetStringEntryByHash(hash);
-	if (pStringTableEntry)
+	if (les_pStringTable)
 	{
-		return pStringTableEntry;
+		const LES_StringEntry* const pStringTableEntry = les_pStringTable->GetStringEntryByHash(hash);
+		if (pStringTableEntry)
+		{
+			return pStringTableEntry;
+		}
 	}
 
 	/* This is horribly slow - need hash lookup table */
@@ -164,19 +174,21 @@ int LES_SetGlobalDefinitionFile(const void* definitionFileData, const int fileDa
 		return LES_RETURN_ERROR;
 	}
 
-	les_pStringTable = les_definitionFile.GetStringTable();
-	const int numStrings = les_pStringTable->GetNumStrings();
-	les_stringTableNumStrings = numStrings;
+	const LES_StringTable* const pStringTable = les_definitionFile.GetStringTable();
+	LES_SetStringTablePtr(pStringTable);
 
-	les_pTypeData = les_definitionFile.GetTypeData();
-	const int numTypes = les_pTypeData->GetNumTypes();
-	les_typeDataNumTypes = numTypes;
+	const LES_TypeData* const pTypeData = les_definitionFile.GetTypeData();
+	LES_Type_SetTypeDataPtr(pTypeData);
 
 	return LES_RETURN_OK;
 }
 
 void LES_DebugOutputGlobalDefinnitionFile(LES_LoggerChannel* const pLogChannel)
 {
+	if (les_definitionFile.Loaded() == false)
+	{
+		return;
+	}
 	// Debug output of the definition file
 	const char* id = les_definitionFile.GetID();
 	const int numChunks = les_definitionFile.GetNumChunks();
@@ -192,22 +204,38 @@ void LES_DebugOutputGlobalDefinnitionFile(LES_LoggerChannel* const pLogChannel)
 		pLogChannel->Print("String[%d] hash:0x%X string:'%s'", i, pStringTableEntry->m_hash, pStringTableEntry->m_str);
 	}
 
-	const int numTypes = les_pTypeData->GetNumTypes();
+	const LES_TypeData* const pTypeData = les_definitionFile.GetTypeData();
+	const int numTypes = pTypeData->GetNumTypes();
 	pLogChannel->Print("numTypes:%d", numTypes);
 	//LES_LOG("m_settled:%d", m_settled);
 	for (int i = 0; i < numTypes; i++)
 	{
-		const LES_TypeEntry* const typeEntryPtr = les_pTypeData->GetTypeEntry(i);
+		const LES_TypeEntry* const typeEntryPtr = pTypeData->GetTypeEntry(i);
 		const unsigned int hash = typeEntryPtr->m_hash;
 		const unsigned int dataSize = typeEntryPtr->m_dataSize;
 		const unsigned int flags = typeEntryPtr->m_flags;
 		const int aliasedID = typeEntryPtr->m_aliasedTypeID;
 		const int numElements = typeEntryPtr->m_numElements;
+		const LES_StringEntry* const nameEntry = LES_GetStringEntryByHash(hash);
+		const char* const name = nameEntry ? nameEntry->m_str : "NULL";
+		const LES_StringEntry* const aliasedEntry = LES_GetStringEntryForID(aliasedID);
+		const char* const aliasedName = aliasedEntry ? aliasedEntry->m_str : "NULL";
 
 		char flagsDecoded[1024];
 		LES_Type_DecodeFlags(flagsDecoded, flags);
-		pLogChannel->Print("Type[%d] hash:0x%X size:%d flags:0x%X %s aliasedID:%d numElements:%d",
-			 									i, hash, dataSize, flags, flagsDecoded, aliasedID, numElements);
+		pLogChannel->Print("Type[%d] name:'%s' hash:0x%X size:%d flags:0x%X %s aliasedName:'%s' aliasedID:%d numElements:%d",
+												i, name, hash, dataSize, flags, flagsDecoded,
+												aliasedName, aliasedID, numElements);
+	}
+}
+
+void LES_DebugOutputStringEntries(LES_LoggerChannel* const pLogChannel)
+{
+	const int numStringEntries = les_numStringEntries;
+	for (int i = 0; i < numStringEntries; i++)
+	{
+		const LES_StringEntry* const pStringEntry = &les_stringEntryArray[i];
+		pLogChannel->Print("String[%d] name:'%s' hash:0x%X", i, pStringEntry->m_str, pStringEntry->m_hash);
 	}
 }
 
