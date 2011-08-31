@@ -22,19 +22,34 @@ class LES_TypeData;
 class LES_DefinitionFile
 {
 public:
+	LES_DefinitionFile();
 	LES_DefinitionFile(const void* chunkFileData, const int dataSize);
 	~LES_DefinitionFile();
+
+	int Load(const void* chunkFileData, const int dataSize);
+	int UnLoad(void);
+
+	const char* GetID(void);
+	int GetNumChunks(void);
 
 	const LES_StringTable* GetStringTable(void) const;
 	const LES_TypeData* GetTypeData(void) const;
 
 private:
+	LES_DefinitionFile(const LES_DefinitionFile& other);
+	LES_DefinitionFile& operator =(const LES_DefinitionFile& other);
+
 	const LES_ChunkFile* m_chunkFileData;
 	enum { 
 					LES_DEFINITION_STRINGTABLE = 0,
 				 	LES_DEFINITION_TYPEDATA = 1,
 			 };
 };
+
+inline LES_DefinitionFile::LES_DefinitionFile()
+{
+	m_chunkFileData = LES_NULL;
+}
 
 inline const LES_StringTable* LES_DefinitionFile::GetStringTable(void) const
 {

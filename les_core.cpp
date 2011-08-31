@@ -5,9 +5,13 @@
 #include "les_hash.h"
 #include "les_stringentry.h"
 #include "les_function.h"
+#include "les_definitionfile.h"
+#include "les_stringtable.h"
+#include "les_typedata.h"
 
 static LES_StringEntry* les_stringEntryArray = LES_NULL;
 static int les_numStringEntries = 0;
+static LES_DefinitionFile les_definitionFile;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -116,6 +120,55 @@ const LES_StringEntry* LES_GetStringEntryByHash(unsigned int hash)
 		}
 	}
 	return LES_NULL;
+}
+
+int LES_SetGlobalDefinitionFile(const void* definitionFileData, const int fileDataSize)
+{
+	if (les_definitionFile.Load(definitionFileData, fileDataSize) != LES_RETURN_OK)
+	{
+		LES_ERROR("LES_SetGlobalDefinitionFile failed to load definitionFileData");
+		return LES_RETURN_ERROR;
+	}
+
+	return LES_RETURN_OK;
+}
+
+void LES_DebugOutputGlobalDefinnitionFile(LES_LoggerChannel* const pLogChannel)
+{
+	// Debug output of the definition file
+	const char* id = les_definitionFile.GetID();
+	const int numChunks = les_definitionFile.GetNumChunks();
+	pLogChannel->Print("ID:'%c%c%c%c'", id[0], id[1], id[2], id[3]);
+	pLogChannel->Print("NumChunks:%d", numChunks);
+
+	const LES_StringTable* const pStringTable = les_definitionFile.GetStringTable();
+	const int numStrings = pStringTable->GetNumStrings();
+	pLogChannel->Print("numStrings:%d", numStrings);
+	//LES_LOG("m_settled:%d", m_settled);
+	for (int i = 0; i < numStrings; i++)
+	{
+		const LES_StringEntry* const pStringEntry = pStringTable->GetStringEntry(i);
+		pLogChannel->Print("String[%d] hash:0x%X string:'%s'", i, pStringEntry->m_hash, pStringEntry->m_str);
+	}
+
+	const LES_TypeData* const pTypeData = les_definitionFile.GetTypeData();
+	const int numTypes = pTypeData->GetNumTypes();
+	pLogChannel->Print("numTypes:%d", numTypes);
+	//LES_LOG("m_settled:%d", m_settled);
+	for (int i = 0; i < numTypes; i++)
+	{
+		const LES_TypeEntry* const typeEntryPtr = pTypeData->GetTypeEntry(i);
+		const unsigned int hash = typeEntryPtr->m_hash;
+		const unsigned int dataSize = typeEntryPtr->m_dataSize;
+		const unsigned int flags = typeEntryPtr->m_flags;
+		const int aliasedID = typeEntryPtr->m_aliasedTypeID;
+		const int numElements = typeEntryPtr->m_numElements;
+
+		char flagsDecoded[1024];
+		LES_Type_DecodeFlags(flagsDecoded, flags);
+		pLogChannel->Print("Type[%d] hash:0x%X size:%d flags:0x%X %s aliasedID:%d numElements:%d",
+			 									i, hash, dataSize, flags, flagsDecoded, aliasedID, numElements);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

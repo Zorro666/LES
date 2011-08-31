@@ -35,7 +35,12 @@ int JAKE_LoadDefinitionFile(const char* const fname)
 	char* fileData = new char[dataSize];
 	fread(fileData, sizeof(char), dataSize, fh);
 	fclose(fh);
-	LES_DefinitionFile testDefFile(fileData, dataSize);
+
+	if (LES_SetGlobalDefinitionFile(fileData, dataSize) != LES_RETURN_OK)
+	{
+		LES_FATAL_ERROR("LES_SetGlobalDefinitionFile '%s' Size:%d failed", fname, dataSize);
+	}
+
 	delete[] fileData;
 
 	return LES_RETURN_OK;
@@ -78,6 +83,7 @@ int main(const int argc, const char* const argv[])
 	{
 		LES_TestSetup();
 		LES_jakeInit(666, 123);
+		LES_DebugOutputGlobalDefinnitionFile(LES_Logger::GetDefaultChannel(LES_Logger::CHANNEL_LOG));
 	}
 
 	LES_Logger::SetChannelOutputFileName(LES_Logger::CHANNEL_WARNING, "warning.txt");
