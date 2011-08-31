@@ -131,7 +131,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 				const int memberNameID = structMember->m_nameID;
 				const int memberTypeID = structMember->m_typeID;
 				returnCode = DecodeSingle(functionParameterData, i, memberNameID, memberTypeID, parameterIndex, newDepth);
-				if (returnCode == LES_RETURN_ERROR)
+				if (returnCode != LES_RETURN_OK)
 				{
 					return LES_RETURN_ERROR;
 				}
@@ -152,7 +152,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		for (int i = 0; i < numElements; i++)
 		{
 			returnCode = DecodeSingle(functionParameterData, i, elementNameID, elementTypeID, parameterIndex, newDepth);
-			if (returnCode == LES_RETURN_ERROR)
+			if (returnCode != LES_RETURN_OK)
 			{
 				return LES_RETURN_ERROR;
 			}
@@ -207,7 +207,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		return LES_RETURN_ERROR;
 	}
 	int errorCode = functionParameterData->Read(typeEntry, valuePtr);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_WARNING("DecodeSingle Read failed for parameter[%d]:%s;", parameterIndex, nameStr);
 		return LES_RETURN_ERROR;
@@ -443,7 +443,7 @@ int LES_FunctionDefinition::Decode(const LES_FunctionParameterData* const functi
 		const int nameID = functionParameterPtr->m_nameID;
 		const int typeID = functionParameterPtr->m_typeID;
 		returnCode = DecodeSingle(functionParameterData, i, nameID, typeID, -1, 0);
-		if (returnCode == LES_RETURN_ERROR)
+		if (returnCode != LES_RETURN_OK)
 		{
 			return LES_RETURN_ERROR;
 		}

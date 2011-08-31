@@ -220,7 +220,7 @@ int LES_FunctionAddParam(const char* const type, const char* const name, const i
 		LES_WARNING("'%s' : functionParameterData is NULL", functionTempData->functionName);
 		return LES_RETURN_ERROR;
 	}
-	if (functionParameterData->Write(parameterTypeStringEntry, data, functionParameterPtr->m_mode) == LES_RETURN_ERROR)
+	if (functionParameterData->Write(parameterTypeStringEntry, data, functionParameterPtr->m_mode) != LES_RETURN_OK)
 	{
 		/* ERROR: during AddParam */
 		LES_WARNING("'%s' : Write parameter:'%s' type:'%s' failed", functionTempData->functionName, name, type);

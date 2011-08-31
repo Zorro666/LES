@@ -363,7 +363,7 @@ static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_
 	typeEntry = LES_GetStringEntry("int");
 	int value_0;
 	errorCode = parameterData->Read(typeEntry, (void*)&value_0);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for input_0", testFuncName);
 		return;
@@ -376,7 +376,7 @@ static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_
 	typeEntry = LES_GetStringEntry("short");
 	short value_1;
 	errorCode = parameterData->Read(typeEntry, (void*)&value_1);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for input_1", testFuncName);
 		return;
@@ -389,7 +389,7 @@ static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_
 	typeEntry = LES_GetStringEntry("char");
 	char value_2;
 	errorCode = parameterData->Read(typeEntry, (void*)&value_2);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for input_2", testFuncName);
 		return;
@@ -402,7 +402,7 @@ static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_
 	typeEntry = LES_GetStringEntry("float");
 	float value_3;
 	errorCode = parameterData->Read(typeEntry, (void*)&value_3);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for input_3", testFuncName);
 		return;
@@ -415,7 +415,7 @@ static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_
 	typeEntry = LES_GetStringEntry("int*");
 	int value_4;
 	errorCode = parameterData->Read(typeEntry, (void*)&value_4);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for input_4", testFuncName);
 		return;
@@ -455,7 +455,7 @@ static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short
 	typeEntry = LES_GetStringEntry("unsigned int*");
 	unsigned int value_0;
 	errorCode = parameterData->Read(typeEntry, (void*)&value_0);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for output_0", testFuncName);
 		return;
@@ -469,7 +469,7 @@ static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short
 	typeEntry = LES_GetStringEntry("unsigned short*");
 	unsigned short value_1;
 	errorCode = parameterData->Read(typeEntry, (void*)&value_1);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for output_1", testFuncName);
 		return;
@@ -483,7 +483,7 @@ static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short
 	typeEntry = LES_GetStringEntry("unsigned char*");
 	unsigned char value_2;
 	errorCode = parameterData->Read(typeEntry, (void*)&value_2);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for output_2", testFuncName);
 		return;
@@ -497,7 +497,7 @@ static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short
 	typeEntry = LES_GetStringEntry("float*");
 	float value_3;
 	errorCode = parameterData->Read(typeEntry, (void*)&value_3);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for output_3", testFuncName);
 		return;
@@ -545,7 +545,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	typeEntry = LES_GetStringEntry("int");
 	int input_value_0;
 	errorCode = parameterData->Read(typeEntry, (void*)&input_value_0);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for input_0", testFuncName);
 		return;
@@ -559,7 +559,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	typeEntry = LES_GetStringEntry("unsigned int*");
 	unsigned int output_value_0;
 	errorCode = parameterData->Read(typeEntry, (void*)&output_value_0);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for output_0", testFuncName);
 		return;
@@ -573,7 +573,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	typeEntry = LES_GetStringEntry("short");
 	short input_value_1;
 	errorCode = parameterData->Read(typeEntry, (void*)&input_value_1);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for input_1", testFuncName);
 		return;
@@ -587,7 +587,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	typeEntry = LES_GetStringEntry("unsigned short*");
 	unsigned short output_value_1;
 	errorCode = parameterData->Read(typeEntry, (void*)&output_value_1);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for output_1", testFuncName);
 		return;
@@ -601,7 +601,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	typeEntry = LES_GetStringEntry("char");
 	char input_value_2;
 	errorCode = parameterData->Read(typeEntry, (void*)&input_value_2);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for input_2", testFuncName);
 		return;
@@ -615,7 +615,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	typeEntry = LES_GetStringEntry("unsigned char*");
 	unsigned char output_value_2;
 	errorCode = parameterData->Read(typeEntry, (void*)&output_value_2);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for output_2", testFuncName);
 		return;
@@ -629,7 +629,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	typeEntry = LES_GetStringEntry("float");
 	float input_value_3;
 	errorCode = parameterData->Read(typeEntry, (void*)&input_value_3);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for input_3", testFuncName);
 		return;
@@ -643,7 +643,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	typeEntry = LES_GetStringEntry("float*");
 	float output_value_3;
 	errorCode = parameterData->Read(typeEntry, (void*)&output_value_3);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for output_3", testFuncName);
 		return;
@@ -657,7 +657,7 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	typeEntry = LES_GetStringEntry("int*");
 	int input_value_4;
 	errorCode = parameterData->Read(typeEntry, (void*)&input_value_4);
-	if (errorCode == LES_RETURN_ERROR)
+	if (errorCode != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Read failed for input_4", testFuncName);
 		return;
@@ -720,7 +720,7 @@ static int LES_Test_GenericDecodeHelper(const char* const testFuncName, LES_Func
 		return LES_RETURN_ERROR;
 	}
 
-	if (functionDefinitionPtr->Decode(parameterData) == LES_RETURN_ERROR)
+	if (functionDefinitionPtr->Decode(parameterData) != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Decode failed", testFuncName);
 		return LES_RETURN_ERROR;

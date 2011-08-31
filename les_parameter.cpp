@@ -196,7 +196,7 @@ int LES_FunctionParameterData::WriteInternal(const LES_StringEntry* const typeSt
 #if LES_PARAMETER_DEBUG
 		LES_LOG("WriteItem[%d] %p 0x%X", element, voidParameterDataPtr, *itemParameterDataPtr);
 #endif // #if LES_PARAMETER_DEBUG
-		if (retError == LES_RETURN_ERROR)
+		if (retError != LES_RETURN_OK)
 		{
 			return LES_RETURN_ERROR;
 		}
@@ -318,7 +318,7 @@ int LES_FunctionParameterData::WriteItem(const LES_StringEntry* const typeString
 								memberDataPtr, structMember->m_dataSize);
 #endif // #if LES_PARAMETER_DEBUG
 			returnCode = WriteInternal(memberTypeStringEntry, memberTypeEntryPtr, paramDataPtr);
-			if (returnCode == LES_RETURN_ERROR)
+			if (returnCode != LES_RETURN_OK)
 			{
 				return LES_RETURN_ERROR;
 			}

@@ -37,14 +37,14 @@ LES_DefinitionFile::LES_DefinitionFile(const void* chunkFileData, const int data
 	}
 
 	LES_StringTable* const pStringTable = (LES_StringTable* const)GetStringTable();
-	if (pStringTable->Settle() == LES_RETURN_ERROR)
+	if (pStringTable->Settle() != LES_RETURN_OK)
 	{
 		LES_ERROR("LES_DefinitionFile::LES_StringTable::Settle() failed");
 		return;
 	}
 
 	LES_TypeData* const pTypeData = (LES_TypeData* const)GetTypeData();
-	if (pTypeData->Settle() == LES_RETURN_ERROR)
+	if (pTypeData->Settle() != LES_RETURN_OK)
 	{
 		LES_ERROR("LES_DefinitionFile::LES_TypeData::Settle() failed");
 		return;
