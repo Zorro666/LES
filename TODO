@@ -1,8 +1,6 @@
 High Priority:
-CORE: debug output typeNames and aliasedNames -> use global string entry functions
 CORE: link type system to global TypeData -> dump output, AddType() for tests should fail
-CORE: use loaded definitions first then use the global data
-CORE: C++ API/classes to use the chunked data file, switch the type data system to use it, use file 1st, fallback to global in the interim
+CORE: switch the type data system to use it, use file 1st, fallback to global in the interim
 CORE: fixed size typedefs: int64, uint64, float32
 
 Medium Priority:
