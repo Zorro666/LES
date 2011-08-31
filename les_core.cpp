@@ -11,7 +11,14 @@
 
 static LES_StringEntry* les_stringEntryArray = LES_NULL;
 static int les_numStringEntries = 0;
+
 static LES_DefinitionFile les_definitionFile;
+
+static const LES_StringTable* les_pStringTable = LES_NULL;
+static int les_stringTableNumStrings = 0;
+
+static const LES_TypeData* les_pTypeData = LES_NULL;
+static int les_typeDataNumTypes = 0;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -21,15 +28,21 @@ static LES_DefinitionFile les_definitionFile;
 
 static int LES_GetStringEntrySlow(const LES_Hash hash, const char* const str)
 {
-	/* This is horribly slow - need hash lookup table */
-	for (int i=0; i<les_numStringEntries; i++)
+	const int index = les_pStringTable->GetStringEntrySlow(hash, str);
+	if (index >=0)
 	{
-		const LES_StringEntry* const stringEntryPtr = &les_stringEntryArray[i];
-		if (stringEntryPtr->m_hash == hash)
+		return index;
+	}
+	/* This is horribly slow - need hash lookup table */
+	const int numStrings = les_numStringEntries;
+	for (int i = 0; i < numStrings; i++)
+	{
+		const LES_StringEntry* const pStringEntry = &les_stringEntryArray[i];
+		if (pStringEntry->m_hash == hash)
 		{
-			if (strcmp(stringEntryPtr->m_str, str) == 0)
+			if (strcmp(pStringEntry->m_str, str) == 0)
 			{
-				return i;
+				return (i + les_stringTableNumStrings);
 			}
 		}
 	}
@@ -40,17 +53,18 @@ static int LES_GetStringEntrySlow(const LES_Hash hash, const char* const str)
 static int LES_AddStringEntry(const LES_Hash hash, const char* const str)
 {
 	int index = LES_GetStringEntrySlow(hash, str);
-	if ((index >= 0) && (index < les_numStringEntries))
+	if (index >= 0)
 	{
 		return index;
 	}
 
 	/* Not found so add it */
 	index = les_numStringEntries;
-	LES_StringEntry* const stringEntryPtr = &les_stringEntryArray[index];
-	stringEntryPtr->m_hash = hash;
-	stringEntryPtr->m_str = str;
+	LES_StringEntry* const pStringEntry = &les_stringEntryArray[index];
+	pStringEntry->m_hash = hash;
+	pStringEntry->m_str = str;
 	les_numStringEntries++;
+	index += les_stringTableNumStrings;
 
 	return index;
 }
@@ -92,12 +106,19 @@ void LES_Shutdown(void)
 
 const LES_StringEntry* LES_GetStringEntryForID(const int id)
 {
-	if ((id < 0) || (id >= les_numStringEntries))
+	if (id < 0)
 	{
 		return LES_NULL;
 	}
-
-	const LES_StringEntry* const stringEntry = &les_stringEntryArray[id];
+	const int index = (id - les_stringTableNumStrings);
+	if (index < 0)
+	{
+		// Get it from definition file string table
+		const LES_StringEntry* const stringEntry = les_pStringTable->GetStringEntry(id);
+		return stringEntry;
+	}
+	// Get it from internal global list
+	const LES_StringEntry* const stringEntry = &les_stringEntryArray[index];
 	return stringEntry;
 }
 
@@ -108,15 +129,22 @@ const LES_StringEntry* LES_GetStringEntry(const char* const str)
 	return LES_GetStringEntryForID(index);
 }
 
-const LES_StringEntry* LES_GetStringEntryByHash(unsigned int hash)
+const LES_StringEntry* LES_GetStringEntryByHash(const unsigned int hash)
 {
-	/* This is horribly slow - need hash lookup table */
-	for (int i=0; i<les_numStringEntries; i++)
+	const LES_StringEntry* const pStringTableEntry = les_pStringTable->GetStringEntryByHash(hash);
+	if (pStringTableEntry)
 	{
-		const LES_StringEntry* const stringEntryPtr = &les_stringEntryArray[i];
-		if (stringEntryPtr->m_hash == hash)
+		return pStringTableEntry;
+	}
+
+	/* This is horribly slow - need hash lookup table */
+	const int numStrings = les_numStringEntries;
+	for (int i = 0; i < numStrings; i++)
+	{
+		const LES_StringEntry* const pStringEntry = &les_stringEntryArray[i];
+		if (pStringEntry->m_hash == hash)
 		{
-			return stringEntryPtr;
+			return pStringEntry;
 		}
 	}
 	return LES_NULL;
@@ -124,11 +152,25 @@ const LES_StringEntry* LES_GetStringEntryByHash(unsigned int hash)
 
 int LES_SetGlobalDefinitionFile(const void* definitionFileData, const int fileDataSize)
 {
+	if (les_numStringEntries != 0)
+	{
+		LES_ERROR("LES_SetGlobalDefinitionFile string entries been added before loading global definition file");
+		return LES_RETURN_ERROR;
+	}
+
 	if (les_definitionFile.Load(definitionFileData, fileDataSize) != LES_RETURN_OK)
 	{
 		LES_ERROR("LES_SetGlobalDefinitionFile failed to load definitionFileData");
 		return LES_RETURN_ERROR;
 	}
+
+	les_pStringTable = les_definitionFile.GetStringTable();
+	const int numStrings = les_pStringTable->GetNumStrings();
+	les_stringTableNumStrings = numStrings;
+
+	les_pTypeData = les_definitionFile.GetTypeData();
+	const int numTypes = les_pTypeData->GetNumTypes();
+	les_typeDataNumTypes = numTypes;
 
 	return LES_RETURN_OK;
 }
@@ -141,23 +183,21 @@ void LES_DebugOutputGlobalDefinnitionFile(LES_LoggerChannel* const pLogChannel)
 	pLogChannel->Print("ID:'%c%c%c%c'", id[0], id[1], id[2], id[3]);
 	pLogChannel->Print("NumChunks:%d", numChunks);
 
-	const LES_StringTable* const pStringTable = les_definitionFile.GetStringTable();
-	const int numStrings = pStringTable->GetNumStrings();
+	const int numStrings = les_pStringTable->GetNumStrings();
 	pLogChannel->Print("numStrings:%d", numStrings);
 	//LES_LOG("m_settled:%d", m_settled);
 	for (int i = 0; i < numStrings; i++)
 	{
-		const LES_StringEntry* const pStringEntry = pStringTable->GetStringEntry(i);
-		pLogChannel->Print("String[%d] hash:0x%X string:'%s'", i, pStringEntry->m_hash, pStringEntry->m_str);
+		const LES_StringEntry* const pStringTableEntry = les_pStringTable->GetStringEntry(i);
+		pLogChannel->Print("String[%d] hash:0x%X string:'%s'", i, pStringTableEntry->m_hash, pStringTableEntry->m_str);
 	}
 
-	const LES_TypeData* const pTypeData = les_definitionFile.GetTypeData();
-	const int numTypes = pTypeData->GetNumTypes();
+	const int numTypes = les_pTypeData->GetNumTypes();
 	pLogChannel->Print("numTypes:%d", numTypes);
 	//LES_LOG("m_settled:%d", m_settled);
 	for (int i = 0; i < numTypes; i++)
 	{
-		const LES_TypeEntry* const typeEntryPtr = pTypeData->GetTypeEntry(i);
+		const LES_TypeEntry* const typeEntryPtr = les_pTypeData->GetTypeEntry(i);
 		const unsigned int hash = typeEntryPtr->m_hash;
 		const unsigned int dataSize = typeEntryPtr->m_dataSize;
 		const unsigned int flags = typeEntryPtr->m_flags;

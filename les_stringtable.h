@@ -27,6 +27,9 @@ public:
 	const LES_StringTableEntry* GetStringTableEntry(const int index) const;
 	const LES_StringEntry* GetStringEntry(const int index) const;
 
+	int GetStringEntrySlow(const LES_Hash hash, const char* const str) const;
+	const LES_StringEntry* GetStringEntryByHash(const LES_Hash hash) const;
+
 	friend class LES_DefinitionFile;
 private:
 	int Settle(void);

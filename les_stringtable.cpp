@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "les_stringtable.h"
 #include "les_logger.h"
 
@@ -33,5 +35,38 @@ int LES_StringTable::Settle(void)
 	m_settled = 1;
 
 	return LES_RETURN_OK;
+}
+
+int LES_StringTable::GetStringEntrySlow(const LES_Hash hash, const char* const str) const
+{
+	/* This is horribly slow - need hash lookup table */
+	const int numStrings = m_numStrings;
+	for (int i = 0; i < numStrings; i++)
+	{
+		const LES_StringEntry* const pStringEntry = GetStringEntry(i);
+		if (pStringEntry->m_hash == hash)
+		{
+			if (strcmp(pStringEntry->m_str, str) == 0)
+			{
+				return i;
+			}
+		}
+	}
+	return -1;
+}
+
+const LES_StringEntry* LES_StringTable::GetStringEntryByHash(const LES_Hash hash) const
+{
+	/* This is horribly slow - need hash lookup table */
+	const int numStrings = m_numStrings;
+	for (int i = 0; i < numStrings; i++)
+	{
+		const LES_StringEntry* const pStringEntry = GetStringEntry(i);
+		if (pStringEntry->m_hash == hash)
+		{
+			return pStringEntry;
+		}
+	}
+	return LES_NULL;
 }
 
