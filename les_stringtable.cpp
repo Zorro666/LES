@@ -11,8 +11,6 @@ int LES_StringTable::Settle(void)
 	// Convert from little endian first
 	m_numStrings = fromLittleEndian32(m_numStrings);
 	m_settled = fromLittleEndian32(m_settled);
-	LES_LOG("m_numStrings:%d", m_numStrings);
-	LES_LOG("m_settled:%d", m_settled);
 
 	const int numStrings = m_numStrings;
 	for (int i = 0; i < numStrings; i++)
@@ -31,7 +29,6 @@ int LES_StringTable::Settle(void)
 		const char* const pString = pStringTableStart + offset;
 		LES_StringEntry* const pStringEntry = (LES_StringEntry* const)(&m_stringTableEntries[i]);
 		pStringEntry->m_str = pString;
-		LES_LOG("String[%d] hash:0x%X offset:%d string:'%s'", i, pStringEntry->m_hash, offset, pStringEntry->m_str);
 	}
 	m_settled = 1;
 
