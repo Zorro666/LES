@@ -2283,5 +2283,7 @@ struct TestStruct66
 #endif // #if 0
 	LES_LoggerChannel* const typeDebugChan = LES_Logger::CreateChannel("TypeDebug", "", "typeDebug.txt", LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT|LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT);
 	LES_DebugOutputTypes(typeDebugChan);
+
+	LES_DebugOutputStringEntries(LES_Logger::GetDefaultChannel(LES_Logger::CHANNEL_LOG));
 }
 
