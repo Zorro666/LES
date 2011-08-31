@@ -2,6 +2,7 @@
 
 import ctypes
 import les_logger
+import sys
 
 def GenerateHashCaseSensitive(string):
 	hashValue = int(0)
@@ -36,6 +37,9 @@ def runTest():
 
 	if hash3 != realHash3:
 		les_logger.Error("hash3 != realHash3")
+
+	for arg in sys.argv[1:]:
+		les_logger.Log("Hash[%s]= 0x%X", arg, GenerateHashCaseSensitive(arg))
 
 if __name__ == '__main__':
 	runTest()
