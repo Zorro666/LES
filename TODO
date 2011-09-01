@@ -1,14 +1,13 @@
 High Priority:
-CORE: fixed size typedefs: int64, uint64, float32
 
 Medium Priority:
-STRUCT: the struct size shouldn't be required -C++ set it to 0 and see what happens
 SERVER: up and running ready for client to connect
 CLIENT: connect to server
 
 CLIENT: use binary version of string table and type data from over the network
 SERVER: add structs, function defintiions to binary data and XML parsing
 CLIENT: use binary version of definition data
+PYTHON: somehow the struct size could be computed on the server size 
 
 SERVER: at some point test and implement endian swapping for the binary data
 CLIENT: test endian swapped binary data
