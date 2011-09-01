@@ -3,7 +3,7 @@
 
 #include "les_base.h"
 
-typedef unsigned int LES_Hash;
+typedef LES_uint LES_Hash;
 
 #define LES_INVALID_HASH (LES_Hash)(-1U);
 
