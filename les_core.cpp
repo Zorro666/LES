@@ -251,3 +251,9 @@ int LES_AddStringEntry(const char* const str)
 	return LES_AddStringEntry(hash, str);
 }
 
+int LES_GetStringEntryID(const LES_Hash hash, const char* const str)
+{
+	const int index = LES_GetStringEntrySlow(hash, str);
+	return index;
+}
+

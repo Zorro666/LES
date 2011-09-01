@@ -27,6 +27,7 @@ LES_Hash LES_TypeEntry::s_ucharHash = LES_GenerateHashCaseSensitive("unsigned ch
 
 LES_Hash LES_TypeEntry::s_floatHash = LES_GenerateHashCaseSensitive("float");
 
+extern int LES_GetStringEntryID(const LES_Hash hash, const char* const str);
 extern int LES_AddStringEntry(const char* const str);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -428,7 +429,7 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 	LES_AddStringEntry(name);
 
 	//TODO: this is horrible - using AddStringEntry just to get an existing ID
-	const int aliasedTypeID = LES_AddStringEntry(aliasedName);
+	const int aliasedTypeID = LES_GetStringEntryID(aliasedHash, aliasedName);
 #if LES_TYPE_DEBUG
 	LES_LOG("aliasedTypeID:%d name:'%s' aliasedName:'%s'", aliasedTypeID, name, aliasedName);
 #endif // #if LES_TYPE_DEBUG
