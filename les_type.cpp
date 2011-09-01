@@ -265,10 +265,10 @@ int LES_TypeEntry::ComputeAlignment(void) const
 
 void LES_DebugOutputTypes(LES_LoggerChannel* const pLogChannel)
 {
-	const int numTypes = les_numTypeEntries;
+	const int numTypes = les_typeDataNumTypes + les_numTypeEntries;
 	for (int i = 0; i < numTypes; i++)
 	{
-		const LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[i];
+		const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntryForID(i);
 		const LES_StringEntry* nameEntry = LES_GetStringEntryByHash(typeEntryPtr->m_hash);
 		const char* const name = nameEntry ? nameEntry->m_str : "NULL";
 		const unsigned int dataSize = typeEntryPtr->m_dataSize;

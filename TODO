@@ -1,6 +1,5 @@
 High Priority:
-CORE: AddType() should fail if pTypeData is not NULL
-CORE: debug output of strings & types should output data from definition file & internal arrays
+CORE: debug output of strings should output data from definition file & internal arrays
 CORE: string debug output should go to named file
 CORE: fixed size typedefs: int64, uint64, float32
 
