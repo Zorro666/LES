@@ -59,6 +59,7 @@ bool LES_TestFunctionEnd(LES_FunctionDefinition* const functionDefinitionPtr, LE
 
 
 #define LES_TEST_ADD_TYPE_EX(TYPE, SIZE, FLAGS, ALIASED_TYPE, NUM_ELEMENTS) \
+	if (1) \
 	{\
 		if (LES_AddType(#TYPE, SIZE, FLAGS, #ALIASED_TYPE, NUM_ELEMENTS) == LES_RETURN_ERROR) \
 		{\

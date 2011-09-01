@@ -496,25 +496,25 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		if (typeEntryPtr->m_dataSize != dataSize)
 		{
 			LES_WARNING("AddType '%s' hash 0x%X already in list and dataSize doesn't match Existing:%d New:%d",
-							name, hash, typeEntryPtr->m_dataSize, dataSize);
+									name, hash, typeEntryPtr->m_dataSize, dataSize);
 			return LES_RETURN_ERROR;
 		}
 		if (typeEntryPtr->m_flags != flags)
 		{
 			LES_WARNING("AddType '%s' hash 0x%X already in list and flags doesn't match Existing:0x%X New:0x%X",
-							name, hash, typeEntryPtr->m_flags, flags);
+									name, hash, typeEntryPtr->m_flags, flags);
 			return LES_RETURN_ERROR;
 		}
 		if (typeEntryPtr->m_aliasedTypeID != aliasedTypeID)
 		{
 			LES_WARNING("AddType '%s' hash 0x%X already in list and aliasedTypeID doesn't match Existing:%d New:%d",
-							name, hash, typeEntryPtr->m_aliasedTypeID, aliasedTypeID);
+									name, hash, typeEntryPtr->m_aliasedTypeID, aliasedTypeID);
 			return LES_RETURN_ERROR;
 		}
 		if (typeEntryPtr->m_numElements != numElements)
 		{
 			LES_WARNING("AddType '%s' hash 0x%X already in list and numElements doesn't match Existing:%d New:%d",
-							name, hash, typeEntryPtr->m_numElements, numElements);
+									name, hash, typeEntryPtr->m_numElements, numElements);
 			return LES_RETURN_ERROR;
 		}
 	}
