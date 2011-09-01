@@ -12,6 +12,11 @@ typedef unsigned short LES_uint16;
 typedef signed int LES_int32;
 typedef unsigned int LES_uint32;
 
+typedef signed long long int LES_int64;
+typedef unsigned long long int LES_uint64;
+
+typedef float LES_float32;
+
 #define LES_NULL (0)
 
 #define LES_RETURN_OK (1)
