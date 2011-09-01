@@ -425,25 +425,9 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		}
 	}
 
-	//TODO: do not like this being called automatically
-	LES_AddStringEntry(name);
-
-	//TODO: this is horrible - using AddStringEntry just to get an existing ID
-	const int aliasedTypeID = LES_GetStringEntryID(aliasedHash, aliasedName);
-#if LES_TYPE_DEBUG
-	LES_LOG("aliasedTypeID:%d name:'%s' aliasedName:'%s'", aliasedTypeID, name, aliasedName);
-#endif // #if LES_TYPE_DEBUG
-
 	int index = LES_GetTypeEntrySlow(hash);
 	if (index < 0)
 	{
-		/* Not found so make a new type and run error checks on it - needed to make some tests work */
-		LES_TypeEntry typeEntry;
-		typeEntry.m_dataSize = dataSize;
-		typeEntry.m_flags= flags;
-		typeEntry.m_aliasedTypeID = aliasedTypeID;
-		typeEntry.m_numElements = numElements;
-
 		if (isArray)
 		{
 			// Array types must be aliased to something
@@ -483,16 +467,30 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 			return LES_RETURN_ERROR;
 		}
 
-		/* Add the new type */
+		LES_AddStringEntry(name);
+		const int aliasedTypeID = LES_GetStringEntryID(aliasedHash, aliasedName);
+#if LES_TYPE_DEBUG
+		LES_LOG("aliasedTypeID:%d name:'%s' aliasedName:'%s'", aliasedTypeID, name, aliasedName);
+#endif // #if LES_TYPE_DEBUG
+
+		// Add the new type
 		index = les_numTypeEntries;
-		LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[index];
-		*typeEntryPtr = typeEntry;
+		LES_TypeEntry* const pTypeEntry = &les_typeEntryArray[index];
+		pTypeEntry->m_dataSize = dataSize;
+		pTypeEntry->m_flags= flags;
+		pTypeEntry->m_aliasedTypeID = aliasedTypeID;
+		pTypeEntry->m_numElements = numElements;
 
 		index += les_typeDataNumTypes;
 		les_numTypeEntries++;
 	}
 	else
 	{
+		const int aliasedTypeID = LES_GetStringEntryID(aliasedHash, aliasedName);
+#if LES_TYPE_DEBUG
+		LES_LOG("aliasedTypeID:%d name:'%s' aliasedName:'%s'", aliasedTypeID, name, aliasedName);
+#endif // #if LES_TYPE_DEBUG
+
 		/* Check the type data matches */
 		const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntryForID(index);
 		if (typeEntryPtr->m_dataSize != dataSize)
