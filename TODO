@@ -1,6 +1,7 @@
 High Priority:
-CORE: link type system to global TypeData -> dump output, AddType() for tests should fail
-CORE: switch the type data system to use it, use file 1st, fallback to global in the interim
+CORE: AddType() should fail if pTypeData is not NULL
+CORE: debug output of strings & types should output data from definition file & internal arrays
+CORE: string debug output should go to named file
 CORE: fixed size typedefs: int64, uint64, float32
 
 Medium Priority:
