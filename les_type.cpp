@@ -431,20 +431,17 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 	int index = LES_GetTypeEntrySlow(hash);
 	if (index < 0)
 	{
-		//LES_LOG("NOT FOUND 0x%X", hash);
-		/* Not found so add it */
-		index = les_numTypeEntries;
-		LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[index];
-		typeEntryPtr->m_hash = hash;
-		typeEntryPtr->m_dataSize = dataSize;
-		typeEntryPtr->m_flags = flags;
-		typeEntryPtr->m_aliasedTypeID = aliasedTypeID;
-		typeEntryPtr->m_numElements = numElements;
+		/* Not found so make a new type and run error checks on it - needed to make some tests work */
+		LES_TypeEntry typeEntry;
+		typeEntry.m_dataSize = dataSize;
+		typeEntry.m_flags= flags;
+		typeEntry.m_aliasedTypeID = aliasedTypeID;
+		typeEntry.m_numElements = numElements;
 
 		if (isArray)
 		{
 			// Array types must be aliased to something
-			if ((typeEntryPtr->m_flags & LES_TYPE_ALIAS) == 0)
+			if ((flags & LES_TYPE_ALIAS) == 0)
 			{
 				LES_WARNING("AddType '%s' hash 0x%X is an array with %d elements but not aliased, arrays must be aliased",
 										name, hash, numElements);
@@ -459,20 +456,31 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 			const LES_TypeEntry* const aliasedTypeEntryPtr = LES_GetTypeEntryForID(aliasedIndex);
 			const unsigned int aliasedFlags = aliasedTypeEntryPtr->m_flags;
 			// Arrays of non-references must not be aliased to pointer or reference
-			if (((typeEntryPtr->m_flags & LES_TYPE_REFERENCE) == 0) && ((aliasedFlags & LES_TYPE_POINTER) || (aliasedFlags & LES_TYPE_REFERENCE)))
+			if (((flags & LES_TYPE_REFERENCE) == 0) && ((aliasedFlags & LES_TYPE_POINTER) || (aliasedFlags & LES_TYPE_REFERENCE)))
 			{
 				LES_WARNING("AddType '%s' hash 0x%X non-reference array types must be aliased to a non-pointer, non-reference type Alias:'%s' Flags:0x%X", 
 										name, hash, aliasedName, aliasedFlags);
 				return LES_RETURN_ERROR;
 			}
 			// Arrays of references must be aliased to pointer 
-			if (((typeEntryPtr->m_flags & LES_TYPE_REFERENCE) == 1) && (((aliasedFlags & LES_TYPE_POINTER) == 0) || (aliasedFlags & LES_TYPE_REFERENCE)))
+			if (((flags & LES_TYPE_REFERENCE) == 1) && (((aliasedFlags & LES_TYPE_POINTER) == 0) || (aliasedFlags & LES_TYPE_REFERENCE)))
 			{
 				LES_WARNING("AddType '%s' hash 0x%X non-reference array types must be aliased to a pointer type Alias:'%s' Flags:0x%X", 
 										name, hash, aliasedName, aliasedFlags);
 				return LES_RETURN_ERROR;
 			}
 		}
+
+		if (les_pTypeData)
+		{
+			LES_ERROR("AddType '%s' hash 0x%X not found in type data definition file", name, hash);
+			return LES_RETURN_ERROR;
+		}
+
+		/* Add the new type */
+		index = les_numTypeEntries;
+		LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[index];
+		*typeEntryPtr = typeEntry;
 
 		index += les_typeDataNumTypes;
 		les_numTypeEntries++;
