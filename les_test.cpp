@@ -2285,5 +2285,8 @@ struct TestStruct66
 	LES_DebugOutputTypes(typeDebugChan);
 
 	LES_DebugOutputStringEntries(LES_Logger::GetDefaultChannel(LES_Logger::CHANNEL_LOG));
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
+	LES_TEST_ADD_TYPE_EX(CantAddNewTypes, 1, 0, int, 0);
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 }
 
