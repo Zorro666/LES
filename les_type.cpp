@@ -386,21 +386,6 @@ void LES_TypeShutdown(void)
 int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int inputFlags, 
 								const char* const aliasedName, const int numElements)
 {
-	LES_AddStringEntry(name);
-
-	const LES_StringEntry* const aliasedEntryPtr = LES_GetStringEntry(aliasedName);
-	if (aliasedEntryPtr == LES_NULL)
-	{
-		LES_WARNING("AddType '%s' : aliasedEntry '%s' not found", name, aliasedName);
-		return LES_RETURN_ERROR;
-	}
-	const int aliasedTypeID = LES_AddStringEntry(aliasedName);
-#if LES_TYPE_DEBUG
-	LES_LOG("aliasedTypeID:%d name:'%s' aliasedName:'%s'", aliasedTypeID, name, aliasedName);
-#endif // #if LES_TYPE_DEBUG
-
-	const LES_Hash hash = LES_GenerateHashCaseSensitive(name);
-
 	unsigned int flags = inputFlags;
 	if (numElements >= 1)
 	{
@@ -411,6 +396,8 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		flags |= LES_TYPE_ARRAY;
 	}
 	const bool isArray = flags & LES_TYPE_ARRAY;
+
+	const LES_Hash hash = LES_GenerateHashCaseSensitive(name);
 	const LES_Hash aliasedHash = LES_GenerateHashCaseSensitive(aliasedName);
 	if (aliasedHash != hash)
 	{
@@ -427,6 +414,24 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 			return LES_RETURN_ERROR;
 		}
 	}
+	if (flags & LES_TYPE_ALIAS)
+	{
+		const LES_StringEntry* const aliasedEntryPtr = LES_GetStringEntry(aliasedName);
+		if (aliasedEntryPtr == LES_NULL)
+		{
+			LES_WARNING("AddType '%s' : aliasedEntry '%s' not found", name, aliasedName);
+			return LES_RETURN_ERROR;
+		}
+	}
+
+	//TODO: do not like this being called automatically
+	LES_AddStringEntry(name);
+
+	//TODO: this is horrible - using AddStringEntry just to get an existing ID
+	const int aliasedTypeID = LES_AddStringEntry(aliasedName);
+#if LES_TYPE_DEBUG
+	LES_LOG("aliasedTypeID:%d name:'%s' aliasedName:'%s'", aliasedTypeID, name, aliasedName);
+#endif // #if LES_TYPE_DEBUG
 
 	int index = LES_GetTypeEntrySlow(hash);
 	if (index < 0)
