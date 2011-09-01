@@ -6,12 +6,11 @@
 
 struct LES_StructMember
 {
-	LES_Hash m_hash;
-	int m_nameID;
-	int m_typeID;
-
-	int m_dataSize;
-	int m_alignmentPadding;
+	LES_uint32 m_hash;
+	LES_int32 m_nameID;
+	LES_int32 m_typeID;
+	LES_int32 m_dataSize;
+	LES_int32 m_alignmentPadding;
 };
 
 class LES_StructDefinition
@@ -29,11 +28,10 @@ public:
 	const LES_StructMember* GetMember(const LES_Hash nameHash) const;
 
 private:
-	int m_nameID;
+	LES_int32 m_nameID;
 
-	int m_numMembers;
+	LES_int32 m_numMembers;
 	const LES_StructMember* m_members;
-	mutable bool m_ownsMembersMemory;
 };
 
 const LES_StructDefinition* LES_GetStructDefinition(const LES_Hash nameHash);

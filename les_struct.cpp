@@ -40,7 +40,6 @@ LES_StructDefinition::LES_StructDefinition(void)
 	m_nameID = -1;
 	m_numMembers = 0;
 	m_members = LES_NULL;
-	m_ownsMembersMemory = false;
 }
 
 LES_StructDefinition::LES_StructDefinition(const LES_StructDefinition& other)
@@ -52,11 +51,14 @@ LES_StructDefinition& LES_StructDefinition::operator=(const LES_StructDefinition
 {
 	m_nameID = other.m_nameID;
 
-	m_numMembers = other.m_numMembers;
-	m_members = other.m_members;
-	m_ownsMembersMemory = true;
-	other.m_ownsMembersMemory = false;
-
+	const int numMembers = other.m_numMembers;
+	m_numMembers = numMembers;
+	m_members = new LES_StructMember[numMembers];
+	for (int i = 0; i < numMembers; i++)
+	{
+		LES_StructMember* const pMember = (LES_StructMember*)&m_members[i];
+		*pMember = other.m_members[i];
+	}
 	return *this;
 }
 
@@ -65,19 +67,27 @@ LES_StructDefinition::LES_StructDefinition(const int nameID, const int numMember
 	m_nameID = nameID;
 	m_numMembers = numMembers;
 	m_members = new LES_StructMember[numMembers];
-	m_ownsMembersMemory = true;
+
+	LES_StructMember emptyMember;
+	emptyMember.m_hash = 0;
+	emptyMember.m_nameID = 0;
+	emptyMember.m_typeID = 0;
+	emptyMember.m_dataSize = 0;
+	emptyMember.m_alignmentPadding = 0;
+
+	for (int i = 0; i < numMembers; i++)
+	{
+		LES_StructMember* const pMember = (LES_StructMember*)&m_members[i];
+		*pMember = emptyMember;
+	}
 }
 
 LES_StructDefinition::~LES_StructDefinition(void)
 {
-	if (m_ownsMembersMemory)
-	{
-		delete[] m_members;
-	}
+	delete[] m_members;
 	m_nameID = -1;
 	m_numMembers = 0;
 	m_members = LES_NULL;
-	m_ownsMembersMemory = false;
 }
 
 int LES_StructDefinition::GetNameID(void) const
