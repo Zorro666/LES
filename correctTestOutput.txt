@@ -545,6 +545,8 @@ String[106] name:'arrayNotAliasedToNonReference[4]' hash:0x20C82642
 String[107] name:'arrayNotAliased[5]' hash:0x521D60A
 String[108] name:'arrayCantFindAlias[1]' hash:0xED709A25
 String[109] name:'arrayInvalidNumElements[1]' hash:0x859E7150
+ERROR: AddType 'CantAddNewTypes' hash 0xE2A43B36 not found in type data definition file
+FATAL_ERROR: TEST AddType 'CantAddNewTypes' NumElements:0 0xE2A43B36 Alias 'int' failed
 ID:'LESD'
 NumChunks:2
 numStrings:71
