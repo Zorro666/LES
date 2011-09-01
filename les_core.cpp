@@ -231,10 +231,10 @@ void LES_DebugOutputGlobalDefinnitionFile(LES_LoggerChannel* const pLogChannel)
 
 void LES_DebugOutputStringEntries(LES_LoggerChannel* const pLogChannel)
 {
-	const int numStringEntries = les_numStringEntries;
+	const int numStringEntries = les_stringTableNumStrings + les_numStringEntries;
 	for (int i = 0; i < numStringEntries; i++)
 	{
-		const LES_StringEntry* const pStringEntry = &les_stringEntryArray[i];
+		const LES_StringEntry* const pStringEntry = LES_GetStringEntryForID(i);
 		pLogChannel->Print("String[%d] name:'%s' hash:0x%X", i, pStringEntry->m_str, pStringEntry->m_hash);
 	}
 }
