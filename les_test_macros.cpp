@@ -9,6 +9,7 @@ extern int LES_AddStringEntry(const char* const str);
 extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr);
 
 extern int LES_StructComputeAlignmentPadding(const int totalMemberSize, const int memberDataSize);
+extern LES_StructDefinition* LES_CreateStructDefinition(const int nameID, const int numMembers);
 
 bool LES_TestFunctionStart(const char* const functionName, const char* const returnType, const int numInputs, const int numOutputs,
 													 LES_FunctionDefinition* const functionDefinitionPtr, LES_TEST_FUNCTION_DATA* testFunctionDataPtr)
@@ -89,15 +90,14 @@ bool LES_TestFunctionEnd(LES_FunctionDefinition* const functionDefinitionPtr, LE
 }
 
 bool LES_TestStructStart(const char* const structName, const int numMembers, 
-												 LES_StructDefinition* const structDefinitionPtr, LES_TEST_STRUCT_DATA* testStructDataPtr)
+												 LES_StructDefinition** structDefinitionPtr, LES_TEST_STRUCT_DATA* testStructDataPtr)
 {
 	testStructDataPtr->structName = structName;
 	testStructDataPtr->globalMemberIndex = 0;
 	testStructDataPtr->totalMemberSizeWithPadding = 0;
 
 	const int nameID = LES_AddStringEntry(structName);
-	LES_StructDefinition structDefinition(nameID, numMembers);
-	*structDefinitionPtr = structDefinition;
+	*structDefinitionPtr = LES_CreateStructDefinition(nameID, numMembers);
 
 	return true;
 }

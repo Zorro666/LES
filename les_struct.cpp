@@ -1,11 +1,12 @@
 #include <string.h>
+#include <malloc.h>
 
 #include "les_struct.h"
 #include "les_core.h"
 #include "les_logger.h"
 #include "les_stringentry.h"
 
-static LES_StructDefinition* les_structDefinitionArray = LES_NULL;
+static const LES_StructDefinition** les_structDefinitionArray = LES_NULL;
 static int les_numStructDefinitions = 0;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -19,7 +20,7 @@ static int LES_GetStructDefinitionIndex(const LES_Hash nameHash)
 	/* This is horribly slow - need hash lookup table */
 	for (int i = 0; i < les_numStructDefinitions; i++)
 	{
-		const LES_StructDefinition* const structDefinitionPtr = &les_structDefinitionArray[i];
+		const LES_StructDefinition* const structDefinitionPtr = les_structDefinitionArray[i];
 		const LES_StringEntry* const structNameStringEntryPtr = LES_GetStringEntryForID(structDefinitionPtr->GetNameID());
 		if (structNameStringEntryPtr->m_hash == nameHash)
 		{
@@ -35,6 +36,7 @@ static int LES_GetStructDefinitionIndex(const LES_Hash nameHash)
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
+#if 0
 LES_StructDefinition::LES_StructDefinition(void)
 {
 	m_nameID = -1;
@@ -84,11 +86,10 @@ LES_StructDefinition::LES_StructDefinition(const int nameID, const int numMember
 
 LES_StructDefinition::~LES_StructDefinition(void)
 {
-	delete[] m_members;
 	m_nameID = -1;
 	m_numMembers = 0;
-	m_members = LES_NULL;
 }
+#endif // #if 0
 
 int LES_StructDefinition::GetNameID(void) const
 {
@@ -131,7 +132,7 @@ const LES_StructDefinition* LES_GetStructDefinition(const LES_Hash nameHash)
 	{
 		return LES_NULL;
 	}
-	const LES_StructDefinition* const structDefinitionPtr = &les_structDefinitionArray[index];
+	const LES_StructDefinition* const structDefinitionPtr = les_structDefinitionArray[index];
 	return structDefinitionPtr;
 }
 
@@ -143,13 +144,19 @@ const LES_StructDefinition* LES_GetStructDefinition(const LES_Hash nameHash)
 
 void LES_StructInit()
 {
-	les_structDefinitionArray = new LES_StructDefinition[1024];
+	les_structDefinitionArray = new const LES_StructDefinition*[1024];
 	les_numStructDefinitions = 0;
 }
 
 void LES_StructShutdown()
 {
 	les_numStructDefinitions = 0;
+	for (int i = 0; i < les_numStructDefinitions; i++)
+	{
+		// Free the memory because of special way memory is done for these structures
+		void* memoryPtr = (void*)les_structDefinitionArray[i];
+		free(memoryPtr);
+	}
 	delete[] les_structDefinitionArray;
 }
 
@@ -159,10 +166,16 @@ int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* 
 	int index = LES_GetStructDefinitionIndex(nameHash);
 	if ((index < 0) || (index >= les_numStructDefinitions))
 	{
-		/* Not found so add it */
+		/* Not found so add it - just store the ptr to the memory */
 		index = les_numStructDefinitions;
-		les_structDefinitionArray[index] = *structDefinitionPtr;
+		les_structDefinitionArray[index] = structDefinitionPtr;
 		les_numStructDefinitions++;
+	}
+	else
+	{
+		// Free the memory because of special way memory is done for these structures
+		void* memoryPtr = (void*)structDefinitionPtr;
+		free(memoryPtr);
 	}
 
 	return index;
@@ -186,5 +199,20 @@ int LES_StructComputeAlignmentPadding(const int totalMemberSize, const int membe
 	}
 
 	return alignmentPadding;
+}
+
+LES_StructDefinition* LES_CreateStructDefinition(const int nameID, const int numMembers)
+{
+	if (numMembers < 1)
+	{
+		LES_FATAL_ERROR("LES_CreateStructDefinition nameID:%d invalid numMembers %d must be > 0", nameID, numMembers);
+		return LES_NULL;
+	}
+	int memorySize = sizeof(LES_StructDefinition);
+	memorySize += sizeof(LES_StructMember) * numMembers - 1;
+	LES_StructDefinition* const structDefinitionPtr = (LES_StructDefinition*)malloc(memorySize);
+	structDefinitionPtr->m_nameID = nameID;
+	structDefinitionPtr->m_numMembers = numMembers;
+	return structDefinitionPtr;
 }
 

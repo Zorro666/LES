@@ -118,13 +118,13 @@ struct LES_TEST_STRUCT_DATA
 };
 
 bool LES_TestStructStart(const char* const structName, const int numMembers, 
-												 LES_StructDefinition* const structDefinitionPtr, LES_TEST_STRUCT_DATA* testStructDataPtr);
+												 LES_StructDefinition** structDefinitionPtr, LES_TEST_STRUCT_DATA* testStructDataPtr);
 
 #define LES_TEST_STRUCT_START(NAME, NUM_MEMBERS) \
 	{ \
-		LES_StructDefinition structDefinition; \
+		LES_StructDefinition* structDefinitionPtr; \
 		LES_TEST_STRUCT_DATA testStructData; \
-		bool __LES_struct_ok = LES_TestStructStart(#NAME, NUM_MEMBERS, &structDefinition, &testStructData); \
+		bool __LES_struct_ok = LES_TestStructStart(#NAME, NUM_MEMBERS, &structDefinitionPtr, &testStructData); \
 
 
 bool LES_TestStructAddMember(const char* const type, const char* const name,
@@ -133,7 +133,7 @@ bool LES_TestStructAddMember(const char* const type, const char* const name,
 #define	LES_TEST_STRUCT_ADD_MEMBER(TYPE, NAME) \
 	if (__LES_struct_ok) \
 	{ \
-		__LES_struct_ok = LES_TestStructAddMember(#TYPE, #NAME, &structDefinition, &testStructData); \
+		__LES_struct_ok = LES_TestStructAddMember(#TYPE, #NAME, structDefinitionPtr, &testStructData); \
 	} \
 
 extern int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* const structDefinitionPtr);
@@ -143,7 +143,7 @@ bool LES_TestStructEnd(LES_StructDefinition* const structDefinitionPtr, LES_TEST
 #define LES_TEST_STRUCT_END() \
 		if (__LES_struct_ok) \
 		{ \
-			__LES_struct_ok = LES_TestStructEnd(&structDefinition, &testStructData); \
+			__LES_struct_ok = LES_TestStructEnd(structDefinitionPtr, &testStructData); \
 		} \
 		if (__LES_struct_ok == false) \
 		{ \

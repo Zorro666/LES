@@ -16,22 +16,22 @@ struct LES_StructMember
 class LES_StructDefinition
 {
 public:
-	LES_StructDefinition(void);
-	LES_StructDefinition(const LES_StructDefinition& other);
-	LES_StructDefinition& operator=(const LES_StructDefinition& other);
-	LES_StructDefinition(const int nameID, const int numMembers);
-	~LES_StructDefinition(void);
-
 	int GetNameID(void) const;
 	int GetNumMembers(void) const;
 	const LES_StructMember* GetMemberByIndex(const int index) const;
 	const LES_StructMember* GetMember(const LES_Hash nameHash) const;
 
+	friend LES_StructDefinition* LES_CreateStructDefinition(const int nameID, const int numMembers);
 private:
-	LES_int32 m_nameID;
+	LES_StructDefinition(void);
+	LES_StructDefinition(const int nameID, const int numMembers);
+	~LES_StructDefinition(void);
+	LES_StructDefinition(const LES_StructDefinition& other);
+	LES_StructDefinition& operator=(const LES_StructDefinition& other);
 
+	LES_int32 m_nameID;
 	LES_int32 m_numMembers;
-	const LES_StructMember* m_members;
+	LES_StructMember m_members[1];	// m_members[m_numMembers]
 };
 
 const LES_StructDefinition* LES_GetStructDefinition(const LES_Hash nameHash);
