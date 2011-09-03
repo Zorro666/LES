@@ -40,7 +40,7 @@ def decodeFlags(flags):
 # struct LES_TypeEntry
 # {
 #		uint32 m_hash;														- 4 bytes
-#		uint32 m_dataSize													- 4 bytes
+#		uint32 m_dataSize;												- 4 bytes
 #		uint32 m_flags;														- 4 bytes
 #		int32 m_aliasedTypeID;										- 4 bytes
 #		int32 m_numElements;											- 4 bytes
@@ -55,11 +55,17 @@ def decodeFlags(flags):
 
 class LES_TypeEntry():
 	def __init__(self, hashValue, dataSize, flags, aliasedTypeID, numElements):
-		self.hashValue = hashValue
-		self.dataSize = dataSize
-		self.flags = flags
-		self.aliasedTypeID = aliasedTypeID
-		self.numElements = numElements
+		self.m_hash = hashValue
+		self.m_dataSize = dataSize
+		self.m_flags = flags
+		self.m_aliasedTypeID = aliasedTypeID
+		self.m_numElements = numElements
+
+	def ComputeDataStorageSize(self):
+		return -1
+
+	def ComputeAlignment(self):
+		return -1
 
 class LES_TypeData():
 	def __init__(self, stringTable):
@@ -67,7 +73,7 @@ class LES_TypeData():
 		self.__m_typeNames__ = []
 		self.__m_stringTable__ = stringTable
 
-	def addType(self, name, dataSize, flags, aliasedName=None, numElements=1):
+	def addType(self, name, dataSize, flags, aliasedName, numElements=0):
 		try:
 			index = self.__m_typeNames__.index(name)
 		except ValueError:
@@ -77,22 +83,22 @@ class LES_TypeData():
 			les_logger.Warning("LES_TypeData::addType '%s' but type already exists", name)
 			typeEntry = self.__m_typeEntries__[index]
 			# Check the existing type data matches the new type data
-			if typeEntry.dataSize != dataSize:
-				les_logger.Error("LES_TypeData::addType '%s' already in list and dataSize doesn't match Existing:%d New:%d", name, typeEntry.dataSize, dataSize)
+			if typeEntry.m_dataSize != dataSize:
+				les_logger.Error("LES_TypeData::addType '%s' already in list and dataSize doesn't match Existing:%d New:%d", name, typeEntry.m_dataSize, dataSize)
 				return -1
 
-			if typeEntry.flags != flags:
-				les_logger.Error("LES_TypeData::addType '%s' already in list and flags doesn't match Existing:0x%X %s New:0x%X %s", name, typeEntry.flags, decodeFlags(typeEntry.flags), flags, decodeFlags(flags))
+			if typeEntry.m_flags != flags:
+				les_logger.Error("LES_TypeData::addType '%s' already in list and flags doesn't match Existing:0x%X %s New:0x%X %s", name, typeEntry.m_flags, decodeFlags(typeEntry.m_flags), flags, decodeFlags(flags))
 				return -1
 
 			aliasedTypeID = self.__m_stringTable__.getStringID(aliasedName)
-			if typeEntry.aliasedTypeID != aliasedTypeID:
-				existingAliasedName = self.__m_stringTable__.getString(typeEntry.aliasedTypeID)
-				les_logger.Error("LES_TypeData::addType '%s' already in list and aliasedTypeID doesn't match Existing:%d '%s' New:%d '%s' ", name, typeEntry.aliasedTypeID, existingAliasedName, aliasedTypeID, aliasedName)
+			if typeEntry.m_aliasedTypeID != aliasedTypeID:
+				existingAliasedName = self.__m_stringTable__.getString(typeEntry.m_aliasedTypeID)
+				les_logger.Error("LES_TypeData::addType '%s' already in list and aliasedTypeID doesn't match Existing:%d '%s' New:%d '%s' ", name, typeEntry.m_aliasedTypeID, existingAliasedName, aliasedTypeID, aliasedName)
 				return -1
 
-			if typeEntry.numElements != numElements:
-				les_logger.Error("LES_TypeData::addType '%s' already in list and numElements doesn't match Existing:%d New:%d", name, typeEntry.numElements, numElements)
+			if typeEntry.m_numElements != numElements:
+				les_logger.Error("LES_TypeData::addType '%s' already in list and numElements doesn't match Existing:%d New:%d", name, typeEntry.m_numElements, numElements)
 				return -1
 
 		# Validate the input values for this type
@@ -132,7 +138,7 @@ class LES_TypeData():
 				les_logger.Error("LES_TypeData::addType '%s' is an array with %d elements but not aliased, arrays must be aliased", name, numElements)
 				return -1
 			typeEntry = self.getTypeData(aliasedName)
-			aliasedFlags = typeEntry.flags
+			aliasedFlags = typeEntry.m_flags
 			# Arrays of non-references must not be aliased to pointer or reference
 			if ((flags & LES_TYPE_REFERENCE) == 0) and (aliasedFlags & LES_TYPE_POINTER) or (aliasedFlags & LES_TYPE_REFERENCE):
 				les_logger.Error("LES_TyepData::addType '%s' non-reference array types must be aliased to a non-pointer, non-reference type Alias:'%s' Flags:0x%X %s", name, aliasedName, aliasedFlags, decodeFlags(aliasedFlags))
@@ -186,26 +192,26 @@ class LES_TypeData():
 			# struct LES_TypeEntry
 			# {
 			#		uint32 m_hash;													- 4 bytes
-			#		uint32 m_dataSize												- 4 bytes
+			#		uint32 m_dataSize;											- 4 bytes
 			#		uint32 m_flags;													- 4 bytes
 			#		int32 m_aliasedTypeID;									- 4 bytes
 			#		int32 m_numElements;										- 4 bytes
 			# };
 
 			#		uint32 m_hash;													- 4 bytes
-			binFile.writeUint(typeEntry.hashValue)
+			binFile.writeUint(typeEntry.m_hash)
 
-			#		uint32 m_dataSize												- 4 bytes
-			binFile.writeUint(typeEntry.dataSize)
+			#		uint32 m_dataSize;											- 4 bytes
+			binFile.writeUint(typeEntry.m_dataSize)
 
 			#		uint32 m_flags;													- 4 bytes
-			binFile.writeUint(typeEntry.flags)
+			binFile.writeUint(typeEntry.m_flags)
 
 			#		int32 m_aliasedTypeID;									- 4 bytes
-			binFile.writeUint(typeEntry.aliasedTypeID)
+			binFile.writeUint(typeEntry.m_aliasedTypeID)
 
 			#		int32 m_numElements;										- 4 bytes
-			binFile.writeUint(typeEntry.numElements)
+			binFile.writeUint(typeEntry.m_numElements)
 
 	def parseXML(self, xmlSource):
 		#<?xml version='1.0' ?>
@@ -442,7 +448,7 @@ class LES_TypeData():
 					typeNameForDataSize = name + "*"
 				if self.doesTypeExist(typeNameForDataSize):
 					typeData = self.getTypeData(typeNameForDataSize)
-					dataSize = typeData.dataSize
+					dataSize = typeData.m_dataSize
 
 			# flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY, delimiter is | e.g. "INPUT|POD"
 			flagsArray = flagsData.split('|')
@@ -514,11 +520,11 @@ class LES_TypeData():
 
 	def DebugOutputTypes(self, loggerChannel):
 		for typeEntry in self.__m_typeEntries__:
-			hashValue = typeEntry.hashValue
-			dataSize = typeEntry.dataSize
-			flags = typeEntry.flags
-			aliasedTypeID = typeEntry.aliasedTypeID
-			numElements = typeEntry.numElements
+			hashValue = typeEntry.m_hash
+			dataSize = typeEntry.m_dataSize
+			flags = typeEntry.m_flags
+			aliasedTypeID = typeEntry.m_aliasedTypeID
+			numElements = typeEntry.m_numElements
 
 			name = self.__m_stringTable__.getStringByHash(hashValue)
 			flagsDecoded = decodeFlags(flags)
@@ -530,9 +536,9 @@ def runTest():
 
 	stringTable = les_stringtable.LES_StringTable()
 	this = LES_TypeData(stringTable)
-	index = this.addType("int", 4, LES_TYPE_INPUT|LES_TYPE_POD)
+	index = this.addType("int", 4, LES_TYPE_INPUT|LES_TYPE_POD, "int")
 	les_logger.Log("Index[int]= %d", index)
-	index = this.addType("int", 2, 0x2)
+	index = this.addType("int", 2, 0x2, "int")
 	les_logger.Error("Index[int]= %d", index)
 	index = this.addType("int*", 4, LES_TYPE_INPUT|LES_TYPE_OUTPUT|LES_TYPE_POINTER|LES_TYPE_ALIAS, "int")
 	index = this.addType("int[3]", 4*3, LES_TYPE_INPUT|LES_TYPE_OUTPUT|LES_TYPE_ARRAY|LES_TYPE_ALIAS, "int*", 3)
