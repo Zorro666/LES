@@ -57,7 +57,7 @@ class LES_StructDefinintion():
 			return self.__m_numMembers__
 
 	def GetMemberByIndex(self, index):
-			return self.__m_members[index]
+			return self.__m_members__[index]
 
 	def GetMember(self, hashValue):
 		for member in self.__m_members__:
