@@ -111,10 +111,11 @@ class LES_StructDefinintion():
 		return True
 
 class LES_StructData():
-	def __init__(self, stringTable):
+	def __init__(self, stringTable, typeData):
 		self.__m_structDefinitions__ = []
 		self.__m_structDefinitionNames__ = []
 		self.__m_stringTable__ = stringTable
+		self.__m_typeData__ = typeData
 
 	def addStructDefinition(self, name, structDefinition):
 		if self.doesStructDefinitionExist(name):
@@ -236,295 +237,96 @@ class LES_StructData():
 		binFile.seek(endIndex)
 
 	def parseXML(self, xmlSource):
-		numErrors = 1
 #		#<?xml version='1.0' ?>
-#		#<LES_TYPES>
-#		#
-#		#	<LES_TYPE name="int*" dataSize="4" flags="INPUT|OUTPUT|POD|ARRAY" aliasedName="int" numElements="2" />
-#		# 	flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY
-#		#		aliasedName is optional, default is value of name
-#		#		numElements is optional, default is 0
-#		#
-#		# <LES_TYPE_POD name="unsigned char" dataSize="1" />
-#		#		flags = INPUT|POD, fixed can't be specified
-#		#		aliasedName = input_name, fixed can't be specified
-#		#		numElements = 0, fixed can't be specified
-#
-#		# <LES_TYPE_POD_POINTER name="unsigned char" />
-#		#		name = input_name + "*"
-#		#		dataSize = 4 by default : this could be set by some global params in the XML in the future
-#		#		flags = INPUT|OUTPUT|POD|POINTER, fixed can't be specified
-#		#		aliasedName = input_name, fixed can't be specified
-#		#		numElements = 0, fixed can't be specified
-#
-#		# <LES_TYPE_POD_REFERENCE name="int" />
-#		#		name = input_name + "&"
-#		#		dataSize = dataSize value of type with the aliasedName
-#		#		flags = INPUT|OUTPUT|POD|REFERENCE, fixed can't be specified
-#		#		aliasedName = input_name + "*", fixed can't be specified
-#		#		numElements = 0, fixed can't be specified
-#
-#		# <LES_TYPE_POD_ARRAY name="int" numElements="4" />
-#		#		name = input_name + "[<numElements>]"
-#		#		dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
-#		#		flags = INPUT|OUTPUT|POD|ARRAY, fixed can't be specified
-#		#		aliasedName = input_name
-#
-#		# <LES_TYPE_POD_REFERENCE_ARRAY name="int" numElements="4" />
-#		#		name = input_name + "&[<numElements>]"
-#		#		dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
-#		#		flags = INPUT|OUTPUT|POD|REFERENCE|ARRAY, fixed can't be specified
-#		#		aliasedName = input_name+"*"
-#
-#		# <LES_TYPE_STRUCT name="TestStruct1" dataSize="10" />
-#		#		flags = INPUT|STRUCT, fixed can't be specified
-#		#		aliasedName = input_name
-#
-#		# <LES_TYPE_STRUCT_POINTER name="TestStruct1" />
-#		#		name = input_name + "*"
-#		#		dataSize = 4 by default : this could be set by some global params in the XML in the future
-#		#		flags = INPUT|OUTPUT|STRUCT|POINTER, fixed can't be specified
-#		#		aliasedName = input_name, fixed can't be specified
-#		#		numElements = 0, fixed can't be specified
-#
-#		# <LES_TYPE_STRUCT_REFERNCE name="TestStruct1" />
-#		#		name = input_name + "&"
-#		#		dataSize = dataSize value of type with the aliasedName
-#		#		flags = INPUT|OUTPUT|STRUCT|REFERENCE, fixed can't be specified
-#		#		aliasedName = input_name + "*", fixed can't be specified
-#		#		numElements = 0, fixed can't be specified
-#
-#		# <LES_TYPE_STRUCT_ARRAY
-#		#		name = input_name + "[<numElements>]"
-#		#		dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
-#		#		flags = INPUT|OUTPUT|STRUCT|ARRAY, fixed can't be specified
-#		#		aliasedName = input_name
-#
-#		# <LES_TYPE_STRUCT_REFERENCE_ARRAY name="TestStruct2" numElements="5" />
-#		#		name = input_name + "&[<numElements>]"
-#		#		dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
-#		#		flags = INPUT|OUTPUT|STRUCT|REFERENCE|ARRAY, fixed can't be specified
-#		#		aliasedName = input_name+"*"
-#
-#		typesXML = xml.etree.ElementTree.XML(xmlSource)
-#		if typesXML.tag != "LES_TYPES":
-#			les_logger.Error("LES_TypeData::parseXML root tag should be LES_TYPES found %d", typesXML.tag)
-#			return 1
-#
-#		numErrors = 0
-#		for typeXML in typesXML:
-#			needsDataSize = True
-#			needsFlags = False
-#			needsAlias = False
-#			needsNumElements = False
-#
-#			dataSizeData = ""
-#			dataSizeDataDefault = None
-#			flagsData = ""
-#			nameSuffix = ""
-#			aliasSuffix = ""
-#			nameSuffixAddNumElements = False
-#
-#			if typeXML.tag == "LES_TYPE":
-#				needsFlags = True
-#				needsAlias = True
-#				needsNumElements = True
-#			elif typeXML.tag == "LES_TYPE_POD":
-#				flagsData = "INPUT|POD"
-#			elif typeXML.tag == "LES_TYPE_POD_POINTER":
-#				flagsData = "INPUT|OUTPUT|POD|POINTER"
-#				nameSuffix = "*"
-#				dataSizeDataDefault = "4"
-#			elif typeXML.tag == "LES_TYPE_POD_REFERENCE":
-#				needsDataSize = False
-#				flagsData = "INPUT|OUTPUT|POD|REFERENCE"
-#				nameSuffix = "&"
-#				aliasSuffix = "*"
-#			elif typeXML.tag == "LES_TYPE_POD_ARRAY":
-#				needsDataSize = False
-#				flagsData = "INPUT|OUTPUT|POD|ARRAY"
-#				nameSuffix = ""
-#				nameSuffixAddNumElements = True
-#				aliasSuffix = ""
-#				needsNumElements = True
-#			elif typeXML.tag == "LES_TYPE_POD_REFERENCE_ARRAY":
-#				needsDataSize = False
-#				flagsData = "INPUT|OUTPUT|POD|REFERENCE|ARRAY"
-#				nameSuffix = "&"
-#				nameSuffixAddNumElements = True
-#				aliasSuffix = "*"
-#				needsNumElements = True
-#			elif typeXML.tag == "LES_TYPE_STRUCT":
-#				flagsData = "INPUT|STRUCT"
-#			elif typeXML.tag == "LES_TYPE_STRUCT_POINTER":
-#				flagsData = "INPUT|OUTPUT|STRUCT|POINTER"
-#				nameSuffix = "*"
-#				dataSizeDataDefault = "4"
-#			elif typeXML.tag == "LES_TYPE_STRUCT_REFERENCE":
-#				needsDataSize = False
-#				flagsData = "INPUT|OUTPUT|STRUCT|REFERENCE"
-#				nameSuffix = "&"
-#				aliasSuffix = "*"
-#			elif typeXML.tag == "LES_TYPE_STRUCT_ARRAY":
-#				needsDataSize = False
-#				flagsData = "INPUT|OUTPUT|STRUCT|ARRAY"
-#				nameSuffix = ""
-#				nameSuffixAddNumElements = True
-#				aliasSuffix = ""
-#				needsNumElements = True
-#			elif typeXML.tag == "LES_TYPE_STRUCT_REFERENCE_ARRAY":
-#				needsDataSize = False
-#				flagsData = "INPUT|OUTPUT|STRUCT|REFERENCE|ARRAY"
-#				nameSuffix = "&"
-#				nameSuffixAddNumElements = True
-#				aliasSuffix = "*"
-#				needsNumElements = True
-#			else:
-#				les_logger.Error("LES_TypeData::parseXML invalid node tag should be LES_TYPE, LES_TYPE_POD, LES_TYPE_POD_POINTER, LES_TYPE_POD_REFERENCE, LES_TYPE_POD_ARRAY, LES_TYPE_POD_REFERENCE_ARRAY, LES_TYPE_STRUCT, LES_TYPE_STRUCT_POINTER, LES_TYPE_STRUCT_REFERENCE, LES_TYPE_STRUCT_ARRAY, LES_TYPE_STRUCT_REFERNCE_ARRAY found %s", typeXML.tag)
-#				numErrors += 1
+#		#<LES_STRUCTS>
+#		#	<LES_STRUCT name="TestStruct1" numMembers="5">
+#		#		<LES_STRUCT_MEMBER type="long long int" name="m_longlong"/>
+#		#		<LES_STRUCT_MEMBER type="char" name="m_char"/>
+#		#		<LES_STRUCT_MEMBER type="int" name="m_int"/>
+#		#		<LES_STRUCT_MEMBER type="short" name="m_short"/>
+#		#		<LES_STRUCT_MEMBER type="float" name="m_float"/>
+#		#	</LES_STRUCT>
+#		#</LES_STRUCTS>
+
+		structsXML = xml.etree.ElementTree.XML(xmlSource)
+		if structsXML.tag != "LES_STRUCTS":
+			les_logger.Error("LES_StructData::parseXML root tag should be LES_STRUCTS found %d", structsXML.tag)
+			return 1
+
+		numErrors = 0
+		for structXML in structsXML:
+			if structXML.tag != "LES_STRUCT":
+				les_logger.Error("LES_StructData::parseXML invalid node tag should be LES_STRUCT found:'%s'", structXML.tag)
+				numErrors += 1
+				continue
+
+			structNameData = structXML.get("name")
+			if structNameData == None:
+				les_logger.Error("LES_StructData::parseXML missing 'name' attribute:%s", xml.etree.ElementTree.tostring(structXML))
+				numErrors += 1
+				continue
+			structName = structNameData
+
+			numMembersData = structXML.get("numMembers")
+			if numMembersData == None:
+					les_logger.Error("LES_StructData::parseXML '%s' missing 'numMembers' attribute:%s", structName, xml.etree.ElementTree.tostring(structXML))
+					numErrors += 1
+					continue
+
+			try:
+				numMembers = int(numMembersData)
+			except ValueError:
+				les_logger.Error("LES_StructData::parseXML '%s' invalid numElements value:%s (must be >= 0)", structName, numMembersData)
+				numErrors += 1
+				numMembers = -1
+				continue
+
+			les_logger.Log("Struct '%s' numMembers:%d", structName, numMembers)
+
+#			if self.doesStructExist(structName):
+#				les_logger.Error("LES_StructData::parseXML '%s' already exists", structName)
+#				numErorrs += 1
 #				continue
-#
-#			nameData = typeXML.get("name")
-#			if nameData == None:
-#				les_logger.Error("LES_TypeData::parseXML missing 'name' attribute:%s", xml.etree.ElementTree.tostring(typeXML))
-#				numErrors += 1
-#				continue
-#			name = nameData
-#
-#			if needsDataSize:
-#				dataSizeData = typeXML.get("dataSize")
-#				if dataSizeData == None:
-#					dataSizeData = dataSizeDataDefault
-#					if dataSizeData == None:
-#						les_logger.Error("LES_TypeData::parseXML '%s' missing 'dataSize' attribute:%s", name, xml.etree.ElementTree.tostring(typeXML))
-#						numErrors += 1
-#						continue
-#			else:
-#				if typeXML.get("dataSize") != None:
-#					les_logger.Error("LES_TypeData::parseXML '%s' 'dataSize' attribute not allowed for this type definition:%s", name, xml.etree.ElementTree.tostring(typeXML))
-#					numErrors += 1
-#					continue
-#
-#			if needsFlags:
-#				flagsData = typeXML.get("flags")
-#				if flagsData == None:
-#					les_logger.Error("LES_TypeData::parseXML '%s' missing 'flags' attribute:%s", name, xml.etree.ElementTree.tostring(typeXML))
-#					numErrors += 1
-#					continue
-#			else:
-#				if typeXML.get("flags") != None:
-#					les_logger.Error("LES_TypeData::parseXML '%s' 'flags' attribute not allowed for this type definition:%s", name, xml.etree.ElementTree.tostring(typeXML))
-#					numErrors += 1
-#					continue
-#
-#			if flagsData == "":
-#				les_logger.Error("LES_TypeData::parseXML '%s' invalid 'flags' attribute:%s", name, xml.etree.ElementTree.tostring(typeXML))
-#				numErrors += 1
-#				continue
-#
-#			if needsAlias:
-#				aliasedNameData = typeXML.get("aliasedName", nameData)
-#			else:
-#				if typeXML.get("aliasedName") != None:
-#					les_logger.Error("LES_TypeData::parseXML '%s' 'aliasedName' attribute not allowed for this type definition:%s", name, xml.etree.ElementTree.tostring(typeXML))
-#					numErrors += 1
-#					continue
-#				aliasedNameData = nameData + aliasSuffix
-#
-#			if needsNumElements:
-#				numElementsData = typeXML.get("numElements", "0")
-#			else:
-#				if typeXML.get("numElements") != None:
-#					les_logger.Error("LES_TypeData::parseXML '%s' 'numElements' attribute not allowed for this type definition:%s", name, xml.etree.ElementTree.tostring(typeXML))
-#					numErrors += 1
-#					continue
-#				numElementsData = "0"
-#					
-#			aliasedName = aliasedNameData
-#			name = nameData + nameSuffix
-#
-#			if needsDataSize:
-#				try:
-#					dataSize = int(dataSizeData)
-#				except ValueError:
-#					les_logger.Error("LES_TypeData::parseXML '%s' invalid dataSize value:'%s' (must be >= 1)", name, dataSizeData)
-#					numErrors += 1
-#					continue
-#			else:
-#				if typeXML.tag == "LES_TYPE_POD_REFERENCE":
-#					# Get it from the data size of the alias - the rule
-#						typeNameForDataSize = aliasedName
-#				elif typeXML.tag == "LES_TYPE_POD_ARRAY":
-#					# dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
-#					typeNameForDataSize = name + "*"
-#				elif typeXML.tag == "LES_TYPE_STRUCT_REFERENCE":
-#					# Get it from the data size of the alias - the rule
-#						typeNameForDataSize = aliasedName
-#				elif typeXML.tag == "LES_TYPE_POD_REFERENCE_ARRAY":
-#					# dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
-#					typeNameForDataSize = name + "*"
-#				elif typeXML.tag == "LES_TYPE_STRUCT_ARRAY":
-#					# dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
-#					typeNameForDataSize = name + "*"
-#				elif typeXML.tag == "LES_TYPE_STRUCT_REFERENCE_ARRAY":
-#					# dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
-#					typeNameForDataSize = name + "*"
-#				if self.doesTypeExist(typeNameForDataSize):
-#					typeData = self.getTypeData(typeNameForDataSize)
-#					dataSize = typeData.dataSize
-#
-#			# flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY, delimiter is | e.g. "INPUT|POD"
-#			flagsArray = flagsData.split('|')
-#			flags = int(0)
-#			for flag in flagsArray:
-#				if flag == "INPUT":
-#					flags |= LES_TYPE_INPUT
-#				elif flag == "OUTPUT":
-#					flags |= LES_TYPE_OUTPUT
-#				elif flag == "POD":
-#					flags |= LES_TYPE_POD
-#				elif flag == "STRUCT":
-#					flags |= LES_TYPE_STRUCT
-#				elif flag == "POINTER":
-#					flags |= LES_TYPE_POINTER
-#				elif flag == "REFERENCE":
-#					flags |= LES_TYPE_REFERENCE
-#				elif flag == "ALIAS":
-#					flags |= LES_TYPE_ALIAS
-#				elif flag == "ARRAY":
-#					flags |= LES_TYPE_ARRAY
-#				else:
-#					les_logger.Error("LES_TypeData::parseXML '%s' invalid flag:'%s' flags:'%s'", name, flag, flagsData)
-#					numErrors += 1
-#					continue
-#
-#			try:
-#				numElements = int(numElementsData)
-#			except ValueError:
-#				les_logger.Error("LES_TypeData::parseXML '%s' invalid numElements value:%s (must be >= 0)", name, numElementsData)
-#				numErrors += 1
-#				numElements = -1
-#				continue
-#
-#			if nameSuffixAddNumElements:
-#				# name = name + "[<numELements>]"
-#				name = name + "[" + str(numElements) + "]"
-#
-#			if aliasedName != name:
-#				flags |= LES_TYPE_ALIAS
-#
-#			flagsDecoded = decodeFlags(flags)
-#			les_logger.Log("Type '%s' size:%d flags:0x%X %s aliasedName:'%s' numElements:%d", name, dataSize, flags, flagsDecoded, aliasedName, numElements)
-#
-#			if self.doesTypeExist(name):
-#				les_logger.Warning("LES_TypeData::parseXML '%s' already exists", name)
-#
-#			index = self.addType(name, dataSize, flags, aliasedName, numElements)
-#			if index == -1:
-#				les_logger.Error("LES_TypeData::parseXML '%s' failed to add type", name)
-#				numErrors += 1
-#				continue
-#
+
+			structNameID = self.__m_stringTable__.addString(structName)
+			structDefinition = LES_StructDefinintion(structNameID, numMembers)
+
+			for memberXML in structXML:
+				if memberXML.tag != "LES_STRUCT_MEMBER":
+					les_logger.Error("LES_StructData::parseXML '%s' invalid node tag should be LES_STRUCT_MEMBER found:'%s'", 
+														structName, memberXML.tag)
+					numErrors += 1
+					continue
+
+				memberTypeData = memberXML.get("type")
+				if memberTypeData == None:
+					les_logger.Error("LES_StructData::parseXML '%s' missing 'type' attribute:%s", 
+													structName, xml.etree.ElementTree.tostring(memberXML))
+					numErrors += 1
+					continue
+
+				memberType = memberTypeData
+
+				memberNameData = memberXML.get("name")
+				if memberNameData == None:
+					les_logger.Error("LES_StructData::parseXML '%s' missing 'name' attribute:%s", 
+													structName, xml.etree.ElementTree.tostring(memberXML))
+					numErrors += 1
+					continue
+				memberName = memberNameData
+
+				if structDefinition.AddMember(memberType, memberName, self.__m_stringTable__, self.__m_typeData__, self) == False:
+					les_logger.Error("LES_StructData::parseXML '%s' AddMember Type:'%s' Name:'%s' failed attribute:%s", 
+														structName, memberType, memberName, xml.etree.ElementTree.tostring(memberXML))
+					numErrors += 1
+					continue
+
+			index = self.addStructDefinition(structName, structDefinition)
+			if index == -1:
+				les_logger.Error("LES_StructData::parseXML '%s' failed to add type", structName)
+				numErrors += 1
+				continue
+
 		return numErrors
 
 	def loadXML(self, fname):
@@ -562,7 +364,7 @@ class LES_StructData():
 				loggerChannel.Print("  Struct '%s' Member[%d] '%s' 0x%X Type:'%s' size:%d alignmentPadding:%d", 
 														structName, i, memberName, hashValue, typeName, dataSize, alignmentPadding)
 
-# Global helper functions to do with LES_TypeEntry data - should move these to les_typedata.py
+# Global helper functions to do with LES_TypeEntry data - could move these to les_typedata.py but only used in this module
 def GetRootType(typeEntry, stringTable, typeData):
 	flags = typeEntry.m_flags
 	while flags & les_typedata.LES_TYPE_ALIAS:
@@ -673,7 +475,7 @@ def runTest():
 	stringTable = les_stringtable.LES_StringTable()
 	typeData = les_typedata.LES_TypeData(stringTable)
 
-	this = LES_StructData(stringTable)
+	this = LES_StructData(stringTable, typeData)
 
 	nameID = stringTable.addString("Jake")
 	structDefinition = LES_StructDefinintion(nameID,1)
@@ -707,15 +509,20 @@ def runTest():
 	testStructChan = les_logger.CreateChannel("StructDebug", "", "structDebug_py.txt", les_logger.LES_LOGGERCHANNEL_FLAGS_DEFAULT)
 	this.DebugOutputStructs(testStructChan)
 
-#	stringTable = les_stringtable.LES_StringTable()
-#	this = LES_StructData(stringTable)
+	stringTable = les_stringtable.LES_StringTable()
+	typeData = les_typedata.LES_TypeData(stringTable)
+	this = LES_StructData(stringTable, typeData)
 
-#	this.loadXML("data/les_types_basic.xml")
-#	this.loadXML("data/les_types_test.xml")
-#	this.loadXML("data/les_types_errors.xml")
+	typeData.addType("char", 1, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD, "char")
+	typeData.addType("short", 2, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD, "short")
+	typeData.addType("int", 4, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD, "int")
+	typeData.addType("float", 4, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD, "float")
+	typeData.addType("long long int", 8, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD, "long long int")
 
-#	testStructChan = les_logger.CreateChannel("StructDebug", "", "structDebug_py.txt", les_logger.LES_LOGGERCHANNEL_FLAGS_DEFAULT)
-#	this.DebugOutputStructs(testStructChan)
+	this.loadXML("data/les_structs_test.xml")
+
+	testStructChan = les_logger.CreateChannel("StructDebug", "", "structDebug_py.txt", les_logger.LES_LOGGERCHANNEL_FLAGS_DEFAULT)
+	this.DebugOutputStructs(testStructChan)
 
 if __name__ == '__main__':
 	runTest()

@@ -1,0 +1,10 @@
+<?xml version='1.0' ?>
+<LES_STRUCTS>
+	<LES_STRUCT name="TestStruct1" numMembers="5">
+		<LES_STRUCT_MEMBER type="long long int" name="m_longlong"/>
+		<LES_STRUCT_MEMBER type="char" name="m_char"/>
+		<LES_STRUCT_MEMBER type="int" name="m_int"/>
+		<LES_STRUCT_MEMBER type="short" name="m_short"/>
+		<LES_STRUCT_MEMBER type="float" name="m_float"/>
+	</LES_STRUCT>
+</LES_STRUCTS>
