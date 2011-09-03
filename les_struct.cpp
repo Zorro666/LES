@@ -4,6 +4,7 @@
 #include "les_struct.h"
 #include "les_core.h"
 #include "les_logger.h"
+#include "les_loggerchannel.h"
 #include "les_stringentry.h"
 
 static const LES_StructDefinition** les_structDefinitionArray = LES_NULL;
@@ -165,5 +166,37 @@ LES_StructDefinition* LES_CreateStructDefinition(const int nameID, const int num
 	structDefinitionPtr->m_nameID = nameID;
 	structDefinitionPtr->m_numMembers = numMembers;
 	return structDefinitionPtr;
+}
+
+void LES_DebugOutputStructs(LES_LoggerChannel* const pLogChannel)
+{
+	const int numStructs = les_numStructDefinitions;
+	for (int i = 0; i < numStructs; i++)
+	{
+		const LES_StructDefinition* const structDefinitionPtr = LES_GetStructDefinitionByID(i);
+		const int structNameID = structDefinitionPtr->GetNameID();
+		const LES_StringEntry* const structNameStringEntryPtr = LES_GetStringEntryForID(structNameID);
+
+		const char* const structName = structNameStringEntryPtr->m_str;
+		const int numMembers = structDefinitionPtr->GetNumMembers();
+		pLogChannel->Print("Struct '%s' NnumMembers[%d]", structName, numMembers);
+		for (int m = 0; m < numMembers; m++)
+		{
+			const LES_StructMember* const structMemberPtr = structDefinitionPtr->GetMemberByIndex(m);
+
+			const LES_Hash hash = structMemberPtr->m_hash;
+			const int nameID = structMemberPtr->m_nameID;
+			const int typeID = structMemberPtr->m_typeID;
+			const int dataSize = structMemberPtr->m_dataSize;
+			const int alignmentPadding = structMemberPtr->m_alignmentPadding;
+
+			const LES_StringEntry* const memberNameStringEntryPtr = LES_GetStringEntryForID(nameID);
+			const char* const memberName = memberNameStringEntryPtr->m_str;
+			const LES_StringEntry* const typeNameStringEntryPtr = LES_GetStringEntryForID(typeID);
+			const char* const typeName = typeNameStringEntryPtr->m_str;
+			pLogChannel->Print("  Struct '%s' Member[%d] '%s' 0x%X Type:'%s' size:%d alignmentPadding:%d", 
+												 structName, m, memberName, hash, typeName, dataSize, alignmentPadding);
+		}
+	}
 }
 

@@ -4,6 +4,8 @@
 #include "les_base.h"
 #include "les_hash.h"
 
+class LES_LoggerChannel;
+
 struct LES_StructMember
 {
 	LES_uint32 m_hash;
@@ -35,5 +37,6 @@ private:
 };
 
 const LES_StructDefinition* LES_GetStructDefinition(const LES_Hash nameHash);
+void LES_DebugOutputStructs(LES_LoggerChannel* const pLogChannel);
 
 #endif // #ifndef LES_STRUCT_HH
