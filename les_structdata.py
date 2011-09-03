@@ -103,6 +103,7 @@ class LES_StructDefinintion():
 		nameID = stringTable.addString(name)
 		structMember = LES_StructMember(nameHash, nameID, typeID, memberDataSize, alignmentPadding)
 
+		self.__m_members__[numAddedMembers] = structMember
 		self.__m_totalMemberSizeWithPadding__ += (memberDataSize + alignmentPadding)
 		self.__m_numAddedMembers__ += 1
 		les_logger.Log("Struct:'%s' Member:'%s' Type:'%s' 0x%X DataSize:%d aligmentPadding:%d", 
