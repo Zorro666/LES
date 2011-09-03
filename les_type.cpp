@@ -140,7 +140,7 @@ int LES_TypeEntry::ComputeDataStorageSize(void) const
 		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeEntryPtr->m_hash);
 		if (structDefinition == LES_NULL)
 		{
-			LES_WARNING("ComputeDataStorage type:0x%X is a struct but can't be found", typeEntryPtr->m_hash);
+			LES_WARNING("ComputeDataStorageSize type:0x%X is a struct but can't be found", typeEntryPtr->m_hash);
 			return -1;
 		}
 		const int numMembers = structDefinition->GetNumMembers();

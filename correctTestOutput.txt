@@ -2,7 +2,7 @@
 ID:'LESD'
 NumChunks:3
 
-numStrings:74
+numStrings:76
 String[0] name:'unsigned char' hash:0x6E40A25D
 String[1] name:'unsigned short' hash:0x3B779699
 String[2] name:'unsigned int' hash:0xA31138D4
@@ -74,9 +74,11 @@ String[67] name:'TestStruct11*' hash:0x8B035147
 String[68] name:'TestStruct11&[1]' hash:0x2031AC34
 String[69] name:'TestStruct12' hash:0x835600E0
 String[70] name:'arrayExistsWrongNumberOfElements[1]' hash:0x5429AC10
-String[71] name:'PyTestStruct1' hash:0xF45E50AD
+String[71] name:'m_longlong' hash:0x82F4779E
 String[72] name:'m_char' hash:0x431FFB4
-String[73] name:'m_float' hash:0x10757BBA
+String[73] name:'m_int' hash:0x8BA40971
+String[74] name:'m_short' hash:0xE757B11E
+String[75] name:'m_float' hash:0x10757BBA
 
 numTypes:71
 Type[0] name:'unsigned char' hash:0x6E40A25D size:1 flags:0x5 INPUT|POD aliasedName:'unsigned char' aliasedID:0 numElements:0
@@ -152,9 +154,12 @@ Type[69] name:'TestStruct12' hash:0x835600E0 size:12 flags:0x9 INPUT|STRUCT alia
 Type[70] name:'arrayExistsWrongNumberOfElements[1]' hash:0x5429AC10 size:4 flags:0xC5 INPUT|POD|ALIAS|ARRAY aliasedName:'int' aliasedID:6 numElements:1
 
 numStructDefinitions:1
-Struct[0] 'PyTestStruct1' nameID:71 numMembers[2]
-  Struct 'PyTestStruct1' Member[0] 'm_char' 0x431FFB4 Type:'char' size:1 alignmentPadding:0
-  Struct 'PyTestStruct1' Member[1] 'm_float' 0x10757BBA Type:'float' size:4 alignmentPadding:3
+Struct[0] 'TestStruct1' numMembers[5]
+  Struct 'TestStruct1' Member[0] Type:'long long int' Name:'m_longlong' 0x82F4779E size:8 alignmentPadding:0
+  Struct 'TestStruct1' Member[1] Type:'char' Name:'m_char' 0x431FFB4 size:1 alignmentPadding:0
+  Struct 'TestStruct1' Member[2] Type:'int' Name:'m_int' 0x8BA40971 size:4 alignmentPadding:3
+  Struct 'TestStruct1' Member[3] Type:'short' Name:'m_short' 0xE757B11E size:2 alignmentPadding:0
+  Struct 'TestStruct1' Member[4] Type:'float' Name:'m_float' 0x10757BBA size:4 alignmentPadding:2
 #### Function header definition tests ####
 WARNING: 'LES_Test_FunctionNotFound' : Can't find function definition
 FATAL_ERROR: 'LES_Test_FunctionNotFound' : Error during LES_FunctionStart
@@ -197,20 +202,20 @@ FATAL_ERROR: 'LES_Test_InputNameDoesntExist' : Error adding Input parameter 0 'i
 WARNING: 'LES_Test_InputNameIDNotFound' : Can't find parameter name for ID:-1 parameter:'input_0' type:'int'
 FATAL_ERROR: 'LES_Test_InputNameIDNotFound' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputNameHashIsWrong' : Adding parameter 'input_0' name hash doesn't match for ID:105 0x480D993 != 0x97A0017 Code:'input_0' Definition:'wrongHash'
+WARNING: 'LES_Test_InputNameHashIsWrong' : Adding parameter 'input_0' name hash doesn't match for ID:104 0x480D993 != 0x97A0017 Code:'input_0' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_InputNameHashIsWrong' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputNameStringIsWrong' : Adding parameter 'InputNameBrokenHash' name string doesn't match for ID:107 'InputNameBrokenHash' != 'brokenString' 0x99F1870C : 0x99F1870C
+WARNING: 'LES_Test_InputNameStringIsWrong' : Adding parameter 'InputNameBrokenHash' name string doesn't match for ID:106 'InputNameBrokenHash' != 'brokenString' 0x99F1870C : 0x99F1870C
 FATAL_ERROR: 'LES_Test_InputNameStringIsWrong' : Error adding Input parameter 0 'InputNameBrokenHash' type:'int'
 
 #### Input type tests ####
 WARNING: 'LES_Test_InputTypeIDNotFound' : Can't find Input parameter type for ID:-1 parameter:'input_0' type:'int'
 FATAL_ERROR: 'LES_Test_InputTypeIDNotFound' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputTypeHashIsWrong' : parameter:0 'input_0' (Input) type hash doesn't match for ID:105 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
+WARNING: 'LES_Test_InputTypeHashIsWrong' : parameter:0 'input_0' (Input) type hash doesn't match for ID:104 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_InputTypeHashIsWrong' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputTypeStringIsWrong' : Adding parameter 'input_0' type string doesn't match for ID:111 'InputTypeBrokenHash' != 'brokenString' 0x7EF15B07 : 0x7EF15B07
+WARNING: 'LES_Test_InputTypeStringIsWrong' : Adding parameter 'input_0' type string doesn't match for ID:110 'InputTypeBrokenHash' != 'brokenString' 0x7EF15B07 : 0x7EF15B07
 FATAL_ERROR: 'LES_Test_InputTypeStringIsWrong' : Error adding Input parameter 0 'input_0' type:'InputTypeBrokenHash'
 
 #### Output parameter tests ####
@@ -240,20 +245,20 @@ FATAL_ERROR: 'LES_Test_OutputNameDoesntExist' : Error adding Output parameter 0 
 WARNING: 'LES_Test_OutputNameIDNotFound' : Can't find parameter name for ID:-1 parameter:'output_0' type:'int'
 FATAL_ERROR: 'LES_Test_OutputNameIDNotFound' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputNameHashIsWrong' : Adding parameter 'output_0' name hash doesn't match for ID:105 0x1D1CA836 != 0x97A0017 Code:'output_0' Definition:'wrongHash'
+WARNING: 'LES_Test_OutputNameHashIsWrong' : Adding parameter 'output_0' name hash doesn't match for ID:104 0x1D1CA836 != 0x97A0017 Code:'output_0' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_OutputNameHashIsWrong' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputNameStringIsWrong' : Adding parameter 'OutputNameBrokenHash' name string doesn't match for ID:124 'OutputNameBrokenHash' != 'brokenString' 0x61782F3F : 0x61782F3F
+WARNING: 'LES_Test_OutputNameStringIsWrong' : Adding parameter 'OutputNameBrokenHash' name string doesn't match for ID:123 'OutputNameBrokenHash' != 'brokenString' 0x61782F3F : 0x61782F3F
 FATAL_ERROR: 'LES_Test_OutputNameStringIsWrong' : Error adding Output parameter 0 'OutputNameBrokenHash' type:'int'
 
 #### Output type tests ####
 WARNING: 'LES_Test_OutputTypeIDNotFound' : Can't find Output parameter type for ID:-1 parameter:'output_0' type:'int'
 FATAL_ERROR: 'LES_Test_OutputTypeIDNotFound' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputTypeHashIsWrong' : parameter:0 'output_0' (Output) type hash doesn't match for ID:105 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
+WARNING: 'LES_Test_OutputTypeHashIsWrong' : parameter:0 'output_0' (Output) type hash doesn't match for ID:104 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_OutputTypeHashIsWrong' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputTypeStringIsWrong' : Adding parameter 'output_0' type string doesn't match for ID:128 'OutputTypeBrokenHash' != 'brokenString' 0x4678033A : 0x4678033A
+WARNING: 'LES_Test_OutputTypeStringIsWrong' : Adding parameter 'output_0' type string doesn't match for ID:127 'OutputTypeBrokenHash' != 'brokenString' 0x4678033A : 0x4678033A
 FATAL_ERROR: 'LES_Test_OutputTypeStringIsWrong' : Error adding Output parameter 0 'output_0' type:'OutputTypeBrokenHash'
 
 #### Parameter already exists tests ####
