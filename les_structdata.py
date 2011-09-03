@@ -9,26 +9,26 @@ import les_logger
 
 #	LES_StructMember
 #	{
-#		uint32 m_hash;
-#		int32 m_nameID;
-#		int32 m_typeID;
-#		int32 m_dataSize;
-#		int32 m_alignmentPadding;
+#		LES_uint32 m_hash;
+#		LES_int32 m_nameID;
+#		LES_int32 m_typeID;
+#		LES_int32 m_dataSize;
+#		LES_int32 m_alignmentPadding;
 #	};
 
 # LES_StructDefinition
 # {
-#		int32 m_nameID;
-#		int32 m_numMembers;
+#		LES_int32 m_nameID;
+#		LES_int32 m_numMembers;
 #		LES_StructMember m_members[m_numMembers];
 #	};
 
 # LES_StructData
 # {
-# 	int32 m_numStructDeinfitions; 												- 4-bytes
-# 	int32 m_settled; 																			- 4-bytes, 0 in file
-#		int32 m_offsets[m_numStructs];												- 4-bytes * m_numStructs
-#		LES_StructDefinition m_structDefinitions[m_numTypes];	- variable 
+# 	LES_int32 m_numStructDeinfitions; 																		- 4-bytes
+# 	LES_int32 m_settled; 																									- 4-bytes, 0 in file
+#		LES_uint32 m_structDefinitionOffsets[m_numStructDefinitions];					- 4-bytes * m_numStructDefinitions
+#		LES_StructDefinition m_structDefinitions[m_numStructDefinitions];	- variable 
 # };
 
 class LES_StructMember():
@@ -150,46 +150,92 @@ class LES_StructData():
 		return self.__m_structDefinitions__[index]
 
 	def writeFile(self, binFile):
+		basePosition = binFile.getIndex()
 		# LES_StructData
 		# {
-		# 	int32 m_numStructDeinfitions; 												- 4-bytes
-		# 	int32 m_settled; 																			- 4-bytes, 0 in file
-		#		int32 m_offsets[m_numStructs];												- 4-bytes * m_numStructs
-		#		LES_StructDefinition m_structDefinitions[m_numTypes];	- variable 
+		# 	LES_int32 m_numStructDeinfitions; 																		- 4-bytes
+		# 	LES_int32 m_settled; 																									- 4-bytes, 0 in file
+		#		LES_uint32 m_structDefinitionOffsets[m_numStructDefinitions];					- 4-bytes * m_numStructDefinitions
+		#		LES_StructDefinition m_structDefinitions[m_numStructDefinitions];	- variable 
 		# };
 
-		# 	int32 m_numStructDefinitions; 										- 4 bytes
+		# 	LES_int32 m_numStructDefinitions; 										- 4 bytes
 		numStructDefinitions = len(self.__m_structDefinitions__)
-		binFile.writeInt(numStructDefinitions)
+		binFile.writeInt32(numStructDefinitions)
 
-		# 	int32 m_settled; 																	- 4-bytes, 0 in file
+		# 	LES_int32 m_settled; 																	- 4-bytes, 0 in file
 		settled = 0
-		binFile.writeInt(settled)
-#
-#		for typeEntry in self.__m_typeEntries__:
-#			# struct LES_TypeEntry
-#			# {
-#			#		uint32 m_hash;													- 4 bytes
-#			#		uint32 m_dataSize;											- 4 bytes
-#			#		uint32 m_flags;													- 4 bytes
-#			#		int32 m_aliasedTypeID;									- 4 bytes
-#			#		int32 m_numElements;										- 4 bytes
-#			# };
-#
-#			#		uint32 m_hash;													- 4 bytes
-#			binFile.writeUint(typeEntry.hashValue)
-#
-#			#		uint32 m_dataSize;											- 4 bytes
-#			binFile.writeUint(typeEntry.dataSize)
-#
-#			#		uint32 m_flags;													- 4 bytes
-#			binFile.writeUint(typeEntry.flags)
-#
-#			#		int32 m_aliasedTypeID;									- 4 bytes
-#			binFile.writeUint(typeEntry.aliasedTypeID)
-#
-#			#		int32 m_numElements;										- 4 bytes
-#			binFile.writeUint(typeEntry.numElements)
+		binFile.writeInt32(settled)
+
+		#		LES_uint32 m_structDefinitionOffsets[m_numStructDefinitions];	- 4-bytes * m_numStructDefinitions
+		structDefinitionOffsetsIndex = binFile.getIndex()
+		for i in range(numStructDefinitions):
+			structDefinitionOffset = 0xFFFFFFFF
+			binFile.writeUint32(structDefinitionOffset)
+
+		structDefinitionOffsets = []
+		#		LES_StructDefinition m_structDefinitions[m_numStructDefinitions];			- variable 
+		for structDefinition in self.__m_structDefinitions__:
+			# LES_StructDefinition
+			# {
+			#		LES_int32 m_nameID;
+			#		LES_int32 m_numMembers;
+			#		LES_StructMember m_members[m_numMembers];
+			#	};
+			currentPosition = binFile.getIndex()
+			offset = currentPosition - basePosition
+			structDefinitionOffsets.append(offset)
+			les_logger.Log("my offset=%d", offset)
+
+			#		LES_int32 m_nameID;
+			nameID = structDefinition.GetNameID()
+			binFile.writeInt32(nameID)
+
+			#		LES_int32 m_numMembers;
+			numMembers = structDefinition.GetNumMembers()
+			binFile.writeInt32(numMembers)
+
+			#		LES_StructMember m_members[m_numMembers];
+			for m in range(numMembers):
+				#	LES_StructMember
+				#	{
+				#		LES_uint32 m_hash;
+				#		LES_int32 m_nameID;
+				#		LES_int32 m_typeID;
+				#		LES_int32 m_dataSize;
+				#		LES_int32 m_alignmentPadding;
+				#	};
+				structMember = structDefinition.GetMemberByIndex(m)
+
+				#		LES_uint32 m_hash;
+				hashValue = structMember.m_hash
+				binFile.writeUint32(hashValue)
+
+				#		LES_int32 m_nameID;
+				nameID = structMember.m_nameID
+				binFile.writeInt32(nameID)
+
+				#		LES_int32 m_typeID;
+				typeID = structMember.m_typeID
+				binFile.writeInt32(typeID)
+
+				#		LES_int32 m_dataSize;
+				dataSize = structMember.m_dataSize
+				binFile.writeInt32(dataSize)
+
+				#		LES_int32 m_alignmentPadding;
+				alignmentPadding = structMember.m_alignmentPadding
+				binFile.writeInt32(alignmentPadding)
+
+		# Go back and fix up the m_structDefinitionOffsets values
+		endIndex = binFile.getIndex()
+		binFile.seek(structDefinitionOffsetsIndex)
+		for i in range(numStructDefinitions):
+			structDefinitionOffset = structDefinitionOffsets[i]
+			binFile.writeUint32(structDefinitionOffset)
+			les_logger.Log("Offset[%d] = %d", i, structDefinitionOffset);
+
+		binFile.seek(endIndex)
 
 	def parseXML(self, xmlSource):
 		numErrors = 1
