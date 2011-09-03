@@ -697,7 +697,7 @@ def runTest():
 	structDefinition = LES_StructDefinintion(nameID, 2)
 	structDefinition.AddMember("char", "m_char", stringTable, typeData, this)
 	structDefinition.AddMember("float", "m_float", stringTable, typeData, this)
-	this.addStructDefinition("TestStruct1", structDefinition)
+	this.addStructDefinition("PyTestStruct1", structDefinition)
 
 	binFile = les_binaryfile.LES_BinaryFile("structDefinitionLittle.bin")
 	binFile.setLittleEndian()

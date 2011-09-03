@@ -22,11 +22,11 @@ def loadTypeData(typeData):
 	typeData.loadXML("data/les_types_errors.xml")
 
 def loadStructData(structData, typeData, stringTable):
-	nameID = stringTable.addString("TestStruct1")
+	nameID = stringTable.addString("PyTestStruct1")
 	structDefinition = les_structdata.LES_StructDefinintion(nameID, 2)
 	structDefinition.AddMember("char", "m_char", stringTable, typeData, structData)
 	structDefinition.AddMember("float", "m_float", stringTable, typeData, structData)
-	structData.addStructDefinition("TestStruct1", structDefinition)
+	structData.addStructDefinition("PyTestStruct1", structDefinition)
 
 class LES_DefinitionFile():
 	def __init__(self):
