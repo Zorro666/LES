@@ -185,7 +185,6 @@ class LES_StructData():
 			currentPosition = binFile.getIndex()
 			offset = currentPosition - basePosition
 			structDefinitionOffsets.append(offset)
-			les_logger.Log("my offset=%d", offset)
 
 			#		LES_int32 m_nameID;
 			nameID = structDefinition.GetNameID()
@@ -233,7 +232,6 @@ class LES_StructData():
 		for i in range(numStructDefinitions):
 			structDefinitionOffset = structDefinitionOffsets[i]
 			binFile.writeUint32(structDefinitionOffset)
-			les_logger.Log("Offset[%d] = %d", i, structDefinitionOffset);
 
 		binFile.seek(endIndex)
 
