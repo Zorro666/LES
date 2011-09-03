@@ -1,26 +1,21 @@
 High Priority:
-STRUCTDATA.PY: dump struct data debug
-STRUCTDATA.PY: add write File 
+eTRUCTDATA.PY: add write File
 STRUCTDATA.PY: add XML parse
-TEST: dump struct data debug command
 TEST: compute the struct size in EndStruct and ERROR if not the same as the definition
 TEST: compute the struct size in EndStruct and update the type definition
 SERVER: add struct defintiions to binary data and XML parsing
 TEST: use definition file with struct definitions in it
-TEST: dump function data debug command
-TEST: remove ownsmemory mess in les_function.{cpp,h}
 
 Medium Priority:
+TEST: dump function data debug command
+TEST: remove ownsmemory mess in les_function.{cpp,h}
+SERVER: add function defintiions to binary data and XML parsing
+
 SERVER: up and running ready for client to connect
 CLIENT: connect to server
 
-CLIENT: use definition file (type, string, structs) from over the network
-SERVER: add function defintiions to binary data and XML parsing
 CLIENT: use definition file (type, string, structs, functions) from over the network
 PYTHON: somehow the struct size could/should be computed on the server size 
-
-SERVER: at some point test and implement endian swapping for the binary data
-CLIENT: test endian swapped binary data
 
 CLIENT: send function data to server as network message
 SERVER: process function data send response
