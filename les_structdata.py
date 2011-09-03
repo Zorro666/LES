@@ -497,19 +497,27 @@ class LES_StructData():
 		else:
 			les_logger.Error("numErrors=%d", numErrors)
 
-#	def DebugOutputTypes(self, loggerChannel):
-#		for typeEntry in self.__m_typeEntries__:
-#			hashValue = typeEntry.hashValue
-#			dataSize = typeEntry.dataSize
-#			flags = typeEntry.flags
-#			aliasedTypeID = typeEntry.aliasedTypeID
-#			numElements = typeEntry.numElements
-#
-#			name = self.__m_stringTable__.getStringByHash(hashValue)
-#			flagsDecoded = decodeFlags(flags)
-#			aliasedName = self.__m_stringTable__.getString(aliasedTypeID)
-#			loggerChannel.Print("Type '%s' size:%d flags:0x%X %s aliasedName:'%s' numElements:%d", name, dataSize, flags, flagsDecoded, aliasedName, numElements)
+	def DebugOutputStructs(self, loggerChannel):
+		for structDefinition in self.__m_structDefinitions__:
+			structNameID = structDefinition.GetNameID()
+			structName = self.__m_stringTable__.getString(structNameID)
 
+			numMembers = structDefinition.GetNumMembers()
+			for i in range(numMembers):
+				structMember = structDefinition.GetMemberByIndex(i)
+
+				hashValue = structMember.m_hash
+				nameID = structMember.m_nameID
+				typeID = structMember.m_typeID
+				dataSize = structMember.m_dataSize
+				alignmentPadding = structMember.m_alignmentPadding
+
+				memberName = self.__m_stringTable__.getString(nameID)
+				typeName = self.__m_stringTable__.getString(typeID)
+				loggerChannel.Print("Struct '%s' Member[%d] '%s' Type:'%s' size:%d alignmentPadding:%d", 
+														structName, i, memberName, typeName, dataSize, alignmentPadding)
+
+# Global helper functions to do with LES_TypeEntry data - should move these to les_typedata.py
 def GetRootType(typeEntry, stringTable, typeData):
 	flags = typeEntry.m_flags
 	while flags & les_typedata.LES_TYPE_ALIAS:
@@ -651,15 +659,18 @@ def runTest():
 	this.writeFile(binFile)
 	binFile.close()
 
-	stringTable = les_stringtable.LES_StringTable()
-	this = LES_StructData(stringTable)
+	testStructChan = les_logger.CreateChannel("StructDebug", "", "structDebug_py.txt", les_logger.LES_LOGGERCHANNEL_FLAGS_DEFAULT)
+	this.DebugOutputStructs(testStructChan)
+
+#	stringTable = les_stringtable.LES_StringTable()
+#	this = LES_StructData(stringTable)
 
 #	this.loadXML("data/les_types_basic.xml")
 #	this.loadXML("data/les_types_test.xml")
 #	this.loadXML("data/les_types_errors.xml")
 
-#	testTypeChan = les_logger.CreateChannel("TypeDebug", "", "typeDebug_py.txt", les_logger.LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT | les_logger.LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT)
-#	this.DebugOutputTypes(testTypeChan)
+#	testStructChan = les_logger.CreateChannel("StructDebug", "", "structDebug_py.txt", les_logger.LES_LOGGERCHANNEL_FLAGS_DEFAULT)
+#	this.DebugOutputStructs(testStructChan)
 
 if __name__ == '__main__':
 	runTest()
