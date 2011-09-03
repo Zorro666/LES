@@ -30,6 +30,16 @@ static int LES_GetStructDefinitionIndex(const LES_Hash nameHash)
 	return -1;
 }
 
+static const LES_StructDefinition* LES_GetStructDefinitionByID(const int index)
+{
+	if ((index < 0) || (index >= les_numStructDefinitions))
+	{
+		return LES_NULL;
+	}
+	const LES_StructDefinition* const structDefinitionPtr = les_structDefinitionArray[index];
+	return structDefinitionPtr;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // External Public functions
@@ -73,11 +83,7 @@ const LES_StructMember* LES_StructDefinition::GetMember(const LES_Hash nameHash)
 const LES_StructDefinition* LES_GetStructDefinition(const LES_Hash nameHash)
 {
 	const int index = LES_GetStructDefinitionIndex(nameHash);
-	if ((index < 0) || (index >= les_numStructDefinitions))
-	{
-		return LES_NULL;
-	}
-	const LES_StructDefinition* const structDefinitionPtr = les_structDefinitionArray[index];
+	const LES_StructDefinition* const structDefinitionPtr = LES_GetStructDefinitionByID(index);
 	return structDefinitionPtr;
 }
 
