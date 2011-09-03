@@ -5,6 +5,7 @@
 #include "les_logger.h"
 #include "les_stringtable.h"
 #include "les_typedata.h"
+#include "les_structdata.h"
 
 LES_DefinitionFile::LES_DefinitionFile(const void* chunkFileData, const int dataSize)
 {
@@ -32,7 +33,7 @@ int LES_DefinitionFile::Load(const void* chunkFileData, const int dataSize)
 	const int numChunks = GetNumChunks();
 
 	const char defID[4] = {'L', 'E', 'S', 'D'};
-	const int defNumChunks = 2;
+	const int defNumChunks = LES_DEFINITION_NUMCHUNKS;
 
 	// CHECK ID = defID
 	if ((id[0] != defID[0]) || (id[1] != defID[1]) || (id[2] != defID[2]) || (id[3] != defID[3]))
@@ -61,6 +62,14 @@ int LES_DefinitionFile::Load(const void* chunkFileData, const int dataSize)
 		LES_ERROR("LES_DefinitionFile::LES_TypeData::Settle() failed");
 		return LES_RETURN_ERROR;
 	}
+
+	LES_StructData* const pStructData = (LES_StructData* const)GetStructData();
+	if (pStructData->Settle() != LES_RETURN_OK)
+	{
+		LES_ERROR("LES_DefinitionFile::LES_StructData::Settle() failed");
+		return LES_RETURN_ERROR;
+	}
+
 	return LES_RETURN_OK;
 }
 

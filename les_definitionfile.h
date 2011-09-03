@@ -18,6 +18,7 @@
 
 class LES_StringTable;
 class LES_TypeData;
+class LES_StructData;
 
 class LES_DefinitionFile
 {
@@ -34,6 +35,7 @@ public:
 
 	const LES_StringTable* GetStringTable(void) const;
 	const LES_TypeData* GetTypeData(void) const;
+	const LES_StructData* GetStructData(void) const;
 
 	bool Loaded(void) const;
 private:
@@ -44,6 +46,8 @@ private:
 	enum { 
 					LES_DEFINITION_STRINGTABLE = 0,
 				 	LES_DEFINITION_TYPEDATA = 1,
+				 	LES_DEFINITION_STRUCTDATA = 2,
+				 	LES_DEFINITION_NUMCHUNKS,
 			 };
 };
 
@@ -66,5 +70,11 @@ inline const LES_TypeData* LES_DefinitionFile::GetTypeData(void) const
 	return typeDataPtr;
 }
 
-#endif // #ifndef LES_DEFINITIONFILE_HH
+inline const LES_StructData* LES_DefinitionFile::GetStructData(void) const
+{
+	const void* chunkDataPtr = m_chunkFileData->GetChunkData(LES_DEFINITION_STRUCTDATA);
+	const LES_StructData* structDataPtr = (const LES_StructData*)chunkDataPtr;
+	return structDataPtr;
+}
 
+#endif // #ifndef LES_DEFINITIONFILE_HH
