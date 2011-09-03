@@ -503,6 +503,7 @@ class LES_StructData():
 			structName = self.__m_stringTable__.getString(structNameID)
 
 			numMembers = structDefinition.GetNumMembers()
+			loggerChannel.Print("Struct '%s' NnumMembers[%d]", structName, numMembers)
 			for i in range(numMembers):
 				structMember = structDefinition.GetMemberByIndex(i)
 
@@ -514,8 +515,8 @@ class LES_StructData():
 
 				memberName = self.__m_stringTable__.getString(nameID)
 				typeName = self.__m_stringTable__.getString(typeID)
-				loggerChannel.Print("Struct '%s' Member[%d] '%s' Type:'%s' size:%d alignmentPadding:%d", 
-														structName, i, memberName, typeName, dataSize, alignmentPadding)
+				loggerChannel.Print("  Struct '%s' Member[%d] '%s' 0x%X Type:'%s' size:%d alignmentPadding:%d", 
+														structName, i, memberName, hashValue, typeName, dataSize, alignmentPadding)
 
 # Global helper functions to do with LES_TypeEntry data - should move these to les_typedata.py
 def GetRootType(typeEntry, stringTable, typeData):
@@ -525,13 +526,13 @@ def GetRootType(typeEntry, stringTable, typeData):
 		les_logger.Log("Type 0x%X alias:%d flags:0x%X", typeEntry.m_hash, aliasedTypeID, flags)
 		aliasedStringType = stringTable.getString(aliasedTypeID)
 		if aliasedStringType == None:
-			les_logger.FatalError("ComputeAlignment aliased type:%d string can't be found", aliasedTypeID)
-			return -1;
+			les_logger.FatalError("GetRootType aliased type:%d string can't be found", aliasedTypeID)
+			return -1
 		aliasedTypeEntry = typeData.getTypeData(aliasedStringType)
 		if aliasedTypeEntry == None:
-			les_logger.FatalError("ComputeAlignment aliased type not found aliased type:'%s'", aliasedStringType)
-			return -1;
-		les_logger.Log("Compute Alignment Type 0x%X alias:%s", typeEntry.m_hash, aliasedStringType)
+			les_logger.FatalError("GetRootType aliased type not found aliased type:'%s'", aliasedStringType)
+			return -1
+		les_logger.Log("GetRootType Type 0x%X alias:%s", typeEntry.m_hash, aliasedStringType)
 
 		typeEntry = aliasedTypeEntry
 		flags = typeEntry.m_flags
@@ -564,7 +565,7 @@ def ComputeAlignment(typeEntry, stringTable, typeData, structData):
 			if alignment > maxAlignment:
 				maxAlignment = alignment
 			les_logger.Log("Compute Alignment Type 0x%X Struct:%d alignment:%d", typeEntry.m_hash, structDefinition.GetNameID(), maxAlignment)
-		return maxAlignment;
+		return maxAlignment
 
 	dataSize = typeEntry.m_dataSize
 	alignment = dataSize
@@ -580,7 +581,7 @@ def ComputeDataStorageSize(typeEntry, stringTable, typeData, structData):
 	if flags & les_typedata.LES_TYPE_STRUCT:
 		structDefinition = structData.getStructDefinition(typeEntry.m_hash)
 		if structDefinition == None:
-			les_logger.Warning("ComputeDataStorage type:0x%X is a struct but can't be found", typeEntry.m_hash)
+			les_logger.Warning("ComputeDataStorageSize type:0x%X is a struct but can't be found", typeEntry.m_hash)
 			return -1
 
 		numMembers = structDefinition.GetNumMembers()
@@ -618,9 +619,9 @@ def StructComputeAlignmentPadding(totalMemberSize, memberDataSize):
 
 #	les_logger.Log("TotalMemberSize:0x%X MemberDataSize:0x%X Alignment:%d", totalMemberSize, memberDataSize, alignmentPadding)
 	if alignmentPadding < 0:
-		les_logger.FatalError("HELP");
+		les_logger.FatalError("HELP")
 
-	return alignmentPadding;
+	return alignmentPadding
 
 def runTest():
 	les_logger.Init()

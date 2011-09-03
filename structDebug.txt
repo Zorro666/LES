@@ -1,0 +1,54 @@
+Struct 'TestStruct1' NnumMembers[5]
+  Struct 'TestStruct1' Member[0] 'm_longlong' 0x82F4779E Type:'long long int' size:8 alignmentPadding:0
+  Struct 'TestStruct1' Member[1] 'm_char' 0x431FFB4 Type:'char' size:1 alignmentPadding:0
+  Struct 'TestStruct1' Member[2] 'm_int' 0x8BA40971 Type:'int' size:4 alignmentPadding:3
+  Struct 'TestStruct1' Member[3] 'm_short' 0xE757B11E Type:'short' size:2 alignmentPadding:0
+  Struct 'TestStruct1' Member[4] 'm_float' 0x10757BBA Type:'float' size:4 alignmentPadding:2
+Struct 'TestStruct2' NnumMembers[5]
+  Struct 'TestStruct2' Member[0] 'm_float' 0x10757BBA Type:'float' size:4 alignmentPadding:0
+  Struct 'TestStruct2' Member[1] 'm_testStruct1' 0xD518419C Type:'TestStruct1' size:24 alignmentPadding:0
+  Struct 'TestStruct2' Member[2] 'm_char' 0x431FFB4 Type:'char' size:1 alignmentPadding:0
+  Struct 'TestStruct2' Member[3] 'm_short' 0xE757B11E Type:'short' size:2 alignmentPadding:1
+  Struct 'TestStruct2' Member[4] 'm_int' 0x8BA40971 Type:'int' size:4 alignmentPadding:0
+Struct 'TestStruct3' NnumMembers[4]
+  Struct 'TestStruct3' Member[0] 'm_short' 0xE757B11E Type:'short' size:2 alignmentPadding:0
+  Struct 'TestStruct3' Member[1] 'm_float' 0x10757BBA Type:'float' size:4 alignmentPadding:2
+  Struct 'TestStruct3' Member[2] 'm_int' 0x8BA40971 Type:'int' size:4 alignmentPadding:0
+  Struct 'TestStruct3' Member[3] 'm_char' 0x431FFB4 Type:'char' size:1 alignmentPadding:0
+Struct 'TestStruct4' NnumMembers[6]
+  Struct 'TestStruct4' Member[0] 'm_float' 0x10757BBA Type:'float' size:4 alignmentPadding:0
+  Struct 'TestStruct4' Member[1] 'm_int' 0x8BA40971 Type:'int' size:4 alignmentPadding:0
+  Struct 'TestStruct4' Member[2] 'm_char' 0x431FFB4 Type:'char' size:1 alignmentPadding:0
+  Struct 'TestStruct4' Member[3] 'm_short' 0xE757B11E Type:'short' size:2 alignmentPadding:1
+  Struct 'TestStruct4' Member[4] 'm_short2' 0xB990C08C Type:'short' size:2 alignmentPadding:0
+  Struct 'TestStruct4' Member[5] 'm_testStruct3' 0xD518419E Type:'TestStruct3' size:16 alignmentPadding:2
+Struct 'TestStruct5' NnumMembers[2]
+  Struct 'TestStruct5' Member[0] 'm_char' 0x431FFB4 Type:'char' size:1 alignmentPadding:0
+  Struct 'TestStruct5' Member[1] 'm_shortPtr' 0x4E5BEFC8 Type:'short*' size:4 alignmentPadding:3
+Struct 'TestStruct6' NnumMembers[3]
+  Struct 'TestStruct6' Member[0] 'm_short' 0xE757B11E Type:'short' size:2 alignmentPadding:0
+  Struct 'TestStruct6' Member[1] 'm_testStructPtr' 0xEC0F5261 Type:'TestStruct5*' size:4 alignmentPadding:2
+  Struct 'TestStruct6' Member[2] 'm_charPtr' 0xD46E749A Type:'char*' size:4 alignmentPadding:0
+Struct 'TestStruct7' NnumMembers[5]
+  Struct 'TestStruct7' Member[0] 'm_short' 0xE757B11E Type:'short' size:2 alignmentPadding:0
+  Struct 'TestStruct7' Member[1] 'm_floatRef' 0xF0697795 Type:'float&' size:4 alignmentPadding:2
+  Struct 'TestStruct7' Member[2] 'm_char' 0x431FFB4 Type:'char' size:1 alignmentPadding:0
+  Struct 'TestStruct7' Member[3] 'm_charRef' 0xD472EFF3 Type:'char&' size:4 alignmentPadding:3
+  Struct 'TestStruct7' Member[4] 'm_charPtr' 0xD46E749A Type:'char*' size:4 alignmentPadding:0
+Struct 'TestStruct8' NnumMembers[3]
+  Struct 'TestStruct8' Member[0] 'm_short' 0xE757B11E Type:'short' size:2 alignmentPadding:0
+  Struct 'TestStruct8' Member[1] 'm_testStruct5Ref' 0x7D94B9D7 Type:'TestStruct5&' size:4 alignmentPadding:2
+  Struct 'TestStruct8' Member[2] 'm_charPtr' 0xD46E749A Type:'char*' size:4 alignmentPadding:0
+Struct 'TestStruct9' NnumMembers[1]
+  Struct 'TestStruct9' Member[0] 'm_short' 0xE757B11E Type:'short[3]' size:6 alignmentPadding:0
+Struct 'TestStruct10' NnumMembers[2]
+  Struct 'TestStruct10' Member[0] 'm_short' 0xE757B11E Type:'short[3]' size:6 alignmentPadding:0
+  Struct 'TestStruct10' Member[1] 'm_testStruct9' 0xD51841A4 Type:'TestStruct9[2]' size:12 alignmentPadding:0
+Struct 'TestStruct11' NnumMembers[3]
+  Struct 'TestStruct11' Member[0] 'm_short' 0xE757B11E Type:'short&[3]' size:4 alignmentPadding:0
+  Struct 'TestStruct11' Member[1] 'm_int' 0x8BA40971 Type:'int&[2]' size:4 alignmentPadding:0
+  Struct 'TestStruct11' Member[2] 'm_char' 0x431FFB4 Type:'char&[5]' size:4 alignmentPadding:0
+Struct 'TestStruct12' NnumMembers[3]
+  Struct 'TestStruct12' Member[0] 'm_short' 0xE757B11E Type:'short&[3]' size:4 alignmentPadding:0
+  Struct 'TestStruct12' Member[1] 'm_testStruct9' 0xD51841A4 Type:'TestStruct9&[2]' size:4 alignmentPadding:0
+  Struct 'TestStruct12' Member[2] 'm_testStruct11' 0x23AB2F05 Type:'TestStruct11&[1]' size:4 alignmentPadding:0
