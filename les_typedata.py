@@ -39,17 +39,17 @@ def decodeFlags(flags):
 
 # struct LES_TypeEntry
 # {
-#		uint32 m_hash;														- 4 bytes
-#		uint32 m_dataSize;												- 4 bytes
-#		uint32 m_flags;														- 4 bytes
-#		int32 m_aliasedTypeID;										- 4 bytes
-#		int32 m_numElements;											- 4 bytes
+#		LES_uint32 m_hash;														- 4 bytes
+#		LES_uint32 m_dataSize;												- 4 bytes
+#		LES_uint32 m_flags;														- 4 bytes
+#		LES_int32 m_aliasedTypeID;										- 4 bytes
+#		LES_int32 m_numElements;											- 4 bytes
 # };
 #
 # LES_TypeData
 # {
-# 	int32 m_numTypes; 												- 4-bytes
-# 	int32 m_settled; 													- 4-bytes, 0 in file
+# 	LES_int32 m_numTypes; 												- 4-bytes
+# 	LES_int32 m_settled; 													- 4-bytes, 0 in file
 #		LES_TypeEntry m_typeEntries[m_numTypes];	- 20 bytes * m_numTypes
 # };
 
@@ -175,43 +175,43 @@ class LES_TypeData():
 	def writeFile(self, binFile):
 		# LES_TypeData
 		# {
-		# 	int32 m_numTypes; 												- 4 bytes
-		# 	int32 m_settled; 													- 4-bytes, 0 in file
+		# 	LES_int32 m_numTypes; 												- 4 bytes
+		# 	LES_int32 m_settled; 													- 4-bytes, 0 in file
 		#		LES_TypeEntry m_typeEntries[m_numTypes];	- 20 bytes * m_numTypes
 		# };
 
-		# 	int32 m_numTypes; 												- 4 bytes
+		# 	LES_int32 m_numTypes; 												- 4 bytes
 		numTypes = len(self.__m_typeEntries__)
-		binFile.writeInt(numTypes)
+		binFile.writeInt32(numTypes)
 
-		# 	int32 m_settled; 													- 4-bytes, 0 in file
+		# 	LES_int32 m_settled; 													- 4-bytes, 0 in file
 		settled = 0
-		binFile.writeInt(settled)
+		binFile.writeInt32(settled)
 
 		for typeEntry in self.__m_typeEntries__:
 			# struct LES_TypeEntry
 			# {
-			#		uint32 m_hash;													- 4 bytes
-			#		uint32 m_dataSize;											- 4 bytes
-			#		uint32 m_flags;													- 4 bytes
-			#		int32 m_aliasedTypeID;									- 4 bytes
-			#		int32 m_numElements;										- 4 bytes
+			#		LES_uint32 m_hash;													- 4 bytes
+			#		LES_uint32 m_dataSize;											- 4 bytes
+			#		LES_uint32 m_flags;													- 4 bytes
+			#		LES_int32 m_aliasedTypeID;									- 4 bytes
+			#		LES_int32 m_numElements;										- 4 bytes
 			# };
 
-			#		uint32 m_hash;													- 4 bytes
-			binFile.writeUint(typeEntry.m_hash)
+			#		LES_uint32 m_hash;													- 4 bytes
+			binFile.writeUint32(typeEntry.m_hash)
 
-			#		uint32 m_dataSize;											- 4 bytes
-			binFile.writeUint(typeEntry.m_dataSize)
+			#		LES_uint32 m_dataSize;											- 4 bytes
+			binFile.writeUint32(typeEntry.m_dataSize)
 
-			#		uint32 m_flags;													- 4 bytes
-			binFile.writeUint(typeEntry.m_flags)
+			#		LES_uint32 m_flags;													- 4 bytes
+			binFile.writeUint32(typeEntry.m_flags)
 
-			#		int32 m_aliasedTypeID;									- 4 bytes
-			binFile.writeUint(typeEntry.m_aliasedTypeID)
+			#		LES_int32 m_aliasedTypeID;									- 4 bytes
+			binFile.writeInt32(typeEntry.m_aliasedTypeID)
 
-			#		int32 m_numElements;										- 4 bytes
-			binFile.writeUint(typeEntry.m_numElements)
+			#		LES_int32 m_numElements;										- 4 bytes
+			binFile.writeInt32(typeEntry.m_numElements)
 
 	def parseXML(self, xmlSource):
 		#<?xml version='1.0' ?>
