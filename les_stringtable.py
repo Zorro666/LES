@@ -57,7 +57,7 @@ class LES_StringTable():
 	def getString(self, index):
 		if index < len(self.__m_strings__):
 			return self.__m_strings__[index]
-		return -1
+		return None
 
 	def getHash(self, index):
 		if index < len(self.hashes):
