@@ -8,6 +8,8 @@
 enum LES_LoggerChannelFlags { LES_LOGGERCHANNEL_FLAGS_FATAL = (1<<0),
 															LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT = (1<<1),
 															LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT = (1<<2),
+															LES_LOGGERCHANNEL_FLAGS_DEFAULT = LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT | 
+																																LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT,
 														};
 
 class LES_LoggerChannel

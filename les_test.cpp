@@ -2286,10 +2286,10 @@ struct TestStruct66
 	LES_TEST_ADD_TYPE_EX(CantAddNewTypes, 1, 0, int, 0);
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 
-	LES_LoggerChannel* const typeDebugChan = LES_Logger::CreateChannel("TypeDebug", "", "typeDebug.txt", LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT|LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT);
+	LES_LoggerChannel* const typeDebugChan = LES_Logger::CreateChannel("TypeDebug", "", "typeDebug.txt", LES_LOGGERCHANNEL_FLAGS_DEFAULT);
 	LES_DebugOutputTypes(typeDebugChan);
 
-	LES_LoggerChannel* const stringDebugChan = LES_Logger::CreateChannel("StringDebug", "", "stringDebug.txt", LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT|LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT);
+	LES_LoggerChannel* const stringDebugChan = LES_Logger::CreateChannel("StringDebug", "", "stringDebug.txt", LES_LOGGERCHANNEL_FLAGS_DEFAULT);
 	LES_DebugOutputStringEntries(stringDebugChan);
 }
 
