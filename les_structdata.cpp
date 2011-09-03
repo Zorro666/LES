@@ -1,6 +1,24 @@
 #include "les_structdata.h"
+#include "les_core.h"
 #include "les_logger.h"
 #include "les_stringentry.h"
+
+int LES_StructData::GetStructDefinitionIndex(const LES_Hash nameHash) const
+{
+	/* This is horribly slow - need hash lookup table */
+	const int numStructDefinitions = m_numStructDefinitions;
+	for (int i = 0; i < numStructDefinitions; i++)
+	{
+		const LES_StructDefinition* const pStructDefinition = GetStructDefinition(i);
+		const int nameID = pStructDefinition->GetNameID();
+		const LES_StringEntry* const pStructNameStringEntry = LES_GetStringEntryForID(nameID);
+		if (pStructNameStringEntry->m_hash == nameHash)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
 
 int LES_StructData::Settle(void)
 {

@@ -19,6 +19,7 @@ class LES_StructData
 public:
 	int GetNumStructDefinitions(void) const;
 	const LES_StructDefinition* GetStructDefinition(const int index) const;
+	int GetStructDefinitionIndex(const LES_Hash nameHash) const;
 
 	friend class LES_DefinitionFile;
 private:

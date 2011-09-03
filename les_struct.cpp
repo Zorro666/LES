@@ -25,6 +25,15 @@ void LES_DebugOutputStructDefinition(LES_LoggerChannel* const pLogChannel,
 
 static int LES_GetStructDefinitionIndex(const LES_Hash nameHash)
 {
+	if (les_pStructData)
+	{
+		const int index = les_pStructData->GetStructDefinitionIndex(nameHash);
+		if (index >= 0)
+		{
+			return index;
+		}
+	}
+
 	/* This is horribly slow - need hash lookup table */
 	for (int i = 0; i < les_numStructDefinitions; i++)
 	{
@@ -196,6 +205,17 @@ LES_StructDefinition* LES_CreateStructDefinition(const int nameID, const int num
 	LES_StructDefinition* const structDefinitionPtr = (LES_StructDefinition*)malloc(memorySize);
 	structDefinitionPtr->m_nameID = nameID;
 	structDefinitionPtr->m_numMembers = numMembers;
+	LES_StructMember emptyStructMember;
+	emptyStructMember.m_hash = 0;
+	emptyStructMember.m_nameID = -1;
+	emptyStructMember.m_typeID = -1;
+	emptyStructMember.m_dataSize = 0;
+	emptyStructMember.m_alignmentPadding = 0;
+	for (int i = 0; i < numMembers; i++)
+	{
+		LES_StructMember* const pStructMember = (LES_StructMember* const)structDefinitionPtr->GetMemberByIndex(i);
+		*pStructMember = emptyStructMember;
+	}
 	return structDefinitionPtr;
 }
 
@@ -207,7 +227,7 @@ void LES_DebugOutputStructDefinition(LES_LoggerChannel* const pLogChannel, const
 
 	const char* const structName = pStructNameStringEntry->m_str;
 	const int numMembers = pStructDefinition->GetNumMembers();
-	pLogChannel->Print("Struct[%d] '%s' nameID:%d numMembers[%d]", i, structName, structNameID, numMembers);
+	pLogChannel->Print("Struct[%d] '%s' numMembers[%d]", i, structName, numMembers);
 	for (int m = 0; m < numMembers; m++)
 	{
 		const LES_StructMember* const pStructMember = pStructDefinition->GetMemberByIndex(m);
@@ -222,7 +242,7 @@ void LES_DebugOutputStructDefinition(LES_LoggerChannel* const pLogChannel, const
 		const char* const memberName = pMemberNameStringEntry->m_str;
 		const LES_StringEntry* const pTypeNameStringEntry = LES_GetStringEntryForID(typeID);
 		const char* const typeName = pTypeNameStringEntry->m_str;
-		pLogChannel->Print("  Struct '%s' Member[%d] '%s' 0x%X Type:'%s' size:%d alignmentPadding:%d", 
-											 structName, m, memberName, hash, typeName, dataSize, alignmentPadding);
+		pLogChannel->Print("  Struct '%s' Member[%d] Type:'%s' Name:'%s' 0x%X size:%d alignmentPadding:%d", 
+											 structName, m, typeName, memberName, hash, dataSize, alignmentPadding);
 	}
 }
