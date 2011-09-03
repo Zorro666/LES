@@ -21,7 +21,6 @@ int LES_StructData::Settle(void)
 	{
 		const int offset = fromLittleEndian32(m_structDefinitionOffsets[i]);
 		const char* const pStruct = basePtr + offset;
-		LES_LOG("offset = %d %p", offset, pStruct);
 		m_structDefinitionOffsets[i] = (LES_uint32)pStruct;
 		
 		// Settle the struct definition
