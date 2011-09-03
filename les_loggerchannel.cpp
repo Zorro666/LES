@@ -16,7 +16,7 @@ void LES_LoggerChannel::SetOutputFileName(const char* const fname)
 	if (strcmp(m_outputFileName, fname) != 0)
 	{
 		m_outputFileName = fname;
-		FILE* const filePtr = fopen(m_outputFileName, "w");
+		FILE* const filePtr = fopen(m_outputFileName, "wb");
 		if (filePtr == LES_NULL)
 		{
 			return;
@@ -42,7 +42,7 @@ void LES_LoggerChannel::InternalOutput(const char* const fmt, va_list* pArgPtr)
 	if (flags & LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT)
 	{
 		const char* const fileName = m_outputFileName;
-		FILE* const filePtr = fopen(fileName, "a");
+		FILE* const filePtr = fopen(fileName, "ab");
 		if (filePtr)
 		{
 			fprintf(filePtr, "%s%s\n", prefix, outputBuffer);
@@ -78,7 +78,7 @@ LES_LoggerChannel::LES_LoggerChannel( const char* const nickName, const char* co
 	m_prefixStr = prefix;
 	m_flags = flags;
 	m_outputFileName = outputFileName;
-	FILE* const filePtr = fopen(m_outputFileName, "w");
+	FILE* const filePtr = fopen(m_outputFileName, "wb");
 	if (filePtr)
 	{
 		fclose(filePtr);
