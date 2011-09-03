@@ -30,6 +30,8 @@ LES_Hash LES_TypeEntry::s_floatHash = LES_GenerateHashCaseSensitive("float");
 extern int LES_GetStringEntryID(const LES_Hash hash, const char* const str);
 extern int LES_AddStringEntry(const char* const str);
 
+void LES_DebugOutputTypeEntry(LES_LoggerChannel* const pLogChannel, const LES_TypeEntry* const pTypeEntry, const int i);
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Static Internal functions
@@ -69,15 +71,11 @@ static const LES_TypeEntry* LES_GetTypeEntryForID(const int id)
 	if (index < 0)
 	{
 		// Get it from definition file type data
-		const LES_TypeEntry* const typeEntryPtr = les_pTypeData->GetTypeEntry(id);
-		return typeEntryPtr;
+		const LES_TypeEntry* const pTypeEntry = les_pTypeData->GetTypeEntry(id);
+		return pTypeEntry;
 	}
-	if (index >= 0)
-	{
-		const LES_TypeEntry* const typeEntryPtr = &les_typeEntryArray[index];
-		return typeEntryPtr;
-	}
-	return LES_NULL;
+	const LES_TypeEntry* const pTypeEntry = &les_typeEntryArray[index];
+	return pTypeEntry;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -232,19 +230,8 @@ void LES_DebugOutputTypes(LES_LoggerChannel* const pLogChannel)
 	const int numTypes = les_typeDataNumTypes + les_numTypeEntries;
 	for (int i = 0; i < numTypes; i++)
 	{
-		const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntryForID(i);
-		const LES_StringEntry* nameEntry = LES_GetStringEntryByHash(typeEntryPtr->m_hash);
-		const char* const name = nameEntry ? nameEntry->m_str : "NULL";
-		const unsigned int dataSize = typeEntryPtr->m_dataSize;
-		const unsigned int flags = typeEntryPtr->m_flags;
-		const LES_StringEntry* const aliasedStringTypeEntry = LES_GetStringEntryForID(typeEntryPtr->m_aliasedTypeID);
-		const char* const aliasedName = aliasedStringTypeEntry ? aliasedStringTypeEntry->m_str : "NULL";
-		const int numElements = typeEntryPtr->m_numElements;
-
-		char flagsDecoded[1024];
-		LES_Type_DecodeFlags(flagsDecoded, flags);
-		pLogChannel->Print("Type '%s' size:%d flags:0x%X %s aliasedName:'%s' numElements:%d",
-												name, dataSize, flags, flagsDecoded, aliasedName, numElements);
+		const LES_TypeEntry* const pTypeEntry = LES_GetTypeEntryForID(i);
+		LES_DebugOutputTypeEntry(pLogChannel, pTypeEntry, i);
 	}
 }
 
@@ -484,3 +471,22 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 	return index;
 }
 
+void LES_DebugOutputTypeEntry(LES_LoggerChannel* const pLogChannel, const LES_TypeEntry* const pTypeEntry, const int i)
+{
+	const unsigned int hash = pTypeEntry->m_hash;
+	const unsigned int dataSize = pTypeEntry->m_dataSize;
+	const unsigned int flags = pTypeEntry->m_flags;
+	const int aliasedTypeID = pTypeEntry->m_aliasedTypeID;
+	const int numElements = pTypeEntry->m_numElements;
+
+	const LES_StringEntry* pNameEntry = LES_GetStringEntryByHash(hash);
+	const char* const name = pNameEntry ? pNameEntry->m_str : "NULL";
+	const LES_StringEntry* const pAliasedStringTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
+	const char* const aliasedName = pAliasedStringTypeEntry ? pAliasedStringTypeEntry->m_str : "NULL";
+
+	char flagsDecoded[1024];
+	LES_Type_DecodeFlags(flagsDecoded, flags);
+	pLogChannel->Print("Type[%d] name:'%s' hash:0x%X size:%d flags:0x%X %s aliasedName:'%s' aliasedID:%d numElements:%d",
+											i, name, hash, dataSize, flags, flagsDecoded,
+											aliasedName, aliasedTypeID, numElements);
+}

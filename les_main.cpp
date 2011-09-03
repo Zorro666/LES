@@ -81,9 +81,13 @@ int main(const int argc, const char* const argv[])
 
 	if (runTests)
 	{
+		LES_DebugOutputGlobalDefinitionFile(LES_Logger::GetDefaultChannel(LES_Logger::CHANNEL_LOG));
+	}
+
+	if (runTests)
+	{
 		LES_TestSetup();
 		LES_jakeInit(666, 123);
-		LES_DebugOutputGlobalDefinnitionFile(LES_Logger::GetDefaultChannel(LES_Logger::CHANNEL_LOG));
 	}
 
 	LES_Logger::SetChannelOutputFileName(LES_Logger::CHANNEL_WARNING, "warning.txt");

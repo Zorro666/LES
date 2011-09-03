@@ -6,9 +6,16 @@
 #include "les_logger.h"
 #include "les_loggerchannel.h"
 #include "les_stringentry.h"
+#include "les_structdata.h"
 
 static const LES_StructDefinition** les_structDefinitionArray = LES_NULL;
 static int les_numStructDefinitions = 0;
+
+static const LES_StructData* les_pStructData = LES_NULL;
+static int les_structDataNumStructDefinitions = 0;
+
+void LES_DebugOutputStructDefinition(LES_LoggerChannel* const pLogChannel, 
+																		 const LES_StructDefinition* const pStructDefinition, const int i);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -31,14 +38,22 @@ static int LES_GetStructDefinitionIndex(const LES_Hash nameHash)
 	return -1;
 }
 
-static const LES_StructDefinition* LES_GetStructDefinitionByID(const int index)
+static const LES_StructDefinition* LES_GetStructDefinitionForID(const int id)
 {
-	if ((index < 0) || (index >= les_numStructDefinitions))
+		if (id < 0)
 	{
 		return LES_NULL;
 	}
-	const LES_StructDefinition* const structDefinitionPtr = les_structDefinitionArray[index];
-	return structDefinitionPtr;
+	const int index = (id - les_structDataNumStructDefinitions);
+	if (index < 0)
+	{
+		LES_LOG("LES_GetStructDefinitionForID %d from file type data", id);
+		// Get it from definition file type data
+		const LES_StructDefinition* const pStructDefinition = les_pStructData->GetStructDefinition(id);
+		return pStructDefinition;
+	}
+	const LES_StructDefinition* const pStructDefinition = les_structDefinitionArray[index];
+	return pStructDefinition;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,8 +99,27 @@ const LES_StructMember* LES_StructDefinition::GetMember(const LES_Hash nameHash)
 const LES_StructDefinition* LES_GetStructDefinition(const LES_Hash nameHash)
 {
 	const int index = LES_GetStructDefinitionIndex(nameHash);
-	const LES_StructDefinition* const structDefinitionPtr = LES_GetStructDefinitionByID(index);
+	LES_LOG("LES_GetStructDefinition 0x%X index:%d", nameHash, index);
+	const LES_StructDefinition* const structDefinitionPtr = LES_GetStructDefinitionForID(index);
 	return structDefinitionPtr;
+}
+
+void LES_DebugOutputStructs(LES_LoggerChannel* const pLogChannel)
+{
+	const int numStructDefinitions = les_structDataNumStructDefinitions + les_numStructDefinitions;
+	for (int i = 0; i < numStructDefinitions; i++)
+	{
+		LES_LOG("DebugOutputStructs %d", i);
+		const LES_StructDefinition* const pStructDefinition = LES_GetStructDefinitionForID(i);
+		LES_DebugOutputStructDefinition(pLogChannel, pStructDefinition, i);
+	}
+}
+
+void LES_Struct_SetStructDataPtr(const LES_StructData* const pStructData)
+{
+	les_pStructData = pStructData;
+	const int numStructDefintiions = pStructData->GetNumStructDefinitions();
+	les_structDataNumStructDefinitions = numStructDefintiions;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,35 +202,30 @@ LES_StructDefinition* LES_CreateStructDefinition(const int nameID, const int num
 	return structDefinitionPtr;
 }
 
-void LES_DebugOutputStructs(LES_LoggerChannel* const pLogChannel)
+void LES_DebugOutputStructDefinition(LES_LoggerChannel* const pLogChannel, const LES_StructDefinition* const pStructDefinition, 
+																		 const int i)
 {
-	const int numStructs = les_numStructDefinitions;
-	for (int i = 0; i < numStructs; i++)
+	const int structNameID = pStructDefinition->GetNameID();
+	const LES_StringEntry* const pStructNameStringEntry = LES_GetStringEntryForID(structNameID);
+
+	const char* const structName = pStructNameStringEntry->m_str;
+	const int numMembers = pStructDefinition->GetNumMembers();
+	pLogChannel->Print("Struct[%d] '%s' nameID:%d numMembers[%d]", i, structName, structNameID, numMembers);
+	for (int m = 0; m < numMembers; m++)
 	{
-		const LES_StructDefinition* const structDefinitionPtr = LES_GetStructDefinitionByID(i);
-		const int structNameID = structDefinitionPtr->GetNameID();
-		const LES_StringEntry* const structNameStringEntryPtr = LES_GetStringEntryForID(structNameID);
+		const LES_StructMember* const pStructMember = pStructDefinition->GetMemberByIndex(m);
 
-		const char* const structName = structNameStringEntryPtr->m_str;
-		const int numMembers = structDefinitionPtr->GetNumMembers();
-		pLogChannel->Print("Struct '%s' NnumMembers[%d]", structName, numMembers);
-		for (int m = 0; m < numMembers; m++)
-		{
-			const LES_StructMember* const structMemberPtr = structDefinitionPtr->GetMemberByIndex(m);
+		const LES_Hash hash = pStructMember->m_hash;
+		const int nameID = pStructMember->m_nameID;
+		const int typeID = pStructMember->m_typeID;
+		const int dataSize = pStructMember->m_dataSize;
+		const int alignmentPadding = pStructMember->m_alignmentPadding;
 
-			const LES_Hash hash = structMemberPtr->m_hash;
-			const int nameID = structMemberPtr->m_nameID;
-			const int typeID = structMemberPtr->m_typeID;
-			const int dataSize = structMemberPtr->m_dataSize;
-			const int alignmentPadding = structMemberPtr->m_alignmentPadding;
-
-			const LES_StringEntry* const memberNameStringEntryPtr = LES_GetStringEntryForID(nameID);
-			const char* const memberName = memberNameStringEntryPtr->m_str;
-			const LES_StringEntry* const typeNameStringEntryPtr = LES_GetStringEntryForID(typeID);
-			const char* const typeName = typeNameStringEntryPtr->m_str;
-			pLogChannel->Print("  Struct '%s' Member[%d] '%s' 0x%X Type:'%s' size:%d alignmentPadding:%d", 
-												 structName, m, memberName, hash, typeName, dataSize, alignmentPadding);
-		}
+		const LES_StringEntry* const pMemberNameStringEntry = LES_GetStringEntryForID(nameID);
+		const char* const memberName = pMemberNameStringEntry->m_str;
+		const LES_StringEntry* const pTypeNameStringEntry = LES_GetStringEntryForID(typeID);
+		const char* const typeName = pTypeNameStringEntry->m_str;
+		pLogChannel->Print("  Struct '%s' Member[%d] '%s' 0x%X Type:'%s' size:%d alignmentPadding:%d", 
+											 structName, m, memberName, hash, typeName, dataSize, alignmentPadding);
 	}
 }
-
