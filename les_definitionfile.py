@@ -21,12 +21,8 @@ def loadTypeData(typeData):
 	typeData.loadXML("data/les_types_test.xml")
 	typeData.loadXML("data/les_types_errors.xml")
 
-def loadStructData(structData, typeData, stringTable):
-	nameID = stringTable.addString("PyTestStruct1")
-	structDefinition = les_structdata.LES_StructDefinintion(nameID, 2)
-	structDefinition.AddMember("char", "m_char", stringTable, typeData, structData)
-	structDefinition.AddMember("float", "m_float", stringTable, typeData, structData)
-	structData.addStructDefinition("PyTestStruct1", structDefinition)
+def loadStructData(structData):
+	structData.loadXML("data/les_structs_test.xml")
 
 class LES_DefinitionFile():
 	def __init__(self):
@@ -57,9 +53,9 @@ class LES_DefinitionFile():
 	def create(self):
 		stringTable = les_stringtable.LES_StringTable()
 		typeData = les_typedata.LES_TypeData(stringTable)
-		structData = les_structdata.LES_StructData(stringTable)
+		structData = les_structdata.LES_StructData(stringTable, typeData)
 		loadTypeData(typeData)
-		loadStructData(structData, typeData, stringTable)
+		loadStructData(structData)
 
 		self.addChunk("StringTable", stringTable)
 		self.addChunk("TypeData", typeData)
