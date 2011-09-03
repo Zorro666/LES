@@ -28,7 +28,7 @@ void LES_Logger::Init(void)
 
 	//Create default channels
 	unsigned int defaultFlags;
-	defaultFlags = LES_LOGGERCHANNEL_FLAGS_DEFAULT;
+	defaultFlags = LES_Logger::FLAGS_DEFAULT;
 
 	s_defaultChannels[CHANNEL_FATAL_ERROR] = CreateChannel("FATAL_ERROR", "FATAL_ERROR: ", DEFAULT_LOG_OUTPUT_FILE, 
 										 																		 defaultFlags | LES_LOGGERCHANNEL_FLAGS_FATAL);

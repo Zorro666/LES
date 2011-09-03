@@ -21,6 +21,8 @@ public:
 										CHANNEL_LOG = 3,
 										LOGGER_NUM_DEFAULT_CHANNELS = 4,
 									};
+	enum LogFlags { FLAGS_DEFAULT = LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT | LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT,
+						    };
 
 public:
 	static void Init(void);
