@@ -44,7 +44,7 @@ class LES_StructDefinintion():
 		self.__m_nameID__ = nameID
 		self.__m_numMembers__ = numMembers
 		self.__m_members__ = []
-		emptyStructMember = LES_StructMember(0, 0, 0, 0, 0)
+		emptyStructMember = LES_StructMember(0, -1, -1, 0, 0)
 		for i in range(numMembers):
 			self.__m_members__.append(emptyStructMember)
 		self.__m_numAddedMembers__ = 0
