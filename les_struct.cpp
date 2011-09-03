@@ -32,7 +32,7 @@ static int LES_GetStructDefinitionIndex(const LES_Hash nameHash)
 		const LES_StringEntry* const structNameStringEntryPtr = LES_GetStringEntryForID(structDefinitionPtr->GetNameID());
 		if (structNameStringEntryPtr->m_hash == nameHash)
 		{
-			return i;
+			return i + les_structDataNumStructDefinitions;
 		}
 	}
 	return -1;
@@ -40,14 +40,13 @@ static int LES_GetStructDefinitionIndex(const LES_Hash nameHash)
 
 static const LES_StructDefinition* LES_GetStructDefinitionForID(const int id)
 {
-		if (id < 0)
+	if (id < 0)
 	{
 		return LES_NULL;
 	}
 	const int index = (id - les_structDataNumStructDefinitions);
 	if (index < 0)
 	{
-		LES_LOG("LES_GetStructDefinitionForID %d from file type data", id);
 		// Get it from definition file type data
 		const LES_StructDefinition* const pStructDefinition = les_pStructData->GetStructDefinition(id);
 		return pStructDefinition;
@@ -99,7 +98,6 @@ const LES_StructMember* LES_StructDefinition::GetMember(const LES_Hash nameHash)
 const LES_StructDefinition* LES_GetStructDefinition(const LES_Hash nameHash)
 {
 	const int index = LES_GetStructDefinitionIndex(nameHash);
-	LES_LOG("LES_GetStructDefinition 0x%X index:%d", nameHash, index);
 	const LES_StructDefinition* const structDefinitionPtr = LES_GetStructDefinitionForID(index);
 	return structDefinitionPtr;
 }
@@ -109,7 +107,6 @@ void LES_DebugOutputStructs(LES_LoggerChannel* const pLogChannel)
 	const int numStructDefinitions = les_structDataNumStructDefinitions + les_numStructDefinitions;
 	for (int i = 0; i < numStructDefinitions; i++)
 	{
-		LES_LOG("DebugOutputStructs %d", i);
 		const LES_StructDefinition* const pStructDefinition = LES_GetStructDefinitionForID(i);
 		LES_DebugOutputStructDefinition(pLogChannel, pStructDefinition, i);
 	}
@@ -150,7 +147,7 @@ int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* 
 {
 	const LES_Hash nameHash = LES_GenerateHashCaseSensitive(name);
 	int index = LES_GetStructDefinitionIndex(nameHash);
-	if ((index < 0) || (index >= les_numStructDefinitions))
+	if (index < 0)
 	{
 		/* Not found so add it - just store the ptr to the memory */
 		index = les_numStructDefinitions;
