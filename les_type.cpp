@@ -94,35 +94,49 @@ const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEnt
 	return pTypeEntry;
 }
 
+const LES_TypeEntry* LES_TypeEntry::GetRootType(void) const
+{
+	const LES_TypeEntry* typeEntryPtr = this;
+	unsigned int flags = typeEntryPtr->m_flags;
+	while (flags & LES_TYPE_ALIAS)
+	{
+		const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
+#if LES_TYPE_DEBUG
+			LES_LOG("Type 0x%X alias:%d flags:0x%X", typeEntryPtr->m_hash, aliasedTypeID, flags);
+#endif // #if LES_TYPE_DEBUG
+		const LES_StringEntry* const aliasedStringTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
+		if (aliasedStringTypeEntry == LES_NULL)
+		{
+			LES_FATAL_ERROR("GetRootType aliased type:%d entry can't be found", aliasedTypeID);
+			return LES_NULL;
+		}
+		const LES_TypeEntry* const aliasedTypeEntryPtr = LES_GetTypeEntry(aliasedStringTypeEntry);
+		if (aliasedTypeEntryPtr == LES_NULL)
+		{
+			LES_FATAL_ERROR("GetRootType aliased type not found aliased type:'%s'", aliasedStringTypeEntry->m_str);
+			return LES_NULL;
+		}
+#if LES_TYPE_DEBUG
+		LES_LOG("GetRootType Alignment Type 0x%X alias:%s", typeEntryPtr->m_hash, aliasedStringTypeEntry->m_str);
+#endif // #if LES_TYPE_DEBUG
+			typeEntryPtr = (const LES_TypeEntry*)aliasedTypeEntryPtr;
+			flags = typeEntryPtr->m_flags;
+#if LES_TYPE_DEBUG
+		LES_LOG("Alias Type 0x%X flags:0x%X", typeEntryPtr->m_hash, flags);
+#endif // #if LES_TYPE_DEBUG
+	}
+	return typeEntryPtr;
+}
+
 int LES_TypeEntry::ComputeDataStorageSize(void) const
 {
 	const LES_TypeEntry* typeEntryPtr = this;
 	unsigned int flags = typeEntryPtr->m_flags;
 	const int numElements = typeEntryPtr->m_numElements;
-	while (flags & LES_TYPE_ALIAS)
-	{
-		const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
-#if LES_TYPE_DEBUG
-		LES_LOG("Type 0x%X alias:%d flags:0x%X", typeEntryPtr->m_hash, aliasedTypeID, flags);
-#endif // #if LES_TYPE_DEBUG
-		const LES_StringEntry* const aliasedStringTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
-		if (aliasedStringTypeEntry == LES_NULL)
-		{
-			LES_WARNING("ComputeDataStorageSize aliased type:%d entry can't be found", aliasedTypeID);
-			return -1;
-		}
-		const LES_TypeEntry* const aliasedTypeEntryPtr = LES_GetTypeEntry(aliasedStringTypeEntry);
-		if (aliasedTypeEntryPtr == LES_NULL)
-		{
-			LES_WARNING("ComputeDataStorageSize aliased type not found aliased type:'%s'", aliasedStringTypeEntry->m_str);
-			return -1;
-		}
-		typeEntryPtr = (const LES_TypeEntry*)aliasedTypeEntryPtr;
-		flags = typeEntryPtr->m_flags;
-#if LES_TYPE_DEBUG
-		LES_LOG("Alias Type 0x%X flags:0x%X", typeEntryPtr->m_hash, flags);
-#endif // #if LES_TYPE_DEBUG
-	}
+
+	typeEntryPtr = typeEntryPtr->GetRootType();
+	flags = typeEntryPtr->m_flags;
+
 	if (flags & LES_TYPE_STRUCT)
 	{
 		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeEntryPtr->m_hash);
@@ -172,65 +186,14 @@ int LES_TypeEntry::ComputeAlignment(void) const
 	unsigned int flags = typeEntryPtr->m_flags;
 	if (flags & LES_TYPE_ARRAY)
 	{
-		while (flags & LES_TYPE_ALIAS)
-		{
-			const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
-#if LES_TYPE_DEBUG
-			LES_LOG("Type 0x%X alias:%d flags:0x%X", typeEntryPtr->m_hash, aliasedTypeID, flags);
-#endif // #if LES_TYPE_DEBUG
-			const LES_StringEntry* const aliasedStringTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
-			if (aliasedStringTypeEntry == LES_NULL)
-			{
-				LES_FATAL_ERROR("ComputeAlignment aliased type:%d entry can't be found", aliasedTypeID);
-				return -1;
-			}
-			const LES_TypeEntry* const aliasedTypeEntryPtr = LES_GetTypeEntry(aliasedStringTypeEntry);
-			if (aliasedTypeEntryPtr == LES_NULL)
-			{
-				LES_FATAL_ERROR("ComputeAlignment aliased type not found aliased type:'%s'", aliasedStringTypeEntry->m_str);
-				return -1;
-			}
-#if LES_TYPE_DEBUG
-			LES_LOG("Compute Alignment Type 0x%X alias:%s", typeEntryPtr->m_hash, aliasedStringTypeEntry->m_str);
-#endif // #if LES_TYPE_DEBUG
-			typeEntryPtr = (const LES_TypeEntry*)aliasedTypeEntryPtr;
-			flags = typeEntryPtr->m_flags;
-#if LES_TYPE_DEBUG
-			LES_LOG("Alias Type 0x%X flags:0x%X", typeEntryPtr->m_hash, flags);
-#endif // #if LES_TYPE_DEBUG
-		}
+		typeEntryPtr = typeEntryPtr->GetRootType();
+		flags = typeEntryPtr->m_flags;
 	}
 
 	if (flags & LES_TYPE_STRUCT)
 	{
-		while (flags & LES_TYPE_ALIAS)
-		{
-			const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
-#if LES_TYPE_DEBUG
-			LES_LOG("Type 0x%X alias:%d flags:0x%X", typeEntryPtr->m_hash, aliasedTypeID, flags);
-#endif // #if LES_TYPE_DEBUG
-			const LES_StringEntry* const aliasedStringTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
-			if (aliasedStringTypeEntry == LES_NULL)
-			{
-				LES_FATAL_ERROR("ComputeAlignment aliased type:%d entry can't be found", aliasedTypeID);
-				return -1;
-			}
-			const LES_TypeEntry* const aliasedTypeEntryPtr = LES_GetTypeEntry(aliasedStringTypeEntry);
-			if (aliasedTypeEntryPtr == LES_NULL)
-			{
-				LES_FATAL_ERROR("ComputeAlignment aliased type not found aliased type:'%s'", aliasedStringTypeEntry->m_str);
-				return -1;
-			}
-#if LES_TYPE_DEBUG
-			LES_LOG("Compute Alignment Type 0x%X alias:%s", typeEntryPtr->m_hash, aliasedStringTypeEntry->m_str);
-#endif // #if LES_TYPE_DEBUG
-			typeEntryPtr = (const LES_TypeEntry*)aliasedTypeEntryPtr;
-			flags = typeEntryPtr->m_flags;
-#if LES_TYPE_DEBUG
-			LES_LOG("Alias Type 0x%X flags:0x%X", typeEntryPtr->m_hash, flags);
-#endif // #if LES_TYPE_DEBUG
-		}
-
+		typeEntryPtr = typeEntryPtr->GetRootType();
+		flags = typeEntryPtr->m_flags;
 		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeEntryPtr->m_hash);
 		if (structDefinition == LES_NULL)
 		{
