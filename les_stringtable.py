@@ -55,6 +55,8 @@ class LES_StringTable():
 		return index
 
 	def getString(self, index):
+		if index < 0:
+			return None
 		if index < len(self.__m_strings__):
 			return self.__m_strings__[index]
 		return None
