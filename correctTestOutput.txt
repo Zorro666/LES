@@ -1,3 +1,160 @@
+
+ID:'LESD'
+NumChunks:3
+
+numStrings:74
+String[0] name:'unsigned char' hash:0x6E40A25D
+String[1] name:'unsigned short' hash:0x3B779699
+String[2] name:'unsigned int' hash:0xA31138D4
+String[3] name:'unsigned long' hash:0x8D6862AB
+String[4] name:'char' hash:0x56F2B2AE
+String[5] name:'short' hash:0xA6410C
+String[6] name:'int' hash:0xF09B6F
+String[7] name:'long' hash:0x761A72FC
+String[8] name:'long long int' hash:0x82108C1F
+String[9] name:'float' hash:0x29C40BA8
+String[10] name:'double' hash:0x9EC4F5FD
+String[11] name:'unsigned char*' hash:0xABB572C1
+String[12] name:'unsigned short*' hash:0xE5C8A975
+String[13] name:'unsigned int*' hash:0x8308E8A6
+String[14] name:'unsigned long*' hash:0xC4CD28AB
+String[15] name:'char*' hash:0x70E41D34
+String[16] name:'short*' hash:0xFB54554E
+String[17] name:'int*' hash:0x6BBAF8F7
+String[18] name:'long*' hash:0x89FBD31E
+String[19] name:'float*' hash:0x235D9F22
+String[20] name:'double*' hash:0x3BFDDA1
+String[21] name:'int&' hash:0x6BBAF8F3
+String[22] name:'short&' hash:0xFB54554A
+String[23] name:'char&' hash:0x70E41D30
+String[24] name:'float&' hash:0x235D9F1E
+String[25] name:'char[3]' hash:0x3F312303
+String[26] name:'short[3]' hash:0x8D5685ED
+String[27] name:'int[3]' hash:0xCEF77DE
+String[28] name:'char&[3]' hash:0xD0896FB9
+String[29] name:'short&[3]' hash:0xF30DF777
+String[30] name:'int&[3]' hash:0xD743B6CA
+String[31] name:'int&[2]' hash:0xD743B547
+String[32] name:'char&[5]' hash:0xD08972BF
+String[33] name:'output_only' hash:0xF9C98C72
+String[34] name:'TestStruct1' hash:0xB640633A
+String[35] name:'TestStruct1*' hash:0x835600D8
+String[36] name:'TestStruct1&' hash:0x835600D4
+String[37] name:'TestStruct1[1]' hash:0x2663E4C1
+String[38] name:'TestStruct1[2]' hash:0x2663E644
+String[39] name:'TestStruct2' hash:0xB640633B
+String[40] name:'TestStruct2*' hash:0x8356025B
+String[41] name:'TestStruct2&' hash:0x83560257
+String[42] name:'TestStruct2[1]' hash:0x29D84D5C
+String[43] name:'TestStruct2[2]' hash:0x29D84EDF
+String[44] name:'TestStruct3' hash:0xB640633C
+String[45] name:'TestStruct3*' hash:0x835603DE
+String[46] name:'TestStruct3[2]' hash:0x2D4CB77A
+String[47] name:'TestStruct4' hash:0xB640633D
+String[48] name:'TestStruct4*' hash:0x83560561
+String[49] name:'TestStruct4[1]' hash:0x30C11E92
+String[50] name:'TestStruct5' hash:0xB640633E
+String[51] name:'TestStruct5*' hash:0x835606E4
+String[52] name:'TestStruct5&' hash:0x835606E0
+String[53] name:'TestStruct6' hash:0xB640633F
+String[54] name:'TestStruct6*' hash:0x83560867
+String[55] name:'TestStruct7' hash:0xB6406340
+String[56] name:'TestStruct7*' hash:0x835609EA
+String[57] name:'TestStruct7&' hash:0x835609E6
+String[58] name:'TestStruct8' hash:0xB6406341
+String[59] name:'TestStruct8*' hash:0x83560B6D
+String[60] name:'TestStruct8&' hash:0x83560B69
+String[61] name:'TestStruct9' hash:0xB6406342
+String[62] name:'TestStruct9*' hash:0x83560CF0
+String[63] name:'TestStruct9[2]' hash:0x42072B1C
+String[64] name:'TestStruct9&[2]' hash:0x1A19F50A
+String[65] name:'TestStruct10' hash:0x835600DE
+String[66] name:'TestStruct11' hash:0x835600DF
+String[67] name:'TestStruct11*' hash:0x8B035147
+String[68] name:'TestStruct11&[1]' hash:0x2031AC34
+String[69] name:'TestStruct12' hash:0x835600E0
+String[70] name:'arrayExistsWrongNumberOfElements[1]' hash:0x5429AC10
+String[71] name:'PyTestStruct1' hash:0xF45E50AD
+String[72] name:'m_char' hash:0x431FFB4
+String[73] name:'m_float' hash:0x10757BBA
+
+numTypes:71
+Type[0] name:'unsigned char' hash:0x6E40A25D size:1 flags:0x5 INPUT|POD aliasedName:'unsigned char' aliasedID:0 numElements:0
+Type[1] name:'unsigned short' hash:0x3B779699 size:2 flags:0x5 INPUT|POD aliasedName:'unsigned short' aliasedID:1 numElements:0
+Type[2] name:'unsigned int' hash:0xA31138D4 size:4 flags:0x5 INPUT|POD aliasedName:'unsigned int' aliasedID:2 numElements:0
+Type[3] name:'unsigned long' hash:0x8D6862AB size:4 flags:0x5 INPUT|POD aliasedName:'unsigned long' aliasedID:3 numElements:0
+Type[4] name:'char' hash:0x56F2B2AE size:1 flags:0x5 INPUT|POD aliasedName:'char' aliasedID:4 numElements:0
+Type[5] name:'short' hash:0xA6410C size:2 flags:0x5 INPUT|POD aliasedName:'short' aliasedID:5 numElements:0
+Type[6] name:'int' hash:0xF09B6F size:4 flags:0x5 INPUT|POD aliasedName:'int' aliasedID:6 numElements:0
+Type[7] name:'long' hash:0x761A72FC size:4 flags:0x5 INPUT|POD aliasedName:'long' aliasedID:7 numElements:0
+Type[8] name:'long long int' hash:0x82108C1F size:8 flags:0x5 INPUT|POD aliasedName:'long long int' aliasedID:8 numElements:0
+Type[9] name:'float' hash:0x29C40BA8 size:4 flags:0x5 INPUT|POD aliasedName:'float' aliasedID:9 numElements:0
+Type[10] name:'double' hash:0x9EC4F5FD size:8 flags:0x5 INPUT|POD aliasedName:'double' aliasedID:10 numElements:0
+Type[11] name:'unsigned char*' hash:0xABB572C1 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned char' aliasedID:0 numElements:0
+Type[12] name:'unsigned short*' hash:0xE5C8A975 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned short' aliasedID:1 numElements:0
+Type[13] name:'unsigned int*' hash:0x8308E8A6 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned int' aliasedID:2 numElements:0
+Type[14] name:'unsigned long*' hash:0xC4CD28AB size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned long' aliasedID:3 numElements:0
+Type[15] name:'char*' hash:0x70E41D34 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'char' aliasedID:4 numElements:0
+Type[16] name:'short*' hash:0xFB54554E size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'short' aliasedID:5 numElements:0
+Type[17] name:'int*' hash:0x6BBAF8F7 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'int' aliasedID:6 numElements:0
+Type[18] name:'long*' hash:0x89FBD31E size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'long' aliasedID:7 numElements:0
+Type[19] name:'float*' hash:0x235D9F22 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'float' aliasedID:9 numElements:0
+Type[20] name:'double*' hash:0x3BFDDA1 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'double' aliasedID:10 numElements:0
+Type[21] name:'int&' hash:0x6BBAF8F3 size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'int*' aliasedID:17 numElements:0
+Type[22] name:'short&' hash:0xFB54554A size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'short*' aliasedID:16 numElements:0
+Type[23] name:'char&' hash:0x70E41D30 size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'char*' aliasedID:15 numElements:0
+Type[24] name:'float&' hash:0x235D9F1E size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'float*' aliasedID:19 numElements:0
+Type[25] name:'char[3]' hash:0x3F312303 size:4 flags:0xC7 INPUT|OUTPUT|POD|ALIAS|ARRAY aliasedName:'char' aliasedID:4 numElements:3
+Type[26] name:'short[3]' hash:0x8D5685ED size:4 flags:0xC7 INPUT|OUTPUT|POD|ALIAS|ARRAY aliasedName:'short' aliasedID:5 numElements:3
+Type[27] name:'int[3]' hash:0xCEF77DE size:4 flags:0xC7 INPUT|OUTPUT|POD|ALIAS|ARRAY aliasedName:'int' aliasedID:6 numElements:3
+Type[28] name:'char&[3]' hash:0xD0896FB9 size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'char*' aliasedID:15 numElements:3
+Type[29] name:'short&[3]' hash:0xF30DF777 size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'short*' aliasedID:16 numElements:3
+Type[30] name:'int&[3]' hash:0xD743B6CA size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'int*' aliasedID:17 numElements:3
+Type[31] name:'int&[2]' hash:0xD743B547 size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'int*' aliasedID:17 numElements:2
+Type[32] name:'char&[5]' hash:0xD08972BF size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'char*' aliasedID:15 numElements:5
+Type[33] name:'output_only' hash:0xF9C98C72 size:4 flags:0x6 OUTPUT|POD aliasedName:'output_only' aliasedID:33 numElements:0
+Type[34] name:'TestStruct1' hash:0xB640633A size:24 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct1' aliasedID:34 numElements:0
+Type[35] name:'TestStruct1*' hash:0x835600D8 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct1' aliasedID:34 numElements:0
+Type[36] name:'TestStruct1&' hash:0x835600D4 size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct1*' aliasedID:35 numElements:0
+Type[37] name:'TestStruct1[1]' hash:0x2663E4C1 size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct1' aliasedID:34 numElements:1
+Type[38] name:'TestStruct1[2]' hash:0x2663E644 size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct1' aliasedID:34 numElements:2
+Type[39] name:'TestStruct2' hash:0xB640633B size:36 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct2' aliasedID:39 numElements:0
+Type[40] name:'TestStruct2*' hash:0x8356025B size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct2' aliasedID:39 numElements:0
+Type[41] name:'TestStruct2&' hash:0x83560257 size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct2*' aliasedID:40 numElements:0
+Type[42] name:'TestStruct2[1]' hash:0x29D84D5C size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct2' aliasedID:39 numElements:1
+Type[43] name:'TestStruct2[2]' hash:0x29D84EDF size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct2' aliasedID:39 numElements:2
+Type[44] name:'TestStruct3' hash:0xB640633C size:16 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct3' aliasedID:44 numElements:0
+Type[45] name:'TestStruct3*' hash:0x835603DE size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct3' aliasedID:44 numElements:0
+Type[46] name:'TestStruct3[2]' hash:0x2D4CB77A size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct3' aliasedID:44 numElements:2
+Type[47] name:'TestStruct4' hash:0xB640633D size:32 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct4' aliasedID:47 numElements:0
+Type[48] name:'TestStruct4*' hash:0x83560561 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct4' aliasedID:47 numElements:0
+Type[49] name:'TestStruct4[1]' hash:0x30C11E92 size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct4' aliasedID:47 numElements:1
+Type[50] name:'TestStruct5' hash:0xB640633E size:8 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct5' aliasedID:50 numElements:0
+Type[51] name:'TestStruct5*' hash:0x835606E4 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct5' aliasedID:50 numElements:0
+Type[52] name:'TestStruct5&' hash:0x835606E0 size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct5*' aliasedID:51 numElements:0
+Type[53] name:'TestStruct6' hash:0xB640633F size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct6' aliasedID:53 numElements:0
+Type[54] name:'TestStruct6*' hash:0x83560867 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct6' aliasedID:53 numElements:0
+Type[55] name:'TestStruct7' hash:0xB6406340 size:20 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct7' aliasedID:55 numElements:0
+Type[56] name:'TestStruct7*' hash:0x835609EA size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct7' aliasedID:55 numElements:0
+Type[57] name:'TestStruct7&' hash:0x835609E6 size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct7*' aliasedID:56 numElements:0
+Type[58] name:'TestStruct8' hash:0xB6406341 size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct8' aliasedID:58 numElements:0
+Type[59] name:'TestStruct8*' hash:0x83560B6D size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct8' aliasedID:58 numElements:0
+Type[60] name:'TestStruct8&' hash:0x83560B69 size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct8*' aliasedID:59 numElements:0
+Type[61] name:'TestStruct9' hash:0xB6406342 size:6 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct9' aliasedID:61 numElements:0
+Type[62] name:'TestStruct9*' hash:0x83560CF0 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct9' aliasedID:61 numElements:0
+Type[63] name:'TestStruct9[2]' hash:0x42072B1C size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct9' aliasedID:61 numElements:2
+Type[64] name:'TestStruct9&[2]' hash:0x1A19F50A size:4 flags:0xEB INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS|ARRAY aliasedName:'TestStruct9*' aliasedID:62 numElements:2
+Type[65] name:'TestStruct10' hash:0x835600DE size:18 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct10' aliasedID:65 numElements:0
+Type[66] name:'TestStruct11' hash:0x835600DF size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct11' aliasedID:66 numElements:0
+Type[67] name:'TestStruct11*' hash:0x8B035147 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct11' aliasedID:66 numElements:0
+Type[68] name:'TestStruct11&[1]' hash:0x2031AC34 size:4 flags:0xEB INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS|ARRAY aliasedName:'TestStruct11*' aliasedID:67 numElements:1
+Type[69] name:'TestStruct12' hash:0x835600E0 size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct12' aliasedID:69 numElements:0
+Type[70] name:'arrayExistsWrongNumberOfElements[1]' hash:0x5429AC10 size:4 flags:0xC5 INPUT|POD|ALIAS|ARRAY aliasedName:'int' aliasedID:6 numElements:1
+
+numStructDefinitions:1
+Struct[0] 'PyTestStruct1' nameID:71 numMembers[2]
+  Struct 'PyTestStruct1' Member[0] 'm_char' 0x431FFB4 Type:'char' size:1 alignmentPadding:0
+  Struct 'PyTestStruct1' Member[1] 'm_float' 0x10757BBA Type:'float' size:4 alignmentPadding:3
 #### Function header definition tests ####
 WARNING: 'LES_Test_FunctionNotFound' : Can't find function definition
 FATAL_ERROR: 'LES_Test_FunctionNotFound' : Error during LES_FunctionStart
@@ -40,20 +197,20 @@ FATAL_ERROR: 'LES_Test_InputNameDoesntExist' : Error adding Input parameter 0 'i
 WARNING: 'LES_Test_InputNameIDNotFound' : Can't find parameter name for ID:-1 parameter:'input_0' type:'int'
 FATAL_ERROR: 'LES_Test_InputNameIDNotFound' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputNameHashIsWrong' : Adding parameter 'input_0' name hash doesn't match for ID:104 0x480D993 != 0x97A0017 Code:'input_0' Definition:'wrongHash'
+WARNING: 'LES_Test_InputNameHashIsWrong' : Adding parameter 'input_0' name hash doesn't match for ID:105 0x480D993 != 0x97A0017 Code:'input_0' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_InputNameHashIsWrong' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputNameStringIsWrong' : Adding parameter 'InputNameBrokenHash' name string doesn't match for ID:106 'InputNameBrokenHash' != 'brokenString' 0x99F1870C : 0x99F1870C
+WARNING: 'LES_Test_InputNameStringIsWrong' : Adding parameter 'InputNameBrokenHash' name string doesn't match for ID:107 'InputNameBrokenHash' != 'brokenString' 0x99F1870C : 0x99F1870C
 FATAL_ERROR: 'LES_Test_InputNameStringIsWrong' : Error adding Input parameter 0 'InputNameBrokenHash' type:'int'
 
 #### Input type tests ####
 WARNING: 'LES_Test_InputTypeIDNotFound' : Can't find Input parameter type for ID:-1 parameter:'input_0' type:'int'
 FATAL_ERROR: 'LES_Test_InputTypeIDNotFound' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputTypeHashIsWrong' : parameter:0 'input_0' (Input) type hash doesn't match for ID:104 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
+WARNING: 'LES_Test_InputTypeHashIsWrong' : parameter:0 'input_0' (Input) type hash doesn't match for ID:105 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_InputTypeHashIsWrong' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputTypeStringIsWrong' : Adding parameter 'input_0' type string doesn't match for ID:110 'InputTypeBrokenHash' != 'brokenString' 0x7EF15B07 : 0x7EF15B07
+WARNING: 'LES_Test_InputTypeStringIsWrong' : Adding parameter 'input_0' type string doesn't match for ID:111 'InputTypeBrokenHash' != 'brokenString' 0x7EF15B07 : 0x7EF15B07
 FATAL_ERROR: 'LES_Test_InputTypeStringIsWrong' : Error adding Input parameter 0 'input_0' type:'InputTypeBrokenHash'
 
 #### Output parameter tests ####
@@ -83,20 +240,20 @@ FATAL_ERROR: 'LES_Test_OutputNameDoesntExist' : Error adding Output parameter 0 
 WARNING: 'LES_Test_OutputNameIDNotFound' : Can't find parameter name for ID:-1 parameter:'output_0' type:'int'
 FATAL_ERROR: 'LES_Test_OutputNameIDNotFound' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputNameHashIsWrong' : Adding parameter 'output_0' name hash doesn't match for ID:104 0x1D1CA836 != 0x97A0017 Code:'output_0' Definition:'wrongHash'
+WARNING: 'LES_Test_OutputNameHashIsWrong' : Adding parameter 'output_0' name hash doesn't match for ID:105 0x1D1CA836 != 0x97A0017 Code:'output_0' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_OutputNameHashIsWrong' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputNameStringIsWrong' : Adding parameter 'OutputNameBrokenHash' name string doesn't match for ID:123 'OutputNameBrokenHash' != 'brokenString' 0x61782F3F : 0x61782F3F
+WARNING: 'LES_Test_OutputNameStringIsWrong' : Adding parameter 'OutputNameBrokenHash' name string doesn't match for ID:124 'OutputNameBrokenHash' != 'brokenString' 0x61782F3F : 0x61782F3F
 FATAL_ERROR: 'LES_Test_OutputNameStringIsWrong' : Error adding Output parameter 0 'OutputNameBrokenHash' type:'int'
 
 #### Output type tests ####
 WARNING: 'LES_Test_OutputTypeIDNotFound' : Can't find Output parameter type for ID:-1 parameter:'output_0' type:'int'
 FATAL_ERROR: 'LES_Test_OutputTypeIDNotFound' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputTypeHashIsWrong' : parameter:0 'output_0' (Output) type hash doesn't match for ID:104 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
+WARNING: 'LES_Test_OutputTypeHashIsWrong' : parameter:0 'output_0' (Output) type hash doesn't match for ID:105 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_OutputTypeHashIsWrong' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputTypeStringIsWrong' : Adding parameter 'output_0' type string doesn't match for ID:127 'OutputTypeBrokenHash' != 'brokenString' 0x4678033A : 0x4678033A
+WARNING: 'LES_Test_OutputTypeStringIsWrong' : Adding parameter 'output_0' type string doesn't match for ID:128 'OutputTypeBrokenHash' != 'brokenString' 0x4678033A : 0x4678033A
 FATAL_ERROR: 'LES_Test_OutputTypeStringIsWrong' : Error adding Output parameter 0 'output_0' type:'OutputTypeBrokenHash'
 
 #### Parameter already exists tests ####
@@ -437,149 +594,3 @@ LES_Test_DecodeInputStructStructArrayReference: parameterDataSize:37
 
 ERROR: AddType 'CantAddNewTypes' hash 0xE2A43B36 not found in type data definition file
 FATAL_ERROR: TEST AddType 'CantAddNewTypes' NumElements:0 0xE2A43B36 Alias 'int' failed
-ID:'LESD'
-NumChunks:2
-numStrings:71
-String[0] hash:0x6E40A25D string:'unsigned char'
-String[1] hash:0x3B779699 string:'unsigned short'
-String[2] hash:0xA31138D4 string:'unsigned int'
-String[3] hash:0x8D6862AB string:'unsigned long'
-String[4] hash:0x56F2B2AE string:'char'
-String[5] hash:0xA6410C string:'short'
-String[6] hash:0xF09B6F string:'int'
-String[7] hash:0x761A72FC string:'long'
-String[8] hash:0x82108C1F string:'long long int'
-String[9] hash:0x29C40BA8 string:'float'
-String[10] hash:0x9EC4F5FD string:'double'
-String[11] hash:0xABB572C1 string:'unsigned char*'
-String[12] hash:0xE5C8A975 string:'unsigned short*'
-String[13] hash:0x8308E8A6 string:'unsigned int*'
-String[14] hash:0xC4CD28AB string:'unsigned long*'
-String[15] hash:0x70E41D34 string:'char*'
-String[16] hash:0xFB54554E string:'short*'
-String[17] hash:0x6BBAF8F7 string:'int*'
-String[18] hash:0x89FBD31E string:'long*'
-String[19] hash:0x235D9F22 string:'float*'
-String[20] hash:0x3BFDDA1 string:'double*'
-String[21] hash:0x6BBAF8F3 string:'int&'
-String[22] hash:0xFB54554A string:'short&'
-String[23] hash:0x70E41D30 string:'char&'
-String[24] hash:0x235D9F1E string:'float&'
-String[25] hash:0x3F312303 string:'char[3]'
-String[26] hash:0x8D5685ED string:'short[3]'
-String[27] hash:0xCEF77DE string:'int[3]'
-String[28] hash:0xD0896FB9 string:'char&[3]'
-String[29] hash:0xF30DF777 string:'short&[3]'
-String[30] hash:0xD743B6CA string:'int&[3]'
-String[31] hash:0xD743B547 string:'int&[2]'
-String[32] hash:0xD08972BF string:'char&[5]'
-String[33] hash:0xF9C98C72 string:'output_only'
-String[34] hash:0xB640633A string:'TestStruct1'
-String[35] hash:0x835600D8 string:'TestStruct1*'
-String[36] hash:0x835600D4 string:'TestStruct1&'
-String[37] hash:0x2663E4C1 string:'TestStruct1[1]'
-String[38] hash:0x2663E644 string:'TestStruct1[2]'
-String[39] hash:0xB640633B string:'TestStruct2'
-String[40] hash:0x8356025B string:'TestStruct2*'
-String[41] hash:0x83560257 string:'TestStruct2&'
-String[42] hash:0x29D84D5C string:'TestStruct2[1]'
-String[43] hash:0x29D84EDF string:'TestStruct2[2]'
-String[44] hash:0xB640633C string:'TestStruct3'
-String[45] hash:0x835603DE string:'TestStruct3*'
-String[46] hash:0x2D4CB77A string:'TestStruct3[2]'
-String[47] hash:0xB640633D string:'TestStruct4'
-String[48] hash:0x83560561 string:'TestStruct4*'
-String[49] hash:0x30C11E92 string:'TestStruct4[1]'
-String[50] hash:0xB640633E string:'TestStruct5'
-String[51] hash:0x835606E4 string:'TestStruct5*'
-String[52] hash:0x835606E0 string:'TestStruct5&'
-String[53] hash:0xB640633F string:'TestStruct6'
-String[54] hash:0x83560867 string:'TestStruct6*'
-String[55] hash:0xB6406340 string:'TestStruct7'
-String[56] hash:0x835609EA string:'TestStruct7*'
-String[57] hash:0x835609E6 string:'TestStruct7&'
-String[58] hash:0xB6406341 string:'TestStruct8'
-String[59] hash:0x83560B6D string:'TestStruct8*'
-String[60] hash:0x83560B69 string:'TestStruct8&'
-String[61] hash:0xB6406342 string:'TestStruct9'
-String[62] hash:0x83560CF0 string:'TestStruct9*'
-String[63] hash:0x42072B1C string:'TestStruct9[2]'
-String[64] hash:0x1A19F50A string:'TestStruct9&[2]'
-String[65] hash:0x835600DE string:'TestStruct10'
-String[66] hash:0x835600DF string:'TestStruct11'
-String[67] hash:0x8B035147 string:'TestStruct11*'
-String[68] hash:0x2031AC34 string:'TestStruct11&[1]'
-String[69] hash:0x835600E0 string:'TestStruct12'
-String[70] hash:0x5429AC10 string:'arrayExistsWrongNumberOfElements[1]'
-numTypes:71
-Type[0] name:'unsigned char' hash:0x6E40A25D size:1 flags:0x5 INPUT|POD aliasedName:'unsigned char' aliasedID:0 numElements:0
-Type[1] name:'unsigned short' hash:0x3B779699 size:2 flags:0x5 INPUT|POD aliasedName:'unsigned short' aliasedID:1 numElements:0
-Type[2] name:'unsigned int' hash:0xA31138D4 size:4 flags:0x5 INPUT|POD aliasedName:'unsigned int' aliasedID:2 numElements:0
-Type[3] name:'unsigned long' hash:0x8D6862AB size:4 flags:0x5 INPUT|POD aliasedName:'unsigned long' aliasedID:3 numElements:0
-Type[4] name:'char' hash:0x56F2B2AE size:1 flags:0x5 INPUT|POD aliasedName:'char' aliasedID:4 numElements:0
-Type[5] name:'short' hash:0xA6410C size:2 flags:0x5 INPUT|POD aliasedName:'short' aliasedID:5 numElements:0
-Type[6] name:'int' hash:0xF09B6F size:4 flags:0x5 INPUT|POD aliasedName:'int' aliasedID:6 numElements:0
-Type[7] name:'long' hash:0x761A72FC size:4 flags:0x5 INPUT|POD aliasedName:'long' aliasedID:7 numElements:0
-Type[8] name:'long long int' hash:0x82108C1F size:8 flags:0x5 INPUT|POD aliasedName:'long long int' aliasedID:8 numElements:0
-Type[9] name:'float' hash:0x29C40BA8 size:4 flags:0x5 INPUT|POD aliasedName:'float' aliasedID:9 numElements:0
-Type[10] name:'double' hash:0x9EC4F5FD size:8 flags:0x5 INPUT|POD aliasedName:'double' aliasedID:10 numElements:0
-Type[11] name:'unsigned char*' hash:0xABB572C1 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned char' aliasedID:0 numElements:0
-Type[12] name:'unsigned short*' hash:0xE5C8A975 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned short' aliasedID:1 numElements:0
-Type[13] name:'unsigned int*' hash:0x8308E8A6 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned int' aliasedID:2 numElements:0
-Type[14] name:'unsigned long*' hash:0xC4CD28AB size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned long' aliasedID:3 numElements:0
-Type[15] name:'char*' hash:0x70E41D34 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'char' aliasedID:4 numElements:0
-Type[16] name:'short*' hash:0xFB54554E size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'short' aliasedID:5 numElements:0
-Type[17] name:'int*' hash:0x6BBAF8F7 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'int' aliasedID:6 numElements:0
-Type[18] name:'long*' hash:0x89FBD31E size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'long' aliasedID:7 numElements:0
-Type[19] name:'float*' hash:0x235D9F22 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'float' aliasedID:9 numElements:0
-Type[20] name:'double*' hash:0x3BFDDA1 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'double' aliasedID:10 numElements:0
-Type[21] name:'int&' hash:0x6BBAF8F3 size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'int*' aliasedID:17 numElements:0
-Type[22] name:'short&' hash:0xFB54554A size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'short*' aliasedID:16 numElements:0
-Type[23] name:'char&' hash:0x70E41D30 size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'char*' aliasedID:15 numElements:0
-Type[24] name:'float&' hash:0x235D9F1E size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'float*' aliasedID:19 numElements:0
-Type[25] name:'char[3]' hash:0x3F312303 size:4 flags:0xC7 INPUT|OUTPUT|POD|ALIAS|ARRAY aliasedName:'char' aliasedID:4 numElements:3
-Type[26] name:'short[3]' hash:0x8D5685ED size:4 flags:0xC7 INPUT|OUTPUT|POD|ALIAS|ARRAY aliasedName:'short' aliasedID:5 numElements:3
-Type[27] name:'int[3]' hash:0xCEF77DE size:4 flags:0xC7 INPUT|OUTPUT|POD|ALIAS|ARRAY aliasedName:'int' aliasedID:6 numElements:3
-Type[28] name:'char&[3]' hash:0xD0896FB9 size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'char*' aliasedID:15 numElements:3
-Type[29] name:'short&[3]' hash:0xF30DF777 size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'short*' aliasedID:16 numElements:3
-Type[30] name:'int&[3]' hash:0xD743B6CA size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'int*' aliasedID:17 numElements:3
-Type[31] name:'int&[2]' hash:0xD743B547 size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'int*' aliasedID:17 numElements:2
-Type[32] name:'char&[5]' hash:0xD08972BF size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'char*' aliasedID:15 numElements:5
-Type[33] name:'output_only' hash:0xF9C98C72 size:4 flags:0x6 OUTPUT|POD aliasedName:'output_only' aliasedID:33 numElements:0
-Type[34] name:'TestStruct1' hash:0xB640633A size:24 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct1' aliasedID:34 numElements:0
-Type[35] name:'TestStruct1*' hash:0x835600D8 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct1' aliasedID:34 numElements:0
-Type[36] name:'TestStruct1&' hash:0x835600D4 size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct1*' aliasedID:35 numElements:0
-Type[37] name:'TestStruct1[1]' hash:0x2663E4C1 size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct1' aliasedID:34 numElements:1
-Type[38] name:'TestStruct1[2]' hash:0x2663E644 size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct1' aliasedID:34 numElements:2
-Type[39] name:'TestStruct2' hash:0xB640633B size:36 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct2' aliasedID:39 numElements:0
-Type[40] name:'TestStruct2*' hash:0x8356025B size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct2' aliasedID:39 numElements:0
-Type[41] name:'TestStruct2&' hash:0x83560257 size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct2*' aliasedID:40 numElements:0
-Type[42] name:'TestStruct2[1]' hash:0x29D84D5C size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct2' aliasedID:39 numElements:1
-Type[43] name:'TestStruct2[2]' hash:0x29D84EDF size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct2' aliasedID:39 numElements:2
-Type[44] name:'TestStruct3' hash:0xB640633C size:16 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct3' aliasedID:44 numElements:0
-Type[45] name:'TestStruct3*' hash:0x835603DE size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct3' aliasedID:44 numElements:0
-Type[46] name:'TestStruct3[2]' hash:0x2D4CB77A size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct3' aliasedID:44 numElements:2
-Type[47] name:'TestStruct4' hash:0xB640633D size:32 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct4' aliasedID:47 numElements:0
-Type[48] name:'TestStruct4*' hash:0x83560561 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct4' aliasedID:47 numElements:0
-Type[49] name:'TestStruct4[1]' hash:0x30C11E92 size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct4' aliasedID:47 numElements:1
-Type[50] name:'TestStruct5' hash:0xB640633E size:8 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct5' aliasedID:50 numElements:0
-Type[51] name:'TestStruct5*' hash:0x835606E4 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct5' aliasedID:50 numElements:0
-Type[52] name:'TestStruct5&' hash:0x835606E0 size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct5*' aliasedID:51 numElements:0
-Type[53] name:'TestStruct6' hash:0xB640633F size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct6' aliasedID:53 numElements:0
-Type[54] name:'TestStruct6*' hash:0x83560867 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct6' aliasedID:53 numElements:0
-Type[55] name:'TestStruct7' hash:0xB6406340 size:20 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct7' aliasedID:55 numElements:0
-Type[56] name:'TestStruct7*' hash:0x835609EA size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct7' aliasedID:55 numElements:0
-Type[57] name:'TestStruct7&' hash:0x835609E6 size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct7*' aliasedID:56 numElements:0
-Type[58] name:'TestStruct8' hash:0xB6406341 size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct8' aliasedID:58 numElements:0
-Type[59] name:'TestStruct8*' hash:0x83560B6D size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct8' aliasedID:58 numElements:0
-Type[60] name:'TestStruct8&' hash:0x83560B69 size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct8*' aliasedID:59 numElements:0
-Type[61] name:'TestStruct9' hash:0xB6406342 size:6 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct9' aliasedID:61 numElements:0
-Type[62] name:'TestStruct9*' hash:0x83560CF0 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct9' aliasedID:61 numElements:0
-Type[63] name:'TestStruct9[2]' hash:0x42072B1C size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct9' aliasedID:61 numElements:2
-Type[64] name:'TestStruct9&[2]' hash:0x1A19F50A size:4 flags:0xEB INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS|ARRAY aliasedName:'TestStruct9*' aliasedID:62 numElements:2
-Type[65] name:'TestStruct10' hash:0x835600DE size:18 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct10' aliasedID:65 numElements:0
-Type[66] name:'TestStruct11' hash:0x835600DF size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct11' aliasedID:66 numElements:0
-Type[67] name:'TestStruct11*' hash:0x8B035147 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct11' aliasedID:66 numElements:0
-Type[68] name:'TestStruct11&[1]' hash:0x2031AC34 size:4 flags:0xEB INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS|ARRAY aliasedName:'TestStruct11*' aliasedID:67 numElements:1
-Type[69] name:'TestStruct12' hash:0x835600E0 size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct12' aliasedID:69 numElements:0
-Type[70] name:'arrayExistsWrongNumberOfElements[1]' hash:0x5429AC10 size:4 flags:0xC5 INPUT|POD|ALIAS|ARRAY aliasedName:'int' aliasedID:6 numElements:1

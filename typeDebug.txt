@@ -1,71 +1,71 @@
-Type 'unsigned char' size:1 flags:0x5 INPUT|POD aliasedName:'unsigned char' numElements:0
-Type 'unsigned short' size:2 flags:0x5 INPUT|POD aliasedName:'unsigned short' numElements:0
-Type 'unsigned int' size:4 flags:0x5 INPUT|POD aliasedName:'unsigned int' numElements:0
-Type 'unsigned long' size:4 flags:0x5 INPUT|POD aliasedName:'unsigned long' numElements:0
-Type 'char' size:1 flags:0x5 INPUT|POD aliasedName:'char' numElements:0
-Type 'short' size:2 flags:0x5 INPUT|POD aliasedName:'short' numElements:0
-Type 'int' size:4 flags:0x5 INPUT|POD aliasedName:'int' numElements:0
-Type 'long' size:4 flags:0x5 INPUT|POD aliasedName:'long' numElements:0
-Type 'long long int' size:8 flags:0x5 INPUT|POD aliasedName:'long long int' numElements:0
-Type 'float' size:4 flags:0x5 INPUT|POD aliasedName:'float' numElements:0
-Type 'double' size:8 flags:0x5 INPUT|POD aliasedName:'double' numElements:0
-Type 'unsigned char*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned char' numElements:0
-Type 'unsigned short*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned short' numElements:0
-Type 'unsigned int*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned int' numElements:0
-Type 'unsigned long*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned long' numElements:0
-Type 'char*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'char' numElements:0
-Type 'short*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'short' numElements:0
-Type 'int*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'int' numElements:0
-Type 'long*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'long' numElements:0
-Type 'float*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'float' numElements:0
-Type 'double*' size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'double' numElements:0
-Type 'int&' size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'int*' numElements:0
-Type 'short&' size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'short*' numElements:0
-Type 'char&' size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'char*' numElements:0
-Type 'float&' size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'float*' numElements:0
-Type 'char[3]' size:4 flags:0xC7 INPUT|OUTPUT|POD|ALIAS|ARRAY aliasedName:'char' numElements:3
-Type 'short[3]' size:4 flags:0xC7 INPUT|OUTPUT|POD|ALIAS|ARRAY aliasedName:'short' numElements:3
-Type 'int[3]' size:4 flags:0xC7 INPUT|OUTPUT|POD|ALIAS|ARRAY aliasedName:'int' numElements:3
-Type 'char&[3]' size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'char*' numElements:3
-Type 'short&[3]' size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'short*' numElements:3
-Type 'int&[3]' size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'int*' numElements:3
-Type 'int&[2]' size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'int*' numElements:2
-Type 'char&[5]' size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'char*' numElements:5
-Type 'output_only' size:4 flags:0x6 OUTPUT|POD aliasedName:'output_only' numElements:0
-Type 'TestStruct1' size:24 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct1' numElements:0
-Type 'TestStruct1*' size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct1' numElements:0
-Type 'TestStruct1&' size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct1*' numElements:0
-Type 'TestStruct1[1]' size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct1' numElements:1
-Type 'TestStruct1[2]' size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct1' numElements:2
-Type 'TestStruct2' size:36 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct2' numElements:0
-Type 'TestStruct2*' size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct2' numElements:0
-Type 'TestStruct2&' size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct2*' numElements:0
-Type 'TestStruct2[1]' size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct2' numElements:1
-Type 'TestStruct2[2]' size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct2' numElements:2
-Type 'TestStruct3' size:16 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct3' numElements:0
-Type 'TestStruct3*' size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct3' numElements:0
-Type 'TestStruct3[2]' size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct3' numElements:2
-Type 'TestStruct4' size:32 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct4' numElements:0
-Type 'TestStruct4*' size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct4' numElements:0
-Type 'TestStruct4[1]' size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct4' numElements:1
-Type 'TestStruct5' size:8 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct5' numElements:0
-Type 'TestStruct5*' size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct5' numElements:0
-Type 'TestStruct5&' size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct5*' numElements:0
-Type 'TestStruct6' size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct6' numElements:0
-Type 'TestStruct6*' size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct6' numElements:0
-Type 'TestStruct7' size:20 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct7' numElements:0
-Type 'TestStruct7*' size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct7' numElements:0
-Type 'TestStruct7&' size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct7*' numElements:0
-Type 'TestStruct8' size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct8' numElements:0
-Type 'TestStruct8*' size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct8' numElements:0
-Type 'TestStruct8&' size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct8*' numElements:0
-Type 'TestStruct9' size:6 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct9' numElements:0
-Type 'TestStruct9*' size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct9' numElements:0
-Type 'TestStruct9[2]' size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct9' numElements:2
-Type 'TestStruct9&[2]' size:4 flags:0xEB INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS|ARRAY aliasedName:'TestStruct9*' numElements:2
-Type 'TestStruct10' size:18 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct10' numElements:0
-Type 'TestStruct11' size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct11' numElements:0
-Type 'TestStruct11*' size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct11' numElements:0
-Type 'TestStruct11&[1]' size:4 flags:0xEB INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS|ARRAY aliasedName:'TestStruct11*' numElements:1
-Type 'TestStruct12' size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct12' numElements:0
-Type 'arrayExistsWrongNumberOfElements[1]' size:4 flags:0xC5 INPUT|POD|ALIAS|ARRAY aliasedName:'int' numElements:1
+Type[0] name:'unsigned char' hash:0x6E40A25D size:1 flags:0x5 INPUT|POD aliasedName:'unsigned char' aliasedID:0 numElements:0
+Type[1] name:'unsigned short' hash:0x3B779699 size:2 flags:0x5 INPUT|POD aliasedName:'unsigned short' aliasedID:1 numElements:0
+Type[2] name:'unsigned int' hash:0xA31138D4 size:4 flags:0x5 INPUT|POD aliasedName:'unsigned int' aliasedID:2 numElements:0
+Type[3] name:'unsigned long' hash:0x8D6862AB size:4 flags:0x5 INPUT|POD aliasedName:'unsigned long' aliasedID:3 numElements:0
+Type[4] name:'char' hash:0x56F2B2AE size:1 flags:0x5 INPUT|POD aliasedName:'char' aliasedID:4 numElements:0
+Type[5] name:'short' hash:0xA6410C size:2 flags:0x5 INPUT|POD aliasedName:'short' aliasedID:5 numElements:0
+Type[6] name:'int' hash:0xF09B6F size:4 flags:0x5 INPUT|POD aliasedName:'int' aliasedID:6 numElements:0
+Type[7] name:'long' hash:0x761A72FC size:4 flags:0x5 INPUT|POD aliasedName:'long' aliasedID:7 numElements:0
+Type[8] name:'long long int' hash:0x82108C1F size:8 flags:0x5 INPUT|POD aliasedName:'long long int' aliasedID:8 numElements:0
+Type[9] name:'float' hash:0x29C40BA8 size:4 flags:0x5 INPUT|POD aliasedName:'float' aliasedID:9 numElements:0
+Type[10] name:'double' hash:0x9EC4F5FD size:8 flags:0x5 INPUT|POD aliasedName:'double' aliasedID:10 numElements:0
+Type[11] name:'unsigned char*' hash:0xABB572C1 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned char' aliasedID:0 numElements:0
+Type[12] name:'unsigned short*' hash:0xE5C8A975 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned short' aliasedID:1 numElements:0
+Type[13] name:'unsigned int*' hash:0x8308E8A6 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned int' aliasedID:2 numElements:0
+Type[14] name:'unsigned long*' hash:0xC4CD28AB size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned long' aliasedID:3 numElements:0
+Type[15] name:'char*' hash:0x70E41D34 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'char' aliasedID:4 numElements:0
+Type[16] name:'short*' hash:0xFB54554E size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'short' aliasedID:5 numElements:0
+Type[17] name:'int*' hash:0x6BBAF8F7 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'int' aliasedID:6 numElements:0
+Type[18] name:'long*' hash:0x89FBD31E size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'long' aliasedID:7 numElements:0
+Type[19] name:'float*' hash:0x235D9F22 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'float' aliasedID:9 numElements:0
+Type[20] name:'double*' hash:0x3BFDDA1 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'double' aliasedID:10 numElements:0
+Type[21] name:'int&' hash:0x6BBAF8F3 size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'int*' aliasedID:17 numElements:0
+Type[22] name:'short&' hash:0xFB54554A size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'short*' aliasedID:16 numElements:0
+Type[23] name:'char&' hash:0x70E41D30 size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'char*' aliasedID:15 numElements:0
+Type[24] name:'float&' hash:0x235D9F1E size:4 flags:0x67 INPUT|OUTPUT|POD|REFERENCE|ALIAS aliasedName:'float*' aliasedID:19 numElements:0
+Type[25] name:'char[3]' hash:0x3F312303 size:4 flags:0xC7 INPUT|OUTPUT|POD|ALIAS|ARRAY aliasedName:'char' aliasedID:4 numElements:3
+Type[26] name:'short[3]' hash:0x8D5685ED size:4 flags:0xC7 INPUT|OUTPUT|POD|ALIAS|ARRAY aliasedName:'short' aliasedID:5 numElements:3
+Type[27] name:'int[3]' hash:0xCEF77DE size:4 flags:0xC7 INPUT|OUTPUT|POD|ALIAS|ARRAY aliasedName:'int' aliasedID:6 numElements:3
+Type[28] name:'char&[3]' hash:0xD0896FB9 size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'char*' aliasedID:15 numElements:3
+Type[29] name:'short&[3]' hash:0xF30DF777 size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'short*' aliasedID:16 numElements:3
+Type[30] name:'int&[3]' hash:0xD743B6CA size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'int*' aliasedID:17 numElements:3
+Type[31] name:'int&[2]' hash:0xD743B547 size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'int*' aliasedID:17 numElements:2
+Type[32] name:'char&[5]' hash:0xD08972BF size:4 flags:0xE7 INPUT|OUTPUT|POD|REFERENCE|ALIAS|ARRAY aliasedName:'char*' aliasedID:15 numElements:5
+Type[33] name:'output_only' hash:0xF9C98C72 size:4 flags:0x6 OUTPUT|POD aliasedName:'output_only' aliasedID:33 numElements:0
+Type[34] name:'TestStruct1' hash:0xB640633A size:24 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct1' aliasedID:34 numElements:0
+Type[35] name:'TestStruct1*' hash:0x835600D8 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct1' aliasedID:34 numElements:0
+Type[36] name:'TestStruct1&' hash:0x835600D4 size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct1*' aliasedID:35 numElements:0
+Type[37] name:'TestStruct1[1]' hash:0x2663E4C1 size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct1' aliasedID:34 numElements:1
+Type[38] name:'TestStruct1[2]' hash:0x2663E644 size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct1' aliasedID:34 numElements:2
+Type[39] name:'TestStruct2' hash:0xB640633B size:36 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct2' aliasedID:39 numElements:0
+Type[40] name:'TestStruct2*' hash:0x8356025B size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct2' aliasedID:39 numElements:0
+Type[41] name:'TestStruct2&' hash:0x83560257 size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct2*' aliasedID:40 numElements:0
+Type[42] name:'TestStruct2[1]' hash:0x29D84D5C size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct2' aliasedID:39 numElements:1
+Type[43] name:'TestStruct2[2]' hash:0x29D84EDF size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct2' aliasedID:39 numElements:2
+Type[44] name:'TestStruct3' hash:0xB640633C size:16 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct3' aliasedID:44 numElements:0
+Type[45] name:'TestStruct3*' hash:0x835603DE size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct3' aliasedID:44 numElements:0
+Type[46] name:'TestStruct3[2]' hash:0x2D4CB77A size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct3' aliasedID:44 numElements:2
+Type[47] name:'TestStruct4' hash:0xB640633D size:32 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct4' aliasedID:47 numElements:0
+Type[48] name:'TestStruct4*' hash:0x83560561 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct4' aliasedID:47 numElements:0
+Type[49] name:'TestStruct4[1]' hash:0x30C11E92 size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct4' aliasedID:47 numElements:1
+Type[50] name:'TestStruct5' hash:0xB640633E size:8 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct5' aliasedID:50 numElements:0
+Type[51] name:'TestStruct5*' hash:0x835606E4 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct5' aliasedID:50 numElements:0
+Type[52] name:'TestStruct5&' hash:0x835606E0 size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct5*' aliasedID:51 numElements:0
+Type[53] name:'TestStruct6' hash:0xB640633F size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct6' aliasedID:53 numElements:0
+Type[54] name:'TestStruct6*' hash:0x83560867 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct6' aliasedID:53 numElements:0
+Type[55] name:'TestStruct7' hash:0xB6406340 size:20 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct7' aliasedID:55 numElements:0
+Type[56] name:'TestStruct7*' hash:0x835609EA size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct7' aliasedID:55 numElements:0
+Type[57] name:'TestStruct7&' hash:0x835609E6 size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct7*' aliasedID:56 numElements:0
+Type[58] name:'TestStruct8' hash:0xB6406341 size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct8' aliasedID:58 numElements:0
+Type[59] name:'TestStruct8*' hash:0x83560B6D size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct8' aliasedID:58 numElements:0
+Type[60] name:'TestStruct8&' hash:0x83560B69 size:4 flags:0x6B INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS aliasedName:'TestStruct8*' aliasedID:59 numElements:0
+Type[61] name:'TestStruct9' hash:0xB6406342 size:6 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct9' aliasedID:61 numElements:0
+Type[62] name:'TestStruct9*' hash:0x83560CF0 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct9' aliasedID:61 numElements:0
+Type[63] name:'TestStruct9[2]' hash:0x42072B1C size:4 flags:0xCB INPUT|OUTPUT|STRUCT|ALIAS|ARRAY aliasedName:'TestStruct9' aliasedID:61 numElements:2
+Type[64] name:'TestStruct9&[2]' hash:0x1A19F50A size:4 flags:0xEB INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS|ARRAY aliasedName:'TestStruct9*' aliasedID:62 numElements:2
+Type[65] name:'TestStruct10' hash:0x835600DE size:18 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct10' aliasedID:65 numElements:0
+Type[66] name:'TestStruct11' hash:0x835600DF size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct11' aliasedID:66 numElements:0
+Type[67] name:'TestStruct11*' hash:0x8B035147 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct11' aliasedID:66 numElements:0
+Type[68] name:'TestStruct11&[1]' hash:0x2031AC34 size:4 flags:0xEB INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS|ARRAY aliasedName:'TestStruct11*' aliasedID:67 numElements:1
+Type[69] name:'TestStruct12' hash:0x835600E0 size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct12' aliasedID:69 numElements:0
+Type[70] name:'arrayExistsWrongNumberOfElements[1]' hash:0x5429AC10 size:4 flags:0xC5 INPUT|POD|ALIAS|ARRAY aliasedName:'int' aliasedID:6 numElements:1
