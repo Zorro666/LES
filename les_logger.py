@@ -3,6 +3,7 @@
 LES_LOGGERCHANNEL_FLAGS_FATAL = 					(1<<0)
 LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT = 	(1<<1)
 LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT = 		(1<<2)
+LES_LOGGERCHANNEL_FLAGS_DEFAULT = LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT | LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT
 
 CHANNEL_FATAL_ERROR = 0
 CHANNEL_ERROR = 			1
@@ -18,7 +19,7 @@ __s_defaultChannels__ = []
 
 def Init():
 	# Create default channels
-	defaultFlags = LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT | LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT
+	defaultFlags = LES_LOGGERCHANNEL_FLAGS_DEFAULT
 
 	for i in range(LOGGER_NUM_DEFAULT_CHANNELS):
 		__s_defaultChannels__.append(None)
@@ -181,7 +182,7 @@ def runTest():
 	SetFileOutput(CHANNEL_LOG, True)
 	SetConsoleOutput(CHANNEL_LOG, True)
 
-	jakeChannel = CreateChannel("Jake", "Custom: ", "jake.txt", LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT | LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT)
+	jakeChannel = CreateChannel("Jake", "Custom: ", "jake.txt", LES_LOGGERCHANNEL_FLAGS_DEFAULT)
 	jakeChannel.Print("Jake")
 	jakeChannel.Print("Jake %d %f %s", 10, 10, "Hello")
 

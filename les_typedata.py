@@ -555,7 +555,7 @@ def runTest():
 	this.loadXML("data/les_types_test.xml")
 	this.loadXML("data/les_types_errors.xml")
 
-	testTypeChan = les_logger.CreateChannel("TypeDebug", "", "typeDebug_py.txt", les_logger.LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT | les_logger.LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT)
+	testTypeChan = les_logger.CreateChannel("TypeDebug", "", "typeDebug_py.txt", les_logger.LES_LOGGERCHANNEL_FLAGS_DEFAULT)
 	this.DebugOutputTypes(testTypeChan)
 
 if __name__ == '__main__':
