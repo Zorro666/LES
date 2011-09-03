@@ -36,61 +36,6 @@ static int LES_GetStructDefinitionIndex(const LES_Hash nameHash)
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-#if 0
-LES_StructDefinition::LES_StructDefinition(void)
-{
-	m_nameID = -1;
-	m_numMembers = 0;
-	m_members = LES_NULL;
-}
-
-LES_StructDefinition::LES_StructDefinition(const LES_StructDefinition& other)
-{
-	*this = other;
-}
-
-LES_StructDefinition& LES_StructDefinition::operator=(const LES_StructDefinition& other)
-{
-	m_nameID = other.m_nameID;
-
-	const int numMembers = other.m_numMembers;
-	m_numMembers = numMembers;
-	m_members = new LES_StructMember[numMembers];
-	for (int i = 0; i < numMembers; i++)
-	{
-		LES_StructMember* const pMember = (LES_StructMember*)&m_members[i];
-		*pMember = other.m_members[i];
-	}
-	return *this;
-}
-
-LES_StructDefinition::LES_StructDefinition(const int nameID, const int numMembers)
-{
-	m_nameID = nameID;
-	m_numMembers = numMembers;
-	m_members = new LES_StructMember[numMembers];
-
-	LES_StructMember emptyMember;
-	emptyMember.m_hash = 0;
-	emptyMember.m_nameID = 0;
-	emptyMember.m_typeID = 0;
-	emptyMember.m_dataSize = 0;
-	emptyMember.m_alignmentPadding = 0;
-
-	for (int i = 0; i < numMembers; i++)
-	{
-		LES_StructMember* const pMember = (LES_StructMember*)&m_members[i];
-		*pMember = emptyMember;
-	}
-}
-
-LES_StructDefinition::~LES_StructDefinition(void)
-{
-	m_nameID = -1;
-	m_numMembers = 0;
-}
-#endif // #if 0
-
 int LES_StructDefinition::GetNameID(void) const
 {
 	return m_nameID;
