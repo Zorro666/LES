@@ -58,49 +58,32 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 												const int depth)
 {
 	const LES_StringEntry* const nameEntry = LES_GetStringEntryForID(nameID);
-	const LES_StringEntry* typeEntry = LES_GetStringEntryForID(typeID);
-	const LES_TypeEntry* typeDataPtr = LES_GetTypeEntry(typeEntry);
+	const LES_StringEntry* typeStringEntry = LES_GetStringEntryForID(typeID);
+	const LES_TypeEntry* typeEntryPtr = LES_GetTypeEntry(typeStringEntry);
 
 #if LES_FUNCTION_DEBUG
-	LES_LOG("DecodeSingle: '%s' '%s' %d", nameEntry->m_str, typeEntry->m_str, typeID);
+	LES_LOG("DecodeSingle: '%s' '%s' %d", nameEntry->m_str, typeStringEntry->m_str, typeID);
 #endif // #if LES_FUNCTION_DEBUG
 
 	const char* const nameStr = nameEntry->m_str;
-	const char* const typeStr = typeEntry->m_str;
+	const char* const typeStr = typeStringEntry->m_str;
 
-	if (typeDataPtr == LES_NULL)
+	if (typeEntryPtr == LES_NULL)
 	{
 		LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' type can't be found", parameterIndex, nameStr, typeStr);
 		return LES_RETURN_ERROR;
 	}
-	const int numElements = typeDataPtr->m_numElements;
-	int aliasedTypeID = typeDataPtr->m_aliasedTypeID;
+	const int numElements = typeEntryPtr->m_numElements;
+	int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
 
-	unsigned int typeFlags = typeDataPtr->m_flags;
-	while ( typeFlags & LES_TYPE_ALIAS)
-	{
-		aliasedTypeID = typeDataPtr->m_aliasedTypeID;
-		const LES_StringEntry* const aliasedTypeEntry = LES_GetStringEntryForID(aliasedTypeID);
-		if (aliasedTypeEntry == LES_NULL)
-		{
-			LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' aliased type:%d entry can't be found", 
-									parameterIndex, nameStr, typeStr, aliasedTypeID);
-			return LES_RETURN_ERROR;
-		}
-#if LES_FUNCTION_DEBUG
-		LES_LOG("Type:'%s' aliased to '%s'", typeEntry->m_str, aliasedTypeEntry->m_str);
-#endif // #if LES_FUNCTION_DEBUG
-		typeDataPtr = LES_GetTypeEntry(aliasedTypeEntry);
-		if (typeDataPtr == LES_NULL)
-		{
-			LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' type can't be found", parameterIndex, nameStr, typeStr);
-			return LES_RETURN_ERROR;
-		}
-		typeFlags = typeDataPtr->m_flags;
-		typeEntry = aliasedTypeEntry;
-	}
+	unsigned int typeFlags = typeEntryPtr->m_flags;
 
-	const int typeDataSize = typeDataPtr->m_dataSize;
+	typeEntryPtr = typeEntryPtr->GetRootType();
+	aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
+	typeFlags = typeEntryPtr->m_flags;
+	typeStringEntry = LES_GetStringEntryForID(aliasedTypeID);
+
+	const int typeDataSize = typeEntryPtr->m_dataSize;
 	if (typeFlags & LES_TYPE_STRUCT)
 	{
 		int localNumElements = numElements;
@@ -115,7 +98,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		LES_LOG("DecodeSingle parameter[%d]:'%s' type:'%s' size:%d STRUCT", parameterIndex, nameStr, typeStr, typeDataSize);
 #endif // #if LES_FUNCTION_DEBUG
 		int returnCode = LES_RETURN_OK;
-		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeDataPtr->m_hash);
+		const LES_StructDefinition* const structDefinition = LES_GetStructDefinition(typeEntryPtr->m_hash);
 		if (structDefinition == LES_NULL)
 		{
 			LES_WARNING("DecodeSingle parameter[%d]:'%s' type:'%s' is a struct but can't be found", parameterIndex, nameStr, typeStr);
@@ -160,7 +143,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		return returnCode;
 	}
 
-	const LES_Hash typeHash = typeDataPtr->m_hash;
+	const LES_Hash typeHash = typeEntryPtr->m_hash;
 
 	long long int longlongValue;
 	int intValue;
@@ -206,7 +189,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		LES_WARNING("DecodeSingle valuePtr = LES_NULL parameter[%d]:'%s'", parameterIndex, nameStr);
 		return LES_RETURN_ERROR;
 	}
-	int errorCode = functionParameterData->Read(typeEntry, valuePtr);
+	int errorCode = functionParameterData->Read(typeStringEntry, valuePtr);
 	if (errorCode != LES_RETURN_OK)
 	{
 		LES_WARNING("DecodeSingle Read failed for parameter[%d]:%s;", parameterIndex, nameStr);
@@ -249,7 +232,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	}
 	else
 	{
-		sprintf(tempString, ":UNKNOWN typeDataSize:%d struct:%d", typeDataSize, (typeDataPtr->m_flags&LES_TYPE_STRUCT));
+		sprintf(tempString, ":UNKNOWN typeDataSize:%d struct:%d", typeDataSize, (typeEntryPtr->m_flags&LES_TYPE_STRUCT));
 	}
 	sprintf(output, "%s%s", output, tempString);
 	LES_LOG(output);

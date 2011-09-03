@@ -149,30 +149,12 @@ int LES_FunctionParameterData::WriteInternal(const LES_StringEntry* const typeSt
 	const LES_StringEntry* aliasedTypeStringEntry = LES_NULL;
 	const LES_TypeEntry* typeEntryPtr = inputTypeEntryPtr;
 	const char* typeNameStr = typeStringEntry->m_str;
-	while (typeFlags & LES_TYPE_ALIAS)
-	{
-		const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
-		aliasedTypeStringEntry = LES_GetStringEntryForID(aliasedTypeID);
-		if (aliasedTypeStringEntry == LES_NULL)
-		{
-			LES_WARNING("WriteInternal type:'%s' aliased type:%d entry can't be found", typeNameStr, aliasedTypeID);
-			return LES_RETURN_ERROR;
-		}
-#if LES_PARAMETER_DEBUG
-		LES_LOG("WriteItem: Type:'%s' aliased to '%s'", typeNameStr, aliasedTypeStringEntry->m_str);
-#endif // #if LES_PARAMETER_DEBUG
-		typeEntryPtr = LES_GetTypeEntry(aliasedTypeStringEntry);
-		if (typeEntryPtr == LES_NULL)
-		{
-			LES_WARNING("WriteInternal type:'%s' type can't be found", aliasedTypeStringEntry->m_str);
-			return LES_RETURN_ERROR;
-		}
-#if LES_PARAMETER_DEBUG
-		LES_LOG("WriteItem: Type:'%s' aliased to 0x%X", typeNameStr, aliasedTypeStringEntry->m_hash);
-#endif // #if LES_PARAMETER_DEBUG
-		typeFlags = typeEntryPtr->m_flags;
-		typeNameStr = (const char*)aliasedTypeStringEntry->m_str;
-	}
+
+	typeEntryPtr = typeEntryPtr->GetRootType();
+	typeFlags = typeEntryPtr->m_flags;
+	const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
+	aliasedTypeStringEntry = LES_GetStringEntryForID(aliasedTypeID);
+	typeNameStr = (const char*)aliasedTypeStringEntry->m_str;
 
 	unsigned int parameterDataSize = inputTypeEntryPtr->m_dataSize;
 	parameterDataSize = typeEntryPtr->m_dataSize;
@@ -216,30 +198,12 @@ int LES_FunctionParameterData::WriteItem(const LES_StringEntry* const typeString
 	unsigned int typeFlags = typeEntryPtr->m_flags;
 
 	const char* typeNameStr = typeStringEntry->m_str;
-	while (typeFlags & LES_TYPE_ALIAS)
-	{
-		const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
-		const LES_StringEntry* const aliasedTypeStringEntry = LES_GetStringEntryForID(aliasedTypeID);
-		if (aliasedTypeStringEntry == LES_NULL)
-		{
-			LES_WARNING("WriteItem type:'%s' aliased type:%d entry can't be found", typeNameStr, aliasedTypeID);
-			return LES_RETURN_ERROR;
-		}
-#if LES_PARAMETER_DEBUG
-		LES_LOG("WriteItem: Type:'%s' aliased to '%s'", typeNameStr, aliasedTypeStringEntry->m_str);
-#endif // #if LES_PARAMETER_DEBUG
-		typeEntryPtr = LES_GetTypeEntry(aliasedTypeStringEntry);
-		if (typeEntryPtr == LES_NULL)
-		{
-			LES_WARNING("WriteItem type:'%s' type can't be found", aliasedTypeStringEntry->m_str);
-			return LES_RETURN_ERROR;
-		}
-#if LES_PARAMETER_DEBUG
-		LES_LOG("WriteItem: Type:'%s' aliased to 0x%X", typeNameStr, aliasedTypeStringEntry->m_hash);
-#endif // #if LES_PARAMETER_DEBUG
-		typeFlags = typeEntryPtr->m_flags;
-		typeNameStr = (const char*)aliasedTypeStringEntry->m_str;
-	}
+
+	typeEntryPtr = typeEntryPtr->GetRootType();
+	typeFlags = typeEntryPtr->m_flags;
+	const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
+	const LES_StringEntry* const aliasedTypeStringEntry = LES_GetStringEntryForID(aliasedTypeID);
+	typeNameStr = (const char*)aliasedTypeStringEntry->m_str;
 
 	const void* valueAddress = parameterDataPtr;
 #if 0
