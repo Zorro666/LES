@@ -138,6 +138,7 @@ class LES_StructData():
 		index = len(self.__m_structDefinitions__)
 		self.__m_structDefinitions__.append(structDefinition)
 		self.__m_structDefinitionNames__.append(name)
+
 		return index
 
 	def doesStructDefinitionExist(self, name):
@@ -283,14 +284,15 @@ class LES_StructData():
 
 			les_logger.Log("Struct '%s' numMembers:%d", structName, numMembers)
 
-#			if self.doesStructExist(structName):
-#				les_logger.Error("LES_StructData::parseXML '%s' already exists", structName)
-#				numErorrs += 1
-#				continue
+			if self.doesStructDefinitionExist(structName):
+				les_logger.Error("LES_StructData::parseXML '%s' already exists", structName)
+				numErorrs += 1
+				continue
 
 			structNameID = self.__m_stringTable__.addString(structName)
 			structDefinition = LES_StructDefinintion(structNameID, numMembers)
 
+			numAdded = 0
 			for memberXML in structXML:
 				if memberXML.tag != "LES_STRUCT_MEMBER":
 					les_logger.Error("LES_StructData::parseXML '%s' invalid node tag should be LES_STRUCT_MEMBER found:'%s'", 
@@ -320,6 +322,13 @@ class LES_StructData():
 														structName, memberType, memberName, xml.etree.ElementTree.tostring(memberXML))
 					numErrors += 1
 					continue
+				numAdded += 1
+
+			if numAdded != numMembers:
+				les_logger.Error("LES_StructData::parseXML '%s' not enough members added numAdded:%d numMembers:%d", 
+												 structName, numAdded, numMembers)
+				numErrors += 1
+				continue
 
 			index = self.addStructDefinition(structName, structDefinition)
 			if index == -1:
