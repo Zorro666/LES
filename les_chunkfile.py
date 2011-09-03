@@ -38,7 +38,7 @@ class LES_ChunkFile():
 		self.binFile.writeString(self.magicName)
 
 		# m_numChunks								: 4-bytes
-		self.binFile.writeUint(numChunks)
+		self.binFile.writeUint32(numChunks)
 
 		# Write out the chunkOffset table
 		# m_chunkOffsets[numChunks]	: 4-bytes * numChunks
@@ -46,7 +46,7 @@ class LES_ChunkFile():
 			currentFileIndex = self.binFile.getIndex()
 			self.chunkOffsetIndexes.append(currentFileIndex)
 			self.chunkNames.append("__NOT_WRITTEN__")
-			self.binFile.writeUint(offset)
+			self.binFile.writeUint32(offset)
 
 	def startChunk(self, chunkName):
 		if self.activeChunkIndex != -1:
@@ -62,11 +62,17 @@ class LES_ChunkFile():
 		self.chunkNames[self.activeChunkIndex] = chunkName
 
 		currentFileIndex = self.binFile.getIndex()
+		# Make sure a chunk starts on 4-byte boundary
+		alignedIndex = (currentFileIndex + 3) & ~3
+		alignmentPadding = alignedIndex - currentFileIndex;
+		for i in range(alignmentPadding):
+			self.binFile.writeUint8(0x66)
+		currentFileIndex = self.binFile.getIndex()
 		self.chunkOffsetValues[self.activeChunkIndex] = currentFileIndex
 
 		offsetIndex = self.chunkOffsetIndexes[self.activeChunkIndex]
 		self.binFile.seek(offsetIndex)
-		self.binFile.writeUint(currentFileIndex)
+		self.binFile.writeUint32(currentFileIndex)
 		self.binFile.seek(currentFileIndex)
 
 		return self.binFile
