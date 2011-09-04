@@ -4,6 +4,7 @@
 #include "les_base.h"
 #include "les_hash.h"
 #include "les_type.h"
+#include "les_parameter.h"
 
 #define LES_MAX_NUM_FUNCTION_PARAMS (32)
 
@@ -17,14 +18,7 @@ class LES_FunctionParameterData;
 class LES_FunctionDefinition
 {
 public:
-	LES_FunctionDefinition(void);
-	LES_FunctionDefinition(const LES_FunctionDefinition& other);
-	LES_FunctionDefinition& operator = (const LES_FunctionDefinition& other);
-	LES_FunctionDefinition(const int nameID, const int returnTypeID, const int numInputs, const int numOutputs);
-	~LES_FunctionDefinition(void);
-
-	void ComputeParameterDataSize(void);
-	void SetReturnTypeID(const int returnTypeID);
+	int ComputeParameterDataSize(void) const;
 
 	const LES_FunctionParameter* GetParameter(const LES_Hash nameHash) const;
 	const LES_FunctionParameter* GetParameterByIndex(const int index) const;
@@ -36,16 +30,25 @@ public:
 	int GetParameterDataSize(void) const;
 
 	int Decode(const LES_FunctionParameterData* const functionParameterData) const;
-private:
-	int m_nameID;
-	int m_returnTypeID;
-	int m_parameterDataSize;
 
-	int m_numInputs;
-	int m_numOutputs;
-	//const LES_FunctionParameter* const m_params; - FOR NOW DO PROPER ASSIGNMENT IN CONSTRUCTOR OR PLACEMENT NEW
-	const LES_FunctionParameter* m_params;
-	mutable bool m_ownsParamsMemory;
+	friend LES_FunctionDefinition* LES_CreateFunctionDefinition(const int nameID, const int returnTypeID, 
+																															const int numInputs, const int numOutputs);
+	friend int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const pFunctionDefinition, 
+																			 const int parameterDataSize);
+	friend void LES_TestSetup(void);
+private:
+	LES_FunctionDefinition(void);
+	LES_FunctionDefinition(const LES_FunctionDefinition& other);
+	LES_FunctionDefinition& operator = (const LES_FunctionDefinition& other);
+	~LES_FunctionDefinition(void);
+
+	LES_int32 m_nameID;
+	LES_int32 m_returnTypeID;
+	LES_int32 m_parameterDataSize;
+
+	LES_int32 m_numInputs;
+	LES_int32 m_numOutputs;
+	LES_FunctionParameter m_paramDatas[1];  // m_paramDatas[m_numInputs+m_numOutputs];
 };
 
 const LES_FunctionDefinition* LES_GetFunctionDefinition(const char* const name);

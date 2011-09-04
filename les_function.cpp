@@ -1,4 +1,5 @@
 #include <string.h>
+#include <malloc.h>
 
 #include "les_core.h"
 #include "les_logger.h"
@@ -8,7 +9,7 @@
 #include "les_parameter.h"
 #include "les_struct.h"
 
-static LES_FunctionDefinition* les_functionDefinitionArray = LES_NULL;
+static const LES_FunctionDefinition** les_functionDefinitionArray = LES_NULL;
 static int les_numFunctionDefinitions = 0;
 
 #define LES_FUNCTION_DEBUG 0
@@ -24,7 +25,7 @@ static int LES_GetFunctionDefinitionIndexByNameID(const int nameID)
 	/* This is horribly slow - need hash lookup table */
 	for (int i = 0; i < les_numFunctionDefinitions; i++)
 	{
-		const LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[i];
+		const LES_FunctionDefinition* const functionDefinitionPtr = les_functionDefinitionArray[i];
 		if (functionDefinitionPtr->GetNameID() == nameID)
 		{
 			return i;
@@ -40,7 +41,7 @@ static int LES_GetFunctionDefinitionIndex(const char* const name)
 	/* This is horribly slow - need hash lookup table */
 	for (int i = 0; i < les_numFunctionDefinitions; i++)
 	{
-		const LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[i];
+		const LES_FunctionDefinition* const functionDefinitionPtr = les_functionDefinitionArray[i];
 		const LES_StringEntry* const functionNameStringEntryPtr = LES_GetStringEntryForID(functionDefinitionPtr->GetNameID());
 		if (functionNameStringEntryPtr->m_hash == functionNameHash)
 		{
@@ -248,11 +249,11 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 const LES_FunctionDefinition* LES_GetFunctionDefinition(const char* const name)
 {
 	const int index = LES_GetFunctionDefinitionIndex(name);
-	if ((index < 0) || (index >= les_numFunctionDefinitions))
+	if (index < 0)
 	{
 		return LES_NULL;
 	}
-	const LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[index];
+	const LES_FunctionDefinition* const functionDefinitionPtr = les_functionDefinitionArray[index];
 	return functionDefinitionPtr;
 }
 
@@ -263,46 +264,18 @@ LES_FunctionParameterData* LES_GetFunctionParameterData(const int functionNameID
 	{
 		return LES_NULL;
 	}
-	const LES_FunctionDefinition* const functionDefinitionPtr = &les_functionDefinitionArray[index];
+	const LES_FunctionDefinition* const functionDefinitionPtr = les_functionDefinitionArray[index];
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
-	char* parameterBuffer = new char[parameterDataSize];
-	LES_FunctionParameterData* parameterData = new LES_FunctionParameterData(parameterBuffer);
-
+	char* parameterBuffer = LES_NULL;
+	if (parameterDataSize > 0)
+	{
+		parameterBuffer = new char[parameterDataSize];
+	}
+	LES_FunctionParameterData* const parameterData = new LES_FunctionParameterData(parameterBuffer);
 	return parameterData;
 }
 
-LES_FunctionDefinition::LES_FunctionDefinition(void)
-{
-	m_nameID = -1;
-	m_returnTypeID = -1;
-	m_parameterDataSize = 0;
-
-	m_numInputs = 0;
-	m_numOutputs = 0;
-	m_params = LES_NULL;
-	m_ownsParamsMemory = false;
-}
-
-LES_FunctionDefinition::LES_FunctionDefinition(const LES_FunctionDefinition& other)
-{
-	*this = other;
-}
-
-LES_FunctionDefinition& LES_FunctionDefinition::operator = (const LES_FunctionDefinition& other)
-{
-	m_nameID = other.m_nameID;
-	m_returnTypeID = other.m_returnTypeID;
-	m_parameterDataSize = other.m_parameterDataSize;
-
-	m_numInputs = other.m_numInputs;
-	m_numOutputs = other.m_numOutputs;
-	m_params = other.m_params;
-	m_ownsParamsMemory = true;
-	other.m_ownsParamsMemory = false;
-
-	return *this;
-}
-
+#if 0
 LES_FunctionDefinition::LES_FunctionDefinition(const int nameID, const int returnTypeID, const int numInputs, const int numOutputs)
 {
 	m_nameID = nameID;
@@ -311,29 +284,13 @@ LES_FunctionDefinition::LES_FunctionDefinition(const int nameID, const int retur
 
 	m_numInputs = numInputs;
 	m_numOutputs = numOutputs;
-	m_params = new LES_FunctionParameter[numInputs+numOutputs];
-	m_ownsParamsMemory = true;
+	m_paramDatas = new LES_FunctionParameter[numInputs+numOutputs];
 }
+#endif
 
-LES_FunctionDefinition::~LES_FunctionDefinition(void)
+int LES_FunctionDefinition::ComputeParameterDataSize(void) const
 {
-	if (m_ownsParamsMemory)
-	{
-		delete[] m_params;
-	}
-	m_nameID = -1;
-	m_returnTypeID = -1;
-	m_parameterDataSize = 0;
-
-	m_numInputs = 0;
-	m_numOutputs = 0;
-	m_params = LES_NULL;
-	m_ownsParamsMemory = false;
-}
-
-void LES_FunctionDefinition::ComputeParameterDataSize(void)
-{
-	m_parameterDataSize = 0;
+	int parameterDataSize = 0;
 	int paramDataSize = 0;
 	int numParams = GetNumParameters();
 	for (int i = 0; i < numParams; i++)
@@ -343,22 +300,18 @@ void LES_FunctionDefinition::ComputeParameterDataSize(void)
 		const LES_StringEntry* const typeStringEntryPtr = LES_GetStringEntryForID(typeID);
 		if (typeStringEntryPtr == LES_NULL)
 		{
-			return;
+			return -1;
 		}
 		const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntry(typeStringEntryPtr);
 		if (typeEntryPtr == LES_NULL)
 		{
-			return;
+			return -1;
 		}
 		// This function is recursive following aliases and also looping over the members in structs and handling arrays
 		paramDataSize += typeEntryPtr->ComputeDataStorageSize();
 	}
-	m_parameterDataSize = paramDataSize;
-}
-
-void LES_FunctionDefinition::SetReturnTypeID(const int returnTypeID)
-{
-	m_returnTypeID = returnTypeID;
+	parameterDataSize = paramDataSize;
+	return parameterDataSize;
 }
 
 int LES_FunctionDefinition::GetNumParameters(void) const 
@@ -396,7 +349,7 @@ const LES_FunctionParameter* LES_FunctionDefinition::GetParameter(const LES_Hash
 	const int numParams = m_numInputs + m_numOutputs;
 	for (int i = 0; i < numParams; i++)
 	{
-		const LES_FunctionParameter* const paramPtr = &m_params[i];
+		const LES_FunctionParameter* const paramPtr = &m_paramDatas[i];
 		if (paramPtr->m_hash == nameHash)
 		{
 			return paramPtr;
@@ -410,7 +363,7 @@ const LES_FunctionParameter* LES_FunctionDefinition::GetParameterByIndex(const i
 	const int numParams = m_numInputs + m_numOutputs;
 	if ((index >= 0) && (index < numParams))
 	{
-		const LES_FunctionParameter* const paramPtr = &m_params[index];
+		const LES_FunctionParameter* const paramPtr = &m_paramDatas[index];
 		return paramPtr;
 	}
 	return LES_NULL;
@@ -442,7 +395,7 @@ int LES_FunctionDefinition::Decode(const LES_FunctionParameterData* const functi
 
 void LES_FunctionInit()
 {
-	les_functionDefinitionArray = new LES_FunctionDefinition[1024];
+	les_functionDefinitionArray = new const LES_FunctionDefinition*[1024];
 	les_numFunctionDefinitions = 0;
 }
 
@@ -452,17 +405,59 @@ void LES_FunctionShutdown()
 	delete[] les_functionDefinitionArray;
 }
 
-int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr)
+int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const pFunctionDefinition, 
+															const int parameterDataSize)
 {
 	int index = LES_GetFunctionDefinitionIndex(name);
 	if ((index < 0) || (index >= les_numFunctionDefinitions))
 	{
-		/* Not found so add it */
+		/* Not found so add it - just store the ptr to the memory */
 		index = les_numFunctionDefinitions;
-		les_functionDefinitionArray[index] = *functionDefinitionPtr;
+		les_functionDefinitionArray[index] = pFunctionDefinition;
+		LES_FunctionDefinition* const pFunctionDefinition2 = (LES_FunctionDefinition* const)les_functionDefinitionArray[index];
+		pFunctionDefinition2->m_parameterDataSize = parameterDataSize;
 		les_numFunctionDefinitions++;
 	}
 
 	return index;
 }
 
+LES_FunctionDefinition* LES_CreateFunctionDefinition(const int nameID, const int returnTypeID, const int numInputs, const int numOutputs)
+{
+	if (numInputs < 0)
+	{
+		LES_FATAL_ERROR("LES_CreateFunctionDefinition nameID:%d invalid numInputs %d must be >= 0", nameID, numInputs);
+		return LES_NULL;
+	}
+	if (numOutputs < 0)
+	{
+		LES_FATAL_ERROR("LES_CreateFunctionDefinition nameID:%d invalid numOutputs %d must be >= 0", nameID, numOutputs);
+		return LES_NULL;
+	}
+	const int numParams = numInputs + numOutputs;
+	int memorySize = sizeof(LES_FunctionDefinition);
+	if (numParams > 1)
+	{
+		memorySize += sizeof(LES_FunctionParameter) * (numParams - 1);
+	}
+	LES_FunctionDefinition* const pFunctionDefinition = (LES_FunctionDefinition*)malloc(memorySize);
+	pFunctionDefinition->m_nameID = nameID;
+	pFunctionDefinition->m_returnTypeID = returnTypeID;
+	pFunctionDefinition->m_parameterDataSize = 0;
+	pFunctionDefinition->m_numInputs = numInputs;
+	pFunctionDefinition->m_numOutputs = numOutputs;
+
+	LES_FunctionParameter emptyFunctionParameter;
+	emptyFunctionParameter.m_hash = 0;
+	emptyFunctionParameter.m_nameID = -1;
+	emptyFunctionParameter.m_typeID = -1;
+	emptyFunctionParameter.m_index = -1;
+	emptyFunctionParameter.m_mode = 0;
+
+	for (int i = 0; i < numParams; i++)
+	{
+		LES_FunctionParameter* const pFunctionParameter = (LES_FunctionParameter* const)pFunctionDefinition->GetParameterByIndex(i);
+		*pFunctionParameter = emptyFunctionParameter;
+	}
+	return pFunctionDefinition;
+}

@@ -6,15 +6,23 @@
 #include "les_stringentry.h"
 
 extern int LES_AddStringEntry(const char* const str);
-extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr);
 
-extern int LES_StructComputeAlignmentPadding(const int totalMemberSize, const int memberDataSize);
+extern LES_FunctionDefinition* LES_CreateFunctionDefinition(const int nameID, const int returnTypeID, 
+																														const int numInputs, const int numOutputs);
+
+extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const functionDefinitionPtr, 
+																		 const int parameterDataSize);
+
+
 extern LES_StructDefinition* LES_CreateStructDefinition(const int nameID, const int numMembers);
+
 extern int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* const structDefinitionPtr, 
 																	 const LES_uint32 structDataSize);
 
+extern int LES_StructComputeAlignmentPadding(const int totalMemberSize, const int memberDataSize);
+
 bool LES_TestFunctionStart(const char* const functionName, const char* const returnType, const int numInputs, const int numOutputs,
-													 LES_FunctionDefinition* const functionDefinitionPtr, LES_TEST_FUNCTION_DATA* testFunctionDataPtr)
+													 LES_FunctionDefinition** const functionDefinitionPtr, LES_TEST_FUNCTION_DATA* testFunctionDataPtr)
 {
 	testFunctionDataPtr->functionName = functionName;
 	testFunctionDataPtr->globalParamIndex = 0;
@@ -23,8 +31,7 @@ bool LES_TestFunctionStart(const char* const functionName, const char* const ret
 
 	const int nameID = LES_AddStringEntry(functionName);
 	const int returnTypeID = LES_AddStringEntry(returnType);
-	LES_FunctionDefinition functionDefinition(nameID, returnTypeID, numInputs, numOutputs);
-	*functionDefinitionPtr = functionDefinition;
+	*functionDefinitionPtr = LES_CreateFunctionDefinition(nameID, returnTypeID, numInputs, numOutputs);
 
 	return true;
 }
@@ -85,8 +92,8 @@ bool LES_TestFunctionEnd(LES_FunctionDefinition* const functionDefinitionPtr, LE
 										testFunctionDataPtr->functionName, testFunctionDataPtr->globalParamIndex, functionDefinitionPtr->GetNumParameters());
 		return false;
 	}
-	functionDefinitionPtr->ComputeParameterDataSize();
-	LES_AddFunctionDefinition(testFunctionDataPtr->functionName, functionDefinitionPtr);
+	const int parameterDataSize = functionDefinitionPtr->ComputeParameterDataSize();
+	LES_AddFunctionDefinition(testFunctionDataPtr->functionName, functionDefinitionPtr, parameterDataSize);
 
 	return true;
 }

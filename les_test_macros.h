@@ -15,15 +15,15 @@ struct LES_TEST_FUNCTION_DATA
 };
 
 bool LES_TestFunctionStart(const char* const functionName, const char* const returnType, const int numInputs, const int numOutputs,
-													 LES_FunctionDefinition* const functionDefinitionPtr, LES_TEST_FUNCTION_DATA* testFunctionDataPtr);
+													 LES_FunctionDefinition** functionDefinitionPtr, LES_TEST_FUNCTION_DATA* testFunctionDataPtr);
 
 #define LES_TEST_FUNCTION_START(NAME, RETURN_TYPE, NUM_INPUTS, NUM_OUTPUTS) \
 	{ \
 		LES_TEST_FUNCTION_DATA testFunctionData; \
-		LES_FunctionDefinition functionDefinition; \
+		LES_FunctionDefinition* functionDefinitionPtr; \
 		bool __LES_function_ok = true; \
 		__LES_function_ok = LES_TestFunctionStart( #NAME, #RETURN_TYPE, NUM_INPUTS, NUM_OUTPUTS, \
-																							 &functionDefinition, &testFunctionData); \
+																							 &functionDefinitionPtr, &testFunctionData); \
 
 
 bool LES_TestFunctionAddParam(const bool isInput, const char* const type, const char* const name, 
@@ -32,7 +32,7 @@ bool LES_TestFunctionAddParam(const bool isInput, const char* const type, const 
 #define	LES_TEST_FUNCTION_ADD_PARAM(IS_INPUT, TYPE, NAME) \
 		if (__LES_function_ok) \
 		{ \
-			__LES_function_ok = LES_TestFunctionAddParam( IS_INPUT, #TYPE, #NAME, &functionDefinition, &testFunctionData); \
+			__LES_function_ok = LES_TestFunctionAddParam( IS_INPUT, #TYPE, #NAME, functionDefinitionPtr, &testFunctionData); \
 		} \
 
 
@@ -49,7 +49,7 @@ bool LES_TestFunctionEnd(LES_FunctionDefinition* const functionDefinitionPtr, LE
 #define LES_TEST_FUNCTION_END() \
 		if (__LES_function_ok) \
 		{ \
-			__LES_function_ok = LES_TestFunctionEnd(&functionDefinition, &testFunctionData); \
+			__LES_function_ok = LES_TestFunctionEnd(functionDefinitionPtr, &testFunctionData); \
 		} \
 		if (__LES_function_ok == false) \
 		{ \

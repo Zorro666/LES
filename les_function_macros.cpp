@@ -133,7 +133,7 @@ int LES_FunctionAddParam(const char* const type, const char* const name, const i
 	}
 
 	/* Check the parameter mode: input or output */
-	const int currentMode = (isInput ? LES_PARAM_MODE_INPUT : LES_PARAM_MODE_OUTPUT);
+	const LES_uint32 currentMode = (isInput ? LES_PARAM_MODE_INPUT : LES_PARAM_MODE_OUTPUT);
 	if (functionParameterPtr->m_mode != currentMode)
 	{
 		/* ERROR: parameter mode doesn't match the definition */
