@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+import sys
+
 LES_LOGGERCHANNEL_FLAGS_FATAL = 					(1<<0)
 LES_LOGGERCHANNEL_FLAGS_CONSOLE_OUTPUT = 	(1<<1)
 LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT = 		(1<<2)
@@ -169,7 +171,7 @@ class LES_LoggerChannel():
 
 		if flags & LES_LOGGERCHANNEL_FLAGS_FATAL:
 			__SetErrorStatus__()
-#			exit(-1)
+			sys.exit(-1)
 
 def runTest():
 	Init()
