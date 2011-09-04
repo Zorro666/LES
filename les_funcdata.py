@@ -35,7 +35,7 @@ LES_PARAM_MODE_OUTPUT = les_typedata.LES_TYPE_OUTPUT
 
 # LES_FunctionData
 # {
-# 	LES_int32 m_numFunctionDeinfitions; 																		- 4-bytes
+# 	LES_int32 m_numFunctionDeifinitions; 																		- 4-bytes
 # 	LES_int32 m_settled; 																										- 4-bytes, 0 in file
 #		LES_uint32 m_functionDefinitionOffsets[m_numFunctionDefinitions];				- 4-bytes * m_numFunctionDefinitions
 #		LES_FunctionDefinition m_functionDefinitions[m_numFunctionDefinitions];	- variable 
@@ -261,7 +261,7 @@ class LES_FunctionData():
 		basePosition = binFile.getIndex()
 		# LES_FunctionData
 		# {
-		# 	LES_int32 m_numFunctionDeinfitions; 																		- 4-bytes
+		# 	LES_int32 m_numFunctionDefinitions; 																		- 4-bytes
 		# 	LES_int32 m_settled; 																										- 4-bytes, 0 in file
 		#		LES_uint32 m_functionDefinitionOffsets[m_numFunctionDefinitions];				- 4-bytes * m_numFunctionDefinitions
 		#		LES_FunctionDefinition m_functionDefinitions[m_numFunctionDefinitions];	- variable 

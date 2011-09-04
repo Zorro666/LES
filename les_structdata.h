@@ -7,7 +7,7 @@
 /*
 LES_StructData
 {
-	LES_int32 m_numStructDeinfitions; 																		- 4-bytes
+	LES_int32 m_numStructDefinitions; 																		- 4-bytes
 	LES_int32 m_settled; 																									- 4-bytes, 0 in file
 	LES_uint32 m_structDefinitionOffsets[m_numStructDefinitions];					- 4-bytes * m_numStructDefinitions
 	LES_StructDefinition m_structDefinitions[m_numStructDefinitions];	- variable 
