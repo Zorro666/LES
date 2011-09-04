@@ -1,0 +1,8 @@
+<?xml version='1.0' ?>
+<LES_FUNCTIONS>
+	<LES_FUNCTION name="PyTestFunction1" returnType="int" numInputs="2" numOutputs="1">
+		<LES_FUNCTION_INPUT_PARAMETER type="long long int" name="m_longlong"/>
+		<LES_FUNCTION_INPUT_PARAMETER type="char" name="m_char"/>
+		<LES_FUNCTION_OUTPUT_PARAMETER type="int*" name="m_int"/>
+	</LES_FUNCTION>
+</LES_FUNCTIONS>

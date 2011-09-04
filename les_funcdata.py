@@ -53,6 +53,7 @@ class LES_FunctionDefinintion():
 	def __init__(self, nameID, returnTypeID, numInputs, numOutputs):
 		self.__m_nameID__ = nameID
 		self.__m_returnTypeID__ = returnTypeID
+		self.__m_parameterDataSize__ = 0
 		self.__m_numInputs__ = numInputs
 		self.__m_numOutputs__ = numOutputs
 		self.__m_parameters__ = []
@@ -70,6 +71,12 @@ class LES_FunctionDefinintion():
 
 	def GetNameID(self):
 			return self.__m_nameID__
+
+	def GetReturnTypeID(self):
+			return self.__m_returnTypeID__
+
+	def GetParameterDataSize(self):
+			return self.__m_parameterDataSize__
 
 	def GetNumInputs(self):
 			return self.__m_numInputs__
@@ -128,6 +135,13 @@ class LES_FunctionDefinintion():
 															functionName, name, typeName)
 				return False
 
+		typeFlags = typeEntry.m_flags
+		if (typeFlags & paramMode == 0):
+			les_logger.FatalError("AddParameter function '%s' : parameter '%s' type:'%s' mode:0x%X %s incorrect for typeFlags:0x%X %s",
+														functionName, name, typeName, paramMode, les_typedata.decodeFlags(paramMode), 
+														typeFlags, les_typedata.decodeFlags(typeFlags))
+			return False
+
 		nameID = stringTable.addString(name)
 
 		numAddedParameters = self.__m_numAddedParameters__
@@ -139,7 +153,7 @@ class LES_FunctionDefinintion():
 		if isInput:
 			self.__m_numAddedInputs__ += 1
 		else:
-			self.__m_numAddedOutputs += 1
+			self.__m_numAddedOutputs__ += 1
 
 		les_logger.Log("  Function:'%s' Parameter:'%s' Type:'%s' 0x%X Input:%d mode:0x%X %s index:%d", 
 										functionName, name, typeName, les_hash.GenerateHashCaseSensitive(typeName), 
@@ -161,7 +175,7 @@ class LES_FunctionDefinintion():
 				return False
 
 		parameterDataSize = self.ComputeParameterDataSize(stringTable, typeData, structData)
-		self.m_parameterDataSize = parameterDataSize
+		self.__m_parameterDataSize__ = parameterDataSize
 
 		self.__m_finalised__ = True
 		return True
@@ -188,11 +202,12 @@ class LES_FunctionDefinintion():
 		return parameterDataSize
 
 class LES_FunctionData():
-	def __init__(self, stringTable, typeData):
+	def __init__(self, stringTable, typeData, structData):
 		self.__m_functionDefinitions__ = []
 		self.__m_functionDefinitionNames__ = []
 		self.__m_stringTable__ = stringTable
 		self.__m_typeData__ = typeData
+		self.__m_structData__ = structData
 
 	def addFunctionDefinition(self, name, functionDefinition):
 		if self.doesFunctionDefinitionExist(name):
@@ -275,7 +290,7 @@ class LES_FunctionData():
 			# {
 			#		LES_int32 m_nameID;
 			#		LES_int32 m_numMembers;
-			#		LES_FunctionMember m_members[m_numMembers];
+			#		LES_FunctionParameter m_parameters[m_numMembers];
 			#	};
 			currentPosition = binFile.getIndex()
 			offset = currentPosition - basePosition
@@ -338,12 +353,12 @@ class LES_FunctionData():
 	def parseXML(self, xmlSource):
 #		#<?xml version='1.0' ?>
 #		#<LES_FUNCTIONS>
-#		#	<LES_FUNCTION name="TestFunction1" numMembers="5">
-#		#		<LES_FUNCTION_PARAMETER type="long long int" name="m_longlong"/>
-#		#		<LES_FUNCTION_PARAMETER type="char" name="m_char"/>
-#		#		<LES_FUNCTION_PARAMETER type="int" name="m_int"/>
-#		#		<LES_FUNCTION_PARAMETER type="short" name="m_short"/>
-#		#		<LES_FUNCTION_PARAMETER type="float" name="m_float"/>
+#		#	<LES_FUNCTION name="TestFunction1" returnType="int" numInputs="5" numOutputs="2">
+#		#		<LES_FUNCTION_INPUT_PARAMETER type="long long int" name="m_longlong"/>
+#		#		<LES_FUNCTION_INPUT_PARAMETER type="char" name="m_char"/>
+#		#		<LES_FUNCTION_OUTPUT_PARAMETER type="int*" name="m_int"/>
+#		#		<LES_FUNCTION_INPUT_PARAMETER type="short" name="m_short"/>
+#		#		<LES_FUNCTION_OUTPUT_PARAMETER type="float*" name="m_float"/>
 #		#	</LES_FUNCTION>
 #		#</LES_FUNCTIONS>
 
@@ -366,21 +381,44 @@ class LES_FunctionData():
 				continue
 			functionName = functionNameData
 
-			numMembersData = functionXML.get("numMembers")
-			if numMembersData == None:
-					les_logger.Error("LES_FunctionData::parseXML '%s' missing 'numMembers' attribute:%s", functionName, xml.etree.ElementTree.tostring(functionXML))
+			returnTypeData = functionXML.get("returnType")
+			if returnTypeData == None:
+				les_logger.Error("LES_FunctionData::parseXML missing 'returnType' attribute:%s", xml.etree.ElementTree.tostring(functionXML))
+				numErrors += 1
+				continue
+			returnTypeName = returnTypeData
+
+			numInputsData = functionXML.get("numInputs")
+			if numInputsData == None:
+					les_logger.Error("LES_FunctionData::parseXML '%s' missing 'numInputs' attribute:%s", 
+													 functionName, xml.etree.ElementTree.tostring(functionXML))
 					numErrors += 1
 					continue
 
 			try:
-				numMembers = int(numMembersData)
+				numInputs = int(numInputsData)
 			except ValueError:
-				les_logger.Error("LES_FunctionData::parseXML '%s' invalid numElements value:%s (must be >= 0)", functionName, numMembersData)
+				les_logger.Error("LES_FunctionData::parseXML '%s' invalid numInputs value:%s (must be >= 0)", functionName, numInputsData)
 				numErrors += 1
-				numMembers = -1
+				numInputs = -1
 				continue
 
-			les_logger.Log("Function '%s' numMembers:%d", functionName, numMembers)
+			numOutputsData = functionXML.get("numOutputs")
+			if numOutputsData == None:
+					les_logger.Error("LES_FunctionData::parseXML '%s' missing 'numOutputs' attribute:%s", 
+													 functionName, xml.etree.ElementTree.tostring(functionXML))
+					numErrors += 1
+					continue
+
+			try:
+				numOutputs = int(numOutputsData)
+			except ValueError:
+				les_logger.Error("LES_FunctionData::parseXML '%s' invalid numOutputs value:%s (must be >= 0)", functionName, numOutputsData)
+				numErrors += 1
+				numInputs = -1
+				continue
+
+			les_logger.Log("Function '%s' returnType:%s numInputs:%d numOutputs:%d", functionName, returnTypeName, numInputs, numOutputs)
 
 			if self.doesFunctionDefinitionExist(functionName):
 				les_logger.Error("LES_FunctionData::parseXML '%s' already exists", functionName)
@@ -388,15 +426,21 @@ class LES_FunctionData():
 				continue
 
 			functionNameID = self.__m_stringTable__.addString(functionName)
-			functionDefinition = LES_FunctionDefinintion(functionNameID, numMembers)
+			returnTypeID = self.__m_stringTable__.addString(returnTypeName)
+			functionDefinition = LES_FunctionDefinintion(functionNameID, returnTypeID, numInputs, numOutputs)
 
 			numAdded = 0
 			for memberXML in functionXML:
-				if memberXML.tag != "LES_function_MEMBER":
-					les_logger.Error("LES_FunctionData::parseXML '%s' invalid node tag should be LES_function_MEMBER found:'%s'", 
+				if memberXML.tag != "LES_FUNCTION_INPUT_PARAMETER" and memberXML.tag != "LES_FUNCTION_OUTPUT_PARAMETER":
+					les_logger.Error("LES_FunctionData::parseXML '%s' invalid node tag should be LES_FUNCTION_INPUT_PARAMETER or LES_FUNCTION_OUTPUT_PARAMETER found:'%s'", 
 														functionName, memberXML.tag)
 					numErrors += 1
 					continue
+
+				if memberXML.tag == "LES_FUNCTION_INPUT_PARAMETER":
+					isInput = True
+				if memberXML.tag == "LES_FUNCTION_OUTPUT_PARAMETER":
+					isInput = False
 
 				memberTypeData = memberXML.get("type")
 				if memberTypeData == None:
@@ -417,20 +461,17 @@ class LES_FunctionData():
 
 #				les_logger.Log("Function '%s' AddParameter[%d] type:'%s' name:'%s'", functionName, numAdded, memberType, memberName)
 
-				if functionDefinition.AddParameter(memberType, memberName, self.__m_stringTable__, self.__m_typeData__, self) == False:
+				if functionDefinition.AddParameter(isInput, memberType, memberName, self.__m_stringTable__, self.__m_typeData__, self) == False:
 					les_logger.Error("LES_FunctionData::parseXML '%s' AddParameter Type:'%s' Name:'%s' failed attribute:%s", 
 														functionName, memberType, memberName, xml.etree.ElementTree.tostring(memberXML))
 					numErrors += 1
 					continue
 				numAdded += 1
 
-			if functionDefinition.Finalise(functionName, stringTable, typeData, structData) == False:
+			if functionDefinition.Finalise(functionName, self.__m_stringTable__, self.__m_typeData__, self.__m_structData__) == False:
 				les_logger.Error("LES_FunctionData::parseXML '%s' error during Finalise", functionName)
 				numErrors += 1
 				continue
-
-			functionSize = functionDefinition.GetTotalMemberSizeWithPadding()
-			les_logger.Log("Function '%s' functionSize:%d", functionName, functionSize)
 
 			index = self.addFunctionDefinition(functionName, functionDefinition)
 			if index == -1:
@@ -468,7 +509,11 @@ class LES_FunctionData():
 			numInputs = functionDefinition.GetNumInputs()
 			numOutputs = functionDefinition.GetNumOutputs()
 			numParameters = functionDefinition.GetNumParameters()
-			loggerChannel.Print("Function '%s' numParameters:%d numInputs:%d numOutputs:%d", functionName, numParameters, numInputs, numOutputs)
+			returnTypeID = functionDefinition.GetReturnTypeID()
+			returnTypeName = self.__m_stringTable__.getString(returnTypeID)
+			parameterDataSize = functionDefinition.GetParameterDataSize()
+			loggerChannel.Print("Function '%s' returnType '%s' numParameters:%d numInputs:%d numOutputs:%d parameterDataSize:%d", 
+													functionName, returnTypeName, numParameters, numInputs, numOutputs, parameterDataSize)
 			for i in range(numParameters):
 				functionParameter = functionDefinition.GetParameterByIndex(i)
 
@@ -491,7 +536,7 @@ def runTest():
 	typeData = les_typedata.LES_TypeData(stringTable)
 	structData = les_structdata.LES_StructData(stringTable, typeData)
 
-	this = LES_FunctionData(stringTable, typeData)
+	this = LES_FunctionData(stringTable, typeData, structData)
 
 	nameID = stringTable.addString("Jake")
 	returnTypeID = stringTable.addString("JakeReturn")
@@ -512,12 +557,13 @@ def runTest():
 	typeData.addType("short", 2, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD, "short")
 	typeData.addType("int", 4, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD, "int")
 	typeData.addType("float", 4, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD, "float")
+	typeData.addType("float*", 4, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_OUTPUT|les_typedata.LES_TYPE_POD, "float")
 
 	functionName = "PyTestFunction1"
 	nameID = stringTable.addString(functionName)
-	functionDefinition = LES_FunctionDefinintion(nameID, returnTypeID, 2, 0)
+	functionDefinition = LES_FunctionDefinintion(nameID, returnTypeID, 1, 1)
 	functionDefinition.AddParameter(True, "char", "m_char", stringTable, typeData, structData)
-	functionDefinition.AddParameter(True, "float", "m_float", stringTable, typeData, structData)
+	functionDefinition.AddParameter(False, "float*", "m_float", stringTable, typeData, structData)
 	if functionDefinition.Finalise(functionName, stringTable, typeData, structData) == False:
 		les_logger.Error("'%s' error during Finalise", functionName)
 
@@ -528,21 +574,25 @@ def runTest():
 	this.writeFile(binFile)
 	binFile.close()
 
+	les_logger.Log("")
 	testFunctionChan = les_logger.CreateChannel("FunctionDebug", "", "functionDebug_py.txt", les_logger.LES_LOGGERCHANNEL_FLAGS_DEFAULT)
 	this.DebugOutputFunctions(testFunctionChan)
 
 	stringTable = les_stringtable.LES_StringTable()
 	typeData = les_typedata.LES_TypeData(stringTable)
-	this = LES_FunctionData(stringTable, typeData)
+	structData = les_structdata.LES_StructData(stringTable, typeData)
+	this = LES_FunctionData(stringTable, typeData, structData)
 
 	typeData.addType("char", 1, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD, "char")
 	typeData.addType("short", 2, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD, "short")
 	typeData.addType("int", 4, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD, "int")
 	typeData.addType("float", 4, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD, "float")
 	typeData.addType("long long int", 8, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD, "long long int")
+	typeData.addType("int*", 4, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_OUTPUT|les_typedata.LES_TYPE_POD|les_typedata.LES_TYPE_POINTER, "int")
 
 	this.loadXML("data/les_functions_test.xml")
 
+	les_logger.Log("")
 	testFunctionChan = les_logger.CreateChannel("FunctionDebug", "", "functionDebug_py.txt", les_logger.LES_LOGGERCHANNEL_FLAGS_DEFAULT)
 	this.DebugOutputFunctions(testFunctionChan)
 
