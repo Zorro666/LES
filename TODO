@@ -1,15 +1,13 @@
 High Priority:
-eTRUCTDATA.PY: add write File
-STRUCTDATA.PY: add XML parse
 TEST: compute the struct size in EndStruct and ERROR if not the same as the definition
-TEST: compute the struct size in EndStruct and update the type definition
-SERVER: add struct defintiions to binary data and XML parsing
-TEST: use definition file with struct definitions in it
+TEST: compute the struct size in EndStruct and update the type definition - contentious
+PYTHON: compute the struct size in EndStruct and update the type definition (type definition could be set to 0 in XML)
 
 Medium Priority:
 TEST: dump function data debug command
 TEST: remove ownsmemory mess in les_function.{cpp,h}
 SERVER: add function defintiions to binary data and XML parsing
+SERVER: struct creation have global for packing amount
 
 SERVER: up and running ready for client to connect
 CLIENT: connect to server
