@@ -7,6 +7,7 @@
 #include "les_loggerchannel.h"
 #include "les_stringentry.h"
 #include "les_structdata.h"
+#include "les_type.h"
 
 static const LES_StructDefinition** les_structDefinitionArray = LES_NULL;
 static int les_numStructDefinitions = 0;
@@ -152,9 +153,18 @@ void LES_StructShutdown()
 	delete[] les_structDefinitionArray;
 }
 
-int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* const structDefinitionPtr)
+int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* const structDefinitionPtr, 
+														const LES_uint32 structDataSize)
 {
 	const LES_Hash nameHash = LES_GenerateHashCaseSensitive(name);
+	const LES_StringEntry* const pStringEntry = LES_GetStringEntryByHash(nameHash);
+	const LES_TypeEntry* const pTypeEntry = LES_GetTypeEntry(pStringEntry);
+	if (pTypeEntry == LES_NULL)
+	{
+		LES_ERROR("LES_AddStructDefinition '%s' hash 0x%X type entry not found", name, nameHash);
+		return -1;
+	}
+
 	int index = LES_GetStructDefinitionIndex(nameHash);
 	if (index < 0)
 	{
@@ -164,6 +174,12 @@ int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* 
 			return -1;
 		}
 
+		if (pTypeEntry->m_dataSize == 0)
+		{
+			LES_TypeEntry* const pTypeEntry2 = (LES_TypeEntry* const)pTypeEntry;
+			pTypeEntry2->m_dataSize = structDataSize;
+		}
+
 		/* Not found so add it - just store the ptr to the memory */
 		index = les_numStructDefinitions;
 		les_structDefinitionArray[index] = structDefinitionPtr;
@@ -171,6 +187,12 @@ int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* 
 	}
 	else
 	{
+		if (pTypeEntry->m_dataSize != structDataSize)
+		{
+			LES_ERROR("LES_AddStructDefinition '%s' hash 0x%X type entry data size doesn't match typeDataSize:%d structDataSize:%d", 
+								name, nameHash, pTypeEntry->m_dataSize, structDataSize);
+			return -1;
+		}
 		// Free the memory because of special way memory is done for these structures
 		void* memoryPtr = (void*)structDefinitionPtr;
 		free(memoryPtr);
