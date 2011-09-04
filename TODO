@@ -1,8 +1,5 @@
 High Priority:
 TEST: dump function data debug command
-LES_FUNCDATA.PY: fully implement parseXML()
-LES_FUNCDATA.PY: fully implement writeFile()
-LES_DEFINITIIONFILE.PY: add function parameter definitions to binary data and XML parsing
 TEST: load and use definition file (type, string, structures, functions)
 TEST: load and use definition file: do not allow local C++ creation of new data (type, string, structures, functions)
 
