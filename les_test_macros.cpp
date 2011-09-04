@@ -10,6 +10,8 @@ extern int LES_AddFunctionDefinition(const char* const name, const LES_FunctionD
 
 extern int LES_StructComputeAlignmentPadding(const int totalMemberSize, const int memberDataSize);
 extern LES_StructDefinition* LES_CreateStructDefinition(const int nameID, const int numMembers);
+extern int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* const structDefinitionPtr, 
+																	 const LES_uint32 structDataSize);
 
 bool LES_TestFunctionStart(const char* const functionName, const char* const returnType, const int numInputs, const int numOutputs,
 													 LES_FunctionDefinition* const functionDefinitionPtr, LES_TEST_FUNCTION_DATA* testFunctionDataPtr)
@@ -95,6 +97,7 @@ bool LES_TestStructStart(const char* const structName, const int numMembers,
 	testStructDataPtr->structName = structName;
 	testStructDataPtr->globalMemberIndex = 0;
 	testStructDataPtr->totalMemberSizeWithPadding = 0;
+	testStructDataPtr->maxMemberSizeAlignment = 0;
 
 	const int nameID = LES_AddStringEntry(structName);
 	*structDefinitionPtr = LES_CreateStructDefinition(nameID, numMembers);
@@ -145,6 +148,10 @@ bool LES_TestStructAddMember(const char* const type, const char* const name,
 	structMemberPtr->m_dataSize = memberDataSize;
 	const int memberAlignment = typeEntryPtr->ComputeAlignment();
 	const int alignmentPadding = LES_StructComputeAlignmentPadding(testStructDataPtr->totalMemberSizeWithPadding, memberAlignment);
+	if (memberAlignment > testStructDataPtr->maxMemberSizeAlignment)
+	{
+		testStructDataPtr->maxMemberSizeAlignment = memberAlignment;
+	}
 	structMemberPtr->m_alignmentPadding = alignmentPadding;
 	testStructDataPtr->totalMemberSizeWithPadding += (memberDataSize + alignmentPadding);
 	testStructDataPtr->globalMemberIndex++;
@@ -164,7 +171,20 @@ bool LES_TestStructEnd(LES_StructDefinition* const structDefinitionPtr, LES_TEST
 										testStructDataPtr->structName, testStructDataPtr->globalMemberIndex, structDefinitionPtr->GetNumMembers());
 		return false;
 	}
-	if (LES_AddStructDefinition(testStructDataPtr->structName, structDefinitionPtr) < 0)
+	// Align the structure to the biggest size in the structure but a maximum of 4-byte or 8-byte
+	// should make the 4-byte or 8-byte a variable (from global params)
+	//const int structMaxAlignment = 8;
+	const int structMaxAlignment = 4;
+	int structAlignment = testStructDataPtr->maxMemberSizeAlignment;
+	if (structAlignment > structMaxAlignment)
+	{
+			structAlignment = structMaxAlignment;
+	}
+
+	const int paddingAmount = LES_StructComputeAlignmentPadding(testStructDataPtr->totalMemberSizeWithPadding, structAlignment);
+	testStructDataPtr->totalMemberSizeWithPadding += paddingAmount;
+
+	if (LES_AddStructDefinition(testStructDataPtr->structName, structDefinitionPtr, testStructDataPtr->totalMemberSizeWithPadding) < 0)
 	{
 		LES_FATAL_ERROR("TEST struct '%s' : ERROR adding structure definition", testStructDataPtr->structName);
 		return false;

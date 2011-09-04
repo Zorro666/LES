@@ -115,6 +115,7 @@ struct LES_TEST_STRUCT_DATA
 	const char* structName;
 	int globalMemberIndex;
 	int totalMemberSizeWithPadding;
+	int maxMemberSizeAlignment;
 };
 
 bool LES_TestStructStart(const char* const structName, const int numMembers, 
@@ -135,8 +136,6 @@ bool LES_TestStructAddMember(const char* const type, const char* const name,
 	{ \
 		__LES_struct_ok = LES_TestStructAddMember(#TYPE, #NAME, structDefinitionPtr, &testStructData); \
 	} \
-
-extern int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* const structDefinitionPtr);
 
 bool LES_TestStructEnd(LES_StructDefinition* const structDefinitionPtr, LES_TEST_STRUCT_DATA* testStructDataPtr);
 
