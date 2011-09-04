@@ -81,20 +81,20 @@ class LES_StructDefinintion():
 		maxNumMembers = self.GetNumMembers()
 		numAddedMembers = self.__m_numAddedMembers__
 		if numAddedMembers >= maxNumMembers:
-			les_logger.FatalError("TEST struct '%s' : MemberIndex too big index:%d max:%d member:'%s' type:'%s'",
+			les_logger.FatalError("AddMember struct '%s' : MemberIndex too big index:%d max:%d member:'%s' type:'%s'",
 														structName, self.__m_numAddedMembers__,  maxNumMembers, name, typeName)
 			return False
 
 		nameHash = les_hash.GenerateHashCaseSensitive(name)
 		# Test to see if the member has already been added
 		if self.GetMember(nameHash):
-			les_logger.FatalError("TEST struct '%s' : member '%s' already exists type:'%s'", structName, name, typeName)
+			les_logger.FatalError("AddMember struct '%s' : member '%s' already exists type:'%s'", structName, name, typeName)
 			return False
 
 		typeID = stringTable.getStringID(typeName)
 		typeEntry = typeData.getTypeData(typeName)
 		if typeEntry == None:
-			les_logger.FatalError("TEST struct '%s' : member '%s' type '%s' not found", structName, name, typeName)
+			les_logger.FatalError("AddMember struct '%s' : member '%s' type '%s' not found", structName, name, typeName)
 			return False
 
 		memberDataSize = typeEntry.m_dataSize
@@ -402,9 +402,13 @@ class LES_StructData():
 	def loadXML(self, fname):
 		les_logger.Log("")
 		les_logger.Log("#####################")
-		les_logger.Log("Loading %s", fname)
+		les_logger.Log("Loading '%s'", fname)
 		les_logger.Log("#####################")
 		les_logger.Log("")
+		if os.path.exists(fname) == False:
+			les_logger.Error("File:'%s' not found", fname)
+			return False
+
  		fh = open(fname)
 		xmlData = fh.read()
 		numErrors = self.parseXML(xmlData)
@@ -421,7 +425,7 @@ class LES_StructData():
 			structName = self.__m_stringTable__.getString(structNameID)
 
 			numMembers = structDefinition.GetNumMembers()
-			loggerChannel.Print("Struct '%s' NnumMembers[%d]", structName, numMembers)
+			loggerChannel.Print("Struct '%s' numMembers[%d]", structName, numMembers)
 			for i in range(numMembers):
 				structMember = structDefinition.GetMemberByIndex(i)
 
@@ -568,7 +572,7 @@ def runTest():
 	typeData.addType("short", 2, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD, "short")
 	typeData.addType("int", 4, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD, "int")
 	typeData.addType("float", 4, les_typedata.LES_TYPE_INPUT|les_typedata.LES_TYPE_POD, "float")
-	nameID = stringTable.addString("TestStruct1")
+	nameID = stringTable.addString("PyTestStruct1")
 	structDefinition = LES_StructDefinintion(nameID, 2)
 	structDefinition.AddMember("char", "m_char", stringTable, typeData, this)
 	structDefinition.AddMember("float", "m_float", stringTable, typeData, this)

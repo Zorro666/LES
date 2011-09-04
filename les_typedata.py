@@ -519,9 +519,13 @@ class LES_TypeData():
 	def loadXML(self, fname):
 		les_logger.Log("")
 		les_logger.Log("#####################")
-		les_logger.Log("Loading %s", fname)
+		les_logger.Log("Loading '%s'", fname)
 		les_logger.Log("#####################")
 		les_logger.Log("")
+		if os.path.exists(fname) == False:
+			les_logger.Error("File:'%s' not found", fname)
+			return False
+
  		fh = open(fname)
 		xmlData = fh.read()
 		numErrors = self.parseXML(xmlData)
