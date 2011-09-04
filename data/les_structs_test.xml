@@ -7,4 +7,75 @@
 		<LES_STRUCT_MEMBER type="short" name="m_short"/>
 		<LES_STRUCT_MEMBER type="float" name="m_float"/>
 	</LES_STRUCT>
+	<LES_STRUCT name="TestStruct2" numMembers="5">
+	  <LES_STRUCT_MEMBER type="float" name="m_float"/>
+	  <LES_STRUCT_MEMBER type="TestStruct1" name="m_testStruct1"/>
+	  <LES_STRUCT_MEMBER type="char" name="m_char"/>
+	  <LES_STRUCT_MEMBER type="short" name="m_short"/>
+	  <LES_STRUCT_MEMBER type="int" name="m_int"/>
+	</LES_STRUCT>
+	<LES_STRUCT name="TestStruct3" numMembers="4">
+	  <LES_STRUCT_MEMBER type="short" name="m_short"/>
+	  <LES_STRUCT_MEMBER type="float" name="m_float"/>
+	  <LES_STRUCT_MEMBER type="int" name="m_int"/>
+	  <LES_STRUCT_MEMBER type="char" name="m_char"/>
+	</LES_STRUCT>
+	<LES_STRUCT name="TestStruct4" numMembers="6">
+	  <LES_STRUCT_MEMBER type="float" name="m_float"/>
+	  <LES_STRUCT_MEMBER type="int" name="m_int"/>
+	  <LES_STRUCT_MEMBER type="char" name="m_char"/>
+	  <LES_STRUCT_MEMBER type="short" name="m_short"/>
+	  <LES_STRUCT_MEMBER type="short" name="m_short2"/>
+	  <LES_STRUCT_MEMBER type="TestStruct3" name="m_testStruct3"/>
+	</LES_STRUCT>
+	<LES_STRUCT name="TestStruct5" numMembers="2">
+	  <LES_STRUCT_MEMBER type="char" name="m_char"/>
+	  <LES_STRUCT_MEMBER type="short*" name="m_shortPtr"/>
+	</LES_STRUCT>
+	<LES_STRUCT name="TestStruct6" numMembers="3">
+	  <LES_STRUCT_MEMBER type="short" name="m_short"/>
+	  <LES_STRUCT_MEMBER type="TestStruct5*" name="m_testStructPtr"/>
+	  <LES_STRUCT_MEMBER type="char*" name="m_charPtr"/>
+	</LES_STRUCT>
+	<LES_STRUCT name="TestStruct7" numMembers="5">
+	  <LES_STRUCT_MEMBER type="short" name="m_short"/>
+	  <LES_STRUCT_MEMBER type="float&amp;" name="m_floatRef"/>
+	  <LES_STRUCT_MEMBER type="char" name="m_char"/>
+	  <LES_STRUCT_MEMBER type="char&amp;" name="m_charRef"/>
+	  <LES_STRUCT_MEMBER type="char*" name="m_charPtr"/>
+	</LES_STRUCT>
+	<LES_STRUCT name="TestStruct8" numMembers="3">
+	  <LES_STRUCT_MEMBER type="short" name="m_short"/>
+	  <LES_STRUCT_MEMBER type="TestStruct5&amp;" name="m_testStruct5Ref"/>
+	  <LES_STRUCT_MEMBER type="char*" name="m_charPtr"/>
+	</LES_STRUCT>
+	<LES_STRUCT name="TestStruct9" numMembers="1">
+	  <LES_STRUCT_MEMBER type="short[3]" name="m_short"/>
+	</LES_STRUCT>
+	<LES_STRUCT name="TestStruct10" numMembers="2">
+	  <LES_STRUCT_MEMBER type="short[3]" name="m_short"/>
+	  <LES_STRUCT_MEMBER type="TestStruct9[2]" name="m_testStruct9"/>
+	</LES_STRUCT>
+	<LES_STRUCT name="TestStruct11" numMembers="3">
+	  <LES_STRUCT_MEMBER type="short&amp;[3]" name="m_short"/>
+	  <LES_STRUCT_MEMBER type="int&amp;[2]" name="m_int"/>
+	  <LES_STRUCT_MEMBER type="char&amp;[5]" name="m_char"/>
+	</LES_STRUCT>
+	<LES_STRUCT name="TestStruct12" numMembers="3">
+	  <LES_STRUCT_MEMBER type="short&amp;[3]" name="m_short"/>
+	  <LES_STRUCT_MEMBER type="TestStruct9&amp;[2]" name="m_testStruct9"/>
+	  <LES_STRUCT_MEMBER type="TestStruct11&amp;[1]" name="m_testStruct11"/>
+	</LES_STRUCT>
+	<LES_STRUCT name="TestStruct13" numMembers="2">
+	  <LES_STRUCT_MEMBER type="char" name="m_char"/>
+	  <LES_STRUCT_MEMBER type="short[3]" name="m_short"/>
+	</LES_STRUCT>
+	<LES_STRUCT name="TestStruct14" numMembers="2">
+	  <LES_STRUCT_MEMBER type="short[3]" name="m_short"/>
+	  <LES_STRUCT_MEMBER type="char" name="m_char"/>
+	</LES_STRUCT>
+	<LES_STRUCT name="TestStruct15" numMembers="2">
+	  <LES_STRUCT_MEMBER type="int" name="m_int"/>
+	  <LES_STRUCT_MEMBER type="short[3]" name="m_short"/>
+	</LES_STRUCT>
 </LES_STRUCTS>

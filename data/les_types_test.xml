@@ -60,5 +60,7 @@
 	<LES_TYPE_STRUCT_REFERENCE_ARRAY name="TestStruct11" numElements="1" />
 
 	<LES_TYPE_STRUCT name="TestStruct12" dataSize="12" />
-
+	<LES_TYPE_STRUCT name="TestStruct13" dataSize="8" />
+	<LES_TYPE_STRUCT name="TestStruct14" dataSize="8" />
+	<LES_TYPE_STRUCT name="TestStruct15" dataSize="12" />
 </LES_TYPES>
