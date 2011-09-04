@@ -2294,5 +2294,12 @@ struct TestStruct66
 
 	LES_LoggerChannel* const structDebugChan = LES_Logger::CreateChannel("StructDebug", "", "structDebug.txt", LES_Logger::FLAGS_DEFAULT);
 	LES_DebugOutputStructs(structDebugChan);
+
+	struct Jake
+	{
+		short bob[3];
+		char hello;
+	};
+	LES_LOG("sizeof(Jake)=%d",sizeof(Jake));
 }
 
