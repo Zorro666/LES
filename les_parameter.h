@@ -12,9 +12,7 @@ struct LES_FunctionParameter
 	LES_uint32 m_hash;
 	LES_int32 m_nameID;
 	LES_int32 m_typeID;
-
 	LES_int32 m_index;
-
 	LES_uint32 m_mode;
 };
 
