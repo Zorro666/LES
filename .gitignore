@@ -16,6 +16,7 @@ console.txt
 jake_log.txt
 typeDebug_py.txt
 structDebug_py.txt
+functionDebug_py.txt
 string.txt
 tags
 core
@@ -30,3 +31,4 @@ chunkTest.bin
 typeDataLittle.bin
 defTest.bin
 structDefinitionLittle.bin
+functionDefinitionLittle.bin
