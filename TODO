@@ -1,23 +1,21 @@
 High Priority:
 TEST: dump function data debug command
-TEST: remove ownsmemory mess in les_function.{cpp,h}
 
 Medium Priority:
-SERVER: add function defintiions to binary data and XML parsing
-SERVER: struct creation have global for packing amount
+SERVER: add function definitions to binary data and XML parsing
 
 SERVER: up and running ready for client to connect
 CLIENT: connect to server
 
-CLIENT: use definition file (type, string, structs, functions) from over the network
-PYTHON: somehow the struct size could/should be computed on the server size 
+CLIENT: use definition file (type, string, structures, functions) from over the network
 
 CLIENT: send function data to server as network message
 SERVER: process function data send response
 CLIENT: support for async function calls, error queue, potential threading issues
 SERVER: support for async function calls, error queue
 
-LES_TYPEDATA.PY: in the future have a global params block e.g. pointer data size default
+LES_TYPEDATA.PY: in the future have a global parameters block e.g. pointer data size default
+LES_STRUCTDATA.PY: struct creation have global for packing amount
 
 FUNCTION: error handling run out of memory when adding new function or new type e.g. array limit reached
 
@@ -30,12 +28,12 @@ Low Priority:
 MACROS: WORK OUT HOW TO DO THE RETURN VALUE IN MACROS
 MACROS: WORK OUT HOW TO DO THE ERROR HANDLING 
 
-FUNCTION: how will output parameters work? Do they need to be sent to the server (yes i.e. in/out params)
+FUNCTION: how will output parameters work? Do they need to be sent to the server (yes i.e. in/out parameters)
 
 CORE: memory management for input & output parameter blocks per function
 CORE: hash table with binary search
 
 LES: need to list the data storage that is required by the global data
 LES: server send global test data instead of building it internally?
-LES: might want to save ptr values for later instead of taking the value from them?????????????
+LES: might want to save pointer values for later instead of taking the value from them?????????????
 
