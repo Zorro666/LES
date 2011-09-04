@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import os.path
 import xml.etree.ElementTree
 
 import les_hash

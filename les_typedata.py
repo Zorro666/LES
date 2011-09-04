@@ -1,9 +1,11 @@
 #!/usr/bin/python
 
+import os.path
+import xml.etree.ElementTree
+
 import les_hash
 import les_binaryfile
 import les_stringtable
-import xml.etree.ElementTree
 import les_logger
 
 LES_TYPE_INPUT 				= (1 << 0)

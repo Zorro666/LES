@@ -4,6 +4,7 @@ import les_chunkfile
 import les_stringtable
 import les_typedata
 import les_structdata
+import les_funcdata
 import les_logger
 
 #{
@@ -26,6 +27,10 @@ def loadTypeData(typeData):
 def loadStructData(structData):
 	if structData.loadXML("data/les_structs_test.xml") == False:
 		les_logger.FatalError("ERROR loading data/les_structs_test.xml")
+
+def loadFunctionData(functionData):
+	if functionData.loadXML("data/les_functions_test.xml") == False:
+		les_logger.FatalError("ERROR loading data/les_functions_test.xml")
 
 class LES_DefinitionFile():
 	def __init__(self):
@@ -57,12 +62,15 @@ class LES_DefinitionFile():
 		stringTable = les_stringtable.LES_StringTable()
 		typeData = les_typedata.LES_TypeData(stringTable)
 		structData = les_structdata.LES_StructData(stringTable, typeData)
+		functionData = les_funcdata.LES_FunctionData(stringTable, typeData, structData)
 		loadTypeData(typeData)
 		loadStructData(structData)
+		loadFunctionData(functionData)
 
 		self.addChunk("StringTable", stringTable)
 		self.addChunk("TypeData", typeData)
 		self.addChunk("StructData", structData)
+		self.addChunk("FunctionData", functionData)
 
 def runTest():
 	les_logger.Init()

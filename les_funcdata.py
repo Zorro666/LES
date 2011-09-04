@@ -233,8 +233,6 @@ class LES_FunctionData():
 			les_logger.Error("LES_FunctionData::addFunctionDefinition '%s' invalid numOutputs:%d must be >= 0", name, numOutputs)
 			return -1
 
-		# TODO SOMETHING WITH THE PARAMETER DATA SIZE BLOCK
-
 		if functionDefinition.IsFinalised() == False:
 			les_logger.Error("LES_FunctionData::addFunctionDefintiion '%s' function isn't finalised", name)
 			return -1
@@ -264,8 +262,8 @@ class LES_FunctionData():
 		# LES_FunctionData
 		# {
 		# 	LES_int32 m_numFunctionDeinfitions; 																		- 4-bytes
-		# 	LES_int32 m_settled; 																									- 4-bytes, 0 in file
-		#		LES_uint32 m_functionDefinitionOffsets[m_numFunctionDefinitions];					- 4-bytes * m_numFunctionDefinitions
+		# 	LES_int32 m_settled; 																										- 4-bytes, 0 in file
+		#		LES_uint32 m_functionDefinitionOffsets[m_numFunctionDefinitions];				- 4-bytes * m_numFunctionDefinitions
 		#		LES_FunctionDefinition m_functionDefinitions[m_numFunctionDefinitions];	- variable 
 		# };
 
@@ -289,8 +287,11 @@ class LES_FunctionData():
 			# LES_FunctionDefinition
 			# {
 			#		LES_int32 m_nameID;
-			#		LES_int32 m_numMembers;
-			#		LES_FunctionParameter m_parameters[m_numMembers];
+			#		LES_int32 m_returnTypeID;
+			#		LES_int32 m_parameterDataSize;
+			#		LES_int32 m_numInputs;
+			#		LES_int32 m_numOutputs;
+			#		LES_FunctionParameter m_parameters[m_numInputs+m_numOutputs];
 			#	};
 			currentPosition = binFile.getIndex()
 			offset = currentPosition - basePosition
@@ -300,6 +301,14 @@ class LES_FunctionData():
 			nameID = functionDefinition.GetNameID()
 			binFile.writeInt32(nameID)
 
+			#		LES_int32 m_returnTypeID;
+			returnTypeID = functionDefinition.GetReturnTypeID()
+			binFile.writeInt32(returnTypeID)
+
+			#		LES_int32 m_parameterDataSize;
+			parameterDataSize = functionDefinition.GetParameterDataSize()
+			binFile.writeInt32(parameterDataSize)
+
 			#		LES_int32 m_nnumInputs;
 			numInputs = functionDefinition.GetNumInputs()
 			binFile.writeInt32(numInputs)
@@ -308,7 +317,7 @@ class LES_FunctionData():
 			numOutputs = functionDefinition.GetNumOutputs()
 			binFile.writeInt32(numOutputs)
 
-			#		LES_FunctionMember m_members[m_numMembers];
+			#		LES_FunctionParameter m_parameters[m_numInputs+m_numOutputs];
 			numParameters = numInputs + numOutputs
 			for p in range(numParameters):
 				# LES_FunctionParameter
