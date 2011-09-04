@@ -229,7 +229,7 @@ LES_StructDefinition* LES_CreateStructDefinition(const int nameID, const int num
 		return LES_NULL;
 	}
 	int memorySize = sizeof(LES_StructDefinition);
-	memorySize += sizeof(LES_StructMember) * numMembers - 1;
+	memorySize += sizeof(LES_StructMember) * (numMembers - 1);
 	LES_StructDefinition* const structDefinitionPtr = (LES_StructDefinition*)malloc(memorySize);
 	structDefinitionPtr->m_nameID = nameID;
 	structDefinitionPtr->m_numMembers = numMembers;

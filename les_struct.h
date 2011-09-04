@@ -28,7 +28,6 @@ public:
 	friend class LES_StructData;
 private:
 	LES_StructDefinition(void);
-	LES_StructDefinition(const int nameID, const int numMembers);
 	~LES_StructDefinition(void);
 	LES_StructDefinition(const LES_StructDefinition& other);
 	LES_StructDefinition& operator=(const LES_StructDefinition& other);
