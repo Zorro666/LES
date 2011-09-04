@@ -158,6 +158,12 @@ int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* 
 	int index = LES_GetStructDefinitionIndex(nameHash);
 	if (index < 0)
 	{
+		if (les_pStructData)
+		{
+			LES_ERROR("LES_AddStructDefinition '%s' hash 0x%X not found in type data definition file", name, nameHash);
+			return -1;
+		}
+
 		/* Not found so add it - just store the ptr to the memory */
 		index = les_numStructDefinitions;
 		les_structDefinitionArray[index] = structDefinitionPtr;
