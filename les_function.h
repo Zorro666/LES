@@ -36,6 +36,7 @@ public:
 	friend int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const pFunctionDefinition, 
 																			 const int parameterDataSize);
 	friend void LES_TestSetup(void);
+	friend class LES_FuncData;
 private:
 	LES_FunctionDefinition(void);
 	LES_FunctionDefinition(const LES_FunctionDefinition& other);

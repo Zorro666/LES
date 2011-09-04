@@ -1,6 +1,8 @@
 LES_FUNCTION:= les_function.cpp les_function_macros.cpp les_type.cpp les_parameter.cpp les_struct.cpp
 LES_TEST:= les_test.cpp les_test_macros.cpp
-LES_DEFINITIONALFILE:= les_definitionfile.cpp les_stringtable.cpp les_chunkfile.cpp les_typedata.cpp les_structdata.cpp
+LES_DEFINITIONALFILE:= les_definitionfile.cpp les_chunkfile.cpp \
+											 les_stringtable.cpp les_typedata.cpp \
+											 les_structdata.cpp les_funcdata.cpp
 LES_CORE:= les_core.cpp les_hash.cpp les_logger.cpp les_loggerchannel.cpp
 LES_DEPENDS:=$(LES_CORE) $(LES_FUNCTION) $(LES_TEST) $(LES_DEFINITIONALFILE) les_jake.cpp
 LES_TEST_DEPENDS:=les_main.cpp $(LES_DEPENDS) 
