@@ -6,6 +6,7 @@
 #include "les_stringtable.h"
 #include "les_typedata.h"
 #include "les_structdata.h"
+#include "les_funcdata.h"
 
 LES_DefinitionFile::LES_DefinitionFile(const void* chunkFileData, const int dataSize)
 {
@@ -67,6 +68,13 @@ int LES_DefinitionFile::Load(const void* chunkFileData, const int dataSize)
 	if (pStructData->Settle() != LES_RETURN_OK)
 	{
 		LES_ERROR("LES_DefinitionFile::LES_StructData::Settle() failed");
+		return LES_RETURN_ERROR;
+	}
+
+	LES_FuncData* const pFuncData = (LES_FuncData* const)GetFuncData();
+	if (pFuncData->Settle() != LES_RETURN_OK)
+	{
+		LES_ERROR("LES_DefinitionFile::LES_FuncData::Settle() failed");
 		return LES_RETURN_ERROR;
 	}
 
