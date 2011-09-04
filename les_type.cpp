@@ -171,7 +171,7 @@ int LES_TypeEntry::ComputeDataStorageSize(void) const
 	if (numElements > 1)
 	{
 #if LES_TYPE_DEBUG
-		LES_LOG("POD Type:0x%X Size:%d NumELements:%d", typeEntryPtr->m_hash, dataSize, numElements);
+		LES_LOG("POD 0x%X Type:0x%X Size:%d NumELements:%d", m_hash, typeEntryPtr->m_hash, dataSize, numElements);
 #endif // #if LES_TYPE_DEBUG
 		dataSize *= numElements;
 	}
