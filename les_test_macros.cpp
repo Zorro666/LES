@@ -164,7 +164,11 @@ bool LES_TestStructEnd(LES_StructDefinition* const structDefinitionPtr, LES_TEST
 										testStructDataPtr->structName, testStructDataPtr->globalMemberIndex, structDefinitionPtr->GetNumMembers());
 		return false;
 	}
-	LES_AddStructDefinition(testStructDataPtr->structName, structDefinitionPtr);
+	if (LES_AddStructDefinition(testStructDataPtr->structName, structDefinitionPtr) < 0)
+	{
+		LES_FATAL_ERROR("TEST struct '%s' : ERROR adding structure definition", testStructDataPtr->structName);
+		return false;
+	}
 
 	return true;
 }
