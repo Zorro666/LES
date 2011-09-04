@@ -17,12 +17,15 @@ import les_logger
 #}
 
 def loadTypeData(typeData):
-	typeData.loadXML("data/les_types_basic.xml")
-	typeData.loadXML("data/les_types_test.xml")
+	if typeData.loadXML("data/les_types_basic.xml") == False:
+		les_logger.FatalError("ERROR loading data/les_types_basic.xml")
+	if typeData.loadXML("data/les_types_test.xml") == False:
+		les_logger.FatalError("ERROR loading data/les_types_test.xml")
 	typeData.loadXML("data/les_types_errors.xml")
 
 def loadStructData(structData):
-	structData.loadXML("data/les_structs_test.xml")
+	if structData.loadXML("data/les_structs_test.xml") == False:
+		les_logger.FatalError("ERROR loading data/les_structs_test.xml")
 
 class LES_DefinitionFile():
 	def __init__(self):

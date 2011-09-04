@@ -175,6 +175,10 @@ class LES_StructData():
 			return -1
 
 		structSize = structDefinition.GetTotalMemberSizeWithPadding()
+		if typeEntry.m_dataSize == 0:
+			typeEntry.m_dataSize = structSize
+
+		typeEntry = self.__m_typeData__.getTypeData(name)
 		if structSize != typeEntry.m_dataSize:
 			les_logger.Error("LES_StructData::addStructDefintiion '%s' structSize doesn't match type definition structSize:%d typeDataSize:%d", 
 									 			name, structSize, typeEntry.m_dataSize)
@@ -406,8 +410,10 @@ class LES_StructData():
 		numErrors = self.parseXML(xmlData)
 		if numErrors == 0:
 			les_logger.Log("SUCCESS")
+			return True
 		else:
 			les_logger.Error("numErrors=%d", numErrors)
+			return False
 
 	def DebugOutputStructs(self, loggerChannel):
 		for structDefinition in self.__m_structDefinitions__:

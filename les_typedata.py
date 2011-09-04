@@ -106,8 +106,14 @@ class LES_TypeData():
 			flags |= LES_TYPE_ALIAS
 
 		if dataSize < 1:
-			les_logger.Error("LES_TypeData::addType '%s' invalid dataSize value:%d (must be >= 1)", name, dataSize)
-			return -1
+			if flags & LES_TYPE_POD  or flags & LES_TYPE_POINTER or flags & LES_TYPE_REFERENCE or flags & LES_TYPE_ARRAY:
+				les_logger.Error("LES_TypeData::addType '%s' invalid dataSize value:%d (must be >= 1)", name, dataSize)
+				return -1
+
+		if flags & LES_TYPE_STRUCT and (flags & LES_TYPE_POINTER == 0) and (flags & LES_TYPE_REFERENCE == 0) and (flags & LES_TYPE_ARRAY == 0) and (flags & LES_TYPE_ALIAS == 0):
+			if dataSize != 0:
+				les_logger.Error("LES_TypeData::addType '%s' invalid dataSize value:%d (must be 0)", name, dataSize)
+				return -1
 
 		if flags == 0:
 			les_logger.Error("LES_TypeData::addType '%s' invalid flags value:0x%X (must be >= 0)", name, flags)
@@ -253,9 +259,10 @@ class LES_TypeData():
 		#		flags = INPUT|OUTPUT|POD|REFERENCE|ARRAY, fixed can't be specified
 		#		aliasedName = input_name+"*"
 
-		# <LES_TYPE_STRUCT name="TestStruct1" dataSize="10" />
+		# <LES_TYPE_STRUCT name="TestStruct1" />
 		#		flags = INPUT|STRUCT, fixed can't be specified
 		#		aliasedName = input_name
+		#		dataSize = 0 (to be computed later by the struct module)
 
 		# <LES_TYPE_STRUCT_POINTER name="TestStruct1" />
 		#		name = input_name + "*"
@@ -332,7 +339,9 @@ class LES_TypeData():
 				aliasSuffix = "*"
 				needsNumElements = True
 			elif typeXML.tag == "LES_TYPE_STRUCT":
+				needsDataSize = False
 				flagsData = "INPUT|STRUCT"
+				dataSizeDataDefault = "0"
 			elif typeXML.tag == "LES_TYPE_STRUCT_POINTER":
 				flagsData = "INPUT|OUTPUT|STRUCT|POINTER"
 				nameSuffix = "*"
@@ -446,9 +455,12 @@ class LES_TypeData():
 				elif typeXML.tag == "LES_TYPE_STRUCT_REFERENCE_ARRAY":
 					# dataSize = dataSize value of type with the input_name+"*" e.g. size of the pointer type
 					typeNameForDataSize = name + "*"
-				if self.doesTypeExist(typeNameForDataSize):
-					typeData = self.getTypeData(typeNameForDataSize)
-					dataSize = typeData.m_dataSize
+				if typeXML.tag == "LES_TYPE_STRUCT":
+					dataSize = int(dataSizeDataDefault)
+				else:
+					if self.doesTypeExist(typeNameForDataSize):
+						typeData = self.getTypeData(typeNameForDataSize)
+						dataSize = typeData.m_dataSize
 
 			# flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY, delimiter is | e.g. "INPUT|POD"
 			flagsArray = flagsData.split('|')
@@ -515,8 +527,10 @@ class LES_TypeData():
 		numErrors = self.parseXML(xmlData)
 		if numErrors == 0:
 			les_logger.Log("SUCCESS")
+			return True
 		else:
 			les_logger.Error("numErrors=%d", numErrors)
+			return False
 
 	def DebugOutputTypes(self, loggerChannel):
 		for typeEntry in self.__m_typeEntries__:
