@@ -9,13 +9,13 @@ struct LES_TypeEntry;
 
 struct LES_FunctionParameter
 {
-	LES_Hash m_hash;
-	int m_nameID;
-	int m_typeID;
+	LES_uint32 m_hash;
+	LES_int32 m_nameID;
+	LES_int32 m_typeID;
 
-	int m_index;
+	LES_int32 m_index;
 
-	int m_mode;
+	LES_uint32 m_mode;
 };
 
 class LES_FunctionParameterData
