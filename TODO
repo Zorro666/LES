@@ -1,11 +1,8 @@
 High Priority:
-TEST: compute the struct size in EndStruct and ERROR if not the same as the definition
-TEST: compute the struct size in EndStruct and update the type definition - contentious
-PYTHON: compute the struct size in EndStruct and update the type definition (type definition could be set to 0 in XML)
-
-Medium Priority:
 TEST: dump function data debug command
 TEST: remove ownsmemory mess in les_function.{cpp,h}
+
+Medium Priority:
 SERVER: add function defintiions to binary data and XML parsing
 SERVER: struct creation have global for packing amount
 
