@@ -52,3 +52,12 @@ Struct[11] 'TestStruct12' numMembers[3]
   Struct 'TestStruct12' Member[0] Type:'short&[3]' Name:'m_short' 0xE757B11E size:4 alignmentPadding:0
   Struct 'TestStruct12' Member[1] Type:'TestStruct9&[2]' Name:'m_testStruct9' 0xD51841A4 size:4 alignmentPadding:0
   Struct 'TestStruct12' Member[2] Type:'TestStruct11&[1]' Name:'m_testStruct11' 0x23AB2F05 size:4 alignmentPadding:0
+Struct[12] 'TestStruct13' numMembers[2]
+  Struct 'TestStruct13' Member[0] Type:'char' Name:'m_char' 0x431FFB4 size:1 alignmentPadding:0
+  Struct 'TestStruct13' Member[1] Type:'short[3]' Name:'m_short' 0xE757B11E size:6 alignmentPadding:1
+Struct[13] 'TestStruct14' numMembers[2]
+  Struct 'TestStruct14' Member[0] Type:'short[3]' Name:'m_short' 0xE757B11E size:6 alignmentPadding:0
+  Struct 'TestStruct14' Member[1] Type:'char' Name:'m_char' 0x431FFB4 size:1 alignmentPadding:0
+Struct[14] 'TestStruct15' numMembers[2]
+  Struct 'TestStruct15' Member[0] Type:'int' Name:'m_int' 0x8BA40971 size:4 alignmentPadding:0
+  Struct 'TestStruct15' Member[1] Type:'short[3]' Name:'m_short' 0xE757B11E size:6 alignmentPadding:0

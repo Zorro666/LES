@@ -2,7 +2,7 @@
 ID:'LESD'
 NumChunks:3
 
-numStrings:76
+numStrings:90
 String[0] name:'unsigned char' hash:0x6E40A25D
 String[1] name:'unsigned short' hash:0x3B779699
 String[2] name:'unsigned int' hash:0xA31138D4
@@ -73,14 +73,28 @@ String[66] name:'TestStruct11' hash:0x835600DF
 String[67] name:'TestStruct11*' hash:0x8B035147
 String[68] name:'TestStruct11&[1]' hash:0x2031AC34
 String[69] name:'TestStruct12' hash:0x835600E0
-String[70] name:'arrayExistsWrongNumberOfElements[1]' hash:0x5429AC10
-String[71] name:'m_longlong' hash:0x82F4779E
-String[72] name:'m_char' hash:0x431FFB4
-String[73] name:'m_int' hash:0x8BA40971
-String[74] name:'m_short' hash:0xE757B11E
-String[75] name:'m_float' hash:0x10757BBA
+String[70] name:'TestStruct13' hash:0x835600E1
+String[71] name:'TestStruct14' hash:0x835600E2
+String[72] name:'TestStruct15' hash:0x835600E3
+String[73] name:'arrayExistsWrongNumberOfElements[1]' hash:0x5429AC10
+String[74] name:'m_longlong' hash:0x82F4779E
+String[75] name:'m_char' hash:0x431FFB4
+String[76] name:'m_int' hash:0x8BA40971
+String[77] name:'m_short' hash:0xE757B11E
+String[78] name:'m_float' hash:0x10757BBA
+String[79] name:'m_testStruct1' hash:0xD518419C
+String[80] name:'m_short2' hash:0xB990C08C
+String[81] name:'m_testStruct3' hash:0xD518419E
+String[82] name:'m_shortPtr' hash:0x4E5BEFC8
+String[83] name:'m_testStructPtr' hash:0xEC0F5261
+String[84] name:'m_charPtr' hash:0xD46E749A
+String[85] name:'m_floatRef' hash:0xF0697795
+String[86] name:'m_charRef' hash:0xD472EFF3
+String[87] name:'m_testStruct5Ref' hash:0x7D94B9D7
+String[88] name:'m_testStruct9' hash:0xD51841A4
+String[89] name:'m_testStruct11' hash:0x23AB2F05
 
-numTypes:71
+numTypes:74
 Type[0] name:'unsigned char' hash:0x6E40A25D size:1 flags:0x5 INPUT|POD aliasedName:'unsigned char' aliasedID:0 numElements:0
 Type[1] name:'unsigned short' hash:0x3B779699 size:2 flags:0x5 INPUT|POD aliasedName:'unsigned short' aliasedID:1 numElements:0
 Type[2] name:'unsigned int' hash:0xA31138D4 size:4 flags:0x5 INPUT|POD aliasedName:'unsigned int' aliasedID:2 numElements:0
@@ -151,15 +165,75 @@ Type[66] name:'TestStruct11' hash:0x835600DF size:12 flags:0x9 INPUT|STRUCT alia
 Type[67] name:'TestStruct11*' hash:0x8B035147 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct11' aliasedID:66 numElements:0
 Type[68] name:'TestStruct11&[1]' hash:0x2031AC34 size:4 flags:0xEB INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS|ARRAY aliasedName:'TestStruct11*' aliasedID:67 numElements:1
 Type[69] name:'TestStruct12' hash:0x835600E0 size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct12' aliasedID:69 numElements:0
-Type[70] name:'arrayExistsWrongNumberOfElements[1]' hash:0x5429AC10 size:4 flags:0xC5 INPUT|POD|ALIAS|ARRAY aliasedName:'int' aliasedID:6 numElements:1
+Type[70] name:'TestStruct13' hash:0x835600E1 size:8 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct13' aliasedID:70 numElements:0
+Type[71] name:'TestStruct14' hash:0x835600E2 size:8 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct14' aliasedID:71 numElements:0
+Type[72] name:'TestStruct15' hash:0x835600E3 size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct15' aliasedID:72 numElements:0
+Type[73] name:'arrayExistsWrongNumberOfElements[1]' hash:0x5429AC10 size:4 flags:0xC5 INPUT|POD|ALIAS|ARRAY aliasedName:'int' aliasedID:6 numElements:1
 
-numStructDefinitions:1
+numStructDefinitions:15
 Struct[0] 'TestStruct1' numMembers[5]
   Struct 'TestStruct1' Member[0] Type:'long long int' Name:'m_longlong' 0x82F4779E size:8 alignmentPadding:0
   Struct 'TestStruct1' Member[1] Type:'char' Name:'m_char' 0x431FFB4 size:1 alignmentPadding:0
   Struct 'TestStruct1' Member[2] Type:'int' Name:'m_int' 0x8BA40971 size:4 alignmentPadding:3
   Struct 'TestStruct1' Member[3] Type:'short' Name:'m_short' 0xE757B11E size:2 alignmentPadding:0
   Struct 'TestStruct1' Member[4] Type:'float' Name:'m_float' 0x10757BBA size:4 alignmentPadding:2
+Struct[1] 'TestStruct2' numMembers[5]
+  Struct 'TestStruct2' Member[0] Type:'float' Name:'m_float' 0x10757BBA size:4 alignmentPadding:0
+  Struct 'TestStruct2' Member[1] Type:'TestStruct1' Name:'m_testStruct1' 0xD518419C size:24 alignmentPadding:0
+  Struct 'TestStruct2' Member[2] Type:'char' Name:'m_char' 0x431FFB4 size:1 alignmentPadding:0
+  Struct 'TestStruct2' Member[3] Type:'short' Name:'m_short' 0xE757B11E size:2 alignmentPadding:1
+  Struct 'TestStruct2' Member[4] Type:'int' Name:'m_int' 0x8BA40971 size:4 alignmentPadding:0
+Struct[2] 'TestStruct3' numMembers[4]
+  Struct 'TestStruct3' Member[0] Type:'short' Name:'m_short' 0xE757B11E size:2 alignmentPadding:0
+  Struct 'TestStruct3' Member[1] Type:'float' Name:'m_float' 0x10757BBA size:4 alignmentPadding:2
+  Struct 'TestStruct3' Member[2] Type:'int' Name:'m_int' 0x8BA40971 size:4 alignmentPadding:0
+  Struct 'TestStruct3' Member[3] Type:'char' Name:'m_char' 0x431FFB4 size:1 alignmentPadding:0
+Struct[3] 'TestStruct4' numMembers[6]
+  Struct 'TestStruct4' Member[0] Type:'float' Name:'m_float' 0x10757BBA size:4 alignmentPadding:0
+  Struct 'TestStruct4' Member[1] Type:'int' Name:'m_int' 0x8BA40971 size:4 alignmentPadding:0
+  Struct 'TestStruct4' Member[2] Type:'char' Name:'m_char' 0x431FFB4 size:1 alignmentPadding:0
+  Struct 'TestStruct4' Member[3] Type:'short' Name:'m_short' 0xE757B11E size:2 alignmentPadding:1
+  Struct 'TestStruct4' Member[4] Type:'short' Name:'m_short2' 0xB990C08C size:2 alignmentPadding:0
+  Struct 'TestStruct4' Member[5] Type:'TestStruct3' Name:'m_testStruct3' 0xD518419E size:16 alignmentPadding:2
+Struct[4] 'TestStruct5' numMembers[2]
+  Struct 'TestStruct5' Member[0] Type:'char' Name:'m_char' 0x431FFB4 size:1 alignmentPadding:0
+  Struct 'TestStruct5' Member[1] Type:'short*' Name:'m_shortPtr' 0x4E5BEFC8 size:4 alignmentPadding:3
+Struct[5] 'TestStruct6' numMembers[3]
+  Struct 'TestStruct6' Member[0] Type:'short' Name:'m_short' 0xE757B11E size:2 alignmentPadding:0
+  Struct 'TestStruct6' Member[1] Type:'TestStruct5*' Name:'m_testStructPtr' 0xEC0F5261 size:4 alignmentPadding:2
+  Struct 'TestStruct6' Member[2] Type:'char*' Name:'m_charPtr' 0xD46E749A size:4 alignmentPadding:0
+Struct[6] 'TestStruct7' numMembers[5]
+  Struct 'TestStruct7' Member[0] Type:'short' Name:'m_short' 0xE757B11E size:2 alignmentPadding:0
+  Struct 'TestStruct7' Member[1] Type:'float&' Name:'m_floatRef' 0xF0697795 size:4 alignmentPadding:2
+  Struct 'TestStruct7' Member[2] Type:'char' Name:'m_char' 0x431FFB4 size:1 alignmentPadding:0
+  Struct 'TestStruct7' Member[3] Type:'char&' Name:'m_charRef' 0xD472EFF3 size:4 alignmentPadding:3
+  Struct 'TestStruct7' Member[4] Type:'char*' Name:'m_charPtr' 0xD46E749A size:4 alignmentPadding:0
+Struct[7] 'TestStruct8' numMembers[3]
+  Struct 'TestStruct8' Member[0] Type:'short' Name:'m_short' 0xE757B11E size:2 alignmentPadding:0
+  Struct 'TestStruct8' Member[1] Type:'TestStruct5&' Name:'m_testStruct5Ref' 0x7D94B9D7 size:4 alignmentPadding:2
+  Struct 'TestStruct8' Member[2] Type:'char*' Name:'m_charPtr' 0xD46E749A size:4 alignmentPadding:0
+Struct[8] 'TestStruct9' numMembers[1]
+  Struct 'TestStruct9' Member[0] Type:'short[3]' Name:'m_short' 0xE757B11E size:6 alignmentPadding:0
+Struct[9] 'TestStruct10' numMembers[2]
+  Struct 'TestStruct10' Member[0] Type:'short[3]' Name:'m_short' 0xE757B11E size:6 alignmentPadding:0
+  Struct 'TestStruct10' Member[1] Type:'TestStruct9[2]' Name:'m_testStruct9' 0xD51841A4 size:12 alignmentPadding:0
+Struct[10] 'TestStruct11' numMembers[3]
+  Struct 'TestStruct11' Member[0] Type:'short&[3]' Name:'m_short' 0xE757B11E size:4 alignmentPadding:0
+  Struct 'TestStruct11' Member[1] Type:'int&[2]' Name:'m_int' 0x8BA40971 size:4 alignmentPadding:0
+  Struct 'TestStruct11' Member[2] Type:'char&[5]' Name:'m_char' 0x431FFB4 size:4 alignmentPadding:0
+Struct[11] 'TestStruct12' numMembers[3]
+  Struct 'TestStruct12' Member[0] Type:'short&[3]' Name:'m_short' 0xE757B11E size:4 alignmentPadding:0
+  Struct 'TestStruct12' Member[1] Type:'TestStruct9&[2]' Name:'m_testStruct9' 0xD51841A4 size:4 alignmentPadding:0
+  Struct 'TestStruct12' Member[2] Type:'TestStruct11&[1]' Name:'m_testStruct11' 0x23AB2F05 size:4 alignmentPadding:0
+Struct[12] 'TestStruct13' numMembers[2]
+  Struct 'TestStruct13' Member[0] Type:'char' Name:'m_char' 0x431FFB4 size:1 alignmentPadding:0
+  Struct 'TestStruct13' Member[1] Type:'short[3]' Name:'m_short' 0xE757B11E size:6 alignmentPadding:1
+Struct[13] 'TestStruct14' numMembers[2]
+  Struct 'TestStruct14' Member[0] Type:'short[3]' Name:'m_short' 0xE757B11E size:6 alignmentPadding:0
+  Struct 'TestStruct14' Member[1] Type:'char' Name:'m_char' 0x431FFB4 size:1 alignmentPadding:0
+Struct[14] 'TestStruct15' numMembers[2]
+  Struct 'TestStruct15' Member[0] Type:'int' Name:'m_int' 0x8BA40971 size:4 alignmentPadding:0
+  Struct 'TestStruct15' Member[1] Type:'short[3]' Name:'m_short' 0xE757B11E size:6 alignmentPadding:0
 #### Function header definition tests ####
 WARNING: 'LES_Test_FunctionNotFound' : Can't find function definition
 FATAL_ERROR: 'LES_Test_FunctionNotFound' : Error during LES_FunctionStart
@@ -202,20 +276,20 @@ FATAL_ERROR: 'LES_Test_InputNameDoesntExist' : Error adding Input parameter 0 'i
 WARNING: 'LES_Test_InputNameIDNotFound' : Can't find parameter name for ID:-1 parameter:'input_0' type:'int'
 FATAL_ERROR: 'LES_Test_InputNameIDNotFound' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputNameHashIsWrong' : Adding parameter 'input_0' name hash doesn't match for ID:104 0x480D993 != 0x97A0017 Code:'input_0' Definition:'wrongHash'
+WARNING: 'LES_Test_InputNameHashIsWrong' : Adding parameter 'input_0' name hash doesn't match for ID:107 0x480D993 != 0x97A0017 Code:'input_0' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_InputNameHashIsWrong' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputNameStringIsWrong' : Adding parameter 'InputNameBrokenHash' name string doesn't match for ID:106 'InputNameBrokenHash' != 'brokenString' 0x99F1870C : 0x99F1870C
+WARNING: 'LES_Test_InputNameStringIsWrong' : Adding parameter 'InputNameBrokenHash' name string doesn't match for ID:109 'InputNameBrokenHash' != 'brokenString' 0x99F1870C : 0x99F1870C
 FATAL_ERROR: 'LES_Test_InputNameStringIsWrong' : Error adding Input parameter 0 'InputNameBrokenHash' type:'int'
 
 #### Input type tests ####
 WARNING: 'LES_Test_InputTypeIDNotFound' : Can't find Input parameter type for ID:-1 parameter:'input_0' type:'int'
 FATAL_ERROR: 'LES_Test_InputTypeIDNotFound' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputTypeHashIsWrong' : parameter:0 'input_0' (Input) type hash doesn't match for ID:104 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
+WARNING: 'LES_Test_InputTypeHashIsWrong' : parameter:0 'input_0' (Input) type hash doesn't match for ID:107 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_InputTypeHashIsWrong' : Error adding Input parameter 0 'input_0' type:'int'
 
-WARNING: 'LES_Test_InputTypeStringIsWrong' : Adding parameter 'input_0' type string doesn't match for ID:110 'InputTypeBrokenHash' != 'brokenString' 0x7EF15B07 : 0x7EF15B07
+WARNING: 'LES_Test_InputTypeStringIsWrong' : Adding parameter 'input_0' type string doesn't match for ID:113 'InputTypeBrokenHash' != 'brokenString' 0x7EF15B07 : 0x7EF15B07
 FATAL_ERROR: 'LES_Test_InputTypeStringIsWrong' : Error adding Input parameter 0 'input_0' type:'InputTypeBrokenHash'
 
 #### Output parameter tests ####
@@ -245,20 +319,20 @@ FATAL_ERROR: 'LES_Test_OutputNameDoesntExist' : Error adding Output parameter 0 
 WARNING: 'LES_Test_OutputNameIDNotFound' : Can't find parameter name for ID:-1 parameter:'output_0' type:'int'
 FATAL_ERROR: 'LES_Test_OutputNameIDNotFound' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputNameHashIsWrong' : Adding parameter 'output_0' name hash doesn't match for ID:104 0x1D1CA836 != 0x97A0017 Code:'output_0' Definition:'wrongHash'
+WARNING: 'LES_Test_OutputNameHashIsWrong' : Adding parameter 'output_0' name hash doesn't match for ID:107 0x1D1CA836 != 0x97A0017 Code:'output_0' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_OutputNameHashIsWrong' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputNameStringIsWrong' : Adding parameter 'OutputNameBrokenHash' name string doesn't match for ID:123 'OutputNameBrokenHash' != 'brokenString' 0x61782F3F : 0x61782F3F
+WARNING: 'LES_Test_OutputNameStringIsWrong' : Adding parameter 'OutputNameBrokenHash' name string doesn't match for ID:126 'OutputNameBrokenHash' != 'brokenString' 0x61782F3F : 0x61782F3F
 FATAL_ERROR: 'LES_Test_OutputNameStringIsWrong' : Error adding Output parameter 0 'OutputNameBrokenHash' type:'int'
 
 #### Output type tests ####
 WARNING: 'LES_Test_OutputTypeIDNotFound' : Can't find Output parameter type for ID:-1 parameter:'output_0' type:'int'
 FATAL_ERROR: 'LES_Test_OutputTypeIDNotFound' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputTypeHashIsWrong' : parameter:0 'output_0' (Output) type hash doesn't match for ID:104 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
+WARNING: 'LES_Test_OutputTypeHashIsWrong' : parameter:0 'output_0' (Output) type hash doesn't match for ID:107 0xF09B6F != 0x97A0017 Code:'int' Definition:'wrongHash'
 FATAL_ERROR: 'LES_Test_OutputTypeHashIsWrong' : Error adding Output parameter 0 'output_0' type:'int'
 
-WARNING: 'LES_Test_OutputTypeStringIsWrong' : Adding parameter 'output_0' type string doesn't match for ID:127 'OutputTypeBrokenHash' != 'brokenString' 0x4678033A : 0x4678033A
+WARNING: 'LES_Test_OutputTypeStringIsWrong' : Adding parameter 'output_0' type string doesn't match for ID:130 'OutputTypeBrokenHash' != 'brokenString' 0x4678033A : 0x4678033A
 FATAL_ERROR: 'LES_Test_OutputTypeStringIsWrong' : Error adding Output parameter 0 'output_0' type:'OutputTypeBrokenHash'
 
 #### Parameter already exists tests ####
@@ -599,3 +673,4 @@ LES_Test_DecodeInputStructStructArrayReference: parameterDataSize:37
 
 ERROR: AddType 'CantAddNewTypes' hash 0xE2A43B36 not found in type data definition file
 FATAL_ERROR: TEST AddType 'CantAddNewTypes' NumElements:0 0xE2A43B36 Alias 'int' failed
+sizeof(Jake)=8

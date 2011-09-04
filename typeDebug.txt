@@ -68,4 +68,7 @@ Type[66] name:'TestStruct11' hash:0x835600DF size:12 flags:0x9 INPUT|STRUCT alia
 Type[67] name:'TestStruct11*' hash:0x8B035147 size:4 flags:0x5B INPUT|OUTPUT|STRUCT|POINTER|ALIAS aliasedName:'TestStruct11' aliasedID:66 numElements:0
 Type[68] name:'TestStruct11&[1]' hash:0x2031AC34 size:4 flags:0xEB INPUT|OUTPUT|STRUCT|REFERENCE|ALIAS|ARRAY aliasedName:'TestStruct11*' aliasedID:67 numElements:1
 Type[69] name:'TestStruct12' hash:0x835600E0 size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct12' aliasedID:69 numElements:0
-Type[70] name:'arrayExistsWrongNumberOfElements[1]' hash:0x5429AC10 size:4 flags:0xC5 INPUT|POD|ALIAS|ARRAY aliasedName:'int' aliasedID:6 numElements:1
+Type[70] name:'TestStruct13' hash:0x835600E1 size:8 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct13' aliasedID:70 numElements:0
+Type[71] name:'TestStruct14' hash:0x835600E2 size:8 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct14' aliasedID:71 numElements:0
+Type[72] name:'TestStruct15' hash:0x835600E3 size:12 flags:0x9 INPUT|STRUCT aliasedName:'TestStruct15' aliasedID:72 numElements:0
+Type[73] name:'arrayExistsWrongNumberOfElements[1]' hash:0x5429AC10 size:4 flags:0xC5 INPUT|POD|ALIAS|ARRAY aliasedName:'int' aliasedID:6 numElements:1
