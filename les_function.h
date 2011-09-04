@@ -48,7 +48,7 @@ private:
 
 	LES_int32 m_numInputs;
 	LES_int32 m_numOutputs;
-	LES_FunctionParameter m_paramDatas[1];  // m_paramDatas[m_numInputs+m_numOutputs];
+	LES_FunctionParameter m_parameters[1];  // m_parameters[m_numInputs+m_numOutputs];
 };
 
 const LES_FunctionDefinition* LES_GetFunctionDefinition(const char* const name);

@@ -275,19 +275,6 @@ LES_FunctionParameterData* LES_GetFunctionParameterData(const int functionNameID
 	return parameterData;
 }
 
-#if 0
-LES_FunctionDefinition::LES_FunctionDefinition(const int nameID, const int returnTypeID, const int numInputs, const int numOutputs)
-{
-	m_nameID = nameID;
-	m_returnTypeID = returnTypeID;
-	m_parameterDataSize = 0;
-
-	m_numInputs = numInputs;
-	m_numOutputs = numOutputs;
-	m_paramDatas = new LES_FunctionParameter[numInputs+numOutputs];
-}
-#endif
-
 int LES_FunctionDefinition::ComputeParameterDataSize(void) const
 {
 	int parameterDataSize = 0;
@@ -349,7 +336,7 @@ const LES_FunctionParameter* LES_FunctionDefinition::GetParameter(const LES_Hash
 	const int numParams = m_numInputs + m_numOutputs;
 	for (int i = 0; i < numParams; i++)
 	{
-		const LES_FunctionParameter* const paramPtr = &m_paramDatas[i];
+		const LES_FunctionParameter* const paramPtr = &m_parameters[i];
 		if (paramPtr->m_hash == nameHash)
 		{
 			return paramPtr;
@@ -363,7 +350,7 @@ const LES_FunctionParameter* LES_FunctionDefinition::GetParameterByIndex(const i
 	const int numParams = m_numInputs + m_numOutputs;
 	if ((index >= 0) && (index < numParams))
 	{
-		const LES_FunctionParameter* const paramPtr = &m_paramDatas[index];
+		const LES_FunctionParameter* const paramPtr = &m_parameters[index];
 		return paramPtr;
 	}
 	return LES_NULL;
