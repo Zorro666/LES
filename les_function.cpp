@@ -46,13 +46,21 @@ static const LES_FunctionDefinition* LES_GetFunctionDefinitionForID(const int id
 
 static int LES_GetFunctionDefinitionIndexByNameID(const int nameID)
 {
+	if (les_pFuncData)
+	{
+		const int index = les_pFuncData->GetFunctionDefinitionIndexByNameID(nameID);
+		if (index >= 0)
+		{
+			return index;
+		}
+	}
 	/* This is horribly slow - need hash lookup table */
 	for (int i = 0; i < les_numFunctionDefinitions; i++)
 	{
 		const LES_FunctionDefinition* const functionDefinitionPtr = les_functionDefinitionArray[i];
 		if (functionDefinitionPtr->GetNameID() == nameID)
 		{
-			return i;
+			return i + les_funcDataNumFunctionDefinitions;
 		}
 	}
 	return -1;
@@ -61,6 +69,14 @@ static int LES_GetFunctionDefinitionIndexByNameID(const int nameID)
 static int LES_GetFunctionDefinitionIndex(const char* const name)
 {
 	const LES_Hash functionNameHash = LES_GenerateHashCaseSensitive(name);
+	if (les_pFuncData)
+	{
+		const int index = les_pFuncData->GetFunctionDefinitionIndex(functionNameHash);
+		if (index >= 0)
+		{
+			return index;
+		}
+	}
 
 	/* This is horribly slow - need hash lookup table */
 	for (int i = 0; i < les_numFunctionDefinitions; i++)
@@ -71,7 +87,7 @@ static int LES_GetFunctionDefinitionIndex(const char* const name)
 		{
 			if (strcmp(functionNameStringEntryPtr->m_str, name) == 0)
 			{
-				return i;
+				return i + les_funcDataNumFunctionDefinitions;
 			}
 		}
 	}
@@ -277,18 +293,18 @@ const LES_FunctionDefinition* LES_GetFunctionDefinition(const char* const name)
 	{
 		return LES_NULL;
 	}
-	const LES_FunctionDefinition* const functionDefinitionPtr = les_functionDefinitionArray[index];
+	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinitionForID(index);
 	return functionDefinitionPtr;
 }
 
 LES_FunctionParameterData* LES_GetFunctionParameterData(const int functionNameID)
 {
 	const int index = LES_GetFunctionDefinitionIndexByNameID(functionNameID);
-	if ((index < 0) || (index >= les_numFunctionDefinitions))
+	if (index < 0)
 	{
 		return LES_NULL;
 	}
-	const LES_FunctionDefinition* const functionDefinitionPtr = les_functionDefinitionArray[index];
+	const LES_FunctionDefinition* const functionDefinitionPtr = LES_GetFunctionDefinitionForID(index);
 	const int parameterDataSize = functionDefinitionPtr->GetParameterDataSize();
 	char* parameterBuffer = LES_NULL;
 	if (parameterDataSize > 0)
@@ -400,8 +416,9 @@ int LES_FunctionDefinition::Decode(const LES_FunctionParameterData* const functi
 
 void LES_DebugOutputFunctionDefinitions(LES_LoggerChannel* const pLogChannel)
 {
-	const int numFunctionDefinitions = les_numFunctionDefinitions;
-	pLogChannel->Print("numFunctionDefinitions:%d", numFunctionDefinitions);
+	const int numFunctionDefinitions = les_funcDataNumFunctionDefinitions + les_numFunctionDefinitions;
+	pLogChannel->Print("numFunctionDefinitions:%d FuncData:%d Internal:%d", 
+										 numFunctionDefinitions, les_funcDataNumFunctionDefinitions, les_numFunctionDefinitions);
 	for (int i = 0; i < numFunctionDefinitions; i++)
 	{
 		const LES_FunctionDefinition* const pFunctionDefinition = LES_GetFunctionDefinitionForID(i);
@@ -431,7 +448,7 @@ int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefiniti
 															const int parameterDataSize)
 {
 	int index = LES_GetFunctionDefinitionIndex(name);
-	if ((index < 0) || (index >= les_numFunctionDefinitions))
+	if (index < 0)
 	{
 		/* Not found so add it - just store the ptr to the memory */
 		index = les_numFunctionDefinitions;
@@ -439,6 +456,10 @@ int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefiniti
 		LES_FunctionDefinition* const pFunctionDefinition2 = (LES_FunctionDefinition* const)les_functionDefinitionArray[index];
 		pFunctionDefinition2->m_parameterDataSize = parameterDataSize;
 		les_numFunctionDefinitions++;
+	}
+	else
+	{
+		LES_FATAL_ERROR("NEED TO ERROR CHECK THE PARAMETER DATA SIZE FOR EXISTING FUNCTION DEFINITIONS");
 	}
 
 	return index;
