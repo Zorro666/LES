@@ -31,6 +31,7 @@ def loadStructData(structData):
 def loadFunctionData(functionData):
 	if functionData.loadXML("data/les_functions_test.xml") == False:
 		les_logger.FatalError("ERROR loading data/les_functions_test.xml")
+	functionData.loadXML("data/les_functions_errors.xml")
 
 class LES_DefinitionFile():
 	def __init__(self):
