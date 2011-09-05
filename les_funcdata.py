@@ -535,7 +535,7 @@ class LES_FunctionData():
 				memberName = self.__m_stringTable__.getString(nameID)
 				typeName = self.__m_stringTable__.getString(typeID)
 				paramMode = les_typedata.decodeFlags(mode)
-				loggerChannel.Print("  Function '%s' Member[%d] '%s' 0x%X Type:'%s' index:%d mode:%d %s", 
+				loggerChannel.Print("  Function '%s' Member[%d] '%s' 0x%X Type:'%s' index:%d mode:0x%X %s", 
 														functionName, i, memberName, hashValue, typeName, index, mode, paramMode)
 
 def runTest():
