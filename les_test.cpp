@@ -2295,6 +2295,9 @@ struct TestStruct66
 	LES_LoggerChannel* const structDebugChan = LES_Logger::CreateChannel("StructDebug", "", "structDebug.txt", LES_Logger::FLAGS_DEFAULT);
 	LES_DebugOutputStructs(structDebugChan);
 
+	LES_LoggerChannel* const funcDebugChan = LES_Logger::CreateChannel("FuncDebug", "", "funcDebug.txt", LES_Logger::FLAGS_DEFAULT);
+	LES_DebugOutputFunctionDefinitions(funcDebugChan);
+
 	struct Jake
 	{
 		short bob[3];

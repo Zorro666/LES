@@ -24,6 +24,8 @@ extern void LES_DebugOutputStructDefinition(LES_LoggerChannel* const pLogChannel
 
 extern void LES_Type_SetTypeDataPtr(const LES_TypeData* const pTypeData);
 extern void LES_Struct_SetStructDataPtr(const LES_StructData* const pStructData);
+extern void LES_Function_SetFuncDataPtr(const LES_FuncData* const pFuncData);
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Internal Static functions
@@ -195,6 +197,9 @@ int LES_SetGlobalDefinitionFile(const void* definitionFileData, const int fileDa
 	const LES_StructData* const pStructData = les_definitionFile.GetStructData();
 	LES_Struct_SetStructDataPtr(pStructData);
 
+	const LES_FuncData* const pFuncData = les_definitionFile.GetFuncData();
+	LES_Function_SetFuncDataPtr(pFuncData);
+
 	return LES_RETURN_OK;
 }
 
@@ -243,6 +248,7 @@ void LES_DebugOutputGlobalDefinitionFile(LES_LoggerChannel* const pLogChannel)
 void LES_DebugOutputStringEntries(LES_LoggerChannel* const pLogChannel)
 {
 	const int numStringEntries = les_stringTableNumStrings + les_numStringEntries;
+	pLogChannel->Print("numStringEntries:%d", numStringEntries);
 	for (int i = 0; i < numStringEntries; i++)
 	{
 		const LES_StringEntry* const pStringEntry = LES_GetStringEntryForID(i);

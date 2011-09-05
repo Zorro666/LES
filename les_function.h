@@ -54,5 +54,6 @@ private:
 
 const LES_FunctionDefinition* LES_GetFunctionDefinition(const char* const name);
 LES_FunctionParameterData* LES_GetFunctionParameterData(const int functionNameID);
+void LES_DebugOutputFunctionDefinitions(LES_LoggerChannel* const pLogChannel);
 
 #endif //#ifndef LES_FUNCTION_HH

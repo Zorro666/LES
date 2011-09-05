@@ -8,9 +8,16 @@
 #include "les_stringentry.h"
 #include "les_parameter.h"
 #include "les_struct.h"
+#include "les_funcdata.h"
 
 static const LES_FunctionDefinition** les_functionDefinitionArray = LES_NULL;
 static int les_numFunctionDefinitions = 0;
+
+static const LES_FuncData* les_pFuncData = LES_NULL;
+static int les_funcDataNumFunctionDefinitions = 0;
+
+void LES_DebugOutputFunctionDefinition(LES_LoggerChannel* const pLogChannel, 
+																			 const LES_FunctionDefinition* const pFunctionDefinition, const int i);
 
 #define LES_FUNCTION_DEBUG 0
 
@@ -19,6 +26,23 @@ static int les_numFunctionDefinitions = 0;
 // Internal Static functions
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
+
+static const LES_FunctionDefinition* LES_GetFunctionDefinitionForID(const int id)
+{
+	if (id < 0)
+	{
+		return LES_NULL;
+	}
+	const int index = (id - les_funcDataNumFunctionDefinitions);
+	if (index < 0)
+	{
+		// Get it from definition file func data
+		const LES_FunctionDefinition* const pFunctionDefinition = les_pFuncData->GetFunctionDefinition(id);
+		return pFunctionDefinition;
+	}
+	const LES_FunctionDefinition* const pFunctionDefinition = les_functionDefinitionArray[index];
+	return pFunctionDefinition;
+}
 
 static int LES_GetFunctionDefinitionIndexByNameID(const int nameID)
 {
@@ -374,6 +398,17 @@ int LES_FunctionDefinition::Decode(const LES_FunctionParameterData* const functi
 	return returnCode;
 }
 
+void LES_DebugOutputFunctionDefinitions(LES_LoggerChannel* const pLogChannel)
+{
+	const int numFunctionDefinitions = les_numFunctionDefinitions;
+	pLogChannel->Print("numFunctionDefinitions:%d", numFunctionDefinitions);
+	for (int i = 0; i < numFunctionDefinitions; i++)
+	{
+		const LES_FunctionDefinition* const pFunctionDefinition = LES_GetFunctionDefinitionForID(i);
+		LES_DebugOutputFunctionDefinition(pLogChannel, pFunctionDefinition, i);
+	}
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Private External functions
@@ -448,3 +483,49 @@ LES_FunctionDefinition* LES_CreateFunctionDefinition(const int nameID, const int
 	}
 	return pFunctionDefinition;
 }
+
+void LES_DebugOutputFunctionDefinition(LES_LoggerChannel* const pLogChannel, 
+																			 const LES_FunctionDefinition* const pFunctionDefinition, const int i)
+{
+	const int functionNameID = pFunctionDefinition->GetNameID();
+	const LES_StringEntry* const pFunctionNameEntry = LES_GetStringEntryForID(functionNameID);
+	const char* const functionName = pFunctionNameEntry->m_str;
+
+	const int numInputs = pFunctionDefinition->GetNumInputs();
+	const int numOutputs = pFunctionDefinition->GetNumOutputs();
+	const int numParameters = pFunctionDefinition->GetNumParameters();
+	const int returnTypeID = pFunctionDefinition->GetReturnTypeID();
+	const LES_StringEntry* const pReturnTypeNameEntry = LES_GetStringEntryForID(returnTypeID);
+	const char* const returnTypeName = pReturnTypeNameEntry ? pReturnTypeNameEntry->m_str : "NULL";
+	const int parameterDataSize = pFunctionDefinition->GetParameterDataSize();
+
+	pLogChannel->Print("Function[%d] '%s' returnType '%s' numParameters:%d numInputs:%d numOutputs:%d parameterDataSize:%d", 
+										 i, functionName, returnTypeName, numParameters, numInputs, numOutputs, parameterDataSize);
+
+	for (int p = 0; p < numParameters; p++)
+	{
+		const LES_FunctionParameter* const pFunctionParameter = pFunctionDefinition->GetParameterByIndex(p);
+
+		const LES_Hash hashValue = pFunctionParameter->m_hash;
+		const int nameID = pFunctionParameter->m_nameID;
+		const int typeID = pFunctionParameter->m_typeID;
+		const int index = pFunctionParameter->m_index;
+		const int mode = pFunctionParameter->m_mode;
+
+		const LES_StringEntry* const pParameterNameEntry = LES_GetStringEntryForID(nameID);
+		const char* const memberName = pParameterNameEntry ? pParameterNameEntry->m_str : "NULL";
+		const LES_StringEntry* const pTypeNameEntry = LES_GetStringEntryForID(typeID);
+		const char* const typeName = pTypeNameEntry ? pTypeNameEntry->m_str : "NULL";
+		char flagsDecoded[1024];
+		LES_Type_DecodeFlags(flagsDecoded, mode);
+		pLogChannel->Print("  Function '%s' Member[%d] '%s' 0x%X Type:'%s' index:%d mode:0x%X %s", 
+											 functionName, p, memberName, hashValue, typeName, index, mode, flagsDecoded);
+	}
+}
+
+void LES_Function_SetFuncDataPtr(const LES_FuncData* const pFuncData)
+{
+	les_pFuncData = pFuncData;
+	les_funcDataNumFunctionDefinitions = les_pFuncData->GetNumFunctionDefinitions();
+}
+
