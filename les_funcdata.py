@@ -431,7 +431,7 @@ class LES_FunctionData():
 
 			if self.doesFunctionDefinitionExist(functionName):
 				les_logger.Error("LES_FunctionData::parseXML '%s' already exists", functionName)
-				numErorrs += 1
+				numErrors += 1
 				continue
 
 			functionNameID = self.__m_stringTable__.addString(functionName)
