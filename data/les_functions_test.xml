@@ -19,7 +19,7 @@
 	<LES_FUNCTION name="LES_Test_TooManyInputParameters" returnType="void" numInputs="2" numOutputs="1">
 	<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_0"/>
 	<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_1"/>
-	<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="output_0"/>
+	<LES_FUNCTION_INPUT_PARAMETER type="int" name="output_0"/>
 	</LES_FUNCTION>
 
 	<LES_FUNCTION name="LES_Test_InputWrongIndex" returnType="void" numInputs="2" numOutputs="1">
@@ -65,7 +65,7 @@
 	</LES_FUNCTION>
 
 	<LES_FUNCTION name="LES_Test_TooManyOutputParameters" returnType="void" numInputs="1" numOutputs="2">
-	<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_0"/>
+	<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="input_0"/>
 	<LES_FUNCTION_OUTPUT_PARAMETER type="unsigned int*" name="output_0"/>
 	<LES_FUNCTION_OUTPUT_PARAMETER type="unsigned short*" name="output_1"/>
 	</LES_FUNCTION>

@@ -1453,7 +1453,7 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_START(LES_Test_TooManyInputParameters, void, 2, 1);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
 	LES_TEST_FUNCTION_ADD_INPUT(int, input_1);
-	LES_TEST_FUNCTION_ADD_OUTPUT(int, output_0);
+	LES_TEST_FUNCTION_ADD_INPUT(int, output_0);
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_InputWrongIndex, void, 2, 1);
@@ -1551,7 +1551,7 @@ void LES_TestSetup(void)
 	LES_TEST_FUNCTION_END();
 
 	LES_TEST_FUNCTION_START(LES_Test_TooManyOutputParameters, void, 1, 2);
-	LES_TEST_FUNCTION_ADD_INPUT(int, input_0);
+	LES_TEST_FUNCTION_ADD_OUTPUT(int, input_0);
 	LES_TEST_FUNCTION_ADD_OUTPUT(unsigned int*, output_0);
 	LES_TEST_FUNCTION_ADD_OUTPUT(unsigned short*, output_1);
 	LES_TEST_FUNCTION_END();
