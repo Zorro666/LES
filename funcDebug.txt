@@ -1,0 +1,183 @@
+numFunctionDefinitions:58
+Function[0] 'PyTestFunction1' returnType 'int' numParameters:3 numInputs:2 numOutputs:1 parameterDataSize:13
+  Function 'PyTestFunction1' Member[0] 'm_longlong' 0x82F4779E Type:'long long int' index:0 mode:0x1 INPUT
+  Function 'PyTestFunction1' Member[1] 'm_char' 0x431FFB4 Type:'char' index:1 mode:0x1 INPUT
+  Function 'PyTestFunction1' Member[2] 'm_int' 0x8BA40971 Type:'int*' index:2 mode:0x2 OUTPUT
+Function[1] 'jakeInit' returnType 'void' numParameters:3 numInputs:2 numOutputs:1 parameterDataSize:10
+  Function 'jakeInit' Member[0] 'a' 0x61 Type:'int' index:0 mode:0x1 INPUT
+  Function 'jakeInit' Member[1] 'b' 0x62 Type:'short' index:1 mode:0x1 INPUT
+  Function 'jakeInit' Member[2] 'rPtr' 0x8A8E17A4 Type:'float*' index:2 mode:0x2 OUTPUT
+Function[2] 'LES_Test_ReturnTypeNotFound' returnType 'NULL' numParameters:0 numInputs:0 numOutputs:0 parameterDataSize:0
+Function[3] 'LES_Test_ReturnTypeHashIsWrong' returnType 'void' numParameters:0 numInputs:0 numOutputs:0 parameterDataSize:0
+Function[4] 'LES_Test_ReturnTypeStringIsWrong' returnType 'brokenString' numParameters:0 numInputs:0 numOutputs:0 parameterDataSize:0
+Function[5] 'LES_Test_TooManyInputParameters' returnType 'void' numParameters:3 numInputs:2 numOutputs:1 parameterDataSize:12
+  Function 'LES_Test_TooManyInputParameters' Member[0] 'input_0' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
+  Function 'LES_Test_TooManyInputParameters' Member[1] 'input_1' 0x480D994 Type:'int' index:1 mode:0x1 INPUT
+  Function 'LES_Test_TooManyInputParameters' Member[2] 'output_0' 0x1D1CA836 Type:'int' index:2 mode:0x2 OUTPUT
+Function[6] 'LES_Test_InputWrongIndex' returnType 'void' numParameters:3 numInputs:2 numOutputs:1 parameterDataSize:12
+  Function 'LES_Test_InputWrongIndex' Member[0] 'input_0' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
+  Function 'LES_Test_InputWrongIndex' Member[1] 'input_1' 0x480D994 Type:'int' index:1 mode:0x1 INPUT
+  Function 'LES_Test_InputWrongIndex' Member[2] 'output_0' 0x1D1CA836 Type:'int' index:2 mode:0x2 OUTPUT
+Function[7] 'LES_Test_InputNameIDNotFound' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:4
+  Function 'LES_Test_InputNameIDNotFound' Member[0] 'NULL' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
+Function[8] 'LES_Test_InputNameDoesntExist' returnType 'void' numParameters:2 numInputs:1 numOutputs:1 parameterDataSize:8
+  Function 'LES_Test_InputNameDoesntExist' Member[0] 'input_0' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
+  Function 'LES_Test_InputNameDoesntExist' Member[1] 'output_0' 0x1D1CA836 Type:'int' index:1 mode:0x2 OUTPUT
+Function[9] 'LES_Test_InputNameHashIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:4
+  Function 'LES_Test_InputNameHashIsWrong' Member[0] 'wrongHash' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
+Function[10] 'LES_Test_InputNameStringIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:4
+  Function 'LES_Test_InputNameStringIsWrong' Member[0] 'brokenString' 0x99F1870C Type:'int' index:0 mode:0x1 INPUT
+Function[11] 'LES_Test_InputTypeIDNotFound' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:-1
+  Function 'LES_Test_InputTypeIDNotFound' Member[0] 'input_0' 0x480D993 Type:'NULL' index:0 mode:0x1 INPUT
+Function[12] 'LES_Test_InputTypeHashIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:-1
+  Function 'LES_Test_InputTypeHashIsWrong' Member[0] 'input_0' 0x480D993 Type:'wrongHash' index:0 mode:0x1 INPUT
+Function[13] 'LES_Test_InputTypeStringIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:-1
+  Function 'LES_Test_InputTypeStringIsWrong' Member[0] 'input_0' 0x480D993 Type:'brokenString' index:0 mode:0x1 INPUT
+Function[14] 'LES_Test_InputGlobalIndexIsWrong' returnType 'void' numParameters:2 numInputs:1 numOutputs:1 parameterDataSize:8
+  Function 'LES_Test_InputGlobalIndexIsWrong' Member[0] 'output_0' 0x1D1CA836 Type:'int' index:0 mode:0x2 OUTPUT
+  Function 'LES_Test_InputGlobalIndexIsWrong' Member[1] 'input_0' 0x480D993 Type:'int' index:1 mode:0x1 INPUT
+Function[15] 'LES_Test_InputUsedAsOutput' returnType 'void' numParameters:2 numInputs:1 numOutputs:1 parameterDataSize:8
+  Function 'LES_Test_InputUsedAsOutput' Member[0] 'input_0' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
+  Function 'LES_Test_InputUsedAsOutput' Member[1] 'output_0' 0x1D1CA836 Type:'int' index:1 mode:0x2 OUTPUT
+Function[16] 'LES_Test_InputParamAlreadyUsed' returnType 'void' numParameters:3 numInputs:2 numOutputs:1 parameterDataSize:12
+  Function 'LES_Test_InputParamAlreadyUsed' Member[0] 'input_0' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
+  Function 'LES_Test_InputParamAlreadyUsed' Member[1] 'input_1' 0x480D994 Type:'int' index:1 mode:0x1 INPUT
+  Function 'LES_Test_InputParamAlreadyUsed' Member[2] 'output_0' 0x1D1CA836 Type:'int' index:2 mode:0x2 OUTPUT
+Function[17] 'LES_Test_InputParamMissing' returnType 'void' numParameters:4 numInputs:3 numOutputs:1 parameterDataSize:16
+  Function 'LES_Test_InputParamMissing' Member[0] 'output_0' 0x1D1CA836 Type:'unsigned int*' index:0 mode:0x2 OUTPUT
+  Function 'LES_Test_InputParamMissing' Member[1] 'input_0' 0x480D993 Type:'int' index:1 mode:0x1 INPUT
+  Function 'LES_Test_InputParamMissing' Member[2] 'input_1' 0x480D994 Type:'int' index:2 mode:0x1 INPUT
+  Function 'LES_Test_InputParamMissing' Member[3] 'input_2' 0x480D995 Type:'int' index:3 mode:0x1 INPUT
+Function[18] 'LES_Test_TooManyOutputParameters' returnType 'void' numParameters:3 numInputs:1 numOutputs:2 parameterDataSize:10
+  Function 'LES_Test_TooManyOutputParameters' Member[0] 'input_0' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
+  Function 'LES_Test_TooManyOutputParameters' Member[1] 'output_0' 0x1D1CA836 Type:'unsigned int*' index:1 mode:0x2 OUTPUT
+  Function 'LES_Test_TooManyOutputParameters' Member[2] 'output_1' 0x1D1CA837 Type:'unsigned short*' index:2 mode:0x2 OUTPUT
+Function[19] 'LES_Test_OutputWrongIndex' returnType 'void' numParameters:3 numInputs:1 numOutputs:2 parameterDataSize:12
+  Function 'LES_Test_OutputWrongIndex' Member[0] 'input_0' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
+  Function 'LES_Test_OutputWrongIndex' Member[1] 'output_0' 0x1D1CA836 Type:'int' index:1 mode:0x2 OUTPUT
+  Function 'LES_Test_OutputWrongIndex' Member[2] 'output_1' 0x1D1CA837 Type:'int' index:2 mode:0x2 OUTPUT
+Function[20] 'LES_Test_OutputNameIDNotFound' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:4
+  Function 'LES_Test_OutputNameIDNotFound' Member[0] 'NULL' 0x1D1CA836 Type:'int' index:0 mode:0x2 OUTPUT
+Function[21] 'LES_Test_OutputNameDoesntExist' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:4
+  Function 'LES_Test_OutputNameDoesntExist' Member[0] 'output_0' 0x1D1CA836 Type:'int' index:0 mode:0x2 OUTPUT
+Function[22] 'LES_Test_OutputNameHashIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:4
+  Function 'LES_Test_OutputNameHashIsWrong' Member[0] 'wrongHash' 0x1D1CA836 Type:'int' index:0 mode:0x2 OUTPUT
+Function[23] 'LES_Test_OutputNameStringIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:4
+  Function 'LES_Test_OutputNameStringIsWrong' Member[0] 'brokenString' 0x61782F3F Type:'int' index:0 mode:0x2 OUTPUT
+Function[24] 'LES_Test_OutputTypeIDNotFound' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:-1
+  Function 'LES_Test_OutputTypeIDNotFound' Member[0] 'output_0' 0x1D1CA836 Type:'NULL' index:0 mode:0x2 OUTPUT
+Function[25] 'LES_Test_OutputTypeHashIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:-1
+  Function 'LES_Test_OutputTypeHashIsWrong' Member[0] 'output_0' 0x1D1CA836 Type:'wrongHash' index:0 mode:0x2 OUTPUT
+Function[26] 'LES_Test_OutputTypeStringIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:-1
+  Function 'LES_Test_OutputTypeStringIsWrong' Member[0] 'output_0' 0x1D1CA836 Type:'brokenString' index:0 mode:0x2 OUTPUT
+Function[27] 'LES_Test_OutputGlobalIndexIsWrong' returnType 'void' numParameters:2 numInputs:1 numOutputs:1 parameterDataSize:8
+  Function 'LES_Test_OutputGlobalIndexIsWrong' Member[0] 'input_0' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
+  Function 'LES_Test_OutputGlobalIndexIsWrong' Member[1] 'output_0' 0x1D1CA836 Type:'int' index:1 mode:0x2 OUTPUT
+Function[28] 'LES_Test_OutputUsedAsInput' returnType 'void' numParameters:2 numInputs:1 numOutputs:1 parameterDataSize:8
+  Function 'LES_Test_OutputUsedAsInput' Member[0] 'input_0' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
+  Function 'LES_Test_OutputUsedAsInput' Member[1] 'output_0' 0x1D1CA836 Type:'int' index:1 mode:0x2 OUTPUT
+Function[29] 'LES_Test_OutputParamAlreadyUsed' returnType 'void' numParameters:3 numInputs:1 numOutputs:2 parameterDataSize:10
+  Function 'LES_Test_OutputParamAlreadyUsed' Member[0] 'input_0' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
+  Function 'LES_Test_OutputParamAlreadyUsed' Member[1] 'output_0' 0x1D1CA836 Type:'unsigned int*' index:1 mode:0x2 OUTPUT
+  Function 'LES_Test_OutputParamAlreadyUsed' Member[2] 'output_1' 0x1D1CA837 Type:'unsigned short*' index:2 mode:0x2 OUTPUT
+Function[30] 'LES_Test_OutputParamMissing' returnType 'void' numParameters:3 numInputs:1 numOutputs:2 parameterDataSize:10
+  Function 'LES_Test_OutputParamMissing' Member[0] 'input_0' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
+  Function 'LES_Test_OutputParamMissing' Member[1] 'output_0' 0x1D1CA836 Type:'unsigned int*' index:1 mode:0x2 OUTPUT
+  Function 'LES_Test_OutputParamMissing' Member[2] 'output_1' 0x1D1CA837 Type:'unsigned short*' index:2 mode:0x2 OUTPUT
+Function[31] 'LES_Test_InputOutputMixture' returnType 'void' numParameters:4 numInputs:2 numOutputs:2 parameterDataSize:9
+  Function 'LES_Test_InputOutputMixture' Member[0] 'input_0' 0x480D993 Type:'unsigned short' index:0 mode:0x1 INPUT
+  Function 'LES_Test_InputOutputMixture' Member[1] 'output_0' 0x1D1CA836 Type:'unsigned int*' index:1 mode:0x2 OUTPUT
+  Function 'LES_Test_InputOutputMixture' Member[2] 'input_1' 0x480D994 Type:'unsigned char' index:2 mode:0x1 INPUT
+  Function 'LES_Test_InputOutputMixture' Member[3] 'output_1' 0x1D1CA837 Type:'unsigned short*' index:3 mode:0x2 OUTPUT
+Function[32] 'LES_Test_InputParamUsedAsOutput' returnType 'void' numParameters:2 numInputs:1 numOutputs:1 parameterDataSize:6
+  Function 'LES_Test_InputParamUsedAsOutput' Member[0] 'input_0' 0x480D993 Type:'unsigned int' index:0 mode:0x1 INPUT
+  Function 'LES_Test_InputParamUsedAsOutput' Member[1] 'output_0' 0x1D1CA836 Type:'unsigned short' index:1 mode:0x2 OUTPUT
+Function[33] 'LES_Test_OutputParamUsedAsInput' returnType 'void' numParameters:2 numInputs:1 numOutputs:1 parameterDataSize:6
+  Function 'LES_Test_OutputParamUsedAsInput' Member[0] 'input_0' 0x480D993 Type:'output_only' index:0 mode:0x1 INPUT
+  Function 'LES_Test_OutputParamUsedAsInput' Member[1] 'output_0' 0x1D1CA836 Type:'unsigned short' index:1 mode:0x2 OUTPUT
+Function[34] 'LES_Test_ReadInputParameters' returnType 'void' numParameters:5 numInputs:5 numOutputs:0 parameterDataSize:15
+  Function 'LES_Test_ReadInputParameters' Member[0] 'input_0' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
+  Function 'LES_Test_ReadInputParameters' Member[1] 'input_1' 0x480D994 Type:'short' index:1 mode:0x1 INPUT
+  Function 'LES_Test_ReadInputParameters' Member[2] 'input_2' 0x480D995 Type:'char' index:2 mode:0x1 INPUT
+  Function 'LES_Test_ReadInputParameters' Member[3] 'input_3' 0x480D996 Type:'float' index:3 mode:0x1 INPUT
+  Function 'LES_Test_ReadInputParameters' Member[4] 'input_4' 0x480D997 Type:'int*' index:4 mode:0x1 INPUT
+Function[35] 'LES_Test_ReadOutputParameters' returnType 'void' numParameters:4 numInputs:0 numOutputs:4 parameterDataSize:11
+  Function 'LES_Test_ReadOutputParameters' Member[0] 'output_0' 0x1D1CA836 Type:'unsigned int*' index:0 mode:0x2 OUTPUT
+  Function 'LES_Test_ReadOutputParameters' Member[1] 'output_1' 0x1D1CA837 Type:'unsigned short*' index:1 mode:0x2 OUTPUT
+  Function 'LES_Test_ReadOutputParameters' Member[2] 'output_2' 0x1D1CA838 Type:'unsigned char*' index:2 mode:0x2 OUTPUT
+  Function 'LES_Test_ReadOutputParameters' Member[3] 'output_3' 0x1D1CA839 Type:'float*' index:3 mode:0x2 OUTPUT
+Function[36] 'LES_Test_ReadInputOutputParameters' returnType 'void' numParameters:9 numInputs:5 numOutputs:4 parameterDataSize:26
+  Function 'LES_Test_ReadInputOutputParameters' Member[0] 'input_0' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
+  Function 'LES_Test_ReadInputOutputParameters' Member[1] 'output_0' 0x1D1CA836 Type:'unsigned int*' index:1 mode:0x2 OUTPUT
+  Function 'LES_Test_ReadInputOutputParameters' Member[2] 'input_1' 0x480D994 Type:'short' index:2 mode:0x1 INPUT
+  Function 'LES_Test_ReadInputOutputParameters' Member[3] 'output_1' 0x1D1CA837 Type:'unsigned short*' index:3 mode:0x2 OUTPUT
+  Function 'LES_Test_ReadInputOutputParameters' Member[4] 'input_2' 0x480D995 Type:'char' index:4 mode:0x1 INPUT
+  Function 'LES_Test_ReadInputOutputParameters' Member[5] 'output_2' 0x1D1CA838 Type:'unsigned char*' index:5 mode:0x2 OUTPUT
+  Function 'LES_Test_ReadInputOutputParameters' Member[6] 'input_3' 0x480D996 Type:'float' index:6 mode:0x1 INPUT
+  Function 'LES_Test_ReadInputOutputParameters' Member[7] 'output_3' 0x1D1CA839 Type:'float*' index:7 mode:0x2 OUTPUT
+  Function 'LES_Test_ReadInputOutputParameters' Member[8] 'input_4' 0x480D997 Type:'int*' index:8 mode:0x1 INPUT
+Function[37] 'LES_Test_DecodeInputOutputParameters' returnType 'void' numParameters:11 numInputs:7 numOutputs:4 parameterDataSize:29
+  Function 'LES_Test_DecodeInputOutputParameters' Member[0] 'input_0' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
+  Function 'LES_Test_DecodeInputOutputParameters' Member[1] 'output_0' 0x1D1CA836 Type:'unsigned int*' index:1 mode:0x2 OUTPUT
+  Function 'LES_Test_DecodeInputOutputParameters' Member[2] 'input_1' 0x480D994 Type:'short' index:2 mode:0x1 INPUT
+  Function 'LES_Test_DecodeInputOutputParameters' Member[3] 'output_1' 0x1D1CA837 Type:'unsigned short*' index:3 mode:0x2 OUTPUT
+  Function 'LES_Test_DecodeInputOutputParameters' Member[4] 'input_2' 0x480D995 Type:'char' index:4 mode:0x1 INPUT
+  Function 'LES_Test_DecodeInputOutputParameters' Member[5] 'output_2' 0x1D1CA838 Type:'unsigned char*' index:5 mode:0x2 OUTPUT
+  Function 'LES_Test_DecodeInputOutputParameters' Member[6] 'input_3' 0x480D996 Type:'float' index:6 mode:0x1 INPUT
+  Function 'LES_Test_DecodeInputOutputParameters' Member[7] 'output_3' 0x1D1CA839 Type:'float*' index:7 mode:0x2 OUTPUT
+  Function 'LES_Test_DecodeInputOutputParameters' Member[8] 'input_4' 0x480D997 Type:'int*' index:8 mode:0x1 INPUT
+  Function 'LES_Test_DecodeInputOutputParameters' Member[9] 'input_5' 0x480D998 Type:'short*' index:9 mode:0x1 INPUT
+  Function 'LES_Test_DecodeInputOutputParameters' Member[10] 'input_6' 0x480D999 Type:'char*' index:10 mode:0x1 INPUT
+Function[38] 'LES_Test_StructInputParam' returnType 'void' numParameters:5 numInputs:5 numOutputs:0 parameterDataSize:88
+  Function 'LES_Test_StructInputParam' Member[0] 'input_0' 0x480D993 Type:'TestStruct2' index:0 mode:0x1 INPUT
+  Function 'LES_Test_StructInputParam' Member[1] 'input_1' 0x480D994 Type:'int' index:1 mode:0x1 INPUT
+  Function 'LES_Test_StructInputParam' Member[2] 'input_2' 0x480D995 Type:'TestStruct1' index:2 mode:0x1 INPUT
+  Function 'LES_Test_StructInputParam' Member[3] 'input_3' 0x480D996 Type:'TestStruct3' index:3 mode:0x1 INPUT
+  Function 'LES_Test_StructInputParam' Member[4] 'input_4' 0x480D997 Type:'TestStruct4*' index:4 mode:0x1 INPUT
+Function[39] 'LES_Test_StructOutputParam' returnType 'void' numParameters:2 numInputs:0 numOutputs:2 parameterDataSize:35
+  Function 'LES_Test_StructOutputParam' Member[0] 'out_0' 0x49B257D7 Type:'TestStruct3*' index:0 mode:0x2 OUTPUT
+  Function 'LES_Test_StructOutputParam' Member[1] 'out_1' 0x49B257D8 Type:'TestStruct4*' index:1 mode:0x2 OUTPUT
+Function[40] 'LES_Test_StructInputOutputParam' returnType 'void' numParameters:2 numInputs:1 numOutputs:1 parameterDataSize:9
+  Function 'LES_Test_StructInputOutputParam' Member[0] 'in_0' 0x6BBAD93E Type:'TestStruct5*' index:0 mode:0x1 INPUT
+  Function 'LES_Test_StructInputOutputParam' Member[1] 'out_0' 0x49B257D7 Type:'TestStruct6*' index:1 mode:0x2 OUTPUT
+Function[41] 'LES_Test_ReferenceInputPODParam' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:4
+  Function 'LES_Test_ReferenceInputPODParam' Member[0] 'input_0' 0x480D993 Type:'int&' index:0 mode:0x1 INPUT
+Function[42] 'LES_Test_ReferenceInputStructParam' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:19
+  Function 'LES_Test_ReferenceInputStructParam' Member[0] 'input_0' 0x480D993 Type:'TestStruct1&' index:0 mode:0x1 INPUT
+Function[43] 'LES_Test_ReferenceOutputPODParam' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:1
+  Function 'LES_Test_ReferenceOutputPODParam' Member[0] 'output_0' 0x1D1CA836 Type:'char&' index:0 mode:0x2 OUTPUT
+Function[44] 'LES_Test_ReferenceOutputStructParam' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:30
+  Function 'LES_Test_ReferenceOutputStructParam' Member[0] 'output_0' 0x1D1CA836 Type:'TestStruct2&' index:0 mode:0x2 OUTPUT
+Function[45] 'LES_Test_ReferenceStructInputParam' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:9
+  Function 'LES_Test_ReferenceStructInputParam' Member[0] 'input_0' 0x480D993 Type:'TestStruct7&' index:0 mode:0x1 INPUT
+Function[46] 'LES_Test_ReferenceStructOutputParam' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:6
+  Function 'LES_Test_ReferenceStructOutputParam' Member[0] 'output_0' 0x1D1CA836 Type:'TestStruct8&' index:0 mode:0x2 OUTPUT
+Function[47] 'LES_Test_DecodeOutputParameters' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:1
+  Function 'LES_Test_DecodeOutputParameters' Member[0] 'output_0' 0x1D1CA836 Type:'char&' index:0 mode:0x2 OUTPUT
+Function[48] 'LES_Test_DecodeInputArrayPOD' returnType 'void' numParameters:2 numInputs:2 numOutputs:0 parameterDataSize:9
+  Function 'LES_Test_DecodeInputArrayPOD' Member[0] 'input_0' 0x480D993 Type:'char[3]' index:0 mode:0x1 INPUT
+  Function 'LES_Test_DecodeInputArrayPOD' Member[1] 'input_1' 0x480D994 Type:'short[3]' index:1 mode:0x1 INPUT
+Function[49] 'LES_Test_DecodeOutputArrayPOD' returnType 'void' numParameters:2 numInputs:0 numOutputs:2 parameterDataSize:18
+  Function 'LES_Test_DecodeOutputArrayPOD' Member[0] 'output_0' 0x1D1CA836 Type:'short[3]' index:0 mode:0x2 OUTPUT
+  Function 'LES_Test_DecodeOutputArrayPOD' Member[1] 'output_1' 0x1D1CA837 Type:'int[3]' index:1 mode:0x2 OUTPUT
+Function[50] 'LES_Test_DecodeInputArraySTRUCTA' returnType 'void' numParameters:2 numInputs:2 numOutputs:0 parameterDataSize:79
+  Function 'LES_Test_DecodeInputArraySTRUCTA' Member[0] 'input_0' 0x480D993 Type:'TestStruct2[2]' index:0 mode:0x1 INPUT
+  Function 'LES_Test_DecodeInputArraySTRUCTA' Member[1] 'input_1' 0x480D994 Type:'TestStruct1[1]' index:1 mode:0x1 INPUT
+Function[51] 'LES_Test_DecodeInputArraySTRUCTB' returnType 'void' numParameters:2 numInputs:2 numOutputs:0 parameterDataSize:68
+  Function 'LES_Test_DecodeInputArraySTRUCTB' Member[0] 'input_0' 0x480D993 Type:'TestStruct1[2]' index:0 mode:0x1 INPUT
+  Function 'LES_Test_DecodeInputArraySTRUCTB' Member[1] 'input_1' 0x480D994 Type:'TestStruct2[1]' index:1 mode:0x1 INPUT
+Function[52] 'LES_Test_DecodeOutputArraySTRUCT' returnType 'void' numParameters:2 numInputs:0 numOutputs:2 parameterDataSize:46
+  Function 'LES_Test_DecodeOutputArraySTRUCT' Member[0] 'output_0' 0x1D1CA836 Type:'TestStruct3[2]' index:0 mode:0x2 OUTPUT
+  Function 'LES_Test_DecodeOutputArraySTRUCT' Member[1] 'output_1' 0x1D1CA837 Type:'TestStruct4[1]' index:1 mode:0x2 OUTPUT
+Function[53] 'LES_Test_DecodeInputArrayReference' returnType 'void' numParameters:2 numInputs:2 numOutputs:0 parameterDataSize:9
+  Function 'LES_Test_DecodeInputArrayReference' Member[0] 'input_0' 0x480D993 Type:'char&[3]' index:0 mode:0x1 INPUT
+  Function 'LES_Test_DecodeInputArrayReference' Member[1] 'input_1' 0x480D994 Type:'short&[3]' index:1 mode:0x1 INPUT
+Function[54] 'LES_Test_DecodeOutputArrayReference' returnType 'void' numParameters:2 numInputs:0 numOutputs:2 parameterDataSize:18
+  Function 'LES_Test_DecodeOutputArrayReference' Member[0] 'output_0' 0x1D1CA836 Type:'short&[3]' index:0 mode:0x2 OUTPUT
+  Function 'LES_Test_DecodeOutputArrayReference' Member[1] 'output_1' 0x1D1CA837 Type:'int&[3]' index:1 mode:0x2 OUTPUT
+Function[55] 'LES_Test_DecodeInputStructPODArray' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:6
+  Function 'LES_Test_DecodeInputStructPODArray' Member[0] 'input_0' 0x480D993 Type:'TestStruct9' index:0 mode:0x1 INPUT
+Function[56] 'LES_Test_DecodeInputStructStructArray' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:18
+  Function 'LES_Test_DecodeInputStructStructArray' Member[0] 'input_0' 0x480D993 Type:'TestStruct10' index:0 mode:0x1 INPUT
+Function[57] 'LES_Test_DecodeInputStructPODArrayReference' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:19
+  Function 'LES_Test_DecodeInputStructPODArrayReference' Member[0] 'input_0' 0x480D993 Type:'TestStruct11' index:0 mode:0x1 INPUT
