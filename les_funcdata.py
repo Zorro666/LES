@@ -470,7 +470,8 @@ class LES_FunctionData():
 
 #				les_logger.Log("Function '%s' AddParameter[%d] type:'%s' name:'%s'", functionName, numAdded, memberType, memberName)
 
-				if functionDefinition.AddParameter(isInput, memberType, memberName, self.__m_stringTable__, self.__m_typeData__, self) == False:
+				if functionDefinition.AddParameter(isInput, memberType, memberName, 
+																					 self.__m_stringTable__, self.__m_typeData__, self.__m_structData__) == False:
 					les_logger.Error("LES_FunctionData::parseXML '%s' AddParameter Type:'%s' Name:'%s' failed attribute:%s", 
 														functionName, memberType, memberName, xml.etree.ElementTree.tostring(memberXML))
 					numErrors += 1
