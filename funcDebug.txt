@@ -1,4 +1,4 @@
-numFunctionDefinitions:58
+numFunctionDefinitions:59 FuncData:1 Internal:58
 Function[0] 'PyTestFunction1' returnType 'int' numParameters:3 numInputs:2 numOutputs:1 parameterDataSize:13
   Function 'PyTestFunction1' Member[0] 'm_longlong' 0x82F4779E Type:'long long int' index:0 mode:0x1 INPUT
   Function 'PyTestFunction1' Member[1] 'm_char' 0x431FFB4 Type:'char' index:1 mode:0x1 INPUT
@@ -181,3 +181,5 @@ Function[56] 'LES_Test_DecodeInputStructStructArray' returnType 'void' numParame
   Function 'LES_Test_DecodeInputStructStructArray' Member[0] 'input_0' 0x480D993 Type:'TestStruct10' index:0 mode:0x1 INPUT
 Function[57] 'LES_Test_DecodeInputStructPODArrayReference' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:19
   Function 'LES_Test_DecodeInputStructPODArrayReference' Member[0] 'input_0' 0x480D993 Type:'TestStruct11' index:0 mode:0x1 INPUT
+Function[58] 'LES_Test_DecodeInputStructStructArrayReference' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:37
+  Function 'LES_Test_DecodeInputStructStructArrayReference' Member[0] 'input_0' 0x480D993 Type:'TestStruct12' index:0 mode:0x1 INPUT

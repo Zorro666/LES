@@ -1,4 +1,4 @@
-numTypes:74
+numTypes:74 TypeData:74 Internal:0
 Type[0] name:'unsigned char' hash:0x6E40A25D size:1 flags:0x5 INPUT|POD aliasedName:'unsigned char' aliasedID:0 numElements:0
 Type[1] name:'unsigned short' hash:0x3B779699 size:2 flags:0x5 INPUT|POD aliasedName:'unsigned short' aliasedID:1 numElements:0
 Type[2] name:'unsigned int' hash:0xA31138D4 size:4 flags:0x5 INPUT|POD aliasedName:'unsigned int' aliasedID:2 numElements:0

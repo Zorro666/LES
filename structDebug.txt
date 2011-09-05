@@ -1,4 +1,4 @@
-numStructDefinitions:15
+numStructDefinitions:15 StructData:15 Internal:0
 Struct[0] 'TestStruct1' numMembers[5]
   Struct 'TestStruct1' Member[0] Type:'long long int' Name:'m_longlong' 0x82F4779E size:8 alignmentPadding:0
   Struct 'TestStruct1' Member[1] Type:'char' Name:'m_char' 0x431FFB4 size:1 alignmentPadding:0

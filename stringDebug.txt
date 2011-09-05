@@ -1,4 +1,4 @@
-numStringEntries:180
+numStringEntries:180 StringTable:91 Internal:89
 String[0] name:'unsigned char' hash:0x6E40A25D
 String[1] name:'unsigned short' hash:0x3B779699
 String[2] name:'unsigned int' hash:0xA31138D4
