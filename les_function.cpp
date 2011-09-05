@@ -459,7 +459,13 @@ int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefiniti
 	}
 	else
 	{
-		LES_FATAL_ERROR("NEED TO ERROR CHECK THE PARAMETER DATA SIZE FOR EXISTING FUNCTION DEFINITIONS");
+		const LES_FunctionDefinition* const pFunctionDefinition2 = LES_GetFunctionDefinitionForID(index);
+		if (pFunctionDefinition2->GetParameterDataSize() != parameterDataSize)
+		{
+			LES_ERROR("AddFunctionDefinition '%s' parameterDataSize doesn't match FuncData:%d Code:%d", name, 
+								pFunctionDefinition2->GetParameterDataSize(), parameterDataSize);
+			return -1;
+		}
 	}
 
 	return index;
