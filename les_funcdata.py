@@ -105,40 +105,40 @@ class LES_FunctionDefinintion():
 			numAddedInputs = self.__m_numAddedInputs__
 			maxNumInputs = self.GetNumInputs()
 			if numAddedInputs >= maxNumInputs:
-				les_logger.FatalError("AddParameter function '%s' : InputParameterIndex too big index:%d max:%d parameter:'%s' type:'%s'",
-															functionName, self.__m_numAddedInputs__,  maxNumInputs, name, typeName)
+				les_logger.Error("AddParameter function '%s' : InputParameterIndex too big index:%d max:%d parameter:'%s' type:'%s'",
+												 functionName, self.__m_numAddedInputs__,  maxNumInputs, name, typeName)
 				return False
 		else:
 		 	paramMode = LES_PARAM_MODE_OUTPUT
 			numAddedOutputs = self.__m_numAddedOutputs__
 			maxNumOutputs = self.GetNumOutputs()
 			if numAddedOutputs >= maxNumOutputs:
-				les_logger.FatalError("AddParameter function '%s' : OutputParameterIndex too big index:%d max:%d parameter:'%s' type:'%s'",
-															functionName, self.__m_numAddedOutputs__,  maxNumOutputs, name, typeName)
+				les_logger.Error("AddParameter function '%s' : OutputParameterIndex too big index:%d max:%d parameter:'%s' type:'%s'",
+												 functionName, self.__m_numAddedOutputs__,  maxNumOutputs, name, typeName)
 				return False
 		
 		nameHash = les_hash.GenerateHashCaseSensitive(name)
 		# Test to see if the parameter has already been added
 		if self.GetParameter(nameHash):
-			les_logger.FatalError("AddParameter function '%s' : parameter '%s' already exists type:'%s'", functionName, name, typeName)
+			les_logger.Error("AddParameter function '%s' : parameter '%s' already exists type:'%s'", functionName, name, typeName)
 			return False
 
 		typeID = stringTable.getStringID(typeName)
 		typeEntry = typeData.getTypeData(typeName)
 		if typeEntry == None:
-			les_logger.FatalError("AddParameter function '%s' : parameter '%s' type '%s' not found", functionName, name, typeName)
+			les_logger.Error("AddParameter function '%s' : parameter '%s' type '%s' not found", functionName, name, typeName)
 			return False
 		else:
 			typeDataStorageSize = les_structdata.ComputeDataStorageSize(typeEntry, stringTable, typeData, structData)
 			if typeDataStorageSize < 0:
-				les_logger.FatalError("AddParameter function '%s' : parameter '%s' type:'%s' invalid typeDataStorageSize",
-															functionName, name, typeName)
+				les_logger.Error("AddParameter function '%s' : parameter '%s' type:'%s' invalid typeDataStorageSize",
+												 functionName, name, typeName)
 				return False
 
 		typeFlags = typeEntry.m_flags
 		if (typeFlags & paramMode == 0):
-			les_logger.FatalError("AddParameter function '%s' : parameter '%s' type:'%s' mode:0x%X %s incorrect for typeFlags:0x%X %s",
-														functionName, name, typeName, paramMode, les_typedata.decodeFlags(paramMode), 
+			les_logger.Error("AddParameter function '%s' : parameter '%s' type:'%s' mode:0x%X %s incorrect for typeFlags:0x%X %s",
+											 functionName, name, typeName, paramMode, les_typedata.decodeFlags(paramMode), 
 														typeFlags, les_typedata.decodeFlags(typeFlags))
 			return False
 

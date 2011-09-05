@@ -1,17 +1,17 @@
 <?xml version='1.0' ?>
 <LES_FUNCTIONS>
 <!---
-Function[47] 'LES_Test_InputNameIDNotFound' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:4
-Function[48] 'LES_Test_InputNameHashIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:4
-Function[49] 'LES_Test_InputTypeIDNotFound' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:-1
-Function[50] 'LES_Test_InputTypeHashIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:-1
-Function[51] 'LES_Test_InputTypeStringIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:-1
-Function[52] 'LES_Test_OutputNameIDNotFound' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:4
-Function[53] 'LES_Test_OutputNameHashIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:4
-Function[54] 'LES_Test_OutputTypeIDNotFound' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:-1
-Function[55] 'LES_Test_OutputTypeHashIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:-1
-Function[56] 'LES_Test_OutputTypeStringIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:-1
-Function[57] 'LES_Test_InputParamUsedAsOutput' returnType 'void' numParameters:2 numInputs:1 numOutputs:1 parameterDataSize:6
-Function[58] 'LES_Test_OutputParamUsedAsInput' returnType 'void' numParameters:2 numInputs:1 numOutputs:1 parameterDataSize:6
+'LES_Test_InputNameIDNotFound' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:4
+'LES_Test_InputNameHashIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:4
+'LES_Test_InputTypeIDNotFound' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:-1
+'LES_Test_InputTypeHashIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:-1
+'LES_Test_InputTypeStringIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:-1
+'LES_Test_OutputNameIDNotFound' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:4
+'LES_Test_OutputNameHashIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:4
+'LES_Test_OutputTypeIDNotFound' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:-1
+'LES_Test_OutputTypeHashIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:-1
+'LES_Test_OutputTypeStringIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:-1
+'LES_Test_InputParamUsedAsOutput' returnType 'void' numParameters:2 numInputs:1 numOutputs:1 parameterDataSize:6
+'LES_Test_OutputParamUsedAsInput' returnType 'void' numParameters:2 numInputs:1 numOutputs:1 parameterDataSize:6
 -->
 </LES_FUNCTIONS>
