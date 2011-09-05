@@ -1,6 +1,10 @@
 High Priority:
+FUNCDATA: fill up the test XML with real test function data from C++
 TEST: load and use definition file (type, string, structures, functions)
 TEST: load and use definition file: do not allow local C++ creation of new data (type, string, structures, functions)
+
+STRUCTDATA: error xml
+FUNCDATA: error xml
 
 Medium Priority:
 SERVER: up and running ready for client to connect
