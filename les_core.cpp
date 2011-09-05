@@ -22,6 +22,8 @@ extern void LES_DebugOutputTypeEntry(LES_LoggerChannel* const pLogChannel, const
 extern void LES_DebugOutputStructDefinition(LES_LoggerChannel* const pLogChannel, 
 																						const LES_StructDefinition* const pStructDefinition, const int i);
 
+extern void LES_Type_SetTypeDataPtr(const LES_TypeData* const pTypeData);
+extern void LES_Struct_SetStructDataPtr(const LES_StructData* const pStructData);
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Internal Static functions

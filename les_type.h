@@ -6,7 +6,6 @@
 
 struct LES_StringEntry;
 class LES_LoggerChannel;
-class LES_TypeData;
 
 #define LES_TYPE_INPUT 				(1<< 0)
 #define LES_TYPE_OUTPUT 			(1<< 1)
@@ -47,6 +46,5 @@ public:
 const LES_TypeEntry* LES_GetTypeEntry(const LES_StringEntry* const typeStringEntry);
 void LES_DebugOutputTypes(LES_LoggerChannel* const pLogChannel);
 void LES_Type_DecodeFlags(char* const flagsDecoded, const LES_uint flags);
-void LES_Type_SetTypeDataPtr(const LES_TypeData* const pTypeData);
 
 #endif // #ifndef LES_TYPE_HH

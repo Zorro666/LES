@@ -228,6 +228,7 @@ int LES_TypeEntry::ComputeAlignment(void) const
 void LES_DebugOutputTypes(LES_LoggerChannel* const pLogChannel)
 {
 	const int numTypes = les_typeDataNumTypes + les_numTypeEntries;
+	pLogChannel->Print("numTypes:%d", numTypes);
 	for (int i = 0; i < numTypes; i++)
 	{
 		const LES_TypeEntry* const pTypeEntry = LES_GetTypeEntryForID(i);
@@ -307,13 +308,6 @@ void LES_Type_DecodeFlags(char* const flagsDecoded, const LES_uint flags)
 		strcat(flagsDecoded, "ARRAY");
 		needsPipe = true;
 	}
-}
-
-void LES_Type_SetTypeDataPtr(const LES_TypeData* const pTypeData)
-{
-	les_pTypeData = pTypeData;
-	const int numTypes = pTypeData->GetNumTypes();
-	les_typeDataNumTypes = numTypes;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -490,3 +484,11 @@ void LES_DebugOutputTypeEntry(LES_LoggerChannel* const pLogChannel, const LES_Ty
 											i, name, hash, dataSize, flags, flagsDecoded,
 											aliasedName, aliasedTypeID, numElements);
 }
+
+void LES_Type_SetTypeDataPtr(const LES_TypeData* const pTypeData)
+{
+	les_pTypeData = pTypeData;
+	const int numTypes = pTypeData->GetNumTypes();
+	les_typeDataNumTypes = numTypes;
+}
+
