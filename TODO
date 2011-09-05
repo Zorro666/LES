@@ -1,5 +1,4 @@
 High Priority:
-TEST: dump function data debug command
 TEST: load and use definition file (type, string, structures, functions)
 TEST: load and use definition file: do not allow local C++ creation of new data (type, string, structures, functions)
 
