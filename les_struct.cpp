@@ -115,18 +115,12 @@ const LES_StructDefinition* LES_GetStructDefinition(const LES_Hash nameHash)
 void LES_DebugOutputStructs(LES_LoggerChannel* const pLogChannel)
 {
 	const int numStructDefinitions = les_structDataNumStructDefinitions + les_numStructDefinitions;
+	pLogChannel->Print("numStructDefinitions:%d", numStructDefinitions);
 	for (int i = 0; i < numStructDefinitions; i++)
 	{
 		const LES_StructDefinition* const pStructDefinition = LES_GetStructDefinitionForID(i);
 		LES_DebugOutputStructDefinition(pLogChannel, pStructDefinition, i);
 	}
-}
-
-void LES_Struct_SetStructDataPtr(const LES_StructData* const pStructData)
-{
-	les_pStructData = pStructData;
-	const int numStructDefintiions = pStructData->GetNumStructDefinitions();
-	les_structDataNumStructDefinitions = numStructDefintiions;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -274,3 +268,11 @@ void LES_DebugOutputStructDefinition(LES_LoggerChannel* const pLogChannel, const
 											 structName, m, typeName, memberName, hash, dataSize, alignmentPadding);
 	}
 }
+
+void LES_Struct_SetStructDataPtr(const LES_StructData* const pStructData)
+{
+	les_pStructData = pStructData;
+	const int numStructDefintiions = pStructData->GetNumStructDefinitions();
+	les_structDataNumStructDefinitions = numStructDefintiions;
+}
+
