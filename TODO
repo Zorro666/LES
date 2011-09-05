@@ -1,5 +1,8 @@
 High Priority:
+TEST: TooManyInput or TooManyOutput parameters need to catch the fatalerror and handle it
+FUNCDATA: TooManyInput or TooManyOutput parameters need to catch the fatalerror and handle it
 FUNCDATA: fill up the test XML with real test function data from C++
+FUNCDATA: fill up the errors XML with real errors function defintiions
 TEST: load and use definition file (type, string, structures, functions)
 TEST: load and use definition file: do not allow local C++ creation of new data (type, string, structures, functions)
 
