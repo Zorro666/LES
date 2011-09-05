@@ -115,7 +115,8 @@ const LES_StructDefinition* LES_GetStructDefinition(const LES_Hash nameHash)
 void LES_DebugOutputStructs(LES_LoggerChannel* const pLogChannel)
 {
 	const int numStructDefinitions = les_structDataNumStructDefinitions + les_numStructDefinitions;
-	pLogChannel->Print("numStructDefinitions:%d", numStructDefinitions);
+	pLogChannel->Print("numStructDefinitions:%d StructData:%d Internal:%d", 
+										 numStructDefinitions, les_structDataNumStructDefinitions, les_numStructDefinitions);
 	for (int i = 0; i < numStructDefinitions; i++)
 	{
 		const LES_StructDefinition* const pStructDefinition = LES_GetStructDefinitionForID(i);

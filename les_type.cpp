@@ -228,7 +228,7 @@ int LES_TypeEntry::ComputeAlignment(void) const
 void LES_DebugOutputTypes(LES_LoggerChannel* const pLogChannel)
 {
 	const int numTypes = les_typeDataNumTypes + les_numTypeEntries;
-	pLogChannel->Print("numTypes:%d", numTypes);
+	pLogChannel->Print("numTypes:%d TypeData:%d Internal:%d", numTypes, les_typeDataNumTypes, les_numTypeEntries);
 	for (int i = 0; i < numTypes; i++)
 	{
 		const LES_TypeEntry* const pTypeEntry = LES_GetTypeEntryForID(i);
