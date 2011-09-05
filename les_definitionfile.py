@@ -27,6 +27,7 @@ def loadTypeData(typeData):
 def loadStructData(structData):
 	if structData.loadXML("data/les_structs_test.xml") == False:
 		les_logger.FatalError("ERROR loading data/les_structs_test.xml")
+	structData.loadXML("data/les_structs_errors.xml")
 
 def loadFunctionData(functionData):
 	if functionData.loadXML("data/les_functions_test.xml") == False:

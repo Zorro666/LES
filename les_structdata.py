@@ -82,20 +82,20 @@ class LES_StructDefinintion():
 		maxNumMembers = self.GetNumMembers()
 		numAddedMembers = self.__m_numAddedMembers__
 		if numAddedMembers >= maxNumMembers:
-			les_logger.FatalError("AddMember struct '%s' : MemberIndex too big index:%d max:%d member:'%s' type:'%s'",
-														structName, self.__m_numAddedMembers__,  maxNumMembers, name, typeName)
+			les_logger.Error("AddMember struct '%s' : MemberIndex too big index:%d max:%d member:'%s' type:'%s'",
+											 structName, self.__m_numAddedMembers__,  maxNumMembers, name, typeName)
 			return False
 
 		nameHash = les_hash.GenerateHashCaseSensitive(name)
 		# Test to see if the member has already been added
 		if self.GetMember(nameHash):
-			les_logger.FatalError("AddMember struct '%s' : member '%s' already exists type:'%s'", structName, name, typeName)
+			les_logger.Error("AddMember struct '%s' : member '%s' already exists type:'%s'", structName, name, typeName)
 			return False
 
 		typeID = stringTable.getStringID(typeName)
 		typeEntry = typeData.getTypeData(typeName)
 		if typeEntry == None:
-			les_logger.FatalError("AddMember struct '%s' : member '%s' type '%s' not found", structName, name, typeName)
+			les_logger.Error("AddMember struct '%s' : member '%s' type '%s' not found", structName, name, typeName)
 			return False
 
 		memberDataSize = typeEntry.m_dataSize
@@ -109,7 +109,7 @@ class LES_StructDefinintion():
 
 		memberAlignment = ComputeAlignment(typeEntry, stringTable, typeData, structData)
 		if memberAlignment < 0:
-			les_logger.FatalError("Struct:'%s' AddMember:'%s' Type:'%s' 0x%X ComputeAlignment failed",
+			les_logger.Error("Struct:'%s' AddMember:'%s' Type:'%s' 0x%X ComputeAlignment failed",
 														structName, name, typeName, typeEntry.m_hash)
 		if memberAlignment > self.__m_maxMemberSizeAlignment__:
 			self.__m_maxMemberSizeAlignment__ = memberAlignment
@@ -129,7 +129,7 @@ class LES_StructDefinintion():
 		self.__m_finalised__ = False
 		if self.__m_numAddedMembers__ != self.__m_numMembers__:
 				les_logger.Error("LES_StructDefintion::Finalise '%s' not enough members added numAdded:%d numMembers:%d", 
-												 structName, numAdded, numMembers)
+												 structName, self.__m_numAddedMembers__, self.__m_numMembers__)
 				return False
 		# Align the structure to the biggest size in the structure but a maximum of 4-byte or 8-byte
 		# should make the 4-byte or 8-byte a variable (from global XML params)
@@ -344,7 +344,7 @@ class LES_StructData():
 
 			if self.doesStructDefinitionExist(structName):
 				les_logger.Error("LES_StructData::parseXML '%s' already exists", structName)
-				numErorrs += 1
+				numErrors += 1
 				continue
 
 			structNameID = self.__m_stringTable__.addString(structName)
@@ -449,11 +449,11 @@ def GetRootType(typeEntry, stringTable, typeData):
 #		les_logger.Log("Type 0x%X alias:%d flags:0x%X", typeEntry.m_hash, aliasedTypeID, flags)
 		aliasedStringType = stringTable.getString(aliasedTypeID)
 		if aliasedStringType == None:
-			les_logger.FatalError("GetRootType aliased type:%d string can't be found", aliasedTypeID)
+			les_logger.Error("GetRootType aliased type:%d string can't be found", aliasedTypeID)
 			return -1
 		aliasedTypeEntry = typeData.getTypeData(aliasedStringType)
 		if aliasedTypeEntry == None:
-			les_logger.FatalError("GetRootType aliased type not found aliased type:'%s'", aliasedStringType)
+			les_logger.Error("GetRootType aliased type not found aliased type:'%s'", aliasedStringType)
 			return -1
 #		les_logger.Log("GetRootType Type 0x%X alias:%s", typeEntry.m_hash, aliasedStringType)
 
@@ -543,7 +543,7 @@ def StructComputeAlignmentPadding(totalMemberSize, memberDataSize):
 
 #	les_logger.Log("TotalMemberSize:0x%X MemberDataSize:0x%X Alignment:%d", totalMemberSize, memberDataSize, alignmentPadding)
 	if alignmentPadding < 0:
-		les_logger.FatalError("StructComputeAlignmentPadding alignmentPadding < 0 :%d", alignmentPadding)
+		les_logger.Error("StructComputeAlignmentPadding alignmentPadding < 0 :%d", alignmentPadding)
 
 	return alignmentPadding
 
