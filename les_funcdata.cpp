@@ -3,6 +3,12 @@
 #include "les_logger.h"
 #include "les_stringentry.h"
 
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Public External functions
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
 int LES_FuncData::GetFunctionDefinitionIndex(const LES_Hash nameHash) const
 {
 	/* This is horribly slow - need hash lookup table */
@@ -13,6 +19,21 @@ int LES_FuncData::GetFunctionDefinitionIndex(const LES_Hash nameHash) const
 		const int nameID = pFunctionDefinition->GetNameID();
 		const LES_StringEntry* const pFunctionNameStringEntry = LES_GetStringEntryForID(nameID);
 		if (pFunctionNameStringEntry->m_hash == nameHash)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+int LES_FuncData::GetFunctionDefinitionIndexByNameID(const int nameID) const
+{
+	/* This is horribly slow - need hash lookup table */
+	const int numFunctionDefinitions = m_numFunctionDefinitions;
+	for (int i = 0; i < numFunctionDefinitions; i++)
+	{
+		const LES_FunctionDefinition* const pFunctionDefinition = GetFunctionDefinition(i);
+		if (pFunctionDefinition->GetNameID() == nameID)
 		{
 			return i;
 		}

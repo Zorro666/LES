@@ -20,6 +20,7 @@ public:
 	int GetNumFunctionDefinitions(void) const;
 	const LES_FunctionDefinition* GetFunctionDefinition(const int index) const;
 	int GetFunctionDefinitionIndex(const LES_Hash nameHash) const;
+	int GetFunctionDefinitionIndexByNameID(const int nameID) const;
 
 	friend class LES_DefinitionFile;
 private:
