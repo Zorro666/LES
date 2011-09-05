@@ -1,4 +1,4 @@
-numFunctionDefinitions:59 FuncData:1 Internal:58
+numFunctionDefinitions:59 FuncData:2 Internal:57
 Function[0] 'PyTestFunction1' returnType 'int' numParameters:3 numInputs:2 numOutputs:1 parameterDataSize:13
   Function 'PyTestFunction1' Member[0] 'm_longlong' 0x82F4779E Type:'long long int' index:0 mode:0x1 INPUT
   Function 'PyTestFunction1' Member[1] 'm_char' 0x431FFB4 Type:'char' index:1 mode:0x1 INPUT
