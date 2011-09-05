@@ -5,11 +5,13 @@
 		<LES_FUNCTION_INPUT_PARAMETER type="char" name="m_char"/>
 		<LES_FUNCTION_OUTPUT_PARAMETER type="int*" name="m_int"/>
 	</LES_FUNCTION>
+
 	<LES_FUNCTION name="jakeInit" returnType="void" numInputs="2" numOutputs="1">
 	  <LES_FUNCTION_INPUT_PARAMETER type="int" name="a"/>
 	  <LES_FUNCTION_INPUT_PARAMETER type="short" name="b"/>
 	  <LES_FUNCTION_OUTPUT_PARAMETER type="float*" name="rPtr"/>
 	</LES_FUNCTION>
+
 	<LES_FUNCTION name="LES_Test_ReturnTypeHashIsWrong" returnType="void" numInputs="0" numOutputs="0">
 	</LES_FUNCTION>
 
