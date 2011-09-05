@@ -19,42 +19,38 @@
 	<LES_FUNCTION name="LES_Test_TooManyInputParameters" returnType="void" numInputs="2" numOutputs="1">
 	<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_0"/>
 	<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_1"/>
-	<LES_FUNCTION_INPUT_PARAMETER type="int" name="output_0"/>
+	<LES_FUNCTION_OUTPUT_PARAMETER type="int*" name="output_0"/>
 	</LES_FUNCTION>
 
 	<LES_FUNCTION name="LES_Test_InputWrongIndex" returnType="void" numInputs="2" numOutputs="1">
 	<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_0"/>
 	<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_1"/>
-	<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="output_0"/>
+	<LES_FUNCTION_OUTPUT_PARAMETER type="int*" name="output_0"/>
 	</LES_FUNCTION>
 
 	<LES_FUNCTION name="LES_Test_InputNameDoesntExist" returnType="void" numInputs="1" numOutputs="1">
 	<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_0"/>
-	<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="output_0"/>
+	<LES_FUNCTION_OUTPUT_PARAMETER type="int*" name="output_0"/>
 	</LES_FUNCTION>
 
 	<LES_FUNCTION name="LES_Test_InputNameStringIsWrong" returnType="void" numInputs="1" numOutputs="0">
 	<LES_FUNCTION_INPUT_PARAMETER type="int" name="InputNameBrokenHash"/>
 	</LES_FUNCTION>
 
-	<LES_FUNCTION name="LES_Test_InputTypeStringIsWrong" returnType="void" numInputs="1" numOutputs="0">
-	<LES_FUNCTION_INPUT_PARAMETER type="InputTypeBrokenHash" name="input_0"/>
-	</LES_FUNCTION>
-
 	<LES_FUNCTION name="LES_Test_InputGlobalIndexIsWrong" returnType="void" numInputs="1" numOutputs="1">
-	<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="output_0"/>
+	<LES_FUNCTION_OUTPUT_PARAMETER type="int*" name="output_0"/>
 	<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_0"/>
 	</LES_FUNCTION>
 
 	<LES_FUNCTION name="LES_Test_InputUsedAsOutput" returnType="void" numInputs="1" numOutputs="1">
 	<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_0"/>
-	<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="output_0"/>
+	<LES_FUNCTION_OUTPUT_PARAMETER type="int*" name="output_0"/>
 	</LES_FUNCTION>
 
 	<LES_FUNCTION name="LES_Test_InputParamAlreadyUsed" returnType="void" numInputs="2" numOutputs="1">
 	<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_0"/>
 	<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_1"/>
-	<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="output_0"/>
+	<LES_FUNCTION_OUTPUT_PARAMETER type="int*" name="output_0"/>
 	</LES_FUNCTION>
 
 	<LES_FUNCTION name="LES_Test_InputParamMissing" returnType="void" numInputs="3" numOutputs="1">
@@ -65,37 +61,33 @@
 	</LES_FUNCTION>
 
 	<LES_FUNCTION name="LES_Test_TooManyOutputParameters" returnType="void" numInputs="1" numOutputs="2">
-	<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="input_0"/>
+	<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_0"/>
 	<LES_FUNCTION_OUTPUT_PARAMETER type="unsigned int*" name="output_0"/>
 	<LES_FUNCTION_OUTPUT_PARAMETER type="unsigned short*" name="output_1"/>
 	</LES_FUNCTION>
 
 	<LES_FUNCTION name="LES_Test_OutputWrongIndex" returnType="void" numInputs="1" numOutputs="2">
 	<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_0"/>
-	<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="output_0"/>
-	<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="output_1"/>
+	<LES_FUNCTION_OUTPUT_PARAMETER type="int*" name="output_0"/>
+	<LES_FUNCTION_OUTPUT_PARAMETER type="int*" name="output_1"/>
 	</LES_FUNCTION>
 
 	<LES_FUNCTION name="LES_Test_OutputNameDoesntExist" returnType="void" numInputs="0" numOutputs="1">
-	<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="output_0"/>
+	<LES_FUNCTION_OUTPUT_PARAMETER type="int*" name="output_0"/>
 	</LES_FUNCTION>
 
 	<LES_FUNCTION name="LES_Test_OutputNameStringIsWrong" returnType="void" numInputs="0" numOutputs="1">
-	<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="OutputNameBrokenHash"/>
-	</LES_FUNCTION>
-
-	<LES_FUNCTION name="LES_Test_OutputTypeStringIsWrong" returnType="void" numInputs="0" numOutputs="1">
-	<LES_FUNCTION_OUTPUT_PARAMETER type="OutputTypeBrokenHash" name="output_0"/>
+	<LES_FUNCTION_OUTPUT_PARAMETER type="int*" name="OutputNameBrokenHash"/>
 	</LES_FUNCTION>
 
 	<LES_FUNCTION name="LES_Test_OutputGlobalIndexIsWrong" returnType="void" numInputs="1" numOutputs="1">
 	<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_0"/>
-	<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="output_0"/>
+	<LES_FUNCTION_OUTPUT_PARAMETER type="int*" name="output_0"/>
 	</LES_FUNCTION>
 
 	<LES_FUNCTION name="LES_Test_OutputUsedAsInput" returnType="void" numInputs="1" numOutputs="1">
 	<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_0"/>
-	<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="output_0"/>
+	<LES_FUNCTION_OUTPUT_PARAMETER type="int*" name="output_0"/>
 	</LES_FUNCTION>
 
 	<LES_FUNCTION name="LES_Test_OutputParamAlreadyUsed" returnType="void" numInputs="1" numOutputs="2">
@@ -115,16 +107,6 @@
 	<LES_FUNCTION_OUTPUT_PARAMETER type="unsigned int*" name="output_0"/>
 	<LES_FUNCTION_INPUT_PARAMETER type="unsigned char" name="input_1"/>
 	<LES_FUNCTION_OUTPUT_PARAMETER type="unsigned short*" name="output_1"/>
-	</LES_FUNCTION>
-
-	<LES_FUNCTION name="LES_Test_InputParamUsedAsOutput" returnType="void" numInputs="1" numOutputs="1">
-	<LES_FUNCTION_INPUT_PARAMETER type="unsigned int" name="input_0"/>
-	<LES_FUNCTION_OUTPUT_PARAMETER type="unsigned short" name="output_0"/>
-	</LES_FUNCTION>
-
-	<LES_FUNCTION name="LES_Test_OutputParamUsedAsInput" returnType="void" numInputs="1" numOutputs="1">
-	<LES_FUNCTION_INPUT_PARAMETER type="output_only" name="input_0"/>
-	<LES_FUNCTION_OUTPUT_PARAMETER type="unsigned short" name="output_0"/>
 	</LES_FUNCTION>
 
 	<LES_FUNCTION name="LES_Test_ReadInputParameters" returnType="void" numInputs="5" numOutputs="0">
