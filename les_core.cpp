@@ -18,14 +18,6 @@ static LES_DefinitionFile les_definitionFile;
 static const LES_StringTable* les_pStringTable = LES_NULL;
 static int les_stringTableNumStrings = 0;
 
-extern void LES_DebugOutputTypeEntry(LES_LoggerChannel* const pLogChannel, const LES_TypeEntry* const pTypeEntry, const int i);
-extern void LES_DebugOutputStructDefinition(LES_LoggerChannel* const pLogChannel, 
-																						const LES_StructDefinition* const pStructDefinition, const int i);
-
-extern void LES_Type_SetTypeDataPtr(const LES_TypeData* const pTypeData);
-extern void LES_Struct_SetStructDataPtr(const LES_StructData* const pStructData);
-extern void LES_Function_SetFuncDataPtr(const LES_FuncData* const pFuncData);
-
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Internal Static functions
@@ -104,6 +96,14 @@ extern void LES_TypeShutdown();
 
 extern void LES_StructInit();
 extern void LES_StructShutdown();
+
+extern void LES_Type_SetTypeDataPtr(const LES_TypeData* const pTypeData);
+extern void LES_Struct_SetStructDataPtr(const LES_StructData* const pStructData);
+extern void LES_Function_SetFuncDataPtr(const LES_FuncData* const pFuncData);
+
+extern void LES_DebugOutputTypeEntry(LES_LoggerChannel* const pLogChannel, const LES_TypeEntry* const pTypeEntry, const int i);
+extern void LES_DebugOutputStructDefinition(LES_LoggerChannel* const pLogChannel, 
+																						const LES_StructDefinition* const pStructDefinition, const int i);
 
 void LES_Init(void)
 {
@@ -248,7 +248,7 @@ void LES_DebugOutputGlobalDefinitionFile(LES_LoggerChannel* const pLogChannel)
 void LES_DebugOutputStringEntries(LES_LoggerChannel* const pLogChannel)
 {
 	const int numStringEntries = les_stringTableNumStrings + les_numStringEntries;
-	pLogChannel->Print("numStringEntries:%d", numStringEntries);
+	pLogChannel->Print("numStringEntries:%d StringTable:%d Internal:%d", numStringEntries, les_stringTableNumStrings, les_numStringEntries);
 	for (int i = 0; i < numStringEntries; i++)
 	{
 		const LES_StringEntry* const pStringEntry = LES_GetStringEntryForID(i);
