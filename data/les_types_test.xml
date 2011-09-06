@@ -12,6 +12,10 @@
 	<LES_TYPE_POD_REFERENCE_ARRAY name="char" numElements="5" />
 
 	<LES_TYPE name="output_only" dataSize="4" flags="OUTPUT|POD" />
+	<LES_TYPE name="input_wrongHash" dataSize="4" flags="INPUT|POD" />
+	<LES_TYPE name="output_wrongHash" dataSize="4" flags="OUTPUT|POD" />
+	<LES_TYPE name="input_brokenString" dataSize="4" flags="INPUT|POD" />
+	<LES_TYPE name="output_brokenString" dataSize="4" flags="OUTPUT|POD" />
 
 	<LES_TYPE_STRUCT name="TestStruct1" />
 	<LES_TYPE_STRUCT_POINTER name="TestStruct1" />

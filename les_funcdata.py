@@ -511,6 +511,70 @@ class LES_FunctionData():
 			les_logger.Error("numErrors=%d", numErrors)
 			return False
 
+	def createTestErrorFunctionDefinitions(self):
+		les_logger.Log("")
+		les_logger.Log("#####################")
+		les_logger.Log("Creating Test Error Function Definitions")
+		les_logger.Log("#####################")
+		les_logger.Log("")
+
+		functionName = "LES_Test_InputNameIDNotFound"
+		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
+		functionParameter = functionDefinition.GetParameterByIndex(0)
+		functionParameter.m_nameID = -1
+
+		functionName = "LES_Test_InputNameHashIsWrong"
+		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
+		functionParameter = functionDefinition.GetParameterByIndex(0)
+		functionParameter.m_nameID = self.__m_stringTable__.addString("wrongHash")
+
+		functionName = "LES_Test_InputTypeIDNotFound"
+		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
+		functionParameter = functionDefinition.GetParameterByIndex(0)
+		functionParameter.m_typeID = -1
+		functionDefinition.__m_parameterDataSize__ = -1
+
+		functionName = "LES_Test_OutputNameIDNotFound"
+		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
+		functionParameter = functionDefinition.GetParameterByIndex(0)
+		functionParameter.m_nameID = -1
+
+		functionName = "LES_Test_OutputNameHashIsWrong"
+		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
+		functionParameter = functionDefinition.GetParameterByIndex(0)
+		functionParameter.m_nameID = self.__m_stringTable__.addString("wrongHash")
+
+		functionName = "LES_Test_OutputTypeIDNotFound"
+		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
+		functionParameter = functionDefinition.GetParameterByIndex(0)
+		functionParameter.m_typeID = -1
+		functionDefinition.__m_parameterDataSize__ = -1
+
+		functionName = "LES_Test_ReturnTypeNotFound"
+		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
+		functionDefinition.__m_returnTypeID__ = -1;
+
+		functionName = "LES_Test_InputParamUsedAsOutput"
+		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
+		functionParameter = functionDefinition.GetParameterByIndex(1)
+		functionParameter.m_typeID = self.__m_stringTable__.addString("unsigned short")
+
+		functionName = "LES_Test_OutputParamUsedAsInput"
+		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
+		functionParameter = functionDefinition.GetParameterByIndex(0)
+		functionParameter.m_typeID = self.__m_stringTable__.addString("output_only")
+
+		return True
+
 	def DebugOutputFunctions(self, loggerChannel):
 		for functionDefinition in self.__m_functionDefinitions__:
 			functionNameID = functionDefinition.GetNameID()

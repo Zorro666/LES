@@ -33,6 +33,8 @@ def loadFunctionData(functionData):
 	if functionData.loadXML("data/les_functions_test.xml") == False:
 		les_logger.FatalError("ERROR loading data/les_functions_test.xml")
 	functionData.loadXML("data/les_functions_errors.xml")
+	if functionData.createTestErrorFunctionDefinitions() == False:
+		les_logger.FatalError("ERROR creating test error functionDefinitions")
 
 class LES_DefinitionFile():
 	def __init__(self):
