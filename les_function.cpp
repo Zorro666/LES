@@ -450,6 +450,13 @@ int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefiniti
 	int index = LES_GetFunctionDefinitionIndex(name);
 	if (index < 0)
 	{
+		LES_WARNING("NEED TO CHECK THE NEW FUNCTION DEFINITION IS IDENTICAL TO THE EXISTING ONE");
+		if (les_pFuncData)
+		{
+			LES_ERROR("AddFunctionDefinition '%s' not found in func data definition file", name);
+			return LES_RETURN_ERROR;
+		}
+
 		/* Not found so add it - just store the ptr to the memory */
 		index = les_numFunctionDefinitions;
 		les_functionDefinitionArray[index] = pFunctionDefinition;
@@ -464,7 +471,7 @@ int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefiniti
 		{
 			LES_ERROR("AddFunctionDefinition '%s' parameterDataSize doesn't match FuncData:%d Code:%d", name, 
 								pFunctionDefinition2->GetParameterDataSize(), parameterDataSize);
-			return -1;
+			return LES_RETURN_ERROR;
 		}
 	}
 
