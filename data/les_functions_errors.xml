@@ -53,4 +53,21 @@
 		<LES_FUNCTION_OUTPUT_PARAMETER type="unsigned short*" name="output_0"/>
 	</LES_FUNCTION>
 
+	<LES_FUNCTION name="LES_Test_InputParameterAlreadyExists" returnType="void" numInputs="2" numOutputs="1">
+		<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_0"/>
+		<LES_FUNCTION_INPUT_PARAMETER type="char" name="input_0"/>
+		<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="output_0"/>
+	</LES_FUNCTION>
+
+	<LES_FUNCTION name="LES_Test_OutputParameterAlreadyExists" returnType="void" numInputs="1" numOutputs="2">
+		<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_0"/>
+		<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="output_0"/>
+		<LES_FUNCTION_OUTPUT_PARAMETER type="short" name="output_0"/>
+	</LES_FUNCTION>
+
+	<LES_FUNCTION name="LES_Test_ParameterAlreadyExists" returnType="void" numInputs="1" numOutputs="2">
+		<LES_FUNCTION_INPUT_PARAMETER type="int" name="input_0"/>
+		<LES_FUNCTION_INPUT_PARAMETER type="float" name="input_0"/>
+		<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="output_0"/>
+	</LES_FUNCTION>
 </LES_FUNCTIONS>
