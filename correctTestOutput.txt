@@ -770,7 +770,6 @@ DecodeSingle       parameter[2] member[3]:'m_char' type:'char' value:'Z'
 DecodeSingle       parameter[2] member[4]:'m_char' type:'char' value:'Y'
 LES_Test_DecodeInputStructStructArrayReference: parameterDataSize:37
 
-WARNING: NEED TO CHECK THE NEW STRING DEFINITION IS IDENTICAL TO THE EXISTING ONE
 ERROR: LES_AddStringEntry 'CantAddNewStrings' 0x7EEFE0D7 not found in string table definition file
 ERROR: AddType 'CantAddNewTypes' hash 0xE2A43B36 not found in type data definition file
 FATAL_ERROR: TEST AddType 'CantAddNewTypes' NumElements:0 0xE2A43B36 Alias 'int' failed

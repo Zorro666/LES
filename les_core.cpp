@@ -56,10 +56,22 @@ static int LES_AddStringEntry(const LES_Hash hash, const char* const str)
 	int index = LES_GetStringEntrySlow(hash, str);
 	if (index >= 0)
 	{
+		const LES_StringEntry* const pStringEntry = LES_GetStringEntryForID(index);
+		if (pStringEntry->m_hash != hash)
+		{
+			LES_FATAL_ERROR("LES_AddStringEntry '%s' 0x%X hash doesn't match entry in string table definition file '%s' 0x%X", 
+					str, hash, pStringEntry->m_str, pStringEntry->m_hash);
+			return LES_RETURN_ERROR;
+		}
+		if (strcmp(pStringEntry->m_str, str) != 0)
+		{
+			LES_FATAL_ERROR("LES_AddStringEntry '%s' 0x%X string doesn't match entry in string table definition file '%s' 0x%X", 
+					str, hash, pStringEntry->m_str, pStringEntry->m_hash);
+			return LES_RETURN_ERROR;
+		}
 		return index;
 	}
 
-	LES_WARNING("NEED TO CHECK THE NEW STRING DEFINITION IS IDENTICAL TO THE EXISTING ONE");
 	if (les_pStringTable)
 	{
 		LES_ERROR("LES_AddStringEntry '%s' 0x%X not found in string table definition file", str, hash);
