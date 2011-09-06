@@ -776,7 +776,6 @@ FATAL_ERROR: TEST AddType 'CantAddNewTypes' NumElements:0 0xE2A43B36 Alias 'int'
 ERROR: LES_AddStructDefinition 'CantAddNewStructs' hash 0xA84BB85F not found in type data definition file
 FATAL_ERROR: TEST struct 'CantAddNewStructs' : ERROR adding structure definition
 FATAL_ERROR: TEST struct 'CantAddNewStructs' : ERROR cannot create definition
-WARNING: NEED TO CHECK THE NEW FUNCTION DEFINITION IS IDENTICAL TO THE EXISTING ONE
 ERROR: AddFunctionDefinition 'CantAddNewFunctions' not found in func data definition file
 FATAL_ERROR: TEST function 'CantAddNewFunctions' : ERROR adding function definition
 FATAL_ERROR: TEST function 'CantAddNewFunctions' : ERROR cannot create definition

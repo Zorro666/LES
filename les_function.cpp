@@ -450,7 +450,6 @@ int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefiniti
 	int index = LES_GetFunctionDefinitionIndex(name);
 	if (index < 0)
 	{
-		LES_WARNING("NEED TO CHECK THE NEW FUNCTION DEFINITION IS IDENTICAL TO THE EXISTING ONE");
 		if (les_pFuncData)
 		{
 			LES_ERROR("AddFunctionDefinition '%s' not found in func data definition file", name);
@@ -466,12 +465,81 @@ int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefiniti
 	}
 	else
 	{
-		const LES_FunctionDefinition* const pFunctionDefinition2 = LES_GetFunctionDefinitionForID(index);
-		if (pFunctionDefinition2->GetParameterDataSize() != parameterDataSize)
+		int i = index;
+		if (les_pFuncData)
 		{
-			LES_ERROR("AddFunctionDefinition '%s' parameterDataSize doesn't match FuncData:%d Code:%d", name, 
-								pFunctionDefinition2->GetParameterDataSize(), parameterDataSize);
+			const LES_Hash nameHash = LES_GenerateHashCaseSensitive(name);
+			i = les_pFuncData->GetFunctionDefinitionIndex(nameHash);
+		}
+		const LES_FunctionDefinition* const pExistingFunction = les_pFuncData ? 
+																	les_pFuncData->GetFunctionDefinition(i) : LES_GetFunctionDefinitionForID(index);
+		if (pExistingFunction->GetNameID() != pFunctionDefinition->GetNameID())
+		{
+			LES_ERROR("AddFunctionDefinition '%s' nameID doesn't match Existing:%d New:%d", name, 
+								pFunctionDefinition->GetNameID(), pFunctionDefinition->GetNameID());
 			return LES_RETURN_ERROR;
+		}
+		if (pExistingFunction->GetReturnTypeID() != pFunctionDefinition->GetReturnTypeID())
+		{
+			LES_ERROR("AddFunctionDefinition '%s' returnTypeID doesn't match Existing:%d New:%d", name, 
+								pFunctionDefinition->GetReturnTypeID(), pFunctionDefinition->GetReturnTypeID());
+			return LES_RETURN_ERROR;
+		}
+		if (pExistingFunction->GetParameterDataSize() != parameterDataSize)
+		{
+			LES_ERROR("AddFunctionDefinition '%s' parameterDataSize doesn't match Existing:%d New:%d", name, 
+								pFunctionDefinition->GetParameterDataSize(), parameterDataSize);
+			return LES_RETURN_ERROR;
+		}
+		const int numInputs = pExistingFunction->GetNumInputs();
+		if (numInputs != pFunctionDefinition->GetNumInputs())
+		{
+			LES_ERROR("AddFunctionDefinition '%s' numInputs doesn't match Existing:%d New:%d", name, 
+								numInputs, pFunctionDefinition->GetNumInputs());
+			return LES_RETURN_ERROR;
+		}
+		const int numOutputs = pExistingFunction->GetNumOutputs();
+		if (numOutputs != pFunctionDefinition->GetNumOutputs())
+		{
+			LES_ERROR("AddFunctionDefinition '%s' numInputs doesn't match Existing:%d New:%d", name, 
+								numOutputs, pFunctionDefinition->GetNumOutputs());
+			return LES_RETURN_ERROR;
+		}
+		const int numParameters = numInputs + numOutputs;
+		for (int p = 0; p < numParameters; p++)
+		{
+			const LES_FunctionParameter* const pExisting = pExistingFunction->GetParameterByIndex(p);
+			const LES_FunctionParameter* const pNew = pExistingFunction->GetParameterByIndex(p);
+			if (pExisting->m_hash != pNew->m_hash)
+			{
+				LES_ERROR("AddFunctionDefinition '%s' Parameter[%d] m_hash doesn't match Existing:0x%X New:0x%X", name, 
+									p, pExisting->m_hash, pNew->m_hash);
+				return LES_RETURN_ERROR;
+			}
+			if (pExisting->m_nameID != pNew->m_nameID)
+			{
+				LES_ERROR("AddFunctionDefinition '%s' Parameter[%d] m_nameID doesn't match Existing:%d New:%d", name, 
+									p, pExisting->m_nameID, pNew->m_nameID);
+				return LES_RETURN_ERROR;
+			}
+			if (pExisting->m_typeID != pNew->m_typeID)
+			{
+				LES_ERROR("AddFunctionDefinition '%s' Parameter[%d] m_typeID doesn't match Existing:%d New:%d", name, 
+									p, pExisting->m_typeID, pNew->m_typeID);
+				return LES_RETURN_ERROR;
+			}
+			if (pExisting->m_index != pNew->m_index)
+			{
+				LES_ERROR("AddFunctionDefinition '%s' Parameter[%d] m_index doesn't match Existing:%d New:%d", name, 
+									p, pExisting->m_index, pNew->m_index);
+				return LES_RETURN_ERROR;
+			}
+			if (pExisting->m_mode != pNew->m_mode)
+			{
+				LES_ERROR("AddFunctionDefinition '%s' Parameter[%d] m_mode doesn't match Existing:0x%X New:0x%X", name, 
+									p, pExisting->m_mode, pNew->m_mode);
+				return LES_RETURN_ERROR;
+			}
 		}
 	}
 
