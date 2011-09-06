@@ -59,6 +59,13 @@ static int LES_AddStringEntry(const LES_Hash hash, const char* const str)
 		return index;
 	}
 
+	LES_WARNING("NEED TO CHECK THE NEW STRING DEFINITION IS IDENTICAL TO THE EXISTING ONE");
+	if (les_pStringTable)
+	{
+		LES_ERROR("LES_AddStringEntry '%s' 0x%X not found in string table definition file", str, hash);
+		return LES_RETURN_ERROR;
+	}
+
 	/* Not found so add it */
 	index = les_numStringEntries;
 	LES_StringEntry* const pStringEntry = &les_stringEntryArray[index];
