@@ -1,13 +1,8 @@
 High Priority:
-TEST: TooManyInput or TooManyOutput parameters need to catch the fatalerror and handle it
-FUNCDATA: TooManyInput or TooManyOutput parameters need to catch the fatalerror and handle it
-FUNCDATA: fill up the test XML with real test function data from C++
-FUNCDATA: fill up the errors XML with real errors function defintiions
-TEST: load and use definition file (type, string, structures, functions)
+FUNDATA: add the missing strings to do with function definitions which error
 TEST: load and use definition file: do not allow local C++ creation of new data (type, string, structures, functions)
-
-STRUCTDATA: error xml
-FUNCDATA: error xml
+TEST: existing func data should match the function definition trying to be added
+TEST: existing strut data should match the struct definition trying to be added
 
 Medium Priority:
 SERVER: up and running ready for client to connect
