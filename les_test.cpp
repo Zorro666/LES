@@ -2287,7 +2287,22 @@ struct TestStruct66
 #endif // #if 0
 
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
+	LES_AddStringEntry("CantAddNewStrings");
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
+
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
 	LES_TEST_ADD_TYPE_EX(CantAddNewTypes, 1, 0, int, 0);
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
+
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
+	LES_TEST_STRUCT_START(CantAddNewStructs, 1);
+	LES_TEST_STRUCT_ADD_MEMBER(char, m_char);
+	LES_TEST_STRUCT_END();
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
+
+	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, false);
+	LES_TEST_FUNCTION_START(CantAddNewFunctions, void, 0, 0);
+	LES_TEST_FUNCTION_END();
 	LES_Logger::SetFatal(LES_Logger::CHANNEL_FATAL_ERROR, true);
 
 	LES_LoggerChannel* const stringDebugChan = LES_Logger::CreateChannel("StringDebug", "", "stringDebug.txt", LES_Logger::FLAGS_DEFAULT);
