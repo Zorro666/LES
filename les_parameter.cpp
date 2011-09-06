@@ -93,8 +93,12 @@ int LES_FunctionParameterData::Write(const LES_StringEntry* const typeStringEntr
 	const unsigned int typeFlags = typeEntryPtr->m_flags;
 	if ((typeFlags & paramMode) == 0)
 	{
-		LES_WARNING("LES_FunctionParameterData::Write type:'%s' flags incorrect for parameter mode typeFlags:0x%X paramMode:0x%X", 
-								typeStringEntry->m_str, typeFlags, paramMode);
+		char typeFlagsDecoded[1024];
+		LES_Type_DecodeFlags(typeFlagsDecoded, typeFlags);
+		char paramModeDecoded[1024];
+		LES_Type_DecodeFlags(paramModeDecoded, paramMode);
+		LES_WARNING("LES_FunctionParameterData::Write type:'%s' flags incorrect for parameter mode typeFlags:0x%X %s paramMode:0x%X %s", 
+								typeStringEntry->m_str, typeFlags, typeFlagsDecoded, paramMode, paramModeDecoded);
 		return LES_RETURN_ERROR;
 	}
 	const void* valueAddress = parameterDataPtr;
