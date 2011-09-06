@@ -1,4 +1,4 @@
-numFunctionDefinitions:59 FuncData:46 Internal:13
+numFunctionDefinitions:59 FuncData:59 Internal:0
 Function[0] 'PyTestFunction1' returnType 'int' numParameters:3 numInputs:2 numOutputs:1 parameterDataSize:13
   Function 'PyTestFunction1' Member[0] 'm_longlong' 0x82F4779E Type:'long long int' index:0 mode:0x1 INPUT
   Function 'PyTestFunction1' Member[1] 'm_char' 0x431FFB4 Type:'char' index:1 mode:0x1 INPUT
@@ -21,7 +21,7 @@ Function[6] 'LES_Test_InputNameDoesntExist' returnType 'void' numParameters:2 nu
   Function 'LES_Test_InputNameDoesntExist' Member[0] 'input_0' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
   Function 'LES_Test_InputNameDoesntExist' Member[1] 'output_0' 0x1D1CA836 Type:'int*' index:1 mode:0x2 OUTPUT
 Function[7] 'LES_Test_InputNameStringIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:4
-  Function 'LES_Test_InputNameStringIsWrong' Member[0] 'brokenString' 0x99F1870C Type:'int' index:0 mode:0x1 INPUT
+  Function 'LES_Test_InputNameStringIsWrong' Member[0] 'brokenString' 0x5ABE37F Type:'int' index:0 mode:0x1 INPUT
 Function[8] 'LES_Test_InputGlobalIndexIsWrong' returnType 'void' numParameters:2 numInputs:1 numOutputs:1 parameterDataSize:8
   Function 'LES_Test_InputGlobalIndexIsWrong' Member[0] 'output_0' 0x1D1CA836 Type:'int*' index:0 mode:0x2 OUTPUT
   Function 'LES_Test_InputGlobalIndexIsWrong' Member[1] 'input_0' 0x480D993 Type:'int' index:1 mode:0x1 INPUT
@@ -48,7 +48,7 @@ Function[13] 'LES_Test_OutputWrongIndex' returnType 'void' numParameters:3 numIn
 Function[14] 'LES_Test_OutputNameDoesntExist' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:4
   Function 'LES_Test_OutputNameDoesntExist' Member[0] 'output_0' 0x1D1CA836 Type:'int*' index:0 mode:0x2 OUTPUT
 Function[15] 'LES_Test_OutputNameStringIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:4
-  Function 'LES_Test_OutputNameStringIsWrong' Member[0] 'brokenString' 0x61782F3F Type:'int*' index:0 mode:0x2 OUTPUT
+  Function 'LES_Test_OutputNameStringIsWrong' Member[0] 'brokenString' 0xBFC4584A Type:'int*' index:0 mode:0x2 OUTPUT
 Function[16] 'LES_Test_OutputGlobalIndexIsWrong' returnType 'void' numParameters:2 numInputs:1 numOutputs:1 parameterDataSize:8
   Function 'LES_Test_OutputGlobalIndexIsWrong' Member[0] 'input_0' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
   Function 'LES_Test_OutputGlobalIndexIsWrong' Member[1] 'output_0' 0x1D1CA836 Type:'int*' index:1 mode:0x2 OUTPUT
@@ -156,27 +156,27 @@ Function[44] 'LES_Test_DecodeInputStructPODArrayReference' returnType 'void' num
   Function 'LES_Test_DecodeInputStructPODArrayReference' Member[0] 'input_0' 0x480D993 Type:'TestStruct11' index:0 mode:0x1 INPUT
 Function[45] 'LES_Test_DecodeInputStructStructArrayReference' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:37
   Function 'LES_Test_DecodeInputStructStructArrayReference' Member[0] 'input_0' 0x480D993 Type:'TestStruct12' index:0 mode:0x1 INPUT
-Function[46] 'LES_Test_ReturnTypeNotFound' returnType 'NULL' numParameters:0 numInputs:0 numOutputs:0 parameterDataSize:0
-Function[47] 'LES_Test_InputNameIDNotFound' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:4
+Function[46] 'LES_Test_InputNameIDNotFound' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:4
   Function 'LES_Test_InputNameIDNotFound' Member[0] 'NULL' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
-Function[48] 'LES_Test_InputNameHashIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:4
+Function[47] 'LES_Test_InputNameHashIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:4
   Function 'LES_Test_InputNameHashIsWrong' Member[0] 'wrongHash' 0x480D993 Type:'int' index:0 mode:0x1 INPUT
-Function[49] 'LES_Test_InputTypeIDNotFound' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:-1
+Function[48] 'LES_Test_InputTypeIDNotFound' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:-1
   Function 'LES_Test_InputTypeIDNotFound' Member[0] 'input_0' 0x480D993 Type:'NULL' index:0 mode:0x1 INPUT
-Function[50] 'LES_Test_InputTypeHashIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:-1
-  Function 'LES_Test_InputTypeHashIsWrong' Member[0] 'input_0' 0x480D993 Type:'wrongHash' index:0 mode:0x1 INPUT
-Function[51] 'LES_Test_InputTypeStringIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:-1
+Function[49] 'LES_Test_InputTypeHashIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:4
+  Function 'LES_Test_InputTypeHashIsWrong' Member[0] 'input_0' 0x480D993 Type:'input_wrongHash' index:0 mode:0x1 INPUT
+Function[50] 'LES_Test_InputTypeStringIsWrong' returnType 'void' numParameters:1 numInputs:1 numOutputs:0 parameterDataSize:4
   Function 'LES_Test_InputTypeStringIsWrong' Member[0] 'input_0' 0x480D993 Type:'brokenString' index:0 mode:0x1 INPUT
-Function[52] 'LES_Test_OutputNameIDNotFound' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:4
-  Function 'LES_Test_OutputNameIDNotFound' Member[0] 'NULL' 0x1D1CA836 Type:'int' index:0 mode:0x2 OUTPUT
-Function[53] 'LES_Test_OutputNameHashIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:4
-  Function 'LES_Test_OutputNameHashIsWrong' Member[0] 'wrongHash' 0x1D1CA836 Type:'int' index:0 mode:0x2 OUTPUT
-Function[54] 'LES_Test_OutputTypeIDNotFound' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:-1
+Function[51] 'LES_Test_OutputNameIDNotFound' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:4
+  Function 'LES_Test_OutputNameIDNotFound' Member[0] 'NULL' 0x1D1CA836 Type:'int*' index:0 mode:0x2 OUTPUT
+Function[52] 'LES_Test_OutputNameHashIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:4
+  Function 'LES_Test_OutputNameHashIsWrong' Member[0] 'wrongHash' 0x1D1CA836 Type:'int*' index:0 mode:0x2 OUTPUT
+Function[53] 'LES_Test_OutputTypeIDNotFound' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:-1
   Function 'LES_Test_OutputTypeIDNotFound' Member[0] 'output_0' 0x1D1CA836 Type:'NULL' index:0 mode:0x2 OUTPUT
-Function[55] 'LES_Test_OutputTypeHashIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:-1
-  Function 'LES_Test_OutputTypeHashIsWrong' Member[0] 'output_0' 0x1D1CA836 Type:'wrongHash' index:0 mode:0x2 OUTPUT
-Function[56] 'LES_Test_OutputTypeStringIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:-1
+Function[54] 'LES_Test_OutputTypeHashIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:4
+  Function 'LES_Test_OutputTypeHashIsWrong' Member[0] 'output_0' 0x1D1CA836 Type:'output_wrongHash' index:0 mode:0x2 OUTPUT
+Function[55] 'LES_Test_OutputTypeStringIsWrong' returnType 'void' numParameters:1 numInputs:0 numOutputs:1 parameterDataSize:4
   Function 'LES_Test_OutputTypeStringIsWrong' Member[0] 'output_0' 0x1D1CA836 Type:'brokenString' index:0 mode:0x2 OUTPUT
+Function[56] 'LES_Test_ReturnTypeNotFound' returnType 'NULL' numParameters:0 numInputs:0 numOutputs:0 parameterDataSize:0
 Function[57] 'LES_Test_InputParamUsedAsOutput' returnType 'void' numParameters:2 numInputs:1 numOutputs:1 parameterDataSize:6
   Function 'LES_Test_InputParamUsedAsOutput' Member[0] 'input_0' 0x480D993 Type:'unsigned int' index:0 mode:0x1 INPUT
   Function 'LES_Test_InputParamUsedAsOutput' Member[1] 'output_0' 0x1D1CA836 Type:'unsigned short' index:1 mode:0x2 OUTPUT
