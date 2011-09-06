@@ -93,7 +93,11 @@ bool LES_TestFunctionEnd(LES_FunctionDefinition* const functionDefinitionPtr, LE
 		return false;
 	}
 	const int parameterDataSize = functionDefinitionPtr->ComputeParameterDataSize();
-	LES_AddFunctionDefinition(testFunctionDataPtr->functionName, functionDefinitionPtr, parameterDataSize);
+	if (LES_AddFunctionDefinition(testFunctionDataPtr->functionName, functionDefinitionPtr, parameterDataSize) == LES_RETURN_ERROR)
+	{
+		LES_FATAL_ERROR("TEST function '%s' : ERROR adding function definition", testFunctionDataPtr->functionName);
+		return false;
+	}
 
 	return true;
 }
@@ -191,7 +195,7 @@ bool LES_TestStructEnd(LES_StructDefinition* const structDefinitionPtr, LES_TEST
 	const int paddingAmount = LES_StructComputeAlignmentPadding(testStructDataPtr->totalMemberSizeWithPadding, structAlignment);
 	testStructDataPtr->totalMemberSizeWithPadding += paddingAmount;
 
-	if (LES_AddStructDefinition(testStructDataPtr->structName, structDefinitionPtr, testStructDataPtr->totalMemberSizeWithPadding) < 0)
+	if (LES_AddStructDefinition(testStructDataPtr->structName, structDefinitionPtr, testStructDataPtr->totalMemberSizeWithPadding) == LES_RETURN_ERROR)
 	{
 		LES_FATAL_ERROR("TEST struct '%s' : ERROR adding structure definition", testStructDataPtr->structName);
 		return false;
