@@ -1,8 +1,7 @@
 High Priority:
-FUNDATA: add the missing strings to do with function definitions which error
-TEST: load and use definition file: do not allow local C++ creation of new data (type, string, structures, functions)
 TEST: existing func data should match the function definition trying to be added
 TEST: existing strut data should match the struct definition trying to be added
+TEST: existing string data should match the string definition trying to be added
 
 Medium Priority:
 SERVER: up and running ready for client to connect
@@ -12,6 +11,8 @@ CLIENT: use definition file (type, string, structures, functions) from over the 
 
 CLIENT: send function data to server as network message
 SERVER: process function data send response
+SERVER: run decode parameter tests on the server
+
 CLIENT: support for async function calls, error queue, potential threading issues
 SERVER: support for async function calls, error queue
 
