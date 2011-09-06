@@ -163,7 +163,6 @@ int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* 
 	int index = LES_GetStructDefinitionIndex(nameHash);
 	if (index < 0)
 	{
-		LES_WARNING("NEED TO CHECK THE NEW STRUCT DEFINITION IS IDENTICAL TO THE EXISTING ONE");
 		if (les_pStructData)
 		{
 			LES_ERROR("LES_AddStructDefinition '%s' hash 0x%X not found in type data definition file", name, nameHash);
@@ -183,6 +182,61 @@ int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* 
 	}
 	else
 	{
+		int i = index;
+		if (les_pStructData)
+		{
+			i = les_pStructData->GetStructDefinitionIndex(nameHash);
+		}
+		const LES_StructDefinition* const pStructDefinition = les_pStructData ? 
+																	les_pStructData->GetStructDefinition(i) : LES_GetStructDefinitionForID(index);
+		if (pStructDefinition->GetNameID() != structDefinitionPtr->GetNameID())
+		{
+			LES_WARNING("LES_AddStructDefinition '%s' hash 0x%X already in list and nameID doesn't match Existing:%d New:%d",
+									name, nameHash, pStructDefinition->GetNameID(), structDefinitionPtr->GetNameID());
+			return LES_RETURN_ERROR;
+		}
+		const int numMembers = pStructDefinition->GetNumMembers();
+		if (numMembers != structDefinitionPtr->GetNumMembers())
+		{
+			LES_WARNING("LES_AddStructDefinition '%s' hash 0x%X already in list and numMembers doesn't match Existing:%d New:%d",
+									name, nameHash, numMembers, structDefinitionPtr->GetNumMembers());
+			return LES_RETURN_ERROR;
+		}
+		for (int m = 0; m < numMembers; m++)
+		{
+			const LES_StructMember* const pExistMember = pStructDefinition->GetMemberByIndex(m);
+			const LES_StructMember* const pNewMember = structDefinitionPtr->GetMemberByIndex(m);
+			if (pExistMember->m_hash != pNewMember->m_hash)
+			{
+				LES_WARNING("LES_AddStructDefinition '%s' hash 0x%X already in list Member[%d] 0x%X m_hash doesn't match Existing:0x%X New:0x%X",
+										name, nameHash, m, pExistMember->m_hash, pNewMember->m_hash);
+				return LES_RETURN_ERROR;
+			}
+			if (pExistMember->m_nameID != pNewMember->m_nameID)
+			{
+				LES_WARNING("LES_AddStructDefinition '%s' hash 0x%X already in list Member[%d] 0x%X m_nameID doesn't match Existing:%d New:%d",
+										name, nameHash, m, pExistMember->m_nameID, pNewMember->m_nameID);
+				return LES_RETURN_ERROR;
+			}
+			if (pExistMember->m_typeID != pNewMember->m_typeID)
+			{
+				LES_WARNING("LES_AddStructDefinition '%s' hash 0x%X already in list Member[%d] 0x%X m_typeID doesn't match Existing:%d New:%d",
+										name, nameHash, m, pExistMember->m_typeID, pNewMember->m_typeID);
+				return LES_RETURN_ERROR;
+			}
+			if (pExistMember->m_dataSize != pNewMember->m_dataSize)
+			{
+				LES_WARNING("LES_AddStructDefinition '%s' hash 0x%X already in list Member[%d] 0x%X m_dataSize doesn't match Existing:%d New:%d",
+										name, nameHash, m, pExistMember->m_dataSize, pNewMember->m_dataSize);
+				return LES_RETURN_ERROR;
+			}
+			if (pExistMember->m_alignmentPadding != pNewMember->m_alignmentPadding)
+			{
+				LES_WARNING("LES_AddStructDefinition '%s' hash 0x%X already in list Member[%d] 0x%X m_dataSize doesn't match Existing:%d New:%d",
+										name, nameHash, m, pExistMember->m_alignmentPadding, pNewMember->m_alignmentPadding);
+				return LES_RETURN_ERROR;
+			}
+		}
 		if (pTypeEntry->m_dataSize != structDataSize)
 		{
 			LES_ERROR("LES_AddStructDefinition '%s' hash 0x%X type entry data size doesn't match typeDataSize:%d structDataSize:%d", 

@@ -773,7 +773,6 @@ LES_Test_DecodeInputStructStructArrayReference: parameterDataSize:37
 ERROR: LES_AddStringEntry 'CantAddNewStrings' 0x7EEFE0D7 not found in string table definition file
 ERROR: AddType 'CantAddNewTypes' hash 0xE2A43B36 not found in type data definition file
 FATAL_ERROR: TEST AddType 'CantAddNewTypes' NumElements:0 0xE2A43B36 Alias 'int' failed
-WARNING: NEED TO CHECK THE NEW STRUCT DEFINITION IS IDENTICAL TO THE EXISTING ONE
 ERROR: LES_AddStructDefinition 'CantAddNewStructs' hash 0xA84BB85F not found in type data definition file
 FATAL_ERROR: TEST struct 'CantAddNewStructs' : ERROR adding structure definition
 FATAL_ERROR: TEST struct 'CantAddNewStructs' : ERROR cannot create definition

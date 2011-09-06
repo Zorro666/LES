@@ -436,7 +436,13 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 #endif // #if LES_TYPE_DEBUG
 
 		/* Check the type data matches */
-		const LES_TypeEntry* const typeEntryPtr = LES_GetTypeEntryForID(index);
+		const LES_TypeEntry* const typeEntryPtr = les_pTypeData ? les_pTypeData->GetTypeEntry(index) : LES_GetTypeEntryForID(index);
+		if (typeEntryPtr->m_hash != hash)
+		{
+			LES_WARNING("AddType '%s' hash 0x%X already in list and hash doesn't match Existing:0x%X New:0x%X",
+									name, hash, typeEntryPtr->m_hash, hash);
+			return LES_RETURN_ERROR;
+		}
 		if (typeEntryPtr->m_dataSize != dataSize)
 		{
 			LES_WARNING("AddType '%s' hash 0x%X already in list and dataSize doesn't match Existing:%d New:%d",
