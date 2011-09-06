@@ -157,16 +157,17 @@ int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* 
 	if (pTypeEntry == LES_NULL)
 	{
 		LES_ERROR("LES_AddStructDefinition '%s' hash 0x%X type entry not found", name, nameHash);
-		return -1;
+		return LES_RETURN_ERROR;
 	}
 
 	int index = LES_GetStructDefinitionIndex(nameHash);
 	if (index < 0)
 	{
+		LES_WARNING("NEED TO CHECK THE NEW STRUCT DEFINITION IS IDENTICAL TO THE EXISTING ONE");
 		if (les_pStructData)
 		{
 			LES_ERROR("LES_AddStructDefinition '%s' hash 0x%X not found in type data definition file", name, nameHash);
-			return -1;
+			return LES_RETURN_ERROR;
 		}
 
 		if (pTypeEntry->m_dataSize == 0)
@@ -186,7 +187,7 @@ int LES_AddStructDefinition(const char* const name, const LES_StructDefinition* 
 		{
 			LES_ERROR("LES_AddStructDefinition '%s' hash 0x%X type entry data size doesn't match typeDataSize:%d structDataSize:%d", 
 								name, nameHash, pTypeEntry->m_dataSize, structDataSize);
-			return -1;
+			return LES_RETURN_ERROR;
 		}
 		// Free the memory because of special way memory is done for these structures
 		void* memoryPtr = (void*)structDefinitionPtr;
