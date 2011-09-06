@@ -573,6 +573,7 @@ class LES_FunctionData():
 		functionParameter = functionDefinition.GetParameterByIndex(0)
 		functionParameter.m_typeID = self.__m_stringTable__.addString("output_only")
 
+		self.__m_stringTable__.addString("CantAddNewFunctions")
 		return True
 
 	def DebugOutputFunctions(self, loggerChannel):

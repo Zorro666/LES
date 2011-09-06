@@ -70,4 +70,5 @@
 		<LES_FUNCTION_INPUT_PARAMETER type="float" name="input_0"/>
 		<LES_FUNCTION_OUTPUT_PARAMETER type="int" name="output_0"/>
 	</LES_FUNCTION>
+
 </LES_FUNCTIONS>
