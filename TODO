@@ -1,4 +1,5 @@
 High Priority:
+FUNCDATA: fix up error tests not working right: OutputParameterAlreadyExists is broken, LES_Test_ParameterAlreadyExists is broken
 
 Medium Priority:
 SERVER: up and running ready for client to connect
