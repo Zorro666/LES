@@ -9,6 +9,7 @@
 #include "les_stringtable.h"
 #include "les_typedata.h"
 #include "les_structdata.h"
+#include "les_funcdata.h"
 #include "les_time.h"
 
 static LES_StringEntry* les_stringEntryArray = LES_NULL;
@@ -128,6 +129,8 @@ extern void LES_Function_SetFuncDataPtr(const LES_FuncData* const pFuncData);
 extern void LES_DebugOutputTypeEntry(LES_LoggerChannel* const pLogChannel, const LES_TypeEntry* const pTypeEntry, const int i);
 extern void LES_DebugOutputStructDefinition(LES_LoggerChannel* const pLogChannel, 
 																						const LES_StructDefinition* const pStructDefinition, const int i);
+extern void LES_DebugOutputFunctionDefinition(LES_LoggerChannel* const pLogChannel, 
+																							const LES_FunctionDefinition* const pFunctionDefinition, const int i);
 
 void LES_Init(void)
 {
@@ -269,8 +272,15 @@ void LES_DebugOutputGlobalDefinitionFile(LES_LoggerChannel* const pLogChannel)
 		const LES_StructDefinition* const pStructDefinition = pStructData->GetStructDefinition(i);
 		LES_DebugOutputStructDefinition(pLogChannel, pStructDefinition, i);
 	}
+	const LES_FuncData* const pFuncData = les_definitionFile.GetFuncData();
+	const int numFunctionDefinitions = pFuncData->GetNumFunctionDefinitions();
 	pLogChannel->Print("");
-	pLogChannel->Print("NEED DBEUG OUTPUT OF FUNCTION DEFINITIONS");
+	pLogChannel->Print("numFunctionDefinitions:%d", numFunctionDefinitions);
+	for (int i = 0; i < numFunctionDefinitions; i++)
+	{
+		const LES_FunctionDefinition* const pFunctionDefinition = pFuncData->GetFunctionDefinition(i);
+		LES_DebugOutputFunctionDefinition(pLogChannel, pFunctionDefinition, i);
+	}
 }
 
 void LES_DebugOutputStringEntries(LES_LoggerChannel* const pLogChannel)
