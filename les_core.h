@@ -15,6 +15,10 @@ void LES_DebugOutputStringEntries(LES_LoggerChannel* const pLogChannel);
 int LES_SetGlobalDefinitionFile(const void* definitionFileData, const int fileDataSize);
 void LES_DebugOutputGlobalDefinitionFile(LES_LoggerChannel* const pLogChannel);
 
+float LES_GetElapsedTimeInSeconds(void);
+LES_uint64 LES_GetElapsedTimeTicks(void);
+void LES_Sleep(const float sleepTimeInSeconds);
+
 void LES_Init(void);
 void LES_Shutdown(void);
 
