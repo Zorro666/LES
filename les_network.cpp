@@ -9,9 +9,22 @@
 
 #define LES_NETWORK_INVALID_SOCKET (-1)
 
-struct NetworkThreadStartStruct
+struct LES_NetworkThreadStartStruct
 {
 	int m_socketHandle;
+};
+
+struct LES_NetworkMessage
+{
+	int m_type;
+	int m_id;
+	int m_payloadSize;
+	char m_payload[1];		// m_payload[m_payloadSize]
+private:
+	LES_NetworkMessage();
+	LES_NetworkMessage(const LES_NetworkMessage& other);
+	LES_NetworkMessage& operator =(const LES_NetworkMessage& other);
+	~LES_NetworkMessage();
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,7 +76,7 @@ static int LES_CreateTCPSocket(const char* const ip, const short port)
 
 static void* clientNetworkThread(void* args)
 {
-	const NetworkThreadStartStruct* const networkThreadStartStruct = (const NetworkThreadStartStruct* const)args;
+	const LES_NetworkThreadStartStruct* const networkThreadStartStruct = (const LES_NetworkThreadStartStruct* const)args;
 	LES_LOG("clientNetworkThread Started");
 
 	const int socketHandle = networkThreadStartStruct->m_socketHandle;
@@ -123,7 +136,7 @@ int JAKE_SocketTest(const char* const ip, const short port)
 		return LES_RETURN_ERROR;
 	}
 
-	static NetworkThreadStartStruct networkThreadStartStruct;
+	static LES_NetworkThreadStartStruct networkThreadStartStruct;
 	networkThreadStartStruct.m_socketHandle = socketHandle;
 
 	pthread_t networkThread;
