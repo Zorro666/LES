@@ -12,14 +12,16 @@ PROJECTS:=\
 
 all: $(PROJECTS)
 
+C_CPP_COMMON_COMPILE_FLAGS:= -g -Wall -Wextra -Wuninitialized -Winit-self -Wstrict-aliasing -Wfloat-equal -Wshadow -Wconversion -Werror -fpack-struct=4
+
 C_COMPILE:=gcc -c
-C_COMPILE_FLAGS:=-g -Wall -Wextra -Wuninitialized -Winit-self -Wstrict-aliasing -Wfloat-equal -Wshadow -Wconversion -Werror -ansi -pedantic-errors -fpack-struct=4
+C_COMPILE_FLAGS:=-ansi -pedantic-errors
 
 CPP_COMPILE:=g++ -c
-CPP_COMPILE_FLAGS:=-g -Wall -Wextra -Wuninitialized -Winit-self -Wstrict-aliasing -Wfloat-equal -Wshadow -Wconversion -Werror -fpack-struct=4
+CPP_COMPILE_FLAGS:=
 
 LINK:=g++
-LINK_FLAGS:=-g -lm
+LINK_FLAGS:=-g -lm -lpthread
 
 ifdef WINDIR
 TARGET_EXTENSION := .exe
@@ -74,11 +76,11 @@ test:
 
 %.o: %.c
 	@echo Compiling $<
-	@$(C_COMPILE) -MMD $(C_COMPILE_FLAGS) -o $*.o $<
+	@$(C_COMPILE) -MMD $(C_CPP_COMMON_COMPILE_FLAGS) $(C_COMPILE_FLAGS) -o $*.o $<
 
 %.o: %.cpp
 	@echo Compiling $<
-	@$(CPP_COMPILE) -MMD $(CPP_COMPILE_FLAGS) -o $*.o $<
+	@$(CPP_COMPILE) -MMD $(C_CPP_COMMON_COMPILE_FLAGS) $(CPP_COMPILE_FLAGS) -o $*.o $<
 
 %: %.o 
 	@echo Linking $@
