@@ -1,10 +1,20 @@
 High Priority:
+CLIENT: put time functions into their own file
+CLIENT: put network thread and bits into their own file
+CLIENT: message struct: TYPE, ID, PAYLOAD_SIZE
+CLIENT: queue of messages to send between main & network thread
+SERVER: process message handler
+CLIENT: queue of messages to process between main & network thread
+CLIENT: need mutex - use global & time for now
+CLIENT: connect to server: CONNECT message
+PYTHON: build definition file data into memory not write it
+CLIENT: GET_DEFINITION message:  use definition file (type, string, structures, functions) from over the network
 
 Medium Priority:
-SERVER: up and running ready for client to connect
-CLIENT: connect to server
+CLIENT: LES function for threads to hide implementation details
+CLIENT: LES tcpsocket to hide implementation details
+CLIENT: network should use select() not recv()
 
-CLIENT: use definition file (type, string, structures, functions) from over the network
 
 CLIENT: send function data to server as network message
 SERVER: process function data send response
