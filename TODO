@@ -1,5 +1,4 @@
 High Priority:
-CLIENT: put time functions into their own file
 CLIENT: put network thread and bits into their own file
 CLIENT: message struct: TYPE, ID, PAYLOAD_SIZE
 CLIENT: queue of messages to send between main & network thread
