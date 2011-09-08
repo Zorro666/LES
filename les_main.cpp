@@ -47,7 +47,7 @@ int JAKE_LoadDefinitionFile(const char* const fname)
 	return LES_RETURN_OK;
 }
 
-extern void JAKE_SocketTest(void);
+extern int JAKE_SocketTest(const char* const ip, const short port);
 
 int main(const int argc, const char* const argv[])
 {
@@ -76,18 +76,20 @@ int main(const int argc, const char* const argv[])
 	LES_Logger::Init();
 	LES_Logger::SetConsoleOutput(LES_Logger::CHANNEL_LOG, verbose);
 	LES_Init();
-	JAKE_SocketTest();
-	float lastTime = -10000.0f;
-	while (1)
+	if (JAKE_SocketTest("127.0.0.1", 3141) == LES_RETURN_OK)
 	{
-		const float logDelta = 1.0f;
-		const float elapsedTime = LES_GetElapsedTimeInSeconds();
-		if ((elapsedTime - lastTime) > logDelta)
+		float lastTime = -10000.0f;
+		while (1)
 		{
-			LES_LOG("Time %f", elapsedTime);
-			lastTime = elapsedTime;
+			const float logDelta = 1.0f;
+			const float elapsedTime = LES_GetElapsedTimeInSeconds();
+			if ((elapsedTime - lastTime) > logDelta)
+			{
+				LES_LOG("Time %f", elapsedTime);
+				lastTime = elapsedTime;
+			}
+			LES_Sleep(2.5f);
 		}
-		LES_Sleep(2.5f);
 	}
 
 	if (JAKE_LoadDefinitionFile("defTest.bin") != LES_RETURN_OK)

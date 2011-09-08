@@ -1,10 +1,9 @@
 High Priority:
-CLIENT: put network thread and bits into their own file
 CLIENT: message struct: TYPE, ID, PAYLOAD_SIZE
 CLIENT: queue of messages to send between main & network thread
-SERVER: process message handler
+SERVER: decode the message struct and process it
 CLIENT: queue of messages to process between main & network thread
-CLIENT: need mutex - use global & time for now
+CLIENT: need mutex - use global & sleep (for yield) & time (for timeout) for now
 CLIENT: connect to server: CONNECT message
 PYTHON: build definition file data into memory not write it
 CLIENT: GET_DEFINITION message:  use definition file (type, string, structures, functions) from over the network
