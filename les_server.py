@@ -34,21 +34,25 @@ class LES_NetworkMessage():
 			self.m_payload = messageData[8:messageDataLen]
 		return self.m_valid
 
-	def Encode(self):
-		packetData = ""
-		packetData += packedInt16.pack(self.m_type)
-		packetData += packedInt16.pack(self.m_id)
-		packetData += packedInt32.pack(self.m_payloadSize)
-		if self.m_payload != None:
-			packetData += self.m_payload
-		return packetData
+def LES_CreateNetworkMessage(typeValue, idValue, payload):
+	# Needs to do memory padding like the client does on its sending
+	payloadSize = len(payload)
+
+	packetData = ""
+	packetData += packedInt16.pack(typeValue)
+	packetData += packedInt16.pack(idValue)
+	packetData += packedInt32.pack(payloadSize)
+	if payload != None:
+		packetData += payload
+
+	return packetData
 
 class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 	def handle(self):
 		curThread = threading.currentThread()
 		threadName = curThread.getName()
 		while (1):
- 			receivedData = self.request.recv(1024)
+ 			receivedData = self.request.recv(100*1024)
 			receivedDataLen = len(receivedData)
 			if receivedDataLen == 0:
 				continue
@@ -57,15 +61,12 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 			if receivedMessage.Decode(receivedData) == False:
 				print("%s: Failed to decode message receivedDataLen:%d" % (threadName, receivedDataLen))
 				continue
+
 			print("type:0x%X id:%d payloadSize:%d" % (receivedMessage.m_type, receivedMessage.m_id, receivedMessage.m_payloadSize))
 			print("payload:%s" % (receivedMessage.m_payload))
 
-			sendMessage = LES_NetworkMessage()
-			sendMessage.m_type = 0x33
-			sendMessage.m_id = receivedMessage.m_id
-			sendMessage.m_payload = "%s:%s" % (threadName, receivedMessage.m_payload)
-			sendMessage.m_payloadSize = len(sendMessage.m_payload)
- 			response = sendMessage.Encode()
+			payload = "%s:%s" % (threadName, receivedMessage.m_payload)
+			response = LES_CreateNetworkMessage(0x33, receivedMessage.m_id, payload)
 			self.request.send(response)
 
 
