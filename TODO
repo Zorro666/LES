@@ -1,11 +1,13 @@
 High Priority:
-CLIENT: big endian data format in messages
+CLIENT: tidy up network code a bit more
+SERVER: tidy up network code a lot
 CLIENT: queue of messages to send between main & network thread
-SERVER: decode big endian data format from messages
-SERVER: process the decoded message
 CLIENT: queue of messages to process between main & network thread
+SERVER: need a message handler
+CLIENT: need a message handler on main thread
 CLIENT: need mutex - use global & sleep (for yield) & time (for timeout) for now
-CLIENT: connect to server: CONNECT message
+CLIENT: CONNECT message: do connection message exchange
+SERVER: CONNECT message: handle connection message exchange
 PYTHON: build definition file data into memory not write it
 CLIENT: GET_DEFINITION message:  use definition file (type, string, structures, functions) from over the network
 
