@@ -1,7 +1,8 @@
 High Priority:
-CLIENT: message struct: TYPE, ID, PAYLOAD_SIZE
+CLIENT: big endian data format in messages
 CLIENT: queue of messages to send between main & network thread
-SERVER: decode the message struct and process it
+SERVER: decode big endian data format from messages
+SERVER: process the decoded message
 CLIENT: queue of messages to process between main & network thread
 CLIENT: need mutex - use global & sleep (for yield) & time (for timeout) for now
 CLIENT: connect to server: CONNECT message
