@@ -10,17 +10,17 @@ int LES_TypeData::Settle(void)
 	}
 
 	// Convert from little endian first
-	m_numTypes = fromLittleEndian32(m_numTypes);
-	m_settled = fromLittleEndian32(m_settled);
+	m_numTypes = fromBigEndian32(m_numTypes);
+	m_settled = fromBigEndian32(m_settled);
 
 	const int numTypes = m_numTypes;
 	for (int i = 0; i < numTypes; i++)
 	{
-		m_typeEntries[i].m_hash = fromLittleEndian32(m_typeEntries[i].m_hash);
-		m_typeEntries[i].m_dataSize = fromLittleEndian32(m_typeEntries[i].m_dataSize);
-		m_typeEntries[i].m_flags = fromLittleEndian32(m_typeEntries[i].m_flags);
-		m_typeEntries[i].m_aliasedTypeID = fromLittleEndian32(m_typeEntries[i].m_aliasedTypeID);
-		m_typeEntries[i].m_numElements = fromLittleEndian32(m_typeEntries[i].m_numElements);
+		m_typeEntries[i].m_hash = fromBigEndian32(m_typeEntries[i].m_hash);
+		m_typeEntries[i].m_dataSize = fromBigEndian32(m_typeEntries[i].m_dataSize);
+		m_typeEntries[i].m_flags = fromBigEndian32(m_typeEntries[i].m_flags);
+		m_typeEntries[i].m_aliasedTypeID = fromBigEndian32(m_typeEntries[i].m_aliasedTypeID);
+		m_typeEntries[i].m_numElements = fromBigEndian32(m_typeEntries[i].m_numElements);
 	}
 	m_settled = 1;
 

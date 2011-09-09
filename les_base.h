@@ -22,7 +22,7 @@ typedef float LES_float32;
 #define LES_RETURN_OK (1)
 #define LES_RETURN_ERROR (-1)
 
-#define BIG_ENDIAN_MACHINE (1)
+#define BIG_ENDIAN_MACHINE (0)
 
 inline LES_int16 swapEndian16(const LES_int16 input)
 {
@@ -72,9 +72,10 @@ inline LES_uint32 swapEndian32(const LES_uint32 input)
 	return output;
 }
 
-#if BIG_ENDIAN_MACHINE
+#if BIG_ENDIAN_MACHINE == 1
+// Big Endian machine
 
-// Swap LittleEndian to BigEndian
+// Swap from LittleEndian to BigEndian
 inline LES_int16 fromLittleEndian16(const LES_int16 input)
 {
 	return swapEndian16(input);
@@ -95,7 +96,7 @@ inline LES_uint32 fromLittleEndian32(const LES_uint32 input)
 	return swapEndian32(input);
 }
 
-// Swap BigEndian to LittleEndian
+// Swap to LittleEndian from BigEndian
 inline LES_int16 toLittleEndian16(const LES_int16 input)
 {
 	return swapEndian16(input);
@@ -116,9 +117,52 @@ inline LES_uint32 toLittleEndian32(const LES_uint32 input)
 	return swapEndian32(input);
 }
 
-#else
+// Swap from BigEndian to BigEndian
+inline LES_int16 fromBigEndian16(const LES_int16 input)
+{
+	return input;
+}
 
-// swap LittleEndian to LittleEndian
+inline LES_uint16 fromBigEndian16(const LES_uint16 input)
+{
+	return input;
+}
+
+inline LES_int32 fromBigEndian32(const LES_int32 input)
+{
+	return input;
+}
+
+inline LES_uint32 fromBigEndian32(const LES_uint32 input)
+{
+	return input;
+}
+
+// Swap to BigEndian from BigEndian
+inline LES_int16 toBigEndian16(const LES_int16 input)
+{
+	return input;
+}
+
+inline LES_uint16 toBigEndian16(const LES_uint16 input)
+{
+	return input;
+}
+
+inline LES_int32 toBigEndian32(const LES_int32 input)
+{
+	return input;
+}
+
+inline LES_uint32 toBigEndian32(const LES_uint32 input)
+{
+	return input;
+}
+
+#else // #if BIG_ENDIAN_MACHINE == 1
+// Little Endian Machine
+
+// swap from LittleEndian to LittleEndian
 inline LES_int16 fromLittleEndian16(const LES_int16 input)
 {
 	return input;
@@ -139,7 +183,7 @@ inline LES_uint32 fromLittleEndian32(const LES_uint32 input)
 	return input;
 }
 
-// swap LittleEndian to LittleEndian
+// swap to LittleEndian from LittleEndian
 inline LES_int16 toLittleEndian16(const LES_int16 input)
 {
 	return input;
@@ -160,6 +204,48 @@ inline LES_uint32 toLittleEndian32(const LES_uint32 input)
 	return input;
 }
 
-#endif // #if BIG_ENDIAN_MACHINE
+// Swap from BigEndian to LittleEndian
+inline LES_int16 fromBigEndian16(const LES_int16 input)
+{
+	return swapEndian16(input);
+}
+
+inline LES_uint16 fromBigEndian16(const LES_uint16 input)
+{
+	return swapEndian16(input);
+}
+
+inline LES_int32 fromBigEndian32(const LES_int32 input)
+{
+	return swapEndian32(input);
+}
+
+inline LES_uint32 fromBigEndian32(const LES_uint32 input)
+{
+	return swapEndian32(input);
+}
+
+// Swap to BigEndian from LittleEndian
+inline LES_int16 toBigEndian16(const LES_int16 input)
+{
+	return swapEndian16(input);
+}
+
+inline LES_uint16 toBigEndian16(const LES_uint16 input)
+{
+	return swapEndian16(input);
+}
+
+inline LES_int32 toBigEndian32(const LES_int32 input)
+{
+	return swapEndian32(input);
+}
+
+inline LES_uint32 toBigEndian32(const LES_uint32 input)
+{
+	return swapEndian32(input);
+}
+
+#endif // #if BIG_ENDIAN_MACHINE == 1
 
 #endif // #ifndef LES_BASE_HH

@@ -11,14 +11,14 @@ int LES_StringTable::Settle(void)
 	}
 
 	// Convert from little endian first
-	m_numStrings = fromLittleEndian32(m_numStrings);
-	m_settled = fromLittleEndian32(m_settled);
+	m_numStrings = fromBigEndian32(m_numStrings);
+	m_settled = fromBigEndian32(m_settled);
 
 	const int numStrings = m_numStrings;
 	for (int i = 0; i < numStrings; i++)
 	{
-		m_stringTableEntries[i].m_hash = fromLittleEndian32(m_stringTableEntries[i].m_hash);
-		m_stringTableEntries[i].m_offset = fromLittleEndian32(m_stringTableEntries[i].m_offset);
+		m_stringTableEntries[i].m_hash = fromBigEndian32(m_stringTableEntries[i].m_hash);
+		m_stringTableEntries[i].m_offset = fromBigEndian32(m_stringTableEntries[i].m_offset);
 	}
 
 	const char* pStringTableStart = (const char*)&m_numStrings;
