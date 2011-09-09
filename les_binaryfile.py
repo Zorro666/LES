@@ -11,12 +11,24 @@ class LES_BinaryFile():
 		self.setBigEndian()
 
 	def setFormats(self):
-		self.int8Format = self.endianFormat + "b"
-		self.uint8Format = self.endianFormat + "B"
-		self.int16Format = self.endianFormat + "h"
-		self.uint16Format = self.endianFormat + "H"
-		self.int32Format = self.endianFormat + "i"
-		self.uint32Format = self.endianFormat + "I"
+		int8Format = self.endianFormat + "b"
+		uint8Format = self.endianFormat + "B"
+		int16Format = self.endianFormat + "h"
+		uint16Format = self.endianFormat + "H"
+		int32Format = self.endianFormat + "i"
+		uint32Format = self.endianFormat + "I"
+		nullCharFormat = self.endianFormat + "1c"
+
+		self.int8 = struct.Struct(int8Format)
+		self.uint8 = struct.Struct(uint8Format)
+
+		self.int16 = struct.Struct(int16Format)
+		self.uint16 = struct.Struct(uint16Format)
+
+		self.int32 = struct.Struct(int32Format)
+		self.uint32 = struct.Struct(uint32Format)
+
+		self.nullChar = struct.Struct(nullCharFormat)
 
 	def setLittleEndian(self):
 		self.endianFormat = "<"
@@ -27,27 +39,27 @@ class LES_BinaryFile():
 		self.setFormats()
 
 	def writeInt8(self, value):
-		temp = struct.pack(self.int8Format, value)
+		temp = self.int8.pack(value)
 		self.fh.write(temp)
 
 	def writeUint8(self, value):
-		temp = struct.pack(self.uint8Format, value)
+		temp = self.uint8.pack(value)
 		self.fh.write(temp)
 
 	def writeInt16(self, value):
-		temp = struct.pack(self.int16Format, value)
+		temp = self.int16.pack(value)
 		self.fh.write(temp)
 
 	def writeUint16(self, value):
-		temp = struct.pack(self.uint16Format, value)
+		temp = self.uint16.pack(value)
 		self.fh.write(temp)
 
 	def writeInt32(self, value):
-		temp = struct.pack(self.int32Format, value)
+		temp = self.int32.pack(value)
 		self.fh.write(temp)
 
 	def writeUint32(self, value):
-		temp = struct.pack(self.uint32Format, value)
+		temp = self.uint32.pack(value)
 		self.fh.write(temp)
 
 	def writeString(self, value):
@@ -59,8 +71,7 @@ class LES_BinaryFile():
 	def writeCstring(self, value):
 		self.writeString(value)
 		# null terminate the string
-		strFmt = self.endianFormat + "1c"
-		temp = struct.pack(strFmt, chr(0))
+		temp = self.nullChar.pack(chr(0))
 		self.fh.write(temp)
 
 	def getIndex(self):
