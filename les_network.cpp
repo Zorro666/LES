@@ -6,6 +6,7 @@
 #include <malloc.h>
 
 #include "les_base.h"
+#include "les_network.h"
 #include "les_logger.h"
 
 #define LES_NETWORK_INVALID_SOCKET (-1)
@@ -46,12 +47,13 @@ static int LES_NetworkMessageSize(const int payLoadSize)
 	return memorySize;
 }
 
-static LES_NetworkMessage* LES_CreateNetworkMessage(const short type, const short id, const int payLoadSize, const int messageSize)
+static LES_NetworkMessage* LES_CreateNetworkMessage(const short type, const short id, const int payLoadSize, void* const payload, const int messageSize)
 {
 	LES_NetworkMessage* const pNetworkMessage = (LES_NetworkMessage*)malloc(messageSize);
 	pNetworkMessage->m_type = toBigEndian16(type);
 	pNetworkMessage->m_id = toBigEndian16(id);
 	pNetworkMessage->m_payloadSize = toBigEndian32(payLoadSize);
+	memcpy(pNetworkMessage->m_payload, payload, payLoadSize);
 
 	return pNetworkMessage;
 }
@@ -97,6 +99,8 @@ static int LES_CreateTCPSocket(const char* const ip, const short port)
 	return socketHandle;
 }
 
+LES_NetworkSendItem s_sendItem;
+
 static void* clientNetworkThread(void* args)
 {
 	const LES_NetworkThreadStartStruct* const networkThreadStartStruct = (const LES_NetworkThreadStartStruct* const)args;
@@ -105,60 +109,81 @@ static void* clientNetworkThread(void* args)
 	const int socketHandle = networkThreadStartStruct->m_socketHandle;
 
 	//Now lets do the client related stuff
-	const short type = 0x66;
-	short int id = 0;
-
 	while (1)
 	{
-		const int bufferLen = 1024;
-  	char buffer[1024];
-		memset(buffer, '\0', bufferLen);
+		// NEEDS A MUTEX LOCK
+		// Get the sendItem from a queue and make main thread add to the sendItem
 
-	  LES_LOG("Enter some text to send to the server (press enter)");
-		fgets(buffer, 1024, stdin);
-		buffer[strlen(buffer)-1]='\0';
-
-		if (strcmp(buffer, "quit") == 0)
+		LES_NetworkSendItem* const pSendItem = &s_sendItem;
+		void* pSendData = (void*)(pSendItem->m_message);
+		const int sendDataSize = pSendItem->m_messageSize;
+		if (sendDataSize == 0)
 		{
-			break;
+			continue;
 		}
-			
-		id++;
-		const int payLoadSize = strlen(buffer);
-		const int messageSize = LES_NetworkMessageSize(payLoadSize);
-		LES_NetworkMessage* const pNetMessage = LES_CreateNetworkMessage(type, id, payLoadSize, messageSize);
-		memcpy(pNetMessage->m_payload, buffer, payLoadSize);
 
-		int bytecount;
-		bytecount = send(socketHandle, pNetMessage, messageSize, 0);
-		if (bytecount == -1)
+		const int bytesSent = send(socketHandle, pSendData, sendDataSize, 0);
+		if (bytesSent == -1)
 		{
 			LES_ERROR("Error sending data %d", errno);
 			break;
 		}
-		LES_LOG("Sent bytes %d (%d)", bytecount, messageSize);
-		free(pNetMessage);
+		LES_LOG("Sent bytes %d (%d)", bytesSent, sendDataSize);
+		pSendItem->Free();
 
+ 		char buffer[128];
+		const int bufferLen = 128;
 		buffer[0] = '\0';
-		bytecount = recv(socketHandle, buffer, bufferLen, 0);
-		if (bytecount == -1)
+		const int bytesReceived = recv(socketHandle, buffer, bufferLen, 0);
+		if (bytesReceived == -1)
 		{
 			LES_ERROR("Error receiving data %d", errno);
 			break;
 		}
+		// Make a NetReceiveItem struct and put data into it
 		LES_NetworkMessage* const pReceivedMessage = (LES_NetworkMessage* const)buffer;
 		short receivedType = fromBigEndian16(pReceivedMessage->m_type);
 		short receivedId = fromBigEndian16(pReceivedMessage->m_id);
 		int receivedPayloadSize = fromBigEndian32(pReceivedMessage->m_payloadSize);
 
-		LES_LOG("Received bytes %d", bytecount);
+		LES_LOG("Received bytes %d", bytesReceived);
 		LES_LOG("Received message: type:0x%X id:%d payloadSize:%d", receivedType, receivedId, receivedPayloadSize);
-		LES_LOG("payload:%s", (char*)pReceivedMessage->m_payload);
+		LES_LOG("payload:'%s'", (char*)pReceivedMessage->m_payload);
 	}
 
   close(socketHandle);
 	LES_LOG("clientNetworkThread Ended");
 	return LES_NULL;
+}
+
+void LES_NetworkSendItem::Create(const short type, const short id, const int payLoadSize, void* const payload)
+{
+	const int messageSize = LES_NetworkMessageSize(payLoadSize);
+	m_message = LES_CreateNetworkMessage(type, id, payLoadSize, payload, messageSize);
+	m_messageSize = messageSize;
+}
+
+void LES_NetworkSendItem::Free(void)
+{
+	free(m_message);
+	m_message = LES_NULL;
+	m_messageSize = 0;
+}
+
+int LES_NetworkAddSendItem(const LES_NetworkSendItem* const pSendItem)
+{
+	if (s_sendItem.m_messageSize != 0)
+	{
+		return LES_RETURN_ERROR;
+	}
+	if (s_sendItem.m_message != LES_NULL)
+	{
+		return LES_RETURN_ERROR;
+	}
+
+	// NEEDS A MUTEX LOCK
+	s_sendItem = *pSendItem;
+	return LES_RETURN_OK;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +192,7 @@ static void* clientNetworkThread(void* args)
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-int JAKE_SocketTest(const char* const ip, const short port)
+int LES_NetworkCreateTCPSocket(const char* const ip, const short port)
 {
 	const int socketHandle = LES_CreateTCPSocket(ip, port);
 

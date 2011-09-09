@@ -7,6 +7,7 @@
 #include "les_test.h"
 #include "les_definitionfile.h"
 #include "les_time.h"
+#include "les_network.h"
 
 #include "les_jake.h"
 
@@ -47,8 +48,6 @@ int JAKE_LoadDefinitionFile(const char* const fname)
 	return LES_RETURN_OK;
 }
 
-extern int JAKE_SocketTest(const char* const ip, const short port);
-
 int main(const int argc, const char* const argv[])
 {
 	bool verbose = true;
@@ -76,11 +75,36 @@ int main(const int argc, const char* const argv[])
 	LES_Logger::Init();
 	LES_Logger::SetConsoleOutput(LES_Logger::CHANNEL_LOG, verbose);
 	LES_Init();
-	if (JAKE_SocketTest("127.0.0.1", 3141) == LES_RETURN_OK)
+	if (LES_NetworkCreateTCPSocket("127.0.0.1", 3141) == LES_RETURN_OK)
 	{
 		float lastTime = -10000.0f;
+		const short type = 0x66;
+		short int id = 0;
 		while (1)
 		{
+			const int bufferLen = 128;
+  		char buffer[128];
+			memset(buffer, '\0', bufferLen);
+
+	  	LES_LOG("Enter some text to send to the server (press enter)");
+			fgets(buffer, 128, stdin);
+			const int stringLen = strlen(buffer);
+			buffer[stringLen-1]='\0';
+
+			if (strcmp(buffer, "quit") == 0)
+			{
+				break;
+			}
+			
+			const int payLoadSize = stringLen;
+			LES_NetworkSendItem sendItem;
+			sendItem.Create(type, id, payLoadSize, buffer);
+			if (LES_NetworkAddSendItem(&sendItem) == LES_RETURN_ERROR)
+			{
+				LES_ERROR("Error adding send item");
+			}
+			id++;
+
 			const float logDelta = 1.0f;
 			const float elapsedTime = LES_GetElapsedTimeInSeconds();
 			if ((elapsedTime - lastTime) > logDelta)
@@ -88,7 +112,7 @@ int main(const int argc, const char* const argv[])
 				LES_LOG("Time %f", elapsedTime);
 				lastTime = elapsedTime;
 			}
-			LES_Sleep(2.5f);
+			LES_Sleep(0.1f);
 		}
 	}
 
