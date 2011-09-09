@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <string.h>
+#include <malloc.h>
 
 #include "les_base.h"
 #include "les_logger.h"
@@ -16,10 +17,10 @@ struct LES_NetworkThreadStartStruct
 
 struct LES_NetworkMessage
 {
-	int m_type;
-	int m_id;
+	short m_type;
+	short m_id;
 	int m_payloadSize;
-	char m_payload[1];		// m_payload[m_payloadSize]
+	int m_payload[1];		// m_payload[m_payloadSize/4]
 private:
 	LES_NetworkMessage();
 	LES_NetworkMessage(const LES_NetworkMessage& other);
@@ -32,6 +33,28 @@ private:
 // Internal Static functions
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
+
+static int LES_NetworkMessageSize(const int payLoadSize)
+{
+	int payloadExtraMemmory = payLoadSize - sizeof(int);
+	if (payloadExtraMemmory < 0)
+	{
+		payloadExtraMemmory = 0;
+	}
+	payloadExtraMemmory = (payloadExtraMemmory + 3) & ~3;
+	const int memorySize = sizeof(LES_NetworkMessage) + payloadExtraMemmory;
+	return memorySize;
+}
+
+static LES_NetworkMessage* LES_CreateNetworkMessage(const short type, const short id, const int payLoadSize, const int messageSize)
+{
+	LES_NetworkMessage* const pNetworkMessage = (LES_NetworkMessage*)malloc(messageSize);
+	pNetworkMessage->m_type = type;
+	pNetworkMessage->m_id = id;
+	pNetworkMessage->m_payloadSize = payLoadSize;
+
+	return pNetworkMessage;
+}
 
 static int LES_CreateTCPSocket(const char* const ip, const short port)
 {
@@ -82,6 +105,9 @@ static void* clientNetworkThread(void* args)
 	const int socketHandle = networkThreadStartStruct->m_socketHandle;
 
 	//Now lets do the client related stuff
+	const short type = 0x66;
+	short int id = 0;
+
 	while (1)
 	{
 		const int bufferLen = 1024;
@@ -97,14 +123,20 @@ static void* clientNetworkThread(void* args)
 			break;
 		}
 			
+		id++;
+		const int payLoadSize = strlen(buffer);
+		const int messageSize = LES_NetworkMessageSize(payLoadSize);
+		LES_NetworkMessage* const pNetMessage = LES_CreateNetworkMessage(type, id, payLoadSize, messageSize);
+		memcpy(pNetMessage->m_payload, buffer, payLoadSize);
+
 		int bytecount;
-		bytecount = send(socketHandle, buffer, strlen(buffer),0);
+		bytecount = send(socketHandle, pNetMessage, messageSize, 0);
 		if (bytecount == -1)
 		{
 			LES_ERROR("Error sending data %d\n", errno);
 			break;
 		}
-		LES_LOG("Sent bytes %d\n", bytecount);
+		LES_LOG("Sent bytes %d (%d)\n", bytecount, messageSize);
 
 		buffer[0] = '\0';
 		bytecount = recv(socketHandle, buffer, bufferLen, 0);
