@@ -49,9 +49,9 @@ static int LES_NetworkMessageSize(const int payLoadSize)
 static LES_NetworkMessage* LES_CreateNetworkMessage(const short type, const short id, const int payLoadSize, const int messageSize)
 {
 	LES_NetworkMessage* const pNetworkMessage = (LES_NetworkMessage*)malloc(messageSize);
-	pNetworkMessage->m_type = type;
-	pNetworkMessage->m_id = id;
-	pNetworkMessage->m_payloadSize = payLoadSize;
+	pNetworkMessage->m_type = toBigEndian16(type);
+	pNetworkMessage->m_id = toBigEndian16(id);
+	pNetworkMessage->m_payloadSize = toBigEndian32(payLoadSize);
 
 	return pNetworkMessage;
 }
@@ -61,7 +61,7 @@ static int LES_CreateTCPSocket(const char* const ip, const short port)
   const int socketHandle = socket(AF_INET, SOCK_STREAM, 0);
   if (socketHandle == -1)
 	{
-      LES_ERROR("LES_CreateTCPSocket::Error initializing socket %d\n",errno);
+      LES_ERROR("LES_CreateTCPSocket::Error initializing socket %d",errno);
       return LES_NETWORK_INVALID_SOCKET;
   }
     
@@ -70,7 +70,7 @@ static int LES_CreateTCPSocket(const char* const ip, const short port)
   if ((setsockopt(socketHandle, SOL_SOCKET, SO_REUSEADDR, (char*)&option, sizeof(int)) == -1) ||
       (setsockopt(socketHandle, SOL_SOCKET, SO_KEEPALIVE, (char*)&option, sizeof(int)) == -1))
 	{
-    LES_ERROR("LES_CreateTCPSocket::Error setting options %d\n",errno);
+    LES_ERROR("LES_CreateTCPSocket::Error setting options %d",errno);
 		close(socketHandle);
     return LES_NETWORK_INVALID_SOCKET;
   }
@@ -89,7 +89,7 @@ static int LES_CreateTCPSocket(const char* const ip, const short port)
 		int err = errno;
 		if (err != EINPROGRESS)
 		{
-			LES_ERROR("LES_CreateTCPSocket::Error connecting socket errno:0x%X\n", errno);
+			LES_ERROR("LES_CreateTCPSocket::Error connecting socket errno:0x%X", errno);
   		close(socketHandle);
     	return LES_NETWORK_INVALID_SOCKET;
 		}
@@ -114,7 +114,7 @@ static void* clientNetworkThread(void* args)
   	char buffer[1024];
 		memset(buffer, '\0', bufferLen);
 
-	  LES_LOG("Enter some text to send to the server (press enter)\n");
+	  LES_LOG("Enter some text to send to the server (press enter)");
 		fgets(buffer, 1024, stdin);
 		buffer[strlen(buffer)-1]='\0';
 
@@ -133,19 +133,27 @@ static void* clientNetworkThread(void* args)
 		bytecount = send(socketHandle, pNetMessage, messageSize, 0);
 		if (bytecount == -1)
 		{
-			LES_ERROR("Error sending data %d\n", errno);
+			LES_ERROR("Error sending data %d", errno);
 			break;
 		}
-		LES_LOG("Sent bytes %d (%d)\n", bytecount, messageSize);
+		LES_LOG("Sent bytes %d (%d)", bytecount, messageSize);
+		free(pNetMessage);
 
 		buffer[0] = '\0';
 		bytecount = recv(socketHandle, buffer, bufferLen, 0);
 		if (bytecount == -1)
 		{
-			LES_ERROR("Error receiving data %d\n", errno);
+			LES_ERROR("Error receiving data %d", errno);
 			break;
 		}
-		LES_LOG("Received bytes %d\nReceived string \"%s\"\n", bytecount, buffer);
+		LES_NetworkMessage* const pReceivedMessage = (LES_NetworkMessage* const)buffer;
+		short receivedType = fromBigEndian16(pReceivedMessage->m_type);
+		short receivedId = fromBigEndian16(pReceivedMessage->m_id);
+		int receivedPayloadSize = fromBigEndian32(pReceivedMessage->m_payloadSize);
+
+		LES_LOG("Received bytes %d", bytecount);
+		LES_LOG("Received message: type:0x%X id:%d payloadSize:%d", receivedType, receivedId, receivedPayloadSize);
+		LES_LOG("payload:%s", (char*)pReceivedMessage->m_payload);
 	}
 
   close(socketHandle);
