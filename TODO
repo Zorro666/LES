@@ -1,6 +1,4 @@
 High Priority:
-CLIENT: tidy up network code a bit more
-SERVER: tidy up network code a lot
 CLIENT: queue of messages to send between main & network thread
 CLIENT: queue of messages to process between main & network thread
 SERVER: need a message handler
