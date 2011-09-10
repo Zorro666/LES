@@ -1,7 +1,4 @@
 High Priority:
-CLIENT: queue of messages to send between main & network thread
-CLIENT: stress test the queue: wrap around
-CLIENT: the queue head doesn't need to reset, insertion can start from last head point when numItems=0
 CLIENT: need a mutex on the send queue, swap queues at a sync point between main & network
 CLIENT: queue of messages to process between main & network thread
 SERVER: need a message handler
