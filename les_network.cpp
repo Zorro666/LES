@@ -11,7 +11,7 @@
 #include "les_time.h"
 
 #define LES_NETWORK_INVALID_SOCKET (-1)
-#define LES_NETWORK_SEND_QUEUE_SIZE (128)
+#define LES_NETWORK_SEND_QUEUE_SIZE (4)
 
 struct LES_NetworkThreadStartStruct
 {
@@ -53,14 +53,14 @@ private:
 LES_NetworkSendQueue::LES_NetworkSendQueue(void)
 {
 	m_numItems = 0;
-	m_headIndex = -1;
+	m_headIndex = 0;
 	m_tailIndex = 0;
 }
 
 LES_NetworkSendQueue::~LES_NetworkSendQueue(void)
 {
 	m_numItems = 0;
-	m_headIndex = -1;
+	m_headIndex = 0;
 	m_tailIndex = 0;
 }
 
@@ -74,7 +74,7 @@ int LES_NetworkSendQueue::Add(const LES_NetworkSendItem* const pSendItem)
 		LES_ERROR("LES_NetworkSendQueue::Add() queue full");
 		return LES_RETURN_ERROR;
 	}
-	if (m_tailIndex == m_headIndex)
+	if ((m_tailIndex == m_headIndex) && (m_numItems != 0))
 	{
 		//Queue wrap around
 		LES_ERROR("LES_NetworkSendQueue::Add() queue wrap around");
@@ -82,39 +82,25 @@ int LES_NetworkSendQueue::Add(const LES_NetworkSendItem* const pSendItem)
 	}
 	*pInsertPlace = *pSendItem;
 
-	if ((m_headIndex == -1) && (m_numItems != 0))
+	if ((m_numItems == 0) && (m_headIndex != m_tailIndex))
 	{
-		LES_ERROR("LES_NetworkSendQueue::Add() head is -1 but numItems != 0 %d", m_numItems);
-		return LES_RETURN_ERROR;
-	}
-	if ((m_numItems == 0) && (m_headIndex != -1))
-	{
-		LES_ERROR("LES_NetworkSendQueue::Add() numItems == 0 but head is not -1 %d", m_headIndex);
+		LES_ERROR("LES_NetworkSendQueue::Add() numItems == 0 but head != tail %d != %d", m_headIndex, m_tailIndex);
 		return LES_RETURN_ERROR;
 	}
 
-	if (m_headIndex == -1)
-	{
-		m_headIndex = m_tailIndex;
-		m_numItems = 0;
-	}
 	m_tailIndex++;
 	m_tailIndex = m_tailIndex % LES_NETWORK_SEND_QUEUE_SIZE;
 	m_numItems++;
+	LES_LOG("Add: head %d tail %d num %d", m_headIndex, m_tailIndex, m_numItems);
 
 	return LES_RETURN_OK;
 }
 
 LES_NetworkSendItem* LES_NetworkSendQueue::Pop(void)
 {
-	if ((m_headIndex == -1) && (m_numItems != 0))
+	if ((m_numItems == 0) && (m_headIndex != m_tailIndex))
 	{
-		LES_ERROR("LES_NetworkSendQueue::Pop() head is -1 but numItems != 0 %d", m_numItems);
-		return LES_NULL;
-	}
-	if ((m_numItems == 0) && (m_headIndex != -1))
-	{
-		LES_ERROR("LES_NetworkSendQueue::Pop() numItems == 0 but head is -1 %d", m_headIndex);
+		LES_ERROR("LES_NetworkSendQueue::Pop() numItems == 0 but head != tail %d:%d", m_headIndex, m_tailIndex);
 		return LES_NULL;
 	}
 	if (m_numItems == 0)
@@ -122,12 +108,17 @@ LES_NetworkSendItem* LES_NetworkSendQueue::Pop(void)
 		return LES_NULL;
 	}
 	LES_NetworkSendItem* const pItem = &m_items[m_headIndex];
+	LES_LOG("Pop: head %d tail %d num %d", m_headIndex, m_tailIndex, m_numItems);
 	m_numItems--;
 	m_headIndex++;
 	m_headIndex = m_headIndex % LES_NETWORK_SEND_QUEUE_SIZE;
 	if (m_numItems == 0)
 	{
-		m_headIndex = -1;
+		if (m_headIndex != m_tailIndex)
+		{
+			LES_ERROR("LES_NetworkSendQueue::Pop() numItems == 0 but head != tail %d:%d", m_headIndex, m_tailIndex);
+			return LES_NULL;
+		}
 	}
 
 	return pItem;
