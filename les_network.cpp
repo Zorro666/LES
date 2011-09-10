@@ -11,7 +11,7 @@
 #include "les_time.h"
 
 #define LES_NETWORK_INVALID_SOCKET (-1)
-#define LES_NETWORK_SEND_QUEUE_SIZE (4)
+#define LES_NETWORK_SEND_QUEUE_SIZE (128)
 
 struct LES_NetworkThreadStartStruct
 {
@@ -91,7 +91,7 @@ int LES_NetworkSendQueue::Add(const LES_NetworkSendItem* const pSendItem)
 	m_tailIndex++;
 	m_tailIndex = m_tailIndex % LES_NETWORK_SEND_QUEUE_SIZE;
 	m_numItems++;
-	LES_LOG("Add: head %d tail %d num %d", m_headIndex, m_tailIndex, m_numItems);
+	//LES_LOG("Add: head %d tail %d num %d", m_headIndex, m_tailIndex, m_numItems);
 
 	return LES_RETURN_OK;
 }
@@ -108,7 +108,6 @@ LES_NetworkSendItem* LES_NetworkSendQueue::Pop(void)
 		return LES_NULL;
 	}
 	LES_NetworkSendItem* const pItem = &m_items[m_headIndex];
-	LES_LOG("Pop: head %d tail %d num %d", m_headIndex, m_tailIndex, m_numItems);
 	m_numItems--;
 	m_headIndex++;
 	m_headIndex = m_headIndex % LES_NETWORK_SEND_QUEUE_SIZE;
@@ -121,6 +120,7 @@ LES_NetworkSendItem* LES_NetworkSendQueue::Pop(void)
 		}
 	}
 
+	//LES_LOG("Pop: head %d tail %d num %d", m_headIndex, m_tailIndex, m_numItems);
 	return pItem;
 }
 
