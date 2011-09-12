@@ -22,5 +22,6 @@ struct LES_NetworkSendItem
 
 int LES_NetworkCreateTCPSocket(const char* const ip, const short port);
 int LES_NetworkAddSendItem(const LES_NetworkSendItem* const pSendItem);
+void LES_NetworkTick(void);
 
 #endif // #ifndef LES_NETWORK_HH
