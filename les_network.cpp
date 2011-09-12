@@ -174,7 +174,7 @@ void LES_Mutex::UnLock(void)
 }
 
 static LES_NetworkQueue<LES_NetworkSendItem, LES_NETWORK_SEND_QUEUE_SIZE> s_sendItemQueue;
-static LES_NetworkQueue<LES_NetworkMessage*, LES_NETWORK_RECEIVE_QUEUE_SIZE> s_receiveMessageQueue;
+static LES_NetworkQueue<LES_NetworkReceivedItem, LES_NETWORK_RECEIVE_QUEUE_SIZE> s_receiveMessageQueue;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -254,7 +254,8 @@ static int LES_NetworkAddReceivedMessage(LES_NetworkMessage* const pReceivedMess
 		LES_ERROR("LES_NetworkAddReceivedMessage() message is NULL");
 		return LES_RETURN_ERROR;
 	}
-	if (s_receiveMessageQueue.Add(&pReceivedMessage) == LES_RETURN_ERROR)
+	LES_NetworkReceivedItem receivedItem(pReceivedMessage);
+	if (s_receiveMessageQueue.Add(&receivedItem) == LES_RETURN_ERROR)
 	{
 		LES_ERROR("LES_NetworkAddReceivedMessage() failed to add to the queue");
 		return LES_RETURN_ERROR;
@@ -283,8 +284,8 @@ static void* clientNetworkThread(void* args)
 			LES_Sleep(4.1f);
 			continue;
 		}
-		void* pSendData = (void*)(pSendItem->m_message);
-		const int sendDataSize = pSendItem->m_messageSize;
+		void* pSendData = (void*)(pSendItem->GetMessage());
+		const int sendDataSize = pSendItem->GetMessageSize();
 		if (sendDataSize == 0)
 		{
 			continue;
@@ -337,6 +338,12 @@ void LES_NetworkSendItem::Free(void)
 	m_messageSize = 0;
 }
 
+void LES_NetworkReceivedItem::Free(void)
+{
+	free(m_message);
+	m_message = LES_NULL;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Public external functions
@@ -364,12 +371,12 @@ int LES_NetworkCreateTCPSocket(const char* const ip, const short port)
 
 int LES_NetworkAddSendItem(const LES_NetworkSendItem* const pSendItem)
 {
-	if (pSendItem->m_messageSize == 0)
+	if (pSendItem->GetMessageSize() == 0)
 	{
 		LES_ERROR("LES_NetworkAddSendItem() messageSize is 0");
 		return LES_RETURN_ERROR;
 	}
-	if (pSendItem->m_message == LES_NULL)
+	if (pSendItem->GetMessage() == LES_NULL)
 	{
 		LES_ERROR("LES_NetworkAddSendItem() message is NULL");
 		return LES_RETURN_ERROR;
@@ -389,12 +396,12 @@ void LES_NetworkTick(void)
 	LES_NETWORK_GET_MUTEX;
 	while (1)
 	{
-		LES_NetworkMessage** const pItem = s_receiveMessageQueue.Pop();
+		LES_NetworkReceivedItem* const pItem = s_receiveMessageQueue.Pop();
 		if (pItem == LES_NULL)
 		{
 			break;
 		}
-		LES_NetworkMessage* const pReceivedMessage = *pItem;
+		LES_NetworkMessage* const pReceivedMessage = pItem->GetMessage();
 
 		short receivedType = fromBigEndian16(pReceivedMessage->m_type);
 		short receivedId = fromBigEndian16(pReceivedMessage->m_id);
@@ -402,6 +409,8 @@ void LES_NetworkTick(void)
 
 		LES_LOG("Received message: type:0x%X id:%d payloadSize:%d", receivedType, receivedId, receivedPayloadSize);
 		LES_LOG("payload:'%s'", (char*)pReceivedMessage->m_payload);
+
+		pItem->Free();
 	}
 }
 
