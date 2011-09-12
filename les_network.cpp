@@ -396,12 +396,12 @@ void LES_NetworkTick(void)
 	LES_NETWORK_GET_MUTEX;
 	while (1)
 	{
-		LES_NetworkReceivedItem* const pItem = s_receiveMessageQueue.Pop();
+		LES_NetworkReceivedItem* const pReceivedItem = s_receiveMessageQueue.Pop();
 		if (pItem == LES_NULL)
 		{
 			break;
 		}
-		LES_NetworkMessage* const pReceivedMessage = pItem->GetMessage();
+		LES_NetworkMessage* const pReceivedMessage = pReceivedItem->GetMessage();
 
 		short receivedType = fromBigEndian16(pReceivedMessage->m_type);
 		short receivedId = fromBigEndian16(pReceivedMessage->m_id);
@@ -410,7 +410,7 @@ void LES_NetworkTick(void)
 		LES_LOG("Received message: type:0x%X id:%d payloadSize:%d", receivedType, receivedId, receivedPayloadSize);
 		LES_LOG("payload:'%s'", (char*)pReceivedMessage->m_payload);
 
-		pItem->Free();
+		pReceivedItem->Free();
 	}
 }
 

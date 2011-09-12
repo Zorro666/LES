@@ -16,7 +16,7 @@ public:
 	}
 	~LES_NetworkReceivedItem()
 	{
-		Free();
+		m_message = LES_NULL;
 	}
 
 	LES_NetworkReceivedItem& operator = (const LES_NetworkReceivedItem& other)

@@ -3,7 +3,7 @@
 
 #include "les_base.h"
 #include "les_networksenditem.h"
-#include "les_networkreceiveitem.h"
+#include "les_networkreceiveditem.h"
 
 struct LES_NetworkMessage;
 int LES_NetworkCreateTCPSocket(const char* const ip, const short port);

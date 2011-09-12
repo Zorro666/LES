@@ -15,7 +15,8 @@ public:
 	}
 	~LES_NetworkSendItem()
 	{
-		Free();
+		m_message = LES_NULL;
+		m_messageSize = 0;
 	}
 
 	LES_NetworkMessage* GetMessage(void) const
