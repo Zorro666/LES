@@ -8,6 +8,7 @@
 #include "les_definitionfile.h"
 #include "les_time.h"
 #include "les_network.h"
+#include "les_thread.h"
 
 #include "les_jake.h"
 
@@ -48,6 +49,46 @@ int JAKE_LoadDefinitionFile(const char* const fname)
 	return LES_RETURN_OK;
 }
 
+static void* inputThread(void*)
+{
+	const short type = 0x66;
+	short int id = 0;
+	while (1)
+	{
+		const int bufferLen = 128;
+		char buffer[128];
+		memset(buffer, '\0', bufferLen);
+
+		LES_LOG("Enter some text to send to the server (press enter)");
+		fgets(buffer, 128, stdin);
+		const int stringLen = strlen(buffer);
+		buffer[stringLen-1]='\0';
+
+		if (strcmp(buffer, "quit") == 0)
+		{
+			break;
+		}
+
+		const int payLoadSize = stringLen;
+		LES_NetworkSendItem sendItem;
+		sendItem.Create(type, id, payLoadSize, buffer);
+		if (LES_NetworkAddSendItem(&sendItem) == LES_RETURN_ERROR)
+		{
+			LES_ERROR("Error adding send item");
+		}
+		id++;
+	}
+	return LES_NULL;
+}
+
+void JAKE_CreateInputThread(void)
+{
+	static LES_ThreadHandle inputThreadHandle;
+	int ret = LES_CreateThread(&inputThreadHandle, LES_NULL, inputThread, LES_NULL);
+
+	LES_LOG("Input thread created handle:%d ret:%d", inputThreadHandle, ret);
+}
+
 int main(const int argc, const char* const argv[])
 {
 	bool verbose = true;
@@ -77,34 +118,10 @@ int main(const int argc, const char* const argv[])
 	LES_Init();
 	if (LES_NetworkCreateTCPSocket("127.0.0.1", 3141) == LES_RETURN_OK)
 	{
+		JAKE_CreateInputThread();
 		float lastTime = -10000.0f;
-		const short type = 0x66;
-		short int id = 0;
 		while (1)
 		{
-			const int bufferLen = 128;
-  		char buffer[128];
-			memset(buffer, '\0', bufferLen);
-
-	  	LES_LOG("Enter some text to send to the server (press enter)");
-			fgets(buffer, 128, stdin);
-			const int stringLen = strlen(buffer);
-			buffer[stringLen-1]='\0';
-
-			if (strcmp(buffer, "quit") == 0)
-			{
-				break;
-			}
-			
-			const int payLoadSize = stringLen;
-			LES_NetworkSendItem sendItem;
-			sendItem.Create(type, id, payLoadSize, buffer);
-			if (LES_NetworkAddSendItem(&sendItem) == LES_RETURN_ERROR)
-			{
-				LES_ERROR("Error adding send item");
-			}
-			id++;
-
 			const float logDelta = 1.0f;
 			const float elapsedTime = LES_GetElapsedTimeInSeconds();
 			if ((elapsedTime - lastTime) > logDelta)
@@ -112,6 +129,7 @@ int main(const int argc, const char* const argv[])
 				LES_LOG("Time %f", elapsedTime);
 				lastTime = elapsedTime;
 			}
+			LES_NetworkTick();
 			LES_Sleep(0.1f);
 		}
 	}
