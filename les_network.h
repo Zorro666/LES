@@ -6,8 +6,11 @@
 #include "les_networkreceiveditem.h"
 
 struct LES_NetworkMessage;
+
+void LES_NetworkInit(void);
+void LES_NetworkTick(void);
+
 int LES_NetworkCreateTCPSocket(const char* const ip, const short port);
 int LES_NetworkAddSendItem(const LES_NetworkSendItem* const pSendItem);
-void LES_NetworkTick(void);
 
 #endif // #ifndef LES_NETWORK_HH

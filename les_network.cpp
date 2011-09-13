@@ -9,6 +9,9 @@
 #include "les_logger.h"
 #include "les_time.h"
 #include "les_thread.h"
+#include "les_mutex.h"
+#include "les_networkqueue.h"
+#include "les_networkmessage.h"
 
 #define LES_NETWORK_INVALID_SOCKET (-1)
 #define LES_NETWORK_SEND_QUEUE_SIZE (128)
@@ -25,185 +28,21 @@ struct LES_NetworkThreadStartStruct
 	int m_socketHandle;
 };
 
-struct LES_NetworkMessage
-{
-public:
-	short m_type;
-	short m_id;
-	int m_payloadSize;
-	int m_payload[1];		// m_payload[m_payloadSize/4]
-private:
-	LES_NetworkMessage();
-	LES_NetworkMessage(const LES_NetworkMessage& other);
-	LES_NetworkMessage& operator =(const LES_NetworkMessage& other);
-	~LES_NetworkMessage();
-};
+static LES_NetworkQueue<LES_NetworkSendItem, LES_NETWORK_SEND_QUEUE_SIZE> s_sendItemQueues[2];
+static LES_NetworkQueue<LES_NetworkReceivedItem, LES_NETWORK_RECEIVE_QUEUE_SIZE> s_receivedMessageQueues[2];
 
-template <class T, int SIZE> class LES_NetworkQueue
-{
-public:
-	LES_NetworkQueue(void);
-	~LES_NetworkQueue(void);
-	int Add(const T* const pSendItem);
-	T* Pop(void);
+static int s_networkThreadQueueIndex;
+static LES_NetworkQueue<LES_NetworkSendItem, LES_NETWORK_SEND_QUEUE_SIZE>* s_pSendItemQueue = LES_NULL;
+static LES_NetworkQueue<LES_NetworkSendItem, LES_NETWORK_SEND_QUEUE_SIZE>* s_pRequestSendItemQueue = LES_NULL;
 
-private:
-	LES_NetworkQueue(const LES_NetworkQueue& other);
-	LES_NetworkQueue& operator =(const LES_NetworkQueue& other);
-
-	int m_numItems;
-	int m_headIndex;
-	int m_tailIndex;
-	T m_items[SIZE];
-};
-
-class LES_Mutex
-{
-public:
-	LES_Mutex(int* const pMutexVariable) : m_pMutexVariable(pMutexVariable)
-	{
-		Lock();
-	}
-	~LES_Mutex(void)
-	{
-		UnLock();
-	}
-private:
-	LES_Mutex(void);
-	LES_Mutex(LES_Mutex& other);
-	LES_Mutex& operator = (LES_Mutex& other);
-
-	void Lock(void);
-	void UnLock(void);
-
-	int* const m_pMutexVariable;
-};
-
-template <class T, int SIZE> LES_NetworkQueue<T, SIZE>::LES_NetworkQueue(void)
-{
-	m_numItems = 0;
-	m_headIndex = 0;
-	m_tailIndex = 0;
-}
-
-template <class T, int SIZE> LES_NetworkQueue<T, SIZE>::~LES_NetworkQueue(void)
-{
-	m_numItems = 0;
-	m_headIndex = 0;
-	m_tailIndex = 0;
-}
-
-template <class T, int SIZE> int LES_NetworkQueue<T, SIZE>::Add(const T* const pItem)
-{
-	T* const pInsertPlace = &m_items[m_tailIndex];
-
-	if (m_numItems >= SIZE)
-	{
-		// Queue full
-		LES_ERROR("LES_NetworkQueue::Add() queue full");
-		return LES_RETURN_ERROR;
-	}
-	if ((m_tailIndex == m_headIndex) && (m_numItems != 0))
-	{
-		//Queue wrap around
-		LES_ERROR("LES_NetworkQueue::Add() queue wrap around");
-		return LES_RETURN_ERROR;
-	}
-	*pInsertPlace = *pItem;
-
-	if ((m_numItems == 0) && (m_headIndex != m_tailIndex))
-	{
-		LES_ERROR("LES_NetworkQueue::Add() numItems == 0 but head != tail %d != %d", m_headIndex, m_tailIndex);
-		return LES_RETURN_ERROR;
-	}
-
-	m_tailIndex++;
-	m_tailIndex = m_tailIndex % SIZE;
-	m_numItems++;
-	//LES_LOG("Add: head %d tail %d num %d", m_headIndex, m_tailIndex, m_numItems);
-
-	return LES_RETURN_OK;
-}
-
-template <class T, int SIZE> T* LES_NetworkQueue<T, SIZE>::Pop(void)
-{
-	if ((m_numItems == 0) && (m_headIndex != m_tailIndex))
-	{
-		LES_ERROR("LES_NetworkQueue::Pop() numItems == 0 but head != tail %d:%d", m_headIndex, m_tailIndex);
-		return LES_NULL;
-	}
-	if (m_numItems == 0)
-	{
-		return LES_NULL;
-	}
-	T* const pItem = &m_items[m_headIndex];
-	m_numItems--;
-	m_headIndex++;
-	m_headIndex = m_headIndex % SIZE;
-	if (m_numItems == 0)
-	{
-		if (m_headIndex != m_tailIndex)
-		{
-			LES_ERROR("LES_NetworkQueue::Pop() numItems == 0 but head != tail %d:%d", m_headIndex, m_tailIndex);
-			return LES_NULL;
-		}
-	}
-
-	//LES_LOG("Pop: head %d tail %d num %d pItem:%p", m_headIndex, m_tailIndex, m_numItems, pItem);
-	return pItem;
-}
-
-void LES_Mutex::Lock(void)
-{
-	volatile int* const pMutexVariable = m_pMutexVariable;
-	while (*pMutexVariable != 0)
-	{
-		LES_Sleep(1.0e-3f);
-	};
-	*pMutexVariable = 1;
-}
-
-void LES_Mutex::UnLock(void)
-{
-	volatile int* const pMutexVariable = m_pMutexVariable;
-	if (*pMutexVariable != 1)
-	{
-		LES_ERROR("Unlock called but mutex not locked %d", *pMutexVariable);
-	}
-	*m_pMutexVariable = 0;
-}
-
-static LES_NetworkQueue<LES_NetworkSendItem, LES_NETWORK_SEND_QUEUE_SIZE> s_sendItemQueue;
-static LES_NetworkQueue<LES_NetworkReceivedItem, LES_NETWORK_RECEIVE_QUEUE_SIZE> s_receiveMessageQueue;
+static LES_NetworkQueue<LES_NetworkReceivedItem, LES_NETWORK_RECEIVE_QUEUE_SIZE>* s_pReceivedMessageQueue = LES_NULL;
+static LES_NetworkQueue<LES_NetworkReceivedItem, LES_NETWORK_RECEIVE_QUEUE_SIZE>* s_pRequestReceivedMessageQueue = LES_NULL;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Internal Static functions
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
-
-static int LES_NetworkMessageSize(const int payLoadSize)
-{
-	int payloadExtraMemmory = payLoadSize - sizeof(int);
-	if (payloadExtraMemmory < 0)
-	{
-		payloadExtraMemmory = 0;
-	}
-	payloadExtraMemmory = (payloadExtraMemmory + 3) & ~3;
-	const int memorySize = sizeof(LES_NetworkMessage) + payloadExtraMemmory;
-	return memorySize;
-}
-
-static LES_NetworkMessage* LES_CreateNetworkMessage(const short type, const short id, const int payLoadSize, void* const payload, const int messageSize)
-{
-	LES_NetworkMessage* const pNetworkMessage = (LES_NetworkMessage*)malloc(messageSize);
-	pNetworkMessage->m_type = toBigEndian16(type);
-	pNetworkMessage->m_id = toBigEndian16(id);
-	pNetworkMessage->m_payloadSize = toBigEndian32(payLoadSize);
-	memcpy(pNetworkMessage->m_payload, payload, payLoadSize);
-
-	return pNetworkMessage;
-}
 
 static int LES_CreateTCPSocket(const char* const ip, const short port)
 {
@@ -248,14 +87,13 @@ static int LES_CreateTCPSocket(const char* const ip, const short port)
 
 static int LES_NetworkAddReceivedMessage(LES_NetworkMessage* const pReceivedMessage)
 {
-	LES_NETWORK_GET_MUTEX;
 	if (pReceivedMessage == LES_NULL)
 	{
 		LES_ERROR("LES_NetworkAddReceivedMessage() message is NULL");
 		return LES_RETURN_ERROR;
 	}
 	LES_NetworkReceivedItem receivedItem(pReceivedMessage);
-	if (s_receiveMessageQueue.Add(&receivedItem) == LES_RETURN_ERROR)
+	if (s_pReceivedMessageQueue->Add(&receivedItem) == LES_RETURN_ERROR)
 	{
 		LES_ERROR("LES_NetworkAddReceivedMessage() failed to add to the queue");
 		return LES_RETURN_ERROR;
@@ -265,10 +103,10 @@ static int LES_NetworkAddReceivedMessage(LES_NetworkMessage* const pReceivedMess
 	return LES_RETURN_OK;
 }
 
-static void* clientNetworkThread(void* args)
+static void* LES_NetworkThreadProcess(void* args)
 {
 	const LES_NetworkThreadStartStruct* const networkThreadStartStruct = (const LES_NetworkThreadStartStruct* const)args;
-	LES_LOG("clientNetworkThread Started");
+	LES_LOG("LES_NetworkThreadProcess Started");
 
 	const int socketHandle = networkThreadStartStruct->m_socketHandle;
 
@@ -277,7 +115,7 @@ static void* clientNetworkThread(void* args)
 	{
 		// Get the sendItem from a queue and make main thread add to the sendItem
 		// Swap the queues between main & network thread
-		LES_NetworkSendItem* const pSendItem = s_sendItemQueue.Pop();
+		LES_NetworkSendItem* const pSendItem = s_pSendItemQueue->Pop();
 		if (pSendItem == LES_NULL)
 		{
 			LES_Sleep(0.1f);
@@ -320,28 +158,23 @@ static void* clientNetworkThread(void* args)
 	}
 
   close(socketHandle);
-	LES_LOG("clientNetworkThread Ended");
+	LES_LOG("LES_NetworkThreadProcess Ended");
 	return LES_NULL;
 }
 
-void LES_NetworkSendItem::Create(const short type, const short id, const int payLoadSize, void* const payload)
+static void LES_NetworkSwapQueues(void)
 {
-	const int messageSize = LES_NetworkMessageSize(payLoadSize);
-	m_message = LES_CreateNetworkMessage(type, id, payLoadSize, payload, messageSize);
-	m_messageSize = messageSize;
-}
+	LES_NETWORK_GET_MUTEX;
+	const int oldNetworkThreadQueueIndex = s_networkThreadQueueIndex;
+	const int networkThreadQueueIndex = oldNetworkThreadQueueIndex ^ 1;
+	const int mainThreadQueueIndex = oldNetworkThreadQueueIndex;
+	s_networkThreadQueueIndex = networkThreadQueueIndex;
 
-void LES_NetworkSendItem::Free(void)
-{
-	free(m_message);
-	m_message = LES_NULL;
-	m_messageSize = 0;
-}
+	s_pSendItemQueue = &s_sendItemQueues[networkThreadQueueIndex];
+	s_pRequestSendItemQueue = &s_sendItemQueues[mainThreadQueueIndex];
 
-void LES_NetworkReceivedItem::Free(void)
-{
-	free(m_message);
-	m_message = LES_NULL;
+	s_pRequestReceivedMessageQueue = &s_receivedMessageQueues[networkThreadQueueIndex];
+	s_pReceivedMessageQueue = &s_receivedMessageQueues[mainThreadQueueIndex];
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -363,7 +196,7 @@ int LES_NetworkCreateTCPSocket(const char* const ip, const short port)
 	networkThreadStartStruct.m_socketHandle = socketHandle;
 
 	static LES_ThreadHandle networkThreadHandle;
-	int ret = LES_CreateThread(&networkThreadHandle, LES_NULL, clientNetworkThread, &networkThreadStartStruct);
+	int ret = LES_CreateThread(&networkThreadHandle, LES_NULL, LES_NetworkThreadProcess, &networkThreadStartStruct);
 
 	LES_LOG("Network thread created handle:%d ret:%d", networkThreadHandle, ret);
 	return LES_RETURN_OK;
@@ -382,7 +215,7 @@ int LES_NetworkAddSendItem(const LES_NetworkSendItem* const pSendItem)
 		return LES_RETURN_ERROR;
 	}
 
-	if (s_sendItemQueue.Add(pSendItem) == LES_RETURN_ERROR)
+	if (s_pSendItemQueue->Add(pSendItem) == LES_RETURN_ERROR)
 	{
 		LES_ERROR("LES_NetworkAddSendItem() failed to add to the queue");
 		return LES_RETURN_ERROR;
@@ -391,13 +224,21 @@ int LES_NetworkAddSendItem(const LES_NetworkSendItem* const pSendItem)
 	return LES_RETURN_OK;
 }
 
+void LES_NetworkInit(void)
+{
+	s_networkThreadQueueIndex = 0;
+	LES_NetworkSwapQueues();
+}
+
 void LES_NetworkTick(void)
 {
-	LES_NETWORK_GET_MUTEX;
+	// Swap the send and receive queues over
+	LES_NetworkSwapQueues();
+
 	while (1)
 	{
-		LES_NetworkReceivedItem* const pReceivedItem = s_receiveMessageQueue.Pop();
-		if (pItem == LES_NULL)
+		LES_NetworkReceivedItem* const pReceivedItem = s_pReceivedMessageQueue->Pop();
+		if (pReceivedItem == LES_NULL)
 		{
 			break;
 		}
