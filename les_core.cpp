@@ -11,6 +11,7 @@
 #include "les_structdata.h"
 #include "les_funcdata.h"
 #include "les_time.h"
+#include "les_network.h"
 
 static LES_StringEntry* les_stringEntryArray = LES_NULL;
 static int les_numStringEntries = 0;
@@ -142,6 +143,7 @@ void LES_Init(void)
 	LES_FunctionInit();
 	LES_TypeInit();
 	LES_StructInit();
+	LES_NetworkInit();
 }
 
 void LES_Shutdown(void)
