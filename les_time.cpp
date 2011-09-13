@@ -1,6 +1,7 @@
 #include <sys/timeb.h>
-#include <time.h>
+#include <unistd.h>
 
+#include "les_base.h"
 #include "les_time.h"
 
 static LES_uint64 les_startTime = 0;
@@ -36,12 +37,18 @@ float LES_GetElapsedTimeInSeconds(void)
 
 void LES_Sleep(const float sleepTimeInSeconds)
 {
-	timespec sleepTime;
-	timespec remainingTime;
-	const int numSeconds = (int)sleepTimeInSeconds;
-	const int numMicroseconds = (int)((sleepTimeInSeconds-(float)numSeconds)*1000000000.0f);
-	sleepTime.tv_sec = numSeconds;
-	sleepTime.tv_nsec = numMicroseconds;
-	nanosleep(&sleepTime, &remainingTime);
+	#define SLEEP_MAX_TIME_MILLI_SECONDS (900)
+	#define SLEEP_MAX_TIME_MICRO_SECONDS (SLEEP_MAX_TIME_MILLI_SECONDS*1000)
+	#define SLEEP_MAX_TIME_SECONDS ((float)SLEEP_MAX_TIME_MILLI_SECONDS/1000.0f)
+
+	float timeToSleep = sleepTimeInSeconds;
+	while (timeToSleep > SLEEP_MAX_TIME_SECONDS)
+	{
+		const int numMicroseconds = SLEEP_MAX_TIME_MICRO_SECONDS;
+		usleep(numMicroseconds);
+		timeToSleep -= SLEEP_MAX_TIME_SECONDS;
+	}
+	const int numMicroseconds = (int)(timeToSleep * 1000.0f * 1000.0f);
+	usleep(numMicroseconds);
 }
 

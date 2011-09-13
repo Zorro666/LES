@@ -1,8 +1,15 @@
-#include <errno.h>
-#include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
 #include <malloc.h>
+
+#if LES_PLATFORM_LINUX == 1
+#include <errno.h>
+#include <arpa/inet.h>
+#endif // #if LES_PLATFORM_LINUX
+
+#if LES_PLATFORM_WINDOWS == 1
+#include <winsock.h>
+#endif // #if LES_PLATFORM_WINDOWS
 
 #include "les_base.h"
 #include "les_network.h"
@@ -74,8 +81,14 @@ static int LES_CreateTCPSocket(const char* const ip, const short port)
 
  	if (connect(socketHandle, (struct sockaddr*)&hostAddr, sizeof(hostAddr)) == -1)
 	{
+#if LES_PLATFORM_LINUX == 1
 		int err = errno;
 		if (err != EINPROGRESS)
+#endif // #if LES_PLATFORM_LINUX == 1
+#if LES_PLATFORM_WINDOWS == 1
+		int err = WSAGetLastError();
+		if (err != WSAEINPROGRESS)
+#endif // #if LES_PLATFORM_WINDOWS == 1
 		{
 			LES_ERROR("LES_CreateTCPSocket::Error connecting socket errno:0x%X", errno);
   		close(socketHandle);
@@ -122,7 +135,7 @@ static void* LES_NetworkThreadProcess(void* args)
 			LES_Sleep(4.1f);
 			continue;
 		}
-		void* pSendData = (void*)(pSendItem->GetMessage());
+		const char* pSendData = (const char*)(pSendItem->GetMessagePtr());
 		const int sendDataSize = pSendItem->GetMessageSize();
 		if (sendDataSize == 0)
 		{
@@ -209,7 +222,7 @@ int LES_NetworkAddSendItem(const LES_NetworkSendItem* const pSendItem)
 		LES_ERROR("LES_NetworkAddSendItem() messageSize is 0");
 		return LES_RETURN_ERROR;
 	}
-	if (pSendItem->GetMessage() == LES_NULL)
+	if (pSendItem->GetMessagePtr() == LES_NULL)
 	{
 		LES_ERROR("LES_NetworkAddSendItem() message is NULL");
 		return LES_RETURN_ERROR;
@@ -242,7 +255,7 @@ void LES_NetworkTick(void)
 		{
 			break;
 		}
-		LES_NetworkMessage* const pReceivedMessage = pReceivedItem->GetMessage();
+		LES_NetworkMessage* const pReceivedMessage = pReceivedItem->GetMessagePtr();
 
 		short receivedType = fromBigEndian16(pReceivedMessage->m_type);
 		short receivedId = fromBigEndian16(pReceivedMessage->m_id);

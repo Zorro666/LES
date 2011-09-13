@@ -19,7 +19,7 @@ public:
 		m_messageSize = 0;
 	}
 
-	LES_NetworkMessage* GetMessage(void) const
+	LES_NetworkMessage* GetMessagePtr(void) const
 	{
 		return m_message;
 	}

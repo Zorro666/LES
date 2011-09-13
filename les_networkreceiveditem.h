@@ -26,7 +26,7 @@ public:
 		return *this;
 	}
 
-	LES_NetworkMessage* GetMessage(void)
+	LES_NetworkMessage* GetMessagePtr(void)
 	{
 		return m_message;
 	}
