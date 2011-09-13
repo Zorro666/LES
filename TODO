@@ -1,19 +1,15 @@
 High Priority:
-CLIENT: need a mutex on the send queue, swap queues at a sync point between main & network
-CLIENT: queue of messages to process between main & network thread
-SERVER: need a message handler
+CLIENT: expose the queue of messages to process between network & main thread
 CLIENT: need a message handler on main thread
-CLIENT: need mutex - use global & sleep (for yield) & time (for timeout) for now
+SERVER: need a message handler
 CLIENT: CONNECT message: do connection message exchange
 SERVER: CONNECT message: handle connection message exchange
 PYTHON: build definition file data into memory not write it
 CLIENT: GET_DEFINITION message:  use definition file (type, string, structures, functions) from over the network
 
 Medium Priority:
-CLIENT: LES function for threads to hide implementation details
 CLIENT: LES tcpsocket to hide implementation details
 CLIENT: network should use select() not recv()
-
 
 CLIENT: send function data to server as network message
 SERVER: process function data send response
