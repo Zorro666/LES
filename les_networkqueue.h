@@ -11,6 +11,10 @@ public:
 	~LES_NetworkQueue(void);
 	int Add(const T* const pSendItem);
 	T* Pop(void);
+	int GetNumItems(void) const
+	{
+		return m_numItems;
+	}
 
 private:
 	LES_NetworkQueue(const LES_NetworkQueue& other);
