@@ -34,7 +34,10 @@ LINK_FLAGS:=-g -lm -lpthread
 
 ifdef WINDIR
 TARGET_EXTENSION := .exe
+LINK_FLAGS += -lwsock32
+C_CPP_COMMON_COMPILE_FLAGS += -DLES_PLATFORM_WINDOWS=1
 else
+C_CPP_COMMON_COMPILE_FLAGS += -DLES_PLATFORM_LINUX=1
 TARGET_EXTENSION := 
 endif	# ifdef WINDIR
 
@@ -93,7 +96,7 @@ test:
 
 %: %.o 
 	@echo Linking $@
-	@$(LINK) $(LINK_FLAGS) -o $@ $^
+	@$(LINK) -o $@ $^ $(LINK_FLAGS)
 
 .PHONY: all clean nuke format tags
 .SUFFIXES:            # Delete the default suffixes
