@@ -1,4 +1,5 @@
 High Priority:
+MUTEX: put thread ID into it, then lock on same thread is ignored?
 CLIENT: expose the queue of messages to process between network & main thread
 CLIENT: need a message handler on main thread
 SERVER: need a message handler
@@ -8,6 +9,7 @@ PYTHON: build definition file data into memory not write it
 CLIENT: GET_DEFINITION message:  use definition file (type, string, structures, functions) from over the network
 
 Medium Priority:
+MUTEX: lock/unlock exposure might be helpful but also error prone
 CLIENT: LES tcpsocket to hide implementation details
 CLIENT: network should use select() not recv()
 
@@ -19,7 +21,7 @@ CLIENT: support for async function calls, error queue, potential threading issue
 SERVER: support for async function calls, error queue
 
 LES_TYPEDATA.PY: in the future have a global parameters block e.g. pointer data size default
-LES_STRUCTDATA.PY: struct creation have global for packing amount
+LES_STRUCTDATA.PY: struct creation have global for packing amount in the XML
 
 FUNCTION: error handling run out of memory when adding new function or new type e.g. array limit reached
 
