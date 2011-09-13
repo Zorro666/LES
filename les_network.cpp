@@ -184,7 +184,6 @@ static void* LES_NetworkThreadProcess(void* args)
 	const LES_NetworkThreadStartStruct* const pNetworkThreadStartStruct = (const LES_NetworkThreadStartStruct* const)args;
 	LES_LOG("LES_NetworkThreadProcess Started");
 
-
 	//Now lets do the client related stuff
 	while (1)
 	{
