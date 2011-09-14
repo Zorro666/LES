@@ -5,9 +5,7 @@ import threading
 import SocketServer
 import struct
 
-packedInt16 = struct.Struct(">h")
 packedUint16 = struct.Struct(">H")
-packedInt32 = struct.Struct(">i")
 packedUint32 = struct.Struct(">I")
 
 class LES_NetworkMessage():
@@ -26,9 +24,9 @@ class LES_NetworkMessage():
 		self.m_valid = False
 		messageDataLen = len(messageData)
 		if messageDataLen > 7:
-			self.m_type = packedInt16.unpack(messageData[0:2])[0]
-			self.m_id = packedInt16.unpack(messageData[2:4])[0]
-			self.m_payloadSize = packedInt32.unpack(messageData[4:8])[0]
+			self.m_type = packedUint16.unpack(messageData[0:2])[0]
+			self.m_id = packedUint16.unpack(messageData[2:4])[0]
+			self.m_payloadSize = packedUint32.unpack(messageData[4:8])[0]
 			self.m_valid = True
 		if messageDataLen > 8:
 			self.m_payload = messageData[8:messageDataLen]
@@ -39,18 +37,43 @@ def LES_CreateNetworkMessage(typeValue, idValue, payload):
 	payloadSize = len(payload)
 
 	packetData = ""
-	packetData += packedInt16.pack(typeValue)
-	packetData += packedInt16.pack(idValue)
-	packetData += packedInt32.pack(payloadSize)
+	packetData += packedUint16.pack(typeValue)
+	packetData += packedUint16.pack(idValue)
+	packetData += packedUint32.pack(payloadSize)
 	if payload != None:
 		packetData += payload
 
 	return packetData
 
+LES_NETMESSAGE_SEND_ID_CONNECT_RESPONSE=0x2
+LES_NETMESSAGE_SEND_ID_TEST=0x33
+
+LES_NETMESSAGE_RECV_ID_CONNECT=0x1
+LES_NETMESSAGE_RECV_ID_TEST=0x66
+
 class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
+	def LES_HandleTestMessage(self, msgType, msgId, msgPayloadSize, msgPayload):
+		print("Test: type:0x%X id:%d payloadSize:%d" % (msgType, msgId, msgPayloadSize))
+		print("Test: payload:%s" % (msgPayload))
+
+		payload = "%s:%s" % (self.m_threadName, msgPayload)
+		response = LES_CreateNetworkMessage(LES_NETMESSAGE_SEND_ID_TEST, msgId, payload)
+		self.request.send(response)
+
+	def LES_HandleConnectMessage(self, msgType, msgId, msgPayloadSize, msgPayload):
+		print("Connect: type:0x%X id:%d payloadSize:%d" % (msgType, msgId, msgPayloadSize))
+		print("Connect: payload:%s" % (msgPayload))
+		payload = ""
+		response = LES_CreateNetworkMessage(LES_NETMESSAGE_SEND_ID_CONNECT_RESPONSE, msgId, payload)
+		self.request.send(response)
+
 	def handle(self):
-		curThread = threading.currentThread()
-		threadName = curThread.getName()
+		s_receivedMessageHandlers = {}
+		s_receivedMessageHandlers[LES_NETMESSAGE_RECV_ID_TEST] = self.LES_HandleTestMessage
+		s_receivedMessageHandlers[LES_NETMESSAGE_RECV_ID_CONNECT] = self.LES_HandleConnectMessage
+
+		self.m_curThread = threading.currentThread()
+		self.m_threadName = self.m_curThread.getName()
 		while (1):
  			receivedData = self.request.recv(100*1024)
 			receivedDataLen = len(receivedData)
@@ -60,16 +83,22 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 
 			receivedMessage = LES_NetworkMessage()
 			if receivedMessage.Decode(receivedData) == False:
-				print("%s: Failed to decode message receivedDataLen:%d" % (threadName, receivedDataLen))
+				print("%s: Failed to decode message receivedDataLen:%d" % (self.m_threadName, receivedDataLen))
 				continue
 
-			print("type:0x%X id:%d payloadSize:%d" % (receivedMessage.m_type, receivedMessage.m_id, receivedMessage.m_payloadSize))
-			print("payload:%s" % (receivedMessage.m_payload))
+			msgType = receivedMessage.m_type
+			msgId = receivedMessage.m_id
+			msgPayloadSize = receivedMessage.m_payloadSize
+			msgPayload = receivedMessage.m_payload
+			if msgType in s_receivedMessageHandlers:
+				s_receivedMessageHandlers[msgType](msgType, msgId, msgPayloadSize, msgPayload)
+			else:
+				print("Unhandled: type:0x%X id:%d payloadSize:%d" % (msgType, msgId, msgPayloadSize))
+				print("Unhandled: payload:%s" % (msgPayload))
 
-			payload = "%s:%s" % (threadName, receivedMessage.m_payload)
-			response = LES_CreateNetworkMessage(0x33, receivedMessage.m_id, payload)
-			self.request.send(response)
-
+#			payload = "%s:%s" % (self.m_threadName, msgPayload)
+#			response = LES_CreateNetworkMessage(LES_NETMESSAGE_SEND_ID_TEST, msgId, payload)
+#			self.request.send(response)
 
 class ThreadedTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
 	pass
@@ -81,8 +110,7 @@ def runTest():
  	server = ThreadedTCPServer((HOST, PORT), ThreadedTCPRequestHandler)
  	ip, port = server.server_address
 
- 	# Start a thread with the server -- that thread will then start one
- 	# more thread for each request
+ 	# Start a thread with the server -- that thread will then start one more thread for each request
  	server_thread = threading.Thread(target=server.serve_forever)
  	server_thread.setDaemon(True)
  	server_thread.start()
