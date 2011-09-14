@@ -1,7 +1,6 @@
 High Priority:
-MUTEX: put thread ID into it, then lock on same thread is ignored?
-CLIENT: expose the queue of messages to process between network & main thread
-CLIENT: need a message handler on main thread
+CLIENT: network tick call the message handler for the type in the received message
+CLIENT: register message handlers on TYPE - log if no handler found
 SERVER: need a message handler
 CLIENT: CONNECT message: do connection message exchange
 SERVER: CONNECT message: handle connection message exchange
@@ -9,8 +8,8 @@ PYTHON: build definition file data into memory not write it
 CLIENT: GET_DEFINITION message:  use definition file (type, string, structures, functions) from over the network
 
 Medium Priority:
-MUTEX: lock/unlock exposure might be helpful but also error prone
-CLIENT: LES tcpsocket to hide implementation details
+MUTEX: put thread ID into it, then lock on same thread is ignored?
+CLIENT: LES tcpsocket to hide implementation details especially horrible mess that is windows
 CLIENT: network should use select() not recv()
 
 CLIENT: send function data to server as network message
