@@ -40,7 +40,6 @@ static LES_Mutex s_networkMutex(&s_networkMutexVariable);
 static LES_ThreadHandle s_networkThreadHandle;
 static LES_NetworkThreadStartStruct s_networkThreadStartStruct;
 
-//typedef void* LES_ThreadFunction(void* args); 
 typedef LES_NetworkQueue<LES_NetworkSendItem, LES_NETWORK_SEND_QUEUE_SIZE> LES_NetworkSendQueue;
 typedef LES_NetworkQueue<LES_NetworkReceivedItem, LES_NETWORK_RECEIVE_QUEUE_SIZE> LES_NetworkReceivedQueue;
 
@@ -53,6 +52,12 @@ static LES_NetworkSendQueue* s_pRequestSendItemQueue = LES_NULL;
 
 static LES_NetworkReceivedQueue* s_pReceivedMessageQueue = LES_NULL;
 static LES_NetworkReceivedQueue* s_pRequestReceivedMessageQueue = LES_NULL;
+
+typedef int LES_ReceivedMessageHandlerFunction(const short type, const short id, const int payloadSize, void* payload);
+
+#define LES_NETWORK_MAX_NUM_HANDLERS 256
+static short s_receivedMessageHandlerTypes[LES_NETWORK_MAX_NUM_HANDLERS];
+static LES_ReceivedMessageHandlerFunction* s_receivedMessageHandlerFunctions[LES_NETWORK_MAX_NUM_HANDLERS];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -278,6 +283,12 @@ void LES_NetworkInit(void)
 	LES_NETWORK_LOCK_MUTEX;
 	s_networkThreadStartStruct.m_socketHandle = -1;
 	LES_NETWORK_UNLOCK_MUTEX;
+
+	for (int i = 0; i < LES_NETWORK_MAX_NUM_HANDLERS; i++)
+	{
+		s_receivedMessageHandlerTypes[i] = LES_NETWORK_INVALID_MESSAGE_TYPE;
+		s_receivedMessageHandlerFunctions[i] = LES_NULL;
+	}
 
 	const int ret = LES_CreateThread(&s_networkThreadHandle, LES_NULL, LES_NetworkThreadProcess, &s_networkThreadStartStruct);
 	LES_LOG("Network thread created handle:%d ret:%d", s_networkThreadHandle, ret);
