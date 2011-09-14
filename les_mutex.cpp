@@ -28,4 +28,3 @@ void LES_Mutex::UnLock(void)
 	}
 	*m_pMutexVariable = 0;
 }
-

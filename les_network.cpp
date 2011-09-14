@@ -26,14 +26,17 @@
 
 #define __LES_PASTE(a,b) a ## b
 #define LES_PASTE(a,b) __LES_PASTE(a,b)
-#define LES_NETWORK_GET_MUTEX LES_Mutex LES_PASTE(__local_mutex__, __COUNTER__)(&s_networkMutex)
+#define LES_NETWORK_SCOPE_MUTEX LES_ScopeMutex LES_PASTE(__local_mutex__, __COUNTER__)(&s_networkMutexVariable)
+#define LES_NETWORK_LOCK_MUTEX s_networkMutex.Lock()
+#define LES_NETWORK_UNLOCK_MUTEX s_networkMutex.UnLock()
 
 struct LES_NetworkThreadStartStruct
 {
 	int m_socketHandle;
 };
 
-static int s_networkMutex = 0;
+static int s_networkMutexVariable = 0;
+static LES_Mutex s_networkMutex(&s_networkMutexVariable);
 static LES_ThreadHandle s_networkThreadHandle;
 static LES_NetworkThreadStartStruct s_networkThreadStartStruct;
 
@@ -128,7 +131,7 @@ static int LES_NetworkAddReceivedMessage(LES_NetworkMessage* const pReceivedMess
 
 static int LES_NetworkThreadProcessOneLoop(const LES_NetworkThreadStartStruct* const pNetworkThreadStartStruct)
 {
-	LES_NETWORK_GET_MUTEX;
+	LES_NETWORK_SCOPE_MUTEX;
 	const int socketHandle = pNetworkThreadStartStruct->m_socketHandle;
 	if (socketHandle < 0)
 	{
@@ -187,7 +190,6 @@ static void* LES_NetworkThreadProcess(void* args)
 	//Now lets do the client related stuff
 	while (1)
 	{
-		// Inner loop inside a function to make scoping on the mutex lock nicer
 		const int ret = LES_NetworkThreadProcessOneLoop(pNetworkThreadStartStruct);
 		if (ret == LES_NETWORK_THREAD_PROCESS_ERROR)
 		{
@@ -198,6 +200,7 @@ static void* LES_NetworkThreadProcess(void* args)
 			LES_Sleep(0.1f);
 			//LES_Sleep(4.1f);
 		}
+		//LES_Sleep(1.1f);
 	}
 	const int socketHandle = pNetworkThreadStartStruct->m_socketHandle;
   close(socketHandle);
@@ -207,7 +210,7 @@ static void* LES_NetworkThreadProcess(void* args)
 
 static void LES_NetworkSwapQueues(void)
 {
-	LES_NETWORK_GET_MUTEX;
+	LES_NETWORK_LOCK_MUTEX;
 
 	const int oldNetworkThreadQueueIndex = s_networkThreadQueueIndex;
 	const int networkThreadQueueIndex = oldNetworkThreadQueueIndex ^ 1;
@@ -219,6 +222,8 @@ static void LES_NetworkSwapQueues(void)
 
 	s_pRequestReceivedMessageQueue = &s_receivedMessageQueues[networkThreadQueueIndex];
 	s_pReceivedMessageQueue = &s_receivedMessageQueues[mainThreadQueueIndex];
+
+	LES_NETWORK_UNLOCK_MUTEX;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,8 +241,9 @@ int LES_NetworkCreateTCPSocket(const char* const ip, const short port)
 		return LES_RETURN_ERROR;
 	}
 
-	LES_NETWORK_GET_MUTEX;
+	LES_NETWORK_LOCK_MUTEX;
 	s_networkThreadStartStruct.m_socketHandle = socketHandle;
+	LES_NETWORK_UNLOCK_MUTEX;
 
 	return LES_RETURN_OK;
 }
@@ -269,14 +275,12 @@ void LES_NetworkInit(void)
 	s_networkThreadQueueIndex = 0;
 	LES_NetworkSwapQueues();
 
-	// Scope for the mutex lock
-	if (1)
-	{
-		LES_NETWORK_GET_MUTEX;
-		s_networkThreadStartStruct.m_socketHandle = -1;
-		const int ret = LES_CreateThread(&s_networkThreadHandle, LES_NULL, LES_NetworkThreadProcess, &s_networkThreadStartStruct);
-		LES_LOG("Network thread created handle:%d ret:%d", s_networkThreadHandle, ret);
-	}
+	LES_NETWORK_LOCK_MUTEX;
+	s_networkThreadStartStruct.m_socketHandle = -1;
+	LES_NETWORK_UNLOCK_MUTEX;
+
+	const int ret = LES_CreateThread(&s_networkThreadHandle, LES_NULL, LES_NetworkThreadProcess, &s_networkThreadStartStruct);
+	LES_LOG("Network thread created handle:%d ret:%d", s_networkThreadHandle, ret);
 }
 
 void LES_NetworkProcessReceivedMessages(void)
@@ -310,15 +314,13 @@ void LES_NetworkTick(void)
 	// Loop without mutex lock until it is empty
 	while (1)
 	{
-		if (1)
-		{
-			LES_NETWORK_GET_MUTEX;
+		LES_NETWORK_LOCK_MUTEX;
+		const int numItems = s_pSendItemQueue->GetNumItems();
+		LES_NETWORK_UNLOCK_MUTEX;
 
-			const int numItems = s_pSendItemQueue->GetNumItems();
-			if (numItems == 0)
-			{
-				break;
-			}
+		if (numItems == 0)
+		{
+			break;
 		}
 		LES_Sleep(0.001f);
 	}
