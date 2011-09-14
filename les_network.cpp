@@ -67,48 +67,73 @@ static LES_ReceivedMessageHandlerFunction* s_receivedMessageHandlerFunctions[LES
 
 static int LES_CreateTCPSocket(const char* const ip, const short port)
 {
-  const int socketHandle = socket(AF_INET, SOCK_STREAM, 0);
-  if (socketHandle == -1)
+	int err;
+
+#if LES_PLATFORM_WINDOWS == 1
+	// Use the MAKEWORD(lowbyte, highbyte) macro declared in Windef.h
+	WORD wVersionRequested = MAKEWORD(2, 2);
+	WSADATA wsaData;
+
+	err = WSAStartup(wVersionRequested, &wsaData);
+	if (err != 0)
+	{
+		// Tell the user that we could not find a usable Winsock DLL
+		LES_ERROR("WSAStartup failed with error: %d", err);
+		return LES_NETWORK_INVALID_SOCKET;
+	}
+
+	// Confirm that the WinSock DLL supports 2.2
+	if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2)
+	{
+		// Tell the user that we could not find a usable Winsock DLL
+		LES_ERROR("Could not find the right version of winsock DLL");
+		WSACleanup();
+		return LES_NETWORK_INVALID_SOCKET;
+	}
+#endif // #if LES_PLATFORM_WINDOWS == 1
+
+	const int socketHandle = socket(AF_INET, SOCK_STREAM, 0);
+	if (socketHandle == -1)
 	{
 		LES_ERROR("LES_CreateTCPSocket::Error initializing socket %d",errno);
-    return LES_NETWORK_INVALID_SOCKET;
-  }
-    
-	int option = 1;
-        
-  if ((setsockopt(socketHandle, SOL_SOCKET, SO_REUSEADDR, (char*)&option, sizeof(int)) == -1) ||
-      (setsockopt(socketHandle, SOL_SOCKET, SO_KEEPALIVE, (char*)&option, sizeof(int)) == -1))
-	{
-    LES_ERROR("LES_CreateTCPSocket::Error setting options %d",errno);
-		close(socketHandle);
-    return LES_NETWORK_INVALID_SOCKET;
-  }
+		return LES_NETWORK_INVALID_SOCKET;
+	}
 
-  const short hostPort = port;
-  const char* const hostIP = ip;
-  struct sockaddr_in hostAddr;
+	int option = 1;
+
+	if ((setsockopt(socketHandle, SOL_SOCKET, SO_REUSEADDR, (char*)&option, sizeof(int)) == -1) ||
+			(setsockopt(socketHandle, SOL_SOCKET, SO_KEEPALIVE, (char*)&option, sizeof(int)) == -1))
+	{
+		LES_ERROR("LES_CreateTCPSocket::Error setting options %d",errno);
+		close(socketHandle);
+		return LES_NETWORK_INVALID_SOCKET;
+	}
+
+	const short hostPort = port;
+	const char* const hostIP = ip;
+	struct sockaddr_in hostAddr;
 	hostAddr.sin_family = AF_INET ;
- 	hostAddr.sin_port = htons(hostPort);
-    
- 	memset(&(hostAddr.sin_zero), 0, 8);
+	hostAddr.sin_port = htons(hostPort);
+
+	memset(&(hostAddr.sin_zero), 0, 8);
 	hostAddr.sin_addr.s_addr = inet_addr(hostIP);
 
- 	if (connect(socketHandle, (struct sockaddr*)&hostAddr, sizeof(hostAddr)) == -1)
+	if (connect(socketHandle, (struct sockaddr*)&hostAddr, sizeof(hostAddr)) == -1)
 	{
 #if LES_PLATFORM_LINUX == 1
-		int err = errno;
+		err = errno;
 		if (err != EINPROGRESS)
 #endif // #if LES_PLATFORM_LINUX == 1
 #if LES_PLATFORM_WINDOWS == 1
-		int err = WSAGetLastError();
+		err = WSAGetLastError();
 		if (err != WSAEINPROGRESS)
 #endif // #if LES_PLATFORM_WINDOWS == 1
 		{
 			LES_ERROR("LES_CreateTCPSocket::Error connecting socket errno:0x%X", errno);
-  		close(socketHandle);
-    	return LES_NETWORK_INVALID_SOCKET;
+			close(socketHandle);
+			return LES_NETWORK_INVALID_SOCKET;
 		}
- 	}
+	}
 	return socketHandle;
 }
 
