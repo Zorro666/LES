@@ -1,6 +1,4 @@
 High Priority:
-CLIENT: network tick call the message handler for the type in the received message
-CLIENT: register message handlers on TYPE - log if no handler found
 SERVER: need a message handler
 CLIENT: CONNECT message: do connection message exchange
 SERVER: CONNECT message: handle connection message exchange
