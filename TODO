@@ -1,14 +1,14 @@
 High Priority:
-SERVER: need a message handler
-CLIENT: CONNECT message: do connection message exchange
-SERVER: CONNECT message: handle connection message exchange
+CLIENT: have function in Main to loop over until connection works (les_core? or new file)
+CLIENT: need a state machine e.g. NOT_CONNECTED, CONNECTED, RECEIVED_DEFINITION_FILE, READY
+
 PYTHON: build definition file data into memory not write it
 CLIENT: GET_DEFINITION message:  use definition file (type, string, structures, functions) from over the network
 
 Medium Priority:
+CLIENT: input thread needs mutex before adding network items, network items should only be added on main thread
 MUTEX: put thread ID into it, then lock on same thread is ignored?
 CLIENT: LES tcpsocket to hide implementation details especially horrible mess that is windows
-CLIENT: network should use select() not recv()
 
 CLIENT: send function data to server as network message
 SERVER: process function data send response
