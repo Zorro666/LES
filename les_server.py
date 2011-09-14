@@ -5,6 +5,8 @@ import threading
 import SocketServer
 import struct
 
+import les_hash
+
 packedUint16 = struct.Struct(">H")
 packedUint32 = struct.Struct(">I")
 
@@ -63,7 +65,8 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 	def LES_HandleConnectMessage(self, msgType, msgId, msgPayloadSize, msgPayload):
 		print("Connect: type:0x%X id:%d payloadSize:%d" % (msgType, msgId, msgPayloadSize))
 		print("Connect: payload:%s" % (msgPayload))
-		payload = ""
+		hashValue = les_hash.GenerateHashCaseSensitive(msgPayload)
+		payload = packedUint32.pack(hashValue)
 		response = LES_CreateNetworkMessage(LES_NETMESSAGE_SEND_ID_CONNECT_RESPONSE, msgId, payload)
 		self.request.send(response)
 

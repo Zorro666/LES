@@ -9,10 +9,12 @@
 #include "les_time.h"
 #include "les_network.h"
 #include "les_thread.h"
+#include "les_hash.h"
 
 #include "les_jake.h"
 
 static int s_state;
+static LES_uint32 s_correctResponseHash;
 enum { LES_STATE_NOT_CONNECTED, LES_STATE_WAITING_FOR_CONNECT_RESPONSE, LES_STATE_CONNECTED };
 
 void JAKE_Test()
@@ -117,12 +119,20 @@ int LES_ConnectResponseMessageHandler(const LES_uint16 type, const LES_uint16 id
 		LES_ERROR("ConnectResponse wrong id:%d", id);
 		return LES_RETURN_ERROR;
 	}
-	if (payloadSize != 0)
+	if (payloadSize != 4)
 	{
 		LES_ERROR("ConnectResponse wrong payloadSize:%d", payloadSize);
 		return LES_RETURN_ERROR;
 	}
-	payload = payload;
+	LES_uint32 bigResponseHash;
+	memcpy(&bigResponseHash, payload, sizeof(LES_uint32));
+	const LES_uint32 responseHash = fromBigEndian32(bigResponseHash);
+	LES_LOG("responseHash:0x%X", responseHash);
+	if (responseHash != s_correctResponseHash)
+	{
+		LES_ERROR("ConnectResponse wrong responseHash:0x%X Expected:0x%X", responseHash, s_correctResponseHash);
+		return LES_RETURN_ERROR;
+	}
 	s_state = LES_STATE_CONNECTED;
 	return LES_RETURN_OK;
 }
@@ -168,14 +178,36 @@ int main(const int argc, const char* const argv[])
 			{
 				const LES_uint16 type = LES_NETMESSAGE_SEND_ID_CONNECT;
 				const LES_uint16 id = 234;
-				const LES_uint32 payloadSize = 0;
+				const LES_uint32 payloadSize = 16;
+				char payload[17];
+				for (LES_uint32 i = 0; i < payloadSize; i++)
+				{
+					char c = '0';
+					const int v = rand() % (10+26+26);
+					if (v < 10)
+					{
+						c = (char)('0' + v);
+					}
+					else if (v < 36)
+					{
+						c = (char)('a' + (v-10));
+					}
+					else
+					{
+						c = (char)('A' + (v-10-26));
+					}
+					payload[i] = c;
+				}
+				payload[16] = '\0';
 				LES_NetworkSendItem sendItem;
-				sendItem.Create(type, id, payloadSize, LES_NULL);
+				sendItem.Create(type, id, payloadSize, payload);
 				if (LES_NetworkAddSendItem(&sendItem) == LES_RETURN_ERROR)
 				{
 					LES_ERROR("Error adding connect send item");
 				}
 				s_state = LES_STATE_WAITING_FOR_CONNECT_RESPONSE;
+				s_correctResponseHash = LES_GenerateHashCaseSensitive(payload);
+				LES_LOG("connectHash:0x%X", s_correctResponseHash);
 			}
 			else if (s_state == LES_STATE_WAITING_FOR_CONNECT_RESPONSE)
 			{
