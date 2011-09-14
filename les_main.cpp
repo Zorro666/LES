@@ -12,6 +12,9 @@
 
 #include "les_jake.h"
 
+static int s_state;
+enum { LES_STATE_NOT_CONNECTED, LES_STATE_WAITING_FOR_CONNECT_RESPONSE, LES_STATE_CONNECTED };
+
 void JAKE_Test()
 {
 #if 0
@@ -49,10 +52,16 @@ int JAKE_LoadDefinitionFile(const char* const fname)
 	return LES_RETURN_OK;
 }
 
+#define LES_NETMESSAGE_RECV_ID_CONNECT_RESPONSE (0x2)
+#define LES_NETMESSAGE_RECV_ID_TEST (0x33)
+
+#define LES_NETMESSAGE_SEND_ID_CONNECT (0x1)
+#define LES_NETMESSAGE_SEND_ID_TEST (0x66)
+
 static void* inputThread(void*)
 {
-	const short type = 0x66;
-	short int id = 0;
+	const LES_uint16 type = LES_NETMESSAGE_SEND_ID_TEST;
+	LES_uint16 id = 0;
 	while (1)
 	{
 		const int bufferLen = 128;
@@ -69,9 +78,10 @@ static void* inputThread(void*)
 			break;
 		}
 
-		const int payLoadSize = stringLen;
+		const LES_uint32 payloadSize = stringLen;
 		LES_NetworkSendItem sendItem;
-		sendItem.Create(type, id, payLoadSize, buffer);
+		sendItem.Create(type, id, payloadSize, buffer);
+		// This is not thread safe - it is meant to be run on the main thread only
 		if (LES_NetworkAddSendItem(&sendItem) == LES_RETURN_ERROR)
 		{
 			LES_ERROR("Error adding send item");
@@ -92,6 +102,28 @@ void JAKE_CreateInputThread(void)
 int JAKE_TestMessageHandler(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payloadSize, void* payload)
 {
 	LES_LOG("Received Message type:0x%X id:0x%X payloadSize:%d payload:'%s'", type, id, payloadSize, (char*)payload);
+	return LES_RETURN_OK;
+}
+
+int LES_ConnectResponseMessageHandler(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payloadSize, void* payload)
+{
+	if (type != LES_NETMESSAGE_RECV_ID_CONNECT_RESPONSE)
+	{
+		LES_ERROR("ConnectResponse wrong type:%d", type);
+		return LES_RETURN_ERROR;
+	}
+	if (id != 234)
+	{
+		LES_ERROR("ConnectResponse wrong id:%d", id);
+		return LES_RETURN_ERROR;
+	}
+	if (payloadSize != 0)
+	{
+		LES_ERROR("ConnectResponse wrong payloadSize:%d", payloadSize);
+		return LES_RETURN_ERROR;
+	}
+	payload = payload;
+	s_state = LES_STATE_CONNECTED;
 	return LES_RETURN_OK;
 }
 
@@ -124,17 +156,39 @@ int main(const int argc, const char* const argv[])
 	LES_Init();
 	if (LES_NetworkCreateTCPSocket("127.0.0.1", 3141) == LES_RETURN_OK)
 	{
-		LES_NetworkRegisterReceivedMessageHandler(0x33, JAKE_TestMessageHandler);
+		LES_NetworkRegisterReceivedMessageHandler(LES_NETMESSAGE_RECV_ID_TEST, JAKE_TestMessageHandler);
+		LES_NetworkRegisterReceivedMessageHandler(LES_NETMESSAGE_RECV_ID_CONNECT_RESPONSE, LES_ConnectResponseMessageHandler);
+		s_state = LES_STATE_NOT_CONNECTED;
 
 		JAKE_CreateInputThread();
 		float lastTime = -10000.0f;
 		while (1)
 		{
+			if (s_state == LES_STATE_NOT_CONNECTED)
+			{
+				const LES_uint16 type = LES_NETMESSAGE_SEND_ID_CONNECT;
+				const LES_uint16 id = 234;
+				const LES_uint32 payloadSize = 0;
+				LES_NetworkSendItem sendItem;
+				sendItem.Create(type, id, payloadSize, LES_NULL);
+				if (LES_NetworkAddSendItem(&sendItem) == LES_RETURN_ERROR)
+				{
+					LES_ERROR("Error adding connect send item");
+				}
+				s_state = LES_STATE_WAITING_FOR_CONNECT_RESPONSE;
+			}
+			else if (s_state == LES_STATE_WAITING_FOR_CONNECT_RESPONSE)
+			{
+			}
+			else if (s_state == LES_STATE_CONNECTED)
+			{
+			}
+
 			const float logDelta = 1.0f;
 			const float elapsedTime = LES_GetElapsedTimeInSeconds();
 			if ((elapsedTime - lastTime) > logDelta)
 			{
-				LES_LOG("Time %f", elapsedTime);
+				LES_LOG("Time %f State:%d", elapsedTime, s_state);
 				lastTime = elapsedTime;
 			}
 			LES_NetworkTick();
