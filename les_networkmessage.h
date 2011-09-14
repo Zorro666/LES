@@ -3,7 +3,7 @@
 
 #include "les_base.h"
 
-#define LES_NETWORK_INVALID_MESSAGE_TYPE (-1)
+#define LES_NETWORK_INVALID_MESSAGE_TYPE (0xFFFF)
 
 struct LES_NetworkMessage
 {

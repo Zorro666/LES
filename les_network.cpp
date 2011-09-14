@@ -53,10 +53,9 @@ static LES_NetworkSendQueue* s_pRequestSendItemQueue = LES_NULL;
 static LES_NetworkReceivedQueue* s_pReceivedMessageQueue = LES_NULL;
 static LES_NetworkReceivedQueue* s_pRequestReceivedMessageQueue = LES_NULL;
 
-typedef int LES_ReceivedMessageHandlerFunction(const short type, const short id, const int payloadSize, void* payload);
-
 #define LES_NETWORK_MAX_NUM_HANDLERS 256
-static short s_receivedMessageHandlerTypes[LES_NETWORK_MAX_NUM_HANDLERS];
+static int s_numRegisteredMessageHandlers = 0;
+static LES_uint16 s_receivedMessageHandlerTypes[LES_NETWORK_MAX_NUM_HANDLERS];
 static LES_ReceivedMessageHandlerFunction* s_receivedMessageHandlerFunctions[LES_NETWORK_MAX_NUM_HANDLERS];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -231,6 +230,48 @@ static void LES_NetworkSwapQueues(void)
 	LES_NETWORK_UNLOCK_MUTEX;
 }
 
+static void LES_NetworkProcessReceivedMessages(void)
+{
+	const int numRegisteredHandlers = s_numRegisteredMessageHandlers;
+	while (1)
+	{
+		LES_NetworkReceivedItem* const pReceivedItem = s_pReceivedMessageQueue->Pop();
+		if (pReceivedItem == LES_NULL)
+		{
+			break;
+		}
+		LES_NetworkMessage* const pReceivedMessage = pReceivedItem->GetMessagePtr();
+
+		const LES_uint16 receivedType = fromBigEndian16(pReceivedMessage->m_type);
+		LES_ReceivedMessageHandlerFunction* pHandlerFunction = LES_NULL;
+		for (int i = 0; i < numRegisteredHandlers; i++)
+		{
+			if (s_receivedMessageHandlerTypes[i] == receivedType)
+			{
+				pHandlerFunction = s_receivedMessageHandlerFunctions[i];
+				break;
+			}
+		}
+		if (pHandlerFunction)
+		{
+			const LES_uint16 receivedId = fromBigEndian16(pReceivedMessage->m_id);
+			const LES_uint32 receivedPayloadSize = fromBigEndian32(pReceivedMessage->m_payloadSize);
+			void* const payload = (void*)pReceivedMessage->m_payload;
+			const int ret = pHandlerFunction(receivedType, receivedId, receivedPayloadSize, payload);
+			if (ret == LES_RETURN_ERROR)
+			{
+				LES_ERROR("LES_NetworkProcessReceivedMessages ERROR returned by message handler");
+			}
+		}
+		else
+		{
+			LES_ERROR("Received message: type:0x%X unhandled", receivedType);
+		}
+
+		pReceivedItem->Free();
+	}
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Public external functions
@@ -275,6 +316,48 @@ int LES_NetworkAddSendItem(const LES_NetworkSendItem* const pSendItem)
 	return LES_RETURN_OK;
 }
 
+int LES_NetworkRegisterReceivedMessageHandler(const LES_uint16 type, LES_ReceivedMessageHandlerFunction* pFunction)
+{
+	const int index = s_numRegisteredMessageHandlers;
+	if (type == LES_NETWORK_INVALID_MESSAGE_TYPE)
+	{
+		LES_ERROR("LES_NetworkRegisterReceivedMessageHandler type:%d illegal type", type);
+		return LES_RETURN_ERROR;
+	}
+	if (index >= LES_NETWORK_MAX_NUM_HANDLERS)
+	{
+		LES_ERROR("LES_NetworkRegisterReceivedMessageHandler type:%d no free space for any more handlers MAX:%d", 
+							type, LES_NETWORK_MAX_NUM_HANDLERS);
+		return LES_RETURN_ERROR;
+	}
+	for (int i = 0; i < index; i++)
+	{
+		if (s_receivedMessageHandlerTypes[index] == type)
+		{
+			LES_ERROR("LES_NetworkRegisterReceivedMessageHandler type:%d already registered", type);
+			return LES_RETURN_ERROR;
+		}
+	}
+	if (s_receivedMessageHandlerTypes[index] != LES_NETWORK_INVALID_MESSAGE_TYPE)
+	{
+		LES_ERROR("LES_NetworkRegisterReceivedMessageHandler type:%d ERROR handler type entry not empty:%d", 
+							type, s_receivedMessageHandlerTypes[index]);
+		return LES_RETURN_ERROR;
+	}
+	if (s_receivedMessageHandlerFunctions[index] != LES_NULL)
+	{
+		LES_ERROR("LES_NetworkRegisterReceivedMessageHandler type:%d ERROR handler function entry not empty:%p", 
+							type, s_receivedMessageHandlerFunctions[index]);
+		return LES_RETURN_ERROR;
+	}
+
+	s_receivedMessageHandlerTypes[index] = type;
+	s_receivedMessageHandlerFunctions[index] = pFunction;
+	s_numRegisteredMessageHandlers++;
+
+	return LES_RETURN_OK;
+}
+
 void LES_NetworkInit(void)
 {
 	s_networkThreadQueueIndex = 0;
@@ -289,31 +372,10 @@ void LES_NetworkInit(void)
 		s_receivedMessageHandlerTypes[i] = LES_NETWORK_INVALID_MESSAGE_TYPE;
 		s_receivedMessageHandlerFunctions[i] = LES_NULL;
 	}
+	s_numRegisteredMessageHandlers = 0;
 
 	const int ret = LES_CreateThread(&s_networkThreadHandle, LES_NULL, LES_NetworkThreadProcess, &s_networkThreadStartStruct);
 	LES_LOG("Network thread created handle:%d ret:%d", s_networkThreadHandle, ret);
-}
-
-void LES_NetworkProcessReceivedMessages(void)
-{
-	while (1)
-	{
-		LES_NetworkReceivedItem* const pReceivedItem = s_pReceivedMessageQueue->Pop();
-		if (pReceivedItem == LES_NULL)
-		{
-			break;
-		}
-		LES_NetworkMessage* const pReceivedMessage = pReceivedItem->GetMessagePtr();
-
-		short receivedType = fromBigEndian16(pReceivedMessage->m_type);
-		short receivedId = fromBigEndian16(pReceivedMessage->m_id);
-		int receivedPayloadSize = fromBigEndian32(pReceivedMessage->m_payloadSize);
-
-		LES_LOG("Received message: type:0x%X id:%d payloadSize:%d", receivedType, receivedId, receivedPayloadSize);
-		LES_LOG("payload:'%s'", (char*)pReceivedMessage->m_payload);
-
-		pReceivedItem->Free();
-	}
 }
 
 void LES_NetworkTick(void)

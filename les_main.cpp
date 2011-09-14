@@ -89,6 +89,12 @@ void JAKE_CreateInputThread(void)
 	LES_LOG("Input thread created handle:%d ret:%d", inputThreadHandle, ret);
 }
 
+int JAKE_TestMessageHandler(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payloadSize, void* payload)
+{
+	LES_LOG("Received Message type:0x%X id:0x%X payloadSize:%d payload:'%s'", type, id, payloadSize, (char*)payload);
+	return LES_RETURN_OK;
+}
+
 int main(const int argc, const char* const argv[])
 {
 	bool verbose = true;
@@ -118,6 +124,8 @@ int main(const int argc, const char* const argv[])
 	LES_Init();
 	if (LES_NetworkCreateTCPSocket("127.0.0.1", 3141) == LES_RETURN_OK)
 	{
+		LES_NetworkRegisterReceivedMessageHandler(0x33, JAKE_TestMessageHandler);
+
 		JAKE_CreateInputThread();
 		float lastTime = -10000.0f;
 		while (1)
