@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <malloc.h>
+#include <sys/select.h>
 
 #if LES_PLATFORM_LINUX == 1
 #include <errno.h>
@@ -124,7 +125,7 @@ static int LES_NetworkAddReceivedMessage(LES_NetworkMessage* const pReceivedMess
 		LES_ERROR("LES_NetworkAddReceivedMessage() failed to add to the queue");
 		return LES_RETURN_ERROR;
 	}
-	LES_LOG("Added message:'%s'",pReceivedMessage->m_payload);
+	//LES_LOG("Added message:'%s'",pReceivedMessage->m_payload);
 
 	return LES_RETURN_OK;
 }
@@ -152,19 +153,45 @@ static int LES_NetworkThreadProcessOneLoop(const LES_NetworkThreadStartStruct* c
 	
 	const char* pSendData = (const char*)(pSendItem->GetMessagePtr());
 	const int sendDataSize = pSendItem->GetMessageSize();
-	if (sendDataSize == 0)
+	if (sendDataSize > 0)
+	{
+		const int bytesSent = send(socketHandle, pSendData, sendDataSize, 0);
+		if (bytesSent == -1)
+		{
+			LES_ERROR("Error sending data %d", errno);
+			return LES_NETWORK_THREAD_PROCESS_ERROR;
+		}
+		LES_LOG("Sent bytes %d (%d)", bytesSent, sendDataSize);
+		pSendItem->Free();
+	}
+
+	fd_set readSocketSet;
+	FD_ZERO(&readSocketSet);
+	FD_SET(socketHandle, &readSocketSet);
+
+	// Wait 0.01 seconds
+	timeval timeOut;
+	timeOut.tv_sec = 0;
+	timeOut.tv_usec = 100 * 1000;
+
+	const int retval = select(socketHandle+1, &readSocketSet, NULL, NULL, &timeOut);
+	if (retval == -1)
+	{
+		LES_ERROR("select() failed");
+		return LES_NETWORK_THREAD_PROCESS_ERROR;
+	}
+	else if (retval)
+	{
+		if (FD_ISSET(socketHandle, &readSocketSet) == 0)
+		{
+			LES_ERROR("select() says data ready but FD_ISSET is 0");
+			return LES_NETWORK_THREAD_PROCESS_ERROR;
+		}
+	}
+	else
 	{
 		return LES_NETWORK_THREAD_PROCESS_MORE;
 	}
-
-	const int bytesSent = send(socketHandle, pSendData, sendDataSize, 0);
-	if (bytesSent == -1)
-	{
-		LES_ERROR("Error sending data %d", errno);
-		return LES_NETWORK_THREAD_PROCESS_ERROR;
-	}
-	LES_LOG("Sent bytes %d (%d)", bytesSent, sendDataSize);
-	pSendItem->Free();
 
 	char buffer[128];
 	const int bufferLen = 128;
@@ -175,13 +202,16 @@ static int LES_NetworkThreadProcessOneLoop(const LES_NetworkThreadStartStruct* c
 		LES_ERROR("Error receiving data %d", errno);
 		return LES_RETURN_ERROR;
 	}
-	LES_LOG("Received bytes %d", bytesReceived);
-	// Make a NetReceiveItem struct and put data into it
-	LES_NetworkMessage* const pReceivedMessage = (LES_NetworkMessage* const)malloc(bytesReceived);
-	memcpy(pReceivedMessage, buffer, bytesReceived);
-	if (LES_NetworkAddReceivedMessage(pReceivedMessage) == LES_RETURN_ERROR)
+	if (bytesReceived > 0)
 	{
-		LES_ERROR("Error adding received message");
+		LES_LOG("Received bytes %d", bytesReceived);
+		// Make a NetReceiveItem struct and put data into it
+		LES_NetworkMessage* const pReceivedMessage = (LES_NetworkMessage* const)malloc(bytesReceived);
+		memcpy(pReceivedMessage, buffer, bytesReceived);
+		if (LES_NetworkAddReceivedMessage(pReceivedMessage) == LES_RETURN_ERROR)
+		{
+			LES_ERROR("Error adding received message");
+		}
 	}
 	return LES_NETWORK_THREAD_PROCESS_MORE;
 }
