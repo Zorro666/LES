@@ -8,9 +8,9 @@
 struct LES_NetworkMessage
 {
 public:
-	short m_type;
-	short m_id;
-	int m_payloadSize;
+	LES_uint16 m_type;
+	LES_uint16 m_id;
+	LES_uint32 m_payloadSize;
 	int m_payload[1];		// m_payload[m_payloadSize/4]
 private:
 	LES_NetworkMessage();

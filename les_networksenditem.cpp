@@ -23,7 +23,8 @@ static int LES_NetworkMessageSize(const int payLoadSize)
 	return memorySize;
 }
 
-static LES_NetworkMessage* LES_CreateNetworkMessage(const short type, const short id, const int payLoadSize, void* const payload, const int messageSize)
+static LES_NetworkMessage* LES_CreateNetworkMessage(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payLoadSize, 
+																										void* const payload, const int messageSize)
 {
 	LES_NetworkMessage* const pNetworkMessage = (LES_NetworkMessage*)malloc(messageSize);
 	pNetworkMessage->m_type = toBigEndian16(type);
@@ -40,7 +41,7 @@ static LES_NetworkMessage* LES_CreateNetworkMessage(const short type, const shor
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-void LES_NetworkSendItem::Create(const short type, const short id, const int payLoadSize, void* const payload)
+void LES_NetworkSendItem::Create(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payLoadSize, void* const payload)
 {
 	const int messageSize = LES_NetworkMessageSize(payLoadSize);
 	m_message = LES_CreateNetworkMessage(type, id, payLoadSize, payload, messageSize);
