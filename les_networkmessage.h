@@ -3,6 +3,8 @@
 
 #include "les_base.h"
 
+#define LES_NETWORK_INVALID_MESSAGE_TYPE (-1)
+
 struct LES_NetworkMessage
 {
 public:
