@@ -55,6 +55,7 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
  			receivedData = self.request.recv(100*1024)
 			receivedDataLen = len(receivedData)
 			if receivedDataLen == 0:
+				time.sleep(0.01)
 				continue
 
 			receivedMessage = LES_NetworkMessage()
