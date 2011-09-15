@@ -66,6 +66,7 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 		print("Connect: type:0x%X id:%d payloadSize:%d" % (msgType, msgId, msgPayloadSize))
 		print("Connect: payload:%s" % (msgPayload))
 		hashValue = les_hash.GenerateHashCaseSensitive(msgPayload)
+		print("Connect: connectResponse:0x%X" % (hashValue))
 		payload = packedUint32.pack(hashValue)
 		response = LES_CreateNetworkMessage(LES_NETMESSAGE_SEND_ID_CONNECT_RESPONSE, msgId, payload)
 		self.request.send(response)
