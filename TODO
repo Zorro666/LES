@@ -1,6 +1,5 @@
 High Priority:
-CLIENT: have function in Main to loop over until connection works (les_core? or new file)
-CLIENT: need a state machine e.g. NOT_CONNECTED, CONNECTED, RECEIVED_DEFINITION_FILE, READY
+CLIENT: need a state machine e.g. RECEIVED_DEFINITION_FILE, READY
 
 PYTHON: build definition file data into memory not write it
 CLIENT: GET_DEFINITION message:  use definition file (type, string, structures, functions) from over the network
@@ -28,6 +27,7 @@ LES: need good debugging ability for the packets before sent and at server end
 LES: send packet data to server?
 
 Low Priority:
+CLIENT: rand() need a random function
 MACROS: WORK OUT HOW TO DO THE RETURN VALUE IN MACROS
 MACROS: WORK OUT HOW TO DO THE ERROR HANDLING 
 
