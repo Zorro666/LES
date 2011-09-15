@@ -2,37 +2,59 @@
 
 make
 if [ $? -gt 0 ]; then
-    echo -e ""
-    echo -e "###########"
-    echo -e "MAKE FAILED"
-    echo -e "###########"
-    echo -e ""
+		echo -e ""
+		echo -e "###########"
+		echo -e "MAKE FAILED"
+		echo -e "###########"
+		echo -e ""
 		exit
 fi
 
+if [ "$1" == "stress" ]; then
+	echo "" >biglog.txt
+	while [ 1 ]; do
+		les_test
+		cat log.txt >>biglog.txt
+		cat error.txt >>biglog.txt
+		cat warning.txt >>biglog.txt
+		grep Unlock biglog.txt
+		if [ $? -eq 0 ]; then
+			echo -e ""
+			echo -e "###############"
+			echo -e "UNLOCK FOUND CRASHED"
+			echo -e "###############"
+			echo -e ""
+			exit
+		fi
+	done
+	exit
+fi
+
+exit
+
 les_test -verbose -tests 
 if [ $? -gt 0 ]; then
-    echo -e ""
-    echo -e "###############"
-    echo -e "PROGRAM CRASHED"
-    echo -e "###############"
-    echo -e ""
+		echo -e ""
+		echo -e "###############"
+		echo -e "PROGRAM CRASHED"
+		echo -e "###############"
+		echo -e ""
 		exit
 fi
 
 diff log.txt correctTestOutput.txt
 if [ $? -gt 0 ]; then
-    echo -e ""
-    echo -e "############"
-    echo -e "TESTS FAILED"
-    echo -e "############"
-    echo -e ""
+		echo -e ""
+		echo -e "############"
+		echo -e "TESTS FAILED"
+		echo -e "############"
+		echo -e ""
 		exit
 else
-    echo -e ""
-    echo -e "############"
-    echo -e "TESTS PASSED"
-    echo -e "############"
-    echo -e ""
+		echo -e ""
+		echo -e "############"
+		echo -e "TESTS PASSED"
+		echo -e "############"
+		echo -e ""
 		exit
 fi
