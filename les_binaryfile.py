@@ -1,12 +1,14 @@
 #!/usr/bin/python
 
 import struct
+import cStringIO
+
 import les_logger
 
 class LES_BinaryFile():	
 	def __init__(self, fname):
 		self.fname = fname
-		self.fh = open(fname, mode="wb")
+		self.fh = cStringIO.StringIO()
 		self.endianFormat = ""
 		self.setBigEndian()
 
@@ -81,6 +83,10 @@ class LES_BinaryFile():
 		self.fh.seek(index)
 
 	def close(self):
+		realFH = open(self.fname, mode="wb")
+		data = self.fh.getvalue()
+		realFH.write(data)
+		realFH.close()
 		self.fh.close()
 
 def runTest():
