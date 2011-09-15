@@ -6,6 +6,7 @@
 *.orig
 .cproject
 .project
+biglog.txt
 jake.txt
 temp.txt
 test.txt
