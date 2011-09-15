@@ -36,7 +36,7 @@ struct LES_NetworkThreadStartStruct
 	int m_socketHandle;
 };
 
-static int s_networkMutexVariable = 0;
+static LES_MutexVariable s_networkMutexVariable;
 static LES_Mutex s_networkMutex(&s_networkMutexVariable);
 static LES_ThreadHandle s_networkThreadHandle;
 static LES_NetworkThreadStartStruct s_networkThreadStartStruct;
@@ -415,6 +415,7 @@ int LES_NetworkRegisterReceivedMessageHandler(const LES_uint16 type, LES_Receive
 
 void LES_NetworkInit(void)
 {
+	LES_MutexVariableInit(&s_networkMutexVariable);
 	s_networkThreadQueueIndex = 0;
 	LES_NetworkSwapQueues();
 

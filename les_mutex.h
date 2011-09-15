@@ -3,10 +3,21 @@
 
 #include "les_base.h"
 
+#define LES_USE_PTHREAD_MUTEX (1)
+
+#if LES_USE_PTHREAD_MUTEX
+typedef pthread_mutex_t LES_MutexVariable;
+#else // #if LES_USE_PTHREAD_MUTEX
+#error LES_MUTEX_WONT_WORK_WITHOUT_PTHREADS
+typedef int LES_MutexVariable;
+#endif // #if LES_USE_PTHREAD_MUTEX
+
+void LES_MutexVariableInit(LES_MutexVariable* pMutexVariable);
+
 class LES_Mutex
 {
 public:
-	LES_Mutex(int* const pMutexVariable) : m_pMutexVariable(pMutexVariable)
+	LES_Mutex(LES_MutexVariable* const pMutexVariable) : m_pMutexVariable(pMutexVariable)
 	{
 	}
 	~LES_Mutex(void)
@@ -20,13 +31,13 @@ private:
 	LES_Mutex(LES_Mutex& other);
 	LES_Mutex& operator = (LES_Mutex& other);
 
-	int* const m_pMutexVariable;
+	LES_MutexVariable* const m_pMutexVariable;
 };
 
 class LES_ScopeMutex
 {
 public:
-	LES_ScopeMutex(int* const pMutexVariable) : m_mutex(pMutexVariable)
+	LES_ScopeMutex(LES_MutexVariable* const pMutexVariable) : m_mutex(pMutexVariable)
 	{
 		m_mutex.Lock();
 	}
