@@ -78,8 +78,9 @@ void LES_CoreEngineShutdown(void)
 int LES_CoreEngineTick(void)
 {
 	LES_NetworkTick();
+	const int currentState = les_state;
 
-	if (les_state == LES_STATE_BOOT)
+	if (currentState == LES_STATE_BOOT)
 	{
 		const char* const ip = "127.0.0.1";
 		const short port = 3141;
@@ -96,7 +97,7 @@ int LES_CoreEngineTick(void)
 			return LES_COREENGINE_ERROR;
 		}
 	}
-	if (les_state == LES_STATE_NOT_CONNECTED)
+	if (currentState == LES_STATE_NOT_CONNECTED)
 	{
 		const LES_uint16 type = LES_NETMESSAGE_SEND_ID_CONNECT;
 		const LES_uint16 id = 234;
@@ -133,14 +134,17 @@ int LES_CoreEngineTick(void)
 		LES_LOG("connectHash:0x%X", les_correctResponseHash);
 		return LES_COREENGINE_OK;
 	}
-	else if (les_state == LES_STATE_WAITING_FOR_CONNECT_RESPONSE)
+	else if (currentState == LES_STATE_WAITING_FOR_CONNECT_RESPONSE)
 	{
+		return LES_COREENGINE_OK;
 	}
-	else if (les_state == LES_STATE_CONNECTED)
+	else if (currentState == LES_STATE_CONNECTED)
 	{
+		return LES_COREENGINE_FINISHED;
 	}
 
-	return LES_COREENGINE_OK;
+	LES_ERROR("LES_CoreEngineTick: unknown state:%d", currentState);
+	return LES_COREENGINE_ERROR;
 }
 
 int LES_CoreEngineGetState(void)
