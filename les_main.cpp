@@ -3,6 +3,7 @@
 #include <math.h>
 
 #include "les_core.h"
+#include "les_coreengine.h"
 #include "les_logger.h"
 #include "les_test.h"
 #include "les_definitionfile.h"
@@ -12,10 +13,6 @@
 #include "les_hash.h"
 
 #include "les_jake.h"
-
-static int s_state;
-static LES_uint32 s_correctResponseHash;
-enum { LES_STATE_NOT_CONNECTED, LES_STATE_WAITING_FOR_CONNECT_RESPONSE, LES_STATE_CONNECTED };
 
 void JAKE_Test()
 {
@@ -54,14 +51,9 @@ int JAKE_LoadDefinitionFile(const char* const fname)
 	return LES_RETURN_OK;
 }
 
-#define LES_NETMESSAGE_RECV_ID_CONNECT_RESPONSE (0x2)
-#define LES_NETMESSAGE_RECV_ID_TEST (0x33)
-
-#define LES_NETMESSAGE_SEND_ID_CONNECT (0x1)
-#define LES_NETMESSAGE_SEND_ID_TEST (0x66)
-
 static void* inputThread(void*)
 {
+	#define LES_NETMESSAGE_SEND_ID_TEST (0x66)
 	const LES_uint16 type = LES_NETMESSAGE_SEND_ID_TEST;
 	LES_uint16 id = 0;
 	while (1)
@@ -101,42 +93,6 @@ void JAKE_CreateInputThread(void)
 	LES_LOG("Input thread created handle:%d ret:%d", inputThreadHandle, ret);
 }
 
-int JAKE_TestMessageHandler(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payloadSize, void* payload)
-{
-	LES_LOG("Received Message type:0x%X id:0x%X payloadSize:%d payload:'%s'", type, id, payloadSize, (char*)payload);
-	return LES_RETURN_OK;
-}
-
-int LES_ConnectResponseMessageHandler(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payloadSize, void* payload)
-{
-	if (type != LES_NETMESSAGE_RECV_ID_CONNECT_RESPONSE)
-	{
-		LES_ERROR("ConnectResponse wrong type:%d", type);
-		return LES_RETURN_ERROR;
-	}
-	if (id != 234)
-	{
-		LES_ERROR("ConnectResponse wrong id:%d", id);
-		return LES_RETURN_ERROR;
-	}
-	if (payloadSize != 4)
-	{
-		LES_ERROR("ConnectResponse wrong payloadSize:%d", payloadSize);
-		return LES_RETURN_ERROR;
-	}
-	LES_uint32 bigResponseHash;
-	memcpy(&bigResponseHash, payload, sizeof(LES_uint32));
-	const LES_uint32 responseHash = fromBigEndian32(bigResponseHash);
-	LES_LOG("responseHash:0x%X", responseHash);
-	if (responseHash != s_correctResponseHash)
-	{
-		LES_ERROR("ConnectResponse wrong responseHash:0x%X Expected:0x%X", responseHash, s_correctResponseHash);
-		return LES_RETURN_ERROR;
-	}
-	s_state = LES_STATE_CONNECTED;
-	return LES_RETURN_OK;
-}
-
 int main(const int argc, const char* const argv[])
 {
 	bool verbose = true;
@@ -164,68 +120,35 @@ int main(const int argc, const char* const argv[])
 	LES_Logger::Init();
 	LES_Logger::SetConsoleOutput(LES_Logger::CHANNEL_LOG, verbose);
 	LES_Init();
-	if (LES_NetworkCreateTCPSocket("127.0.0.1", 3141) == LES_RETURN_OK)
+
+	bool inputThreadAlive = false;
+	float lastTime = -10000.0f;
+	while (1)
 	{
-		LES_NetworkRegisterReceivedMessageHandler(LES_NETMESSAGE_RECV_ID_TEST, JAKE_TestMessageHandler);
-		LES_NetworkRegisterReceivedMessageHandler(LES_NETMESSAGE_RECV_ID_CONNECT_RESPONSE, LES_ConnectResponseMessageHandler);
-		s_state = LES_STATE_NOT_CONNECTED;
-
-		JAKE_CreateInputThread();
-		float lastTime = -10000.0f;
-		while (1)
+		const int ret = LES_CoreEngineTick();
+		if (ret == LES_RETURN_ERROR)
 		{
-			if (s_state == LES_STATE_NOT_CONNECTED)
-			{
-				const LES_uint16 type = LES_NETMESSAGE_SEND_ID_CONNECT;
-				const LES_uint16 id = 234;
-				const LES_uint32 payloadSize = 16;
-				char payload[17];
-				for (LES_uint32 i = 0; i < payloadSize; i++)
-				{
-					char c = '0';
-					const int v = rand() % (10+26+26);
-					if (v < 10)
-					{
-						c = (char)('0' + v);
-					}
-					else if (v < 36)
-					{
-						c = (char)('a' + (v-10));
-					}
-					else
-					{
-						c = (char)('A' + (v-10-26));
-					}
-					payload[i] = c;
-				}
-				payload[16] = '\0';
-				LES_NetworkSendItem sendItem;
-				sendItem.Create(type, id, payloadSize, payload);
-				if (LES_NetworkAddSendItem(&sendItem) == LES_RETURN_ERROR)
-				{
-					LES_ERROR("Error adding connect send item");
-				}
-				s_state = LES_STATE_WAITING_FOR_CONNECT_RESPONSE;
-				s_correctResponseHash = LES_GenerateHashCaseSensitive(payload);
-				LES_LOG("connectHash:0x%X", s_correctResponseHash);
-			}
-			else if (s_state == LES_STATE_WAITING_FOR_CONNECT_RESPONSE)
-			{
-			}
-			else if (s_state == LES_STATE_CONNECTED)
-			{
-			}
-
-			const float logDelta = 1.0f;
-			const float elapsedTime = LES_GetElapsedTimeInSeconds();
-			if ((elapsedTime - lastTime) > logDelta)
-			{
-				LES_LOG("Time %f State:%d", elapsedTime, s_state);
-				lastTime = elapsedTime;
-			}
-			LES_NetworkTick();
-			LES_Sleep(0.1f);
+			LES_ERROR("ERROR during LES_CoreEngineTick()");
+			break;
 		}
+		else if (ret == LES_COREENGINE_FINISHED)
+		{
+			LES_LOG("LES_CoreEngineTick() finished");
+			break;
+		}
+		if (inputThreadAlive == false)
+		{
+			JAKE_CreateInputThread();
+			inputThreadAlive = true;
+		}
+		const float logDelta = 1.0f;
+		const float elapsedTime = LES_GetElapsedTimeInSeconds();
+		if ((elapsedTime - lastTime) > logDelta)
+		{
+			LES_LOG("Time %f State:%d", elapsedTime, LES_CoreEngineGetState());
+			lastTime = elapsedTime;
+		}
+		LES_Sleep(0.1f);
 	}
 
 	if (JAKE_LoadDefinitionFile("defTest.bin") != LES_RETURN_OK)

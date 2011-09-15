@@ -463,6 +463,14 @@ void LES_NetworkTick(void)
 	LES_NetworkProcessReceivedMessages();
 }
 
+void LES_NetworkShutdown(void)
+{
+	// Stop the network thread
+	// Close the socket
+	LES_LOG("TODO:STOP THE NETWORK THREAD");
+	LES_LOG("TODO:CLOSE THE SOCKET");
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Private External functions

@@ -10,7 +10,8 @@ LES_DEFINITIONALFILE:= les_definitionfile.cpp les_chunkfile.cpp \
 
 LES_CORE:= les_core.cpp les_hash.cpp les_time.cpp \
 					 les_logger.cpp les_loggerchannel.cpp \
-					 les_thread.cpp les_mutex.cpp 
+					 les_thread.cpp les_mutex.cpp \
+					 les_coreengine.cpp
 
 LES_DEPENDS:=$(LES_CORE) $(LES_FUNCTION) $(LES_TEST) $(LES_DEFINITIONALFILE) $(LES_NETWORK) les_jake.cpp
 

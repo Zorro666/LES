@@ -11,6 +11,7 @@ typedef int LES_ReceivedMessageHandlerFunction(const LES_uint16 type, const LES_
 
 void LES_NetworkInit(void);
 void LES_NetworkTick(void);
+void LES_NetworkShutdown(void);
 
 int LES_NetworkCreateTCPSocket(const char* const ip, const short port);
 int LES_NetworkAddSendItem(const LES_NetworkSendItem* const pSendItem);

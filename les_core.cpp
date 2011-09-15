@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "les_core.h"
+#include "les_coreengine.h"
 #include "les_logger.h"
 #include "les_hash.h"
 #include "les_stringentry.h"
@@ -144,10 +145,13 @@ void LES_Init(void)
 	LES_TypeInit();
 	LES_StructInit();
 	LES_NetworkInit();
+	LES_CoreEngineInit();
 }
 
 void LES_Shutdown(void)
 {
+	LES_CoreEngineShutdown();
+	LES_NetworkShutdown();
 	LES_StructShutdown();
 	LES_TypeShutdown();
 	LES_FunctionShutdown();
