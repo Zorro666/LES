@@ -1,12 +1,8 @@
 High Priority:
-CLIENT: need a state machine e.g. RECEIVED_DEFINITION_FILE, READY
-
 PYTHON: build definition file data into memory not write it
 CLIENT: GET_DEFINITION message:  use definition file (type, string, structures, functions) from over the network
 
 Medium Priority:
-CLIENT: input thread needs mutex before adding network items, network items should only be added on main thread
-MUTEX: put thread ID into it, then lock on same thread is ignored?
 CLIENT: LES tcpsocket to hide implementation details especially horrible mess that is windows
 
 CLIENT: send function data to server as network message
@@ -27,6 +23,8 @@ LES: need good debugging ability for the packets before sent and at server end
 LES: send packet data to server?
 
 Low Priority:
+MUTEX: put thread ID into it, then lock on same thread is ignored?
+CLIENT: input thread needs mutex before adding network items, network items should only be added on main thread
 CLIENT: rand() need a random function
 MACROS: WORK OUT HOW TO DO THE RETURN VALUE IN MACROS
 MACROS: WORK OUT HOW TO DO THE ERROR HANDLING 
