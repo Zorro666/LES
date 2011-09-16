@@ -1,9 +1,7 @@
 High Priority:
-PYTHON: build definition file data into memory not write it
-CLIENT: GET_DEFINITION message:  use definition file (type, string, structures, functions) from over the network
+CLIENT: LES tcpsocket to hide implementation details especially horrible mess that is windows
 
 Medium Priority:
-CLIENT: LES tcpsocket to hide implementation details especially horrible mess that is windows
 
 CLIENT: send function data to server as network message
 SERVER: process function data send response
