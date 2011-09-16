@@ -59,6 +59,9 @@ static int s_numRegisteredMessageHandlers = 0;
 static LES_uint16 s_receivedMessageHandlerTypes[LES_NETWORK_MAX_NUM_HANDLERS];
 static LES_ReceivedMessageHandlerFunction* s_receivedMessageHandlerFunctions[LES_NETWORK_MAX_NUM_HANDLERS];
 
+#define LES_NETWORK_MAX_RECEIVE_SIZE (128*1024)
+static char les_receiveBuffer[LES_NETWORK_MAX_RECEIVE_SIZE];
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Internal Static functions
@@ -218,8 +221,8 @@ static int LES_NetworkThreadProcessOneLoop(const LES_NetworkThreadStartStruct* c
 		return LES_NETWORK_THREAD_PROCESS_MORE;
 	}
 
-	char buffer[128];
-	const int bufferLen = 128;
+	const int bufferLen = LES_NETWORK_MAX_RECEIVE_SIZE;
+	char* const buffer = les_receiveBuffer;
 	buffer[0] = '\0';
 	const int bytesReceived = recv(socketHandle, buffer, bufferLen, 0);
 	if (bytesReceived == -1)
