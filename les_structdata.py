@@ -209,7 +209,7 @@ class LES_StructData():
 			return None
 		return self.__m_structDefinitions__[index]
 
-	def writeFile(self, binFile):
+	def write(self, binFile):
 		basePosition = binFile.getIndex()
 		# LES_StructData
 		# {
@@ -581,7 +581,7 @@ def runTest():
 
 	binFile = les_binaryfile.LES_BinaryFile("structDefinitionLittle.bin")
 	binFile.setLittleEndian()
-	this.writeFile(binFile)
+	this.write(binFile)
 	binFile.close()
 
 	testStructChan = les_logger.CreateChannel("StructDebug", "", "structDebug_py.txt", les_logger.LES_LOGGERCHANNEL_FLAGS_DEFAULT)

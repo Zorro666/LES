@@ -180,7 +180,7 @@ class LES_TypeData():
 			return None
 		return self.__m_typeEntries__[index]
 
-	def writeFile(self, binFile):
+	def write(self, binFile):
 		# LES_TypeData
 		# {
 		# 	LES_int32 m_numTypes; 												- 4 bytes
@@ -565,7 +565,7 @@ def runTest():
 
 	binFile = les_binaryfile.LES_BinaryFile("typeDataLittle.bin")
 	binFile.setLittleEndian()
-	this.writeFile(binFile)
+	this.write(binFile)
 	binFile.close()
 
 	stringTable = les_stringtable.LES_StringTable()

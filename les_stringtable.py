@@ -83,7 +83,7 @@ class LES_StringTable():
 				return self.__m_strings__[index]
 		return None
 
-	def writeFile(self, binFile):
+	def write(self, binFile):
 		# LES_StringTable
 		# {
 		# 	LES_int32 m_numStrings; 																- 4 bytes
@@ -132,12 +132,12 @@ def runTest():
 
 	binFile = les_binaryfile.LES_BinaryFile("stringTableBig.bin")
 	binFile.setBigEndian()
-	this.writeFile(binFile)
+	this.write(binFile)
 	binFile.close()
 
 	binFile = les_binaryfile.LES_BinaryFile("stringTableLittle.bin")
 	binFile.setLittleEndian()
-	this.writeFile(binFile)
+	this.write(binFile)
 	binFile.close()
 
 if __name__ == '__main__':

@@ -38,7 +38,6 @@ def loadFunctionData(functionData):
 
 class LES_DefinitionFile():
 	def __init__(self):
-		self.fname = ""
 		self.chunkDatas = []
 		self.chunkNames = []
 		self.numChunks = len(self.chunkDatas)
@@ -48,19 +47,23 @@ class LES_DefinitionFile():
 		self.chunkNames.append(chunkName)
 		self.numChunks = len(self.chunkDatas)
 
-	def writeFile(self, fname):
-		self.fname = fname
-		chunkFile = les_chunkfile.LES_ChunkFile(self.fname, "LESD", self.numChunks, bigEndian=True)
+	def makeData(self):
+		chunkFileData = les_chunkfile.LES_ChunkFile("LESD", self.numChunks, bigEndian=True)
 
 		for i in range(self.numChunks):
 			chunkData = self.chunkDatas[i]
 			chunkName = self.chunkNames[i]
 
-			binFile = chunkFile.startChunk(chunkName)
-			chunkData.writeFile(binFile)
-			chunkFile.endChunk()
+			binFile = chunkFileData.startChunk(chunkName)
+			chunkData.write(binFile)
+			chunkFileData.endChunk()
 
-		chunkFile.close()
+		return chunkFileData
+
+	def writeFile(self, fname):
+		chunkFileData = self.makeData()
+		chunkFileData.saveToFile(fname)
+		chunkFileData.close()
 
 	def create(self):
 		stringTable = les_stringtable.LES_StringTable()

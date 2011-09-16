@@ -257,7 +257,7 @@ class LES_FunctionData():
 			return None
 		return self.__m_functionDefinitions__[index]
 
-	def writeFile(self, binFile):
+	def write(self, binFile):
 		basePosition = binFile.getIndex()
 		# LES_FunctionData
 		# {
@@ -646,7 +646,7 @@ def runTest():
 
 	binFile = les_binaryfile.LES_BinaryFile("functionDefinitionLittle.bin")
 	binFile.setLittleEndian()
-	this.writeFile(binFile)
+	this.write(binFile)
 	binFile.close()
 
 	les_logger.Log("")

@@ -13,9 +13,8 @@ import les_logger
 # chunkData[numChunks-1]]
 
 class LES_ChunkFile():	
-	def __init__(self, fname, magicName, numChunks, bigEndian=True):
-		self.fname = fname
-		self.binFile = les_binaryfile.LES_BinaryFile(fname)
+	def __init__(self, magicName, numChunks, bigEndian=True):
+		self.binFile = les_binaryfile.LES_BinaryFile()
 		self.chunkNames = []
 		self.chunkOffsetValues = []
 		self.chunkOffsetIndexes = []
@@ -86,6 +85,12 @@ class LES_ChunkFile():
 		self.activeChunkIndex = -1
 		self.activeChunkName = "__NOT_ACTIVE__"
 
+	def saveToFile(self, fname):
+		self.binFile.saveToFile(fname)
+
+	def getData(self):
+		return self.binFile.getData()
+
 	def close(self):
 		if self.activeChunkIndex != -1:
 			les_logger.Error("LES_ChunkFile::close current chunk isn't closed '%s'", self.activeChunkName)
@@ -99,11 +104,12 @@ class LES_ChunkFile():
 
 def runTest():
 	les_logger.Init()
-	this = LES_ChunkFile("chunkTest.bin", "BAGA", 2)
+	this = LES_ChunkFile("BAGA", 2)
 
 	binFile = this.startChunk("StringTable")
 	binFile.writeCstring("string table data")
 	this.endChunk()
+	this.saveToFile("chunkTest.bin")
 	this.close()
 
 	binFile = this.startChunk("TypeData")
