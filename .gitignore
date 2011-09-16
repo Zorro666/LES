@@ -11,6 +11,7 @@ jake.txt
 temp.txt
 test.txt
 log.txt
+log_py.txt
 error.txt
 warning.txt
 console.txt
@@ -31,5 +32,6 @@ testBig.bin
 chunkTest.bin
 typeDataLittle.bin
 defTest.bin
+defTest.old
 structDefinitionLittle.bin
 functionDefinitionLittle.bin
