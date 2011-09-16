@@ -13,7 +13,7 @@ CHANNEL_WARNING = 		2
 CHANNEL_LOG = 				3
 LOGGER_NUM_DEFAULT_CHANNELS = 4
 
-__DEFAULT_LOG_OUTPUT_FILE__ = "log.txt"
+__DEFAULT_LOG_OUTPUT_FILE__ = "log_py.txt"
 
 __s_errorFlag__ = False
 __s_channels__ = []
