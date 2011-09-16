@@ -6,17 +6,28 @@
 #include "les_logger.h"
 #include "les_network.h"
 #include "les_hash.h"
+#include "les_definitionfile.h"
+#include "les_core.h"
 
-enum { LES_STATE_UNKNOWN, LES_STATE_BOOT, LES_STATE_NOT_CONNECTED, LES_STATE_WAITING_FOR_CONNECT_RESPONSE, LES_STATE_CONNECTED };
+enum { LES_STATE_UNKNOWN, 
+			 LES_STATE_BOOT, 
+			 LES_STATE_NOT_CONNECTED, 
+			 LES_STATE_WAITING_FOR_CONNECT_RESPONSE, 
+			 LES_STATE_CONNECTED,
+			 LES_STATE_WAITING_FOR_DEFINITIONFILE_RESPONSE,
+			 LES_STATE_READY
+		 };
 
 static int les_state = LES_STATE_UNKNOWN;
 static LES_uint32 les_correctResponseHash;
 
-#define LES_NETMESSAGE_RECV_ID_CONNECT_RESPONSE (0x2)
-#define LES_NETMESSAGE_RECV_ID_TEST (0x33)
-
 #define LES_NETMESSAGE_SEND_ID_CONNECT (0x1)
-#define LES_NETMESSAGE_SEND_ID_TEST (0x66)
+#define LES_NETMESSAGE_SEND_ID_GETDEFINITIONFILE (0x3)
+#define LES_NETMESSAGE_SEND_ID_TEST (0xF1)
+
+#define LES_NETMESSAGE_RECV_ID_CONNECT_RESPONSE (0x2)
+#define LES_NETMESSAGE_RECV_ID_GETDEFINITIONFILE_RESPONSE (0x4)
+#define LES_NETMESSAGE_RECV_ID_TEST_RESPONSE (0xF2)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -24,7 +35,7 @@ static LES_uint32 les_correctResponseHash;
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int LES_TestMessageHandler(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payloadSize, void* payload)
+static int LES_TestResponseMessageHandler(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payloadSize, void* payload)
 {
 	LES_LOG("Received Message type:0x%X id:0x%X payloadSize:%d payload:'%s'", type, id, payloadSize, (char*)payload);
 	return LES_RETURN_OK;
@@ -56,7 +67,36 @@ static int LES_ConnectResponseMessageHandler(const LES_uint16 type, const LES_ui
 		LES_ERROR("ConnectResponse wrong responseHash:0x%X Expected:0x%X", responseHash, les_correctResponseHash);
 		return LES_RETURN_ERROR;
 	}
+
 	les_state = LES_STATE_CONNECTED;
+	return LES_RETURN_OK;
+}
+
+static int LES_GetDefinitionFileResponseMessageHandler(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payloadSize, 
+																											 void* payload)
+{
+	if (type != LES_NETMESSAGE_RECV_ID_GETDEFINITIONFILE_RESPONSE)
+	{
+		LES_ERROR("GetDefinitionFileResponse wrong type:%d", type);
+		return LES_RETURN_ERROR;
+	}
+	if (id != 432)
+	{
+		LES_ERROR("GetDefinitionFileResponse wrong id:%d", id);
+		return LES_RETURN_ERROR;
+	}
+	if (payloadSize < sizeof(LES_DefinitionFile))
+	{
+		LES_ERROR("GetDefinitionFileResponse wrong payloadSize:%d", payloadSize);
+		return LES_RETURN_ERROR;
+	}
+
+	if (LES_SetGlobalDefinitionFile(payload, payloadSize) != LES_RETURN_OK)
+	{
+		LES_FATAL_ERROR("LES_SetGlobalDefinitionFile Size:%d failed", payloadSize);
+	}
+
+	les_state = LES_STATE_READY;
 	return LES_RETURN_OK;
 }
 
@@ -86,8 +126,9 @@ int LES_CoreEngineTick(void)
 		const short port = 3141;
 		if (LES_NetworkCreateTCPSocket("127.0.0.1", 3141) == LES_RETURN_OK)
 		{
-			LES_NetworkRegisterReceivedMessageHandler(LES_NETMESSAGE_RECV_ID_TEST, LES_TestMessageHandler);
+			LES_NetworkRegisterReceivedMessageHandler(LES_NETMESSAGE_RECV_ID_TEST_RESPONSE, LES_TestResponseMessageHandler);
 			LES_NetworkRegisterReceivedMessageHandler(LES_NETMESSAGE_RECV_ID_CONNECT_RESPONSE, LES_ConnectResponseMessageHandler);
+			LES_NetworkRegisterReceivedMessageHandler(LES_NETMESSAGE_RECV_ID_GETDEFINITIONFILE_RESPONSE, LES_GetDefinitionFileResponseMessageHandler);
 			les_state = LES_STATE_NOT_CONNECTED;
 			return LES_COREENGINE_OK;
 		}
@@ -139,6 +180,26 @@ int LES_CoreEngineTick(void)
 		return LES_COREENGINE_OK;
 	}
 	else if (currentState == LES_STATE_CONNECTED)
+	{
+		const LES_uint16 type = LES_NETMESSAGE_SEND_ID_GETDEFINITIONFILE;
+		const LES_uint16 id = 432;
+		LES_NetworkSendItem sendItem;
+		const int payloadSize = 0;
+		void* payload = LES_NULL;	
+		sendItem.Create(type, id, payloadSize, payload);
+		if (LES_NetworkAddSendItem(&sendItem) == LES_RETURN_ERROR)
+		{
+			LES_ERROR("Error adding getdefinitionfile send item");
+			return LES_COREENGINE_ERROR;
+		}
+		les_state = LES_STATE_WAITING_FOR_DEFINITIONFILE_RESPONSE;
+		return LES_COREENGINE_OK;
+	}
+	else if (currentState == LES_STATE_WAITING_FOR_DEFINITIONFILE_RESPONSE)
+	{
+		return LES_COREENGINE_OK;
+	}
+	else if (currentState == LES_STATE_READY)
 	{
 		return LES_COREENGINE_FINISHED;
 	}
