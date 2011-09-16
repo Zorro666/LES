@@ -6,8 +6,7 @@ import cStringIO
 import les_logger
 
 class LES_BinaryFile():	
-	def __init__(self, fname):
-		self.fname = fname
+	def __init__(self):
 		self.fh = cStringIO.StringIO()
 		self.endianFormat = ""
 		self.setBigEndian()
@@ -82,29 +81,36 @@ class LES_BinaryFile():
 	def seek(self, index):
 		self.fh.seek(index)
 
-	def close(self):
-		realFH = open(self.fname, mode="wb")
+	def saveToFile(self, fname):
+		realFH = open(fname, mode="wb")
 		data = self.fh.getvalue()
 		realFH.write(data)
 		realFH.close()
+
+	def close(self):
 		self.fh.close()
+
+	def getData(self):
+		return self.fh.getvalue()
 
 def runTest():
 	les_logger.Init()
-	this = LES_BinaryFile("testLittle.bin")
+	this = LES_BinaryFile()
 	this.setLittleEndian()
 	this.writeInt32(15)
 	this.writeInt32(0x987654)
 	this.writeUint32(0xDEADBEAF)
 	this.writeString("testLit")
+	this.saveToFile("testLittle.bin")
 	this.close()
 
-	this = LES_BinaryFile("testBig.bin")
+	this = LES_BinaryFile()
 	this.setBigEndian()
 	this.writeInt32(15)
 	this.writeInt32(0x987654)
 	this.writeUint32(0xDEADBEAF)
 	this.writeString("testBig")
+	this.saveToFile("testBig.bin")
 	this.close()
 
 if __name__ == '__main__':
