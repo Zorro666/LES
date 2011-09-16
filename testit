@@ -30,8 +30,6 @@ if [ "$1" == "stress" ]; then
 	exit
 fi
 
-exit
-
 les_test -verbose -tests 
 if [ $? -gt 0 ]; then
 		echo -e ""
