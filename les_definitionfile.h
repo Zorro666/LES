@@ -39,11 +39,12 @@ public:
 	const LES_StructData* GetStructData(void) const;
 	const LES_FuncData* GetFuncData(void) const;
 
-	bool Loaded(void) const;
+	int IsValid(void) const;
 private:
 	LES_DefinitionFile(const LES_DefinitionFile& other);
 	LES_DefinitionFile& operator =(const LES_DefinitionFile& other);
 
+	bool m_valid;
 	const LES_ChunkFile* m_chunkFileData;
 	enum { 
 					LES_DEFINITION_STRINGTABLE = 0,

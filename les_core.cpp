@@ -238,9 +238,14 @@ int LES_SetGlobalDefinitionFile(const void* definitionFileData, const int fileDa
 	return LES_RETURN_OK;
 }
 
+int LES_IsGlobalDefinitionFileValid(void)
+{
+	return les_definitionFile.IsValid();
+}
+
 void LES_DebugOutputGlobalDefinitionFile(LES_LoggerChannel* const pLogChannel)
 {
-	if (les_definitionFile.Loaded() == false)
+	if (les_definitionFile.IsValid() == LES_RETURN_ERROR)
 	{
 		return;
 	}

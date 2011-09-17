@@ -123,7 +123,6 @@ int main(const int argc, const char* const argv[])
 
 	bool inputThreadAlive = false;
 	float lastTime = -10000.0f;
-	bool loadDefinitionFile = true;
 	while (1)
 	{
 		const int ret = LES_CoreEngineTick();
@@ -135,7 +134,6 @@ int main(const int argc, const char* const argv[])
 		else if (ret == LES_COREENGINE_FINISHED)
 		{
 			LES_LOG("LES_CoreEngineTick() finished");
-			loadDefinitionFile = false;
 			break;
 		}
 		if (inputThreadAlive == false)
@@ -153,7 +151,7 @@ int main(const int argc, const char* const argv[])
 		LES_Sleep(0.1f);
 	}
 
-	if (loadDefinitionFile)
+	if (LES_IsGlobalDefinitionFileValid() != LES_RETURN_OK)
 	{
 		if (JAKE_LoadDefinitionFile("defTest.bin") != LES_RETURN_OK)
 		{

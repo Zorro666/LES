@@ -10,6 +10,7 @@
 
 LES_DefinitionFile::LES_DefinitionFile(const void* chunkFileData, const int dataSize)
 {
+	m_valid = false;
 	if (Load(chunkFileData, dataSize) != LES_RETURN_OK)
 	{
 		LES_ERROR("LES_DefinitionFile::Load() failed");
@@ -18,6 +19,7 @@ LES_DefinitionFile::LES_DefinitionFile(const void* chunkFileData, const int data
 
 int LES_DefinitionFile::Load(const void* chunkFileData, const int dataSize)
 {
+	m_valid = false;
 	if (m_chunkFileData != LES_NULL)
 	{
 		LES_ERROR("LES_DefinitionFile::Load() m_chunkFileData isn't NULL");
@@ -78,6 +80,7 @@ int LES_DefinitionFile::Load(const void* chunkFileData, const int dataSize)
 		return LES_RETURN_ERROR;
 	}
 
+	m_valid = true;
 	return LES_RETURN_OK;
 }
 
@@ -91,6 +94,7 @@ int LES_DefinitionFile::UnLoad(void)
 
 	delete[] (char*)m_chunkFileData;
 	m_chunkFileData = LES_NULL;
+	m_valid = false;
 	return LES_RETURN_OK;
 }
 
@@ -121,7 +125,15 @@ int LES_DefinitionFile::GetNumChunks(void)
 	return numChunks;
 }
 
-bool LES_DefinitionFile::Loaded(void) const
+int LES_DefinitionFile::IsValid(void) const
 {
-	return (m_chunkFileData != LES_NULL);
+	if (m_valid == false)
+	{
+		return LES_RETURN_ERROR;
+	}
+	if (m_chunkFileData == LES_NULL)
+	{
+		return LES_RETURN_ERROR;
+	}
+	return LES_RETURN_OK;
 }

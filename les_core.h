@@ -12,6 +12,7 @@ const LES_StringEntry* LES_GetStringEntry(const char* const str);
 const LES_StringEntry* LES_GetStringEntryByHash(const unsigned int hash);
 void LES_DebugOutputStringEntries(LES_LoggerChannel* const pLogChannel);
 
+int LES_IsGlobalDefinitionFileValid(void);
 int LES_SetGlobalDefinitionFile(const void* definitionFileData, const int fileDataSize);
 void LES_DebugOutputGlobalDefinitionFile(LES_LoggerChannel* const pLogChannel);
 
