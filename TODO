@@ -1,5 +1,4 @@
 High Priority:
-CLIENT: LES tcpsocket to hide implementation details especially horrible mess that is windows
 CLIENT: sometimes the receive definition file fails
 
 Medium Priority:
