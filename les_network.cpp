@@ -1,16 +1,6 @@
 #include <unistd.h>
 #include <string.h>
 #include <malloc.h>
-#include <sys/select.h>
-
-#if LES_PLATFORM_LINUX == 1
-#include <errno.h>
-#include <arpa/inet.h>
-#endif // #if LES_PLATFORM_LINUX
-
-#if LES_PLATFORM_WINDOWS == 1
-#include <winsock.h>
-#endif // #if LES_PLATFORM_WINDOWS
 
 #include "les_base.h"
 #include "les_network.h"
@@ -20,8 +10,8 @@
 #include "les_mutex.h"
 #include "les_networkqueue.h"
 #include "les_networkmessage.h"
+#include "les_tcpsocket.h"
 
-#define LES_NETWORK_INVALID_SOCKET (-1)
 #define LES_NETWORK_SEND_QUEUE_SIZE (128)
 #define LES_NETWORK_RECEIVE_QUEUE_SIZE (32)
 
@@ -33,7 +23,7 @@
 
 struct LES_NetworkThreadStartStruct
 {
-	int m_socketHandle;
+	LES_TCPSocket m_tcpSocket;
 };
 
 static LES_MutexVariable s_networkMutexVariable;
@@ -68,78 +58,6 @@ static char les_receiveBuffer[LES_NETWORK_MAX_RECEIVE_SIZE];
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int LES_CreateTCPSocket(const char* const ip, const short port)
-{
-	int err;
-
-#if LES_PLATFORM_WINDOWS == 1
-	// Use the MAKEWORD(lowbyte, highbyte) macro declared in Windef.h
-	WORD wVersionRequested = MAKEWORD(2, 2);
-	WSADATA wsaData;
-
-	err = WSAStartup(wVersionRequested, &wsaData);
-	if (err != 0)
-	{
-		// Tell the user that we could not find a usable Winsock DLL
-		LES_ERROR("WSAStartup failed with error: %d", err);
-		return LES_NETWORK_INVALID_SOCKET;
-	}
-
-	// Confirm that the WinSock DLL supports 2.2
-	if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2)
-	{
-		// Tell the user that we could not find a usable Winsock DLL
-		LES_ERROR("Could not find the right version of winsock DLL");
-		WSACleanup();
-		return LES_NETWORK_INVALID_SOCKET;
-	}
-#endif // #if LES_PLATFORM_WINDOWS == 1
-
-	const int socketHandle = socket(AF_INET, SOCK_STREAM, 0);
-	if (socketHandle == -1)
-	{
-		LES_ERROR("LES_CreateTCPSocket::Error initializing socket %d",errno);
-		return LES_NETWORK_INVALID_SOCKET;
-	}
-
-	int option = 1;
-
-	if ((setsockopt(socketHandle, SOL_SOCKET, SO_REUSEADDR, (char*)&option, sizeof(int)) == -1) ||
-			(setsockopt(socketHandle, SOL_SOCKET, SO_KEEPALIVE, (char*)&option, sizeof(int)) == -1))
-	{
-		LES_ERROR("LES_CreateTCPSocket::Error setting options %d",errno);
-		close(socketHandle);
-		return LES_NETWORK_INVALID_SOCKET;
-	}
-
-	const short hostPort = port;
-	const char* const hostIP = ip;
-	struct sockaddr_in hostAddr;
-	hostAddr.sin_family = AF_INET ;
-	hostAddr.sin_port = htons(hostPort);
-
-	memset(&(hostAddr.sin_zero), 0, 8);
-	hostAddr.sin_addr.s_addr = inet_addr(hostIP);
-
-	if (connect(socketHandle, (struct sockaddr*)&hostAddr, sizeof(hostAddr)) == -1)
-	{
-#if LES_PLATFORM_LINUX == 1
-		err = errno;
-		if (err != EINPROGRESS)
-#endif // #if LES_PLATFORM_LINUX == 1
-#if LES_PLATFORM_WINDOWS == 1
-		err = WSAGetLastError();
-		if (err != WSAEINPROGRESS)
-#endif // #if LES_PLATFORM_WINDOWS == 1
-		{
-			LES_ERROR("LES_CreateTCPSocket::Error connecting socket errno:0x%X", errno);
-			close(socketHandle);
-			return LES_NETWORK_INVALID_SOCKET;
-		}
-	}
-	return socketHandle;
-}
-
 static int LES_NetworkAddReceivedMessage(LES_NetworkMessage* const pReceivedMessage)
 {
 	if (pReceivedMessage == LES_NULL)
@@ -162,11 +80,11 @@ static int LES_NetworkAddReceivedMessage(LES_NetworkMessage* const pReceivedMess
 #define LES_NETWORK_THREAD_PROCESS_MORE (1)
 #define LES_NETWORK_THREAD_PROCESS_ERROR (-1)
 
-static int LES_NetworkThreadProcessOneLoop(const LES_NetworkThreadStartStruct* const pNetworkThreadStartStruct)
+static int LES_NetworkThreadProcessOneLoop(LES_NetworkThreadStartStruct* const pNetworkThreadStartStruct)
 {
 	LES_NETWORK_SCOPE_MUTEX;
-	const int socketHandle = pNetworkThreadStartStruct->m_socketHandle;
-	if (socketHandle < 0)
+	LES_TCPSocket* const pTCPSocket = &(pNetworkThreadStartStruct->m_tcpSocket);
+	if (pTCPSocket->IsValid() == LES_RETURN_ERROR)
 	{
 		return LES_NETWORK_THREAD_PROCESS_FINISHED;
 	}
@@ -183,53 +101,31 @@ static int LES_NetworkThreadProcessOneLoop(const LES_NetworkThreadStartStruct* c
 	const int sendDataSize = pSendItem->GetMessageSize();
 	if (sendDataSize > 0)
 	{
-		const int bytesSent = send(socketHandle, pSendData, sendDataSize, 0);
+		const int bytesSent = pTCPSocket->Send(pSendData, sendDataSize);
 		if (bytesSent == -1)
 		{
-			LES_ERROR("Error sending data %d", errno);
+			LES_ERROR("Send failed -1 bytes sent");
 			return LES_NETWORK_THREAD_PROCESS_ERROR;
 		}
 		LES_LOG("Sent bytes %d (%d)", bytesSent, sendDataSize);
 		pSendItem->Free();
 	}
 
-	fd_set readSocketSet;
-	FD_ZERO(&readSocketSet);
-	FD_SET(socketHandle, &readSocketSet);
-
-	// Wait 0.01 seconds
-	timeval timeOut;
-	timeOut.tv_sec = 0;
-	timeOut.tv_usec = 100 * 1000;
-
-	const int retval = select(socketHandle+1, &readSocketSet, NULL, NULL, &timeOut);
-	if (retval == -1)
+	const int bufferLen = LES_NETWORK_MAX_RECEIVE_SIZE;
+	char* const buffer = les_receiveBuffer;
+	int bytesReceived = 0;
+	buffer[0] = '\0';
+	const int recvReturn = pTCPSocket->Recv(buffer, bufferLen, &bytesReceived);
+	if (recvReturn == LES_NETWORK_RECEIVE_ERROR)
 	{
-		LES_ERROR("select() failed");
+		LES_LOG("RECEVE ERROR");
 		return LES_NETWORK_THREAD_PROCESS_ERROR;
 	}
-	else if (retval)
-	{
-		if (FD_ISSET(socketHandle, &readSocketSet) == 0)
-		{
-			LES_ERROR("select() says data ready but FD_ISSET is 0");
-			return LES_NETWORK_THREAD_PROCESS_ERROR;
-		}
-	}
-	else
+	else if (recvReturn == LES_NETWORK_RECEIVE_NO_DATA)
 	{
 		return LES_NETWORK_THREAD_PROCESS_MORE;
 	}
 
-	const int bufferLen = LES_NETWORK_MAX_RECEIVE_SIZE;
-	char* const buffer = les_receiveBuffer;
-	buffer[0] = '\0';
-	const int bytesReceived = recv(socketHandle, buffer, bufferLen, 0);
-	if (bytesReceived == -1)
-	{
-		LES_ERROR("Error receiving data %d", errno);
-		return LES_RETURN_ERROR;
-	}
 	if (bytesReceived > 0)
 	{
 		LES_LOG("Received bytes %d", bytesReceived);
@@ -246,7 +142,7 @@ static int LES_NetworkThreadProcessOneLoop(const LES_NetworkThreadStartStruct* c
 
 static void* LES_NetworkThreadProcess(void* args)
 {
-	const LES_NetworkThreadStartStruct* const pNetworkThreadStartStruct = (const LES_NetworkThreadStartStruct* const)args;
+	LES_NetworkThreadStartStruct* const pNetworkThreadStartStruct = (LES_NetworkThreadStartStruct* const)args;
 	LES_LOG("LES_NetworkThreadProcess Started");
 
 	//Now lets do the client related stuff
@@ -264,8 +160,7 @@ static void* LES_NetworkThreadProcess(void* args)
 		}
 		//LES_Sleep(1.1f);
 	}
-	const int socketHandle = pNetworkThreadStartStruct->m_socketHandle;
-  close(socketHandle);
+	pNetworkThreadStartStruct->m_tcpSocket.Close();
 	LES_LOG("LES_NetworkThreadProcess Ended");
 	return LES_NULL;
 }
@@ -338,17 +233,16 @@ static void LES_NetworkProcessReceivedMessages(void)
 
 int LES_NetworkCreateTCPSocket(const char* const ip, const short port)
 {
-	const int socketHandle = LES_CreateTCPSocket(ip, port);
-
-	if (socketHandle == LES_NETWORK_INVALID_SOCKET)
+	LES_NETWORK_SCOPE_MUTEX;
+	LES_TCPSocket* const pTCPSocket = &(s_networkThreadStartStruct.m_tcpSocket);
+	if (pTCPSocket->Create() == LES_RETURN_ERROR)
 	{
 		return LES_RETURN_ERROR;
 	}
-
-	LES_NETWORK_LOCK_MUTEX;
-	s_networkThreadStartStruct.m_socketHandle = socketHandle;
-	LES_NETWORK_UNLOCK_MUTEX;
-
+	if (pTCPSocket->Connect(ip, port) == LES_RETURN_ERROR)
+	{
+		return LES_RETURN_ERROR;
+	}
 	return LES_RETURN_OK;
 }
 
@@ -418,13 +312,15 @@ int LES_NetworkRegisterReceivedMessageHandler(const LES_uint16 type, LES_Receive
 
 void LES_NetworkInit(void)
 {
+	if (LES_TCPSocket::InitSystem() == LES_RETURN_ERROR)
+	{
+		LES_FATAL_ERROR("LES_NetworkInit::ERROR during LES_TCPSocket::InitSystem()");
+		return;
+	}
+
 	LES_MutexVariableInit(&s_networkMutexVariable);
 	s_networkThreadQueueIndex = 0;
 	LES_NetworkSwapQueues();
-
-	LES_NETWORK_LOCK_MUTEX;
-	s_networkThreadStartStruct.m_socketHandle = -1;
-	LES_NETWORK_UNLOCK_MUTEX;
 
 	for (int i = 0; i < LES_NETWORK_MAX_NUM_HANDLERS; i++)
 	{

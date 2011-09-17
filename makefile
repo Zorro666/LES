@@ -2,7 +2,7 @@ LES_FUNCTION:= les_function.cpp les_function_macros.cpp les_type.cpp les_paramet
 
 LES_TEST:= les_test.cpp les_test_macros.cpp
 
-LES_NETWORK:=les_network.cpp les_networksenditem.cpp les_networkreceiveditem.cpp
+LES_NETWORK:=les_network.cpp les_networksenditem.cpp les_networkreceiveditem.cpp les_tcpsocket.cpp
 
 LES_DEFINITIONALFILE:= les_definitionfile.cpp les_chunkfile.cpp \
 											 les_stringtable.cpp les_typedata.cpp \
