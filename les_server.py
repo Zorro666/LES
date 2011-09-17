@@ -4,6 +4,7 @@ import time
 import threading
 import SocketServer
 import struct
+import random
 
 import les_hash
 import les_definitionfile
@@ -66,6 +67,9 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 
 		payload = "%s:%s" % (self.m_threadName, msgPayload)
 		response = LES_CreateNetworkMessage(LES_NETMESSAGE_SEND_ID_TEST_RESPONSE, msgId, payload)
+		sleepTime = random.uniform(0.1, 0.5)
+		les_logger.Log("SleepTime:%f" % (sleepTime))
+		time.sleep(sleepTime)
 		self.request.send(response)
 
 	def LES_HandleConnectMessage(self, msgType, msgId, msgPayloadSize, msgPayload):
@@ -75,6 +79,9 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 		les_logger.Log("Connect: connectResponse:0x%X" % (hashValue))
 		payload = packedUint32.pack(hashValue)
 		response = LES_CreateNetworkMessage(LES_NETMESSAGE_SEND_ID_CONNECT_RESPONSE, msgId, payload)
+		sleepTime = random.uniform(0.1, 0.5)
+		les_logger.Log("SleepTime:%f" % (sleepTime))
+		time.sleep(sleepTime)
 		self.request.send(response)
 
 	def LES_HandleGetDefinitionFileMessage(self, msgType, msgId, msgPayloadSize, msgPayload):
@@ -87,6 +94,10 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 		payload = definitionFileData
 		response = LES_CreateNetworkMessage(LES_NETMESSAGE_SEND_ID_GETDEFINITIONFILE_RESPONSE, msgId, payload)
 		chunkFileData.close()
+		les_logger.Log("GetDefinitionFile: sending:%d" % (len(payload)))
+		sleepTime = random.uniform(0.1, 0.5)
+		les_logger.Log("SleepTime:%f" % (sleepTime))
+		time.sleep(sleepTime)
 		self.request.send(response)
 
 	def handle(self):
