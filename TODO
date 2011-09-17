@@ -1,8 +1,8 @@
 High Priority:
 CLIENT: LES tcpsocket to hide implementation details especially horrible mess that is windows
+CLIENT: sometimes the receive definition file fails
 
 Medium Priority:
-
 CLIENT: send function data to server as network message
 SERVER: process function data send response
 SERVER: run decode parameter tests on the server
