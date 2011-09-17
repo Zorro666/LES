@@ -92,23 +92,23 @@ static int LES_NetworkThreadProcessOneLoop(LES_NetworkThreadStartStruct* const p
 	// Get the sendItem from a queue and make main thread add to the sendItem
 	// Swap the queues between main & network thread
 	LES_NetworkSendItem* const pSendItem = s_pSendItemQueue->Pop();
-	if (pSendItem == LES_NULL)
+	bool doMoreWork = false;
+	if (pSendItem != LES_NULL)
 	{
-		return LES_NETWORK_THREAD_PROCESS_FINISHED;
-	}
-	
-	const char* pSendData = (const char*)(pSendItem->GetMessagePtr());
-	const int sendDataSize = pSendItem->GetMessageSize();
-	if (sendDataSize > 0)
-	{
-		const int bytesSent = pTCPSocket->Send(pSendData, sendDataSize);
-		if (bytesSent == -1)
+		const char* pSendData = (const char*)(pSendItem->GetMessagePtr());
+		const int sendDataSize = pSendItem->GetMessageSize();
+		if (sendDataSize > 0)
 		{
-			LES_ERROR("Send failed -1 bytes sent");
-			return LES_NETWORK_THREAD_PROCESS_ERROR;
+			const int bytesSent = pTCPSocket->Send(pSendData, sendDataSize);
+			if (bytesSent == -1)
+			{
+				LES_ERROR("Send failed -1 bytes sent");
+				return LES_NETWORK_THREAD_PROCESS_ERROR;
+			}
+			LES_LOG("Sent bytes %d (%d)", bytesSent, sendDataSize);
+			pSendItem->Free();
 		}
-		LES_LOG("Sent bytes %d (%d)", bytesSent, sendDataSize);
-		pSendItem->Free();
+		doMoreWork = true;
 	}
 
 	const int bufferLen = LES_NETWORK_MAX_RECEIVE_SIZE;
@@ -121,23 +121,26 @@ static int LES_NetworkThreadProcessOneLoop(LES_NetworkThreadStartStruct* const p
 		LES_LOG("RECEVE ERROR");
 		return LES_NETWORK_THREAD_PROCESS_ERROR;
 	}
-	else if (recvReturn == LES_NETWORK_RECEIVE_NO_DATA)
+	else if (recvReturn == LES_NETWORK_RECEIVE_OK)
+	{
+		doMoreWork = true;
+		if (bytesReceived > 0)
+		{
+			LES_LOG("Received bytes %d", bytesReceived);
+			// Make a NetReceiveItem struct and put data into it
+			LES_NetworkMessage* const pReceivedMessage = (LES_NetworkMessage* const)malloc(bytesReceived);
+			memcpy(pReceivedMessage, buffer, bytesReceived);
+			if (LES_NetworkAddReceivedMessage(pReceivedMessage) == LES_RETURN_ERROR)
+			{
+				LES_ERROR("Error adding received message");
+			}
+		}
+	}
+	if (doMoreWork)
 	{
 		return LES_NETWORK_THREAD_PROCESS_MORE;
 	}
-
-	if (bytesReceived > 0)
-	{
-		LES_LOG("Received bytes %d", bytesReceived);
-		// Make a NetReceiveItem struct and put data into it
-		LES_NetworkMessage* const pReceivedMessage = (LES_NetworkMessage* const)malloc(bytesReceived);
-		memcpy(pReceivedMessage, buffer, bytesReceived);
-		if (LES_NetworkAddReceivedMessage(pReceivedMessage) == LES_RETURN_ERROR)
-		{
-			LES_ERROR("Error adding received message");
-		}
-	}
-	return LES_NETWORK_THREAD_PROCESS_MORE;
+	return LES_NETWORK_THREAD_PROCESS_FINISHED;
 }
 
 static void* LES_NetworkThreadProcess(void* args)
