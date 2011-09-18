@@ -3,6 +3,6 @@
 
 #include "les_base.h"
 
-void LES_TestSetup(void);
+int LES_TestSetup(void);
 
 #endif // #ifndef LES_TEST_HH

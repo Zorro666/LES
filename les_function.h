@@ -35,7 +35,7 @@ public:
 																															const int numInputs, const int numOutputs);
 	friend int LES_AddFunctionDefinition(const char* const name, const LES_FunctionDefinition* const pFunctionDefinition, 
 																			 const int parameterDataSize);
-	friend void LES_TestSetup(void);
+	friend int LES_TestSetup(void);
 	friend class LES_FuncData;
 private:
 	LES_FunctionDefinition(void);
