@@ -1,11 +1,9 @@
 High Priority:
-CLIENT: sometimes the receive definition file fails
+PYTHON: receive message and decode it - output params and values
+PYTHON: move the tests from C++ to python for testing - should be same output as C++ version
+CLIENT: change to/from BigEndian functions to take an output ptr & input ptr, to save double memcpys
 
 Medium Priority:
-CLIENT: send function data to server as network message
-SERVER: process function data send response
-SERVER: run decode parameter tests on the server
-
 CLIENT: support for async function calls, error queue, potential threading issues
 SERVER: support for async function calls, error queue
 
