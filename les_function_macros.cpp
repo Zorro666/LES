@@ -5,6 +5,7 @@
 #include "les_logger.h"
 #include "les_parameter.h"
 #include "les_stringentry.h"
+#include "les_coreengine.h"
 
 int LES_FunctionStart(const char* const name, const char* const returnType, 
 											const LES_FunctionDefinition** functionDefinitionPtr,
@@ -290,6 +291,18 @@ int LES_FunctionEnd(const LES_FunctionDefinition* const functionDefinitionPtr,
 								functionTempData->functionName, numBytesWritten, parameterDataSize);
 		return LES_RETURN_ERROR;
 	}
+	const int sendReturn = LES_CoreEngineSendFunctionRPC(functionDefinitionPtr, functionParameterData);
+	if (sendReturn == LES_COREENGINE_SEND_ERROR)
+	{
+		LES_ERROR("Function RPC: '%s' : send error", functionTempData->functionName);
+		return LES_RETURN_ERROR;
+	}
+	else if (sendReturn == LES_COREENGINE_NOT_READY)
+	{
+		LES_ERROR("Function RPC: '%s' : not ready to send data", functionTempData->functionName);
+		return LES_RETURN_ERROR;
+	}
+
 	return LES_RETURN_OK;
 }
 

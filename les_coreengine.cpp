@@ -8,21 +8,16 @@
 #include "les_hash.h"
 #include "les_definitionfile.h"
 #include "les_core.h"
-
-enum { LES_STATE_UNKNOWN, 
-			 LES_STATE_BOOT, 
-			 LES_STATE_NOT_CONNECTED, 
-			 LES_STATE_WAITING_FOR_CONNECT_RESPONSE, 
-			 LES_STATE_CONNECTED,
-			 LES_STATE_WAITING_FOR_DEFINITIONFILE_RESPONSE,
-			 LES_STATE_READY
-		 };
+#include "les_function.h"
+#include "les_networkmessage.h"
 
 static int les_state = LES_STATE_UNKNOWN;
 static LES_uint32 les_correctResponseHash;
+static LES_uint16 les_functionID;
 
 #define LES_NETMESSAGE_SEND_ID_CONNECT (0x1)
 #define LES_NETMESSAGE_SEND_ID_GETDEFINITIONFILE (0x3)
+#define LES_NETMESSAGE_SEND_ID_FUNCTIONRPC (0x5)
 #define LES_NETMESSAGE_SEND_ID_TEST (0xF1)
 
 #define LES_NETMESSAGE_RECV_ID_CONNECT_RESPONSE (0x2)
@@ -109,6 +104,7 @@ static int LES_GetDefinitionFileResponseMessageHandler(const LES_uint16 type, co
 void LES_CoreEngineInit(void)
 {
 	les_state = LES_STATE_BOOT;
+	les_functionID = 0;
 }
 
 void LES_CoreEngineShutdown(void)
@@ -201,7 +197,9 @@ int LES_CoreEngineTick(void)
 	}
 	else if (currentState == LES_STATE_READY)
 	{
-		return LES_COREENGINE_FINISHED;
+		//les_state = LES_STATE_UNKNOWN;
+		//return LES_COREENGINE_FINISHED;
+		return LES_COREENGINE_OK;
 	}
 
 	LES_ERROR("LES_CoreEngineTick: unknown state:%d", currentState);
@@ -211,4 +209,36 @@ int LES_CoreEngineTick(void)
 int LES_CoreEngineGetState(void)
 {
 	return les_state;
+}
+
+int LES_CoreEngineSendFunctionRPC(const LES_FunctionDefinition* const pFunctionDefinition, 
+																	const LES_FunctionParameterData* const pFunctionParameterData)
+{
+	if (les_state != LES_STATE_READY)
+	{
+		return LES_COREENGINE_NOT_READY;
+	}
+
+	const LES_uint32 functionNameID = pFunctionDefinition->GetNameID();
+	const int functionParameterDataSize = pFunctionParameterData->GetNumBytesWritten();
+	const char* const pFunctionParameterDataBuffer = pFunctionParameterData->GetBufferPtr();
+	LES_LOG("SendRPC functionID:%d paramDataSize:%d", functionNameID, functionParameterDataSize);
+
+	const LES_uint16 type = LES_NETMESSAGE_SEND_ID_FUNCTIONRPC;
+	const LES_uint16 id = les_functionID;
+	les_functionID++;
+	LES_NetworkSendItem sendItem;
+	const int payloadSize = functionParameterDataSize + sizeof(LES_uint32);
+	sendItem.Create(type, id, payloadSize);
+	char* pPayload = (char*)(sendItem.GetMessagePtr()->m_payload);
+	const LES_uint32 bigFunctionNameID = toBigEndian32(functionNameID);
+	memcpy(pPayload, &bigFunctionNameID, sizeof(LES_uint32));
+	pPayload += sizeof(LES_uint32);
+	memcpy(pPayload, pFunctionParameterDataBuffer, functionParameterDataSize);
+	if (LES_NetworkAddSendItem(&sendItem) == LES_RETURN_ERROR)
+	{
+		LES_ERROR("Error adding getdefinitionfile send item");
+		return LES_COREENGINE_SEND_ERROR;
+	}
+	return LES_COREENGINE_OK;
 }
