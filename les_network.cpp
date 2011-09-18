@@ -82,7 +82,6 @@ static int LES_NetworkAddReceivedMessage(LES_NetworkMessage* const pReceivedMess
 
 static int LES_NetworkThreadProcessOneLoop(LES_NetworkThreadStartStruct* const pNetworkThreadStartStruct)
 {
-	LES_NETWORK_SCOPE_MUTEX;
 	LES_TCPSocket* const pTCPSocket = &(pNetworkThreadStartStruct->m_tcpSocket);
 	if (pTCPSocket->IsValid() == LES_RETURN_ERROR)
 	{
@@ -151,7 +150,9 @@ static void* LES_NetworkThreadProcess(void* args)
 	//Now lets do the client related stuff
 	while (1)
 	{
+		LES_NETWORK_LOCK_MUTEX;
 		const int ret = LES_NetworkThreadProcessOneLoop(pNetworkThreadStartStruct);
+		LES_NETWORK_UNLOCK_MUTEX;
 		if (ret == LES_NETWORK_THREAD_PROCESS_ERROR)
 		{
 			break;
