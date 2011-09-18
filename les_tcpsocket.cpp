@@ -176,7 +176,7 @@ int LES_TCPSocket::Recv(void* const pReceiveBuffer, const int bufferSize, int* c
 	// Wait 0.01 seconds
 	timeval timeOut;
 	timeOut.tv_sec = 0;
-	timeOut.tv_usec = 100 * 1000;
+	timeOut.tv_usec = 10 * 1000;
 
 	const int retval = select(socketHandle+1, &readSocketSet, NULL, NULL, &timeOut);
 	if (retval == -1)
