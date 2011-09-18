@@ -1,3 +1,15 @@
+LES_NetworkThreadProcess Started
+Network thread created handle:-1219097744 ret:0
+Time 0.001000 State:1
+Input thread created handle:-1227490448 ret:0
+Enter some text to send to the server (press enter)
+connectHash:0x5FC8095E
+Sent bytes 24 (24)
+Received bytes 12
+responseHash:0x5FC8095E
+Sent bytes 12 (12)
+Time 1.018000 State:5
+Received bytes 11568
 
 ID:'LESD'
 NumChunks:4
@@ -573,6 +585,7 @@ FATAL_ERROR: 'LES_Test_InputTypeIDNotFound' : Error adding Input parameter 0 'in
 
 WARNING: 'LES_Test_InputTypeHashIsWrong' : parameter:0 'input_0' (Input) type hash doesn't match for ID:34 0xF09B6F != 0x261B6E5A Code:'int' Definition:'input_wrongHash'
 FATAL_ERROR: 'LES_Test_InputTypeHashIsWrong' : Error adding Input parameter 0 'input_0' type:'int'
+Time 2.042000 State:6
 
 WARNING: 'LES_Test_InputTypeStringIsWrong' : Adding parameter 'input_0' type string doesn't match for ID:36 'input_brokenString' != 'brokenString' 0xB423831B : 0xB423831B
 FATAL_ERROR: 'LES_Test_InputTypeStringIsWrong' : Error adding Input parameter 0 'input_0' type:'input_brokenString'
@@ -631,11 +644,13 @@ FATAL_ERROR: TEST function 'LES_Test_ParameterAlreadyExists' : parameter 'input_
 FATAL_ERROR: TEST function 'LES_Test_ParameterAlreadyExists' : ERROR cannot create definition
 
 #### Complex Input Output Parameter tests ####
+SendRPC functionID:131 paramDataSize:9
 LES_Test_InputOutputMixture: success if no error output
 
 WARNING: LES_FunctionParameterData::Write type:'unsigned short' flags incorrect for parameter mode typeFlags:0x5 INPUT|POD paramMode:0x2 OUTPUT
 WARNING: 'LES_Test_InputParamUsedAsOutput' : Write parameter:'output_0' type:'unsigned short' failed
 FATAL_ERROR: 'LES_Test_InputParamUsedAsOutput' : Error adding Output parameter 0 'output_0' type:'unsigned short'
+Sent bytes 24 (24)
 
 WARNING: LES_FunctionParameterData::Write type:'output_only' flags incorrect for parameter mode typeFlags:0x6 OUTPUT|POD paramMode:0x1 INPUT
 WARNING: 'LES_Test_OutputParamUsedAsInput' : Write parameter:'input_0' type:'output_only' failed
@@ -652,17 +667,21 @@ WARNING: AddType 'unsigned char*' hash 0xABB572C1 already in list and aliasedTyp
 FATAL_ERROR: TEST AddType 'unsigned char*' NumElements:0 0xABB572C1 Alias 'unsigned int' failed
 
 #### Read Parameter tests ####
+SendRPC functionID:132 paramDataSize:15
 LES_Test_ReadInputParameters: input_0:102 value_0:102
 LES_Test_ReadInputParameters: input_1:23453 value_1:23453
 LES_Test_ReadInputParameters: input_2:110 value_2:110
 LES_Test_ReadInputParameters: input_3:-4.033200 value_3:-4.033200
 LES_Test_ReadInputParameters: input_4:12345 value_4:12345
 
+SendRPC functionID:135 paramDataSize:11
 LES_Test_ReadOutputParameters: output_0:1 value_0:1
 LES_Test_ReadOutputParameters: output_1:2 value_1:2
 LES_Test_ReadOutputParameters: output_2:79 value_2:79
 LES_Test_ReadOutputParameters: output_3:-123.456001 value_3:-123.456001
+Sent bytes 28 (28)
 
+SendRPC functionID:138 paramDataSize:26
 LES_Test_ReadInputOutputParameters: input_0:102 value_0:102
 LES_Test_ReadInputOutputParameters: output_0:1 value_0:1
 LES_Test_ReadInputOutputParameters: input_1:23453 value_1:23453
@@ -673,7 +692,9 @@ LES_Test_ReadInputOutputParameters: input_3:-4.033200 value_3:-4.033200
 LES_Test_ReadInputOutputParameters: output_3:-123.456001 value_3:-123.456001
 LES_Test_ReadInputOutputParameters: input_4:12345 value_4:12345
 LES_Test_ReadInputOutputParameters: parameterDataSize:26
+Sent bytes 24 (24)
 
+SendRPC functionID:139 paramDataSize:29
 DecodeSingle parameter[0]:'input_0' type:'int' value:201
 DecodeSingle parameter[1]:'output_0' type:'unsigned int*' value:1
 DecodeSingle parameter[2]:'input_1' type:'short' value:12863
@@ -686,6 +707,8 @@ DecodeSingle parameter[8]:'input_4' type:'int*' value:12345
 DecodeSingle parameter[9]:'input_5' type:'short*' value:8989
 DecodeSingle parameter[10]:'input_6' type:'char*' value:'6'
 LES_Test_DecodeInputOutputParameters: parameterDataSize:29
+Time 3.066000 State:6
+Sent bytes 40 (40)
 
 #### Struct tests ####
 FATAL_ERROR: TEST struct 'LES_Struct_TooManyMembers' : MemberIndex too big index:1 max:1 member:'m_two' type:'short'
@@ -696,7 +719,9 @@ FATAL_ERROR: TEST struct 'LES_Struct_MemberAlreadyExists' : ERROR cannot create 
 
 FATAL_ERROR: TEST struct 'LES_Struct_NotEnoughMembers' : ERROR not the right number of members Added:2 Should be:3
 FATAL_ERROR: TEST struct 'LES_Struct_NotEnoughMembers' : ERROR cannot create definition
+Sent bytes 44 (44)
 
+SendRPC functionID:142 paramDataSize:88
 DecodeSingle   parameter[0] member[0]:'m_float' type:'float' value:666.987000
 DecodeSingle     parameter[1] member[0]:'m_longlong' type:'long long int' value:-100048
 DecodeSingle     parameter[1] member[1]:'m_char' type:'char' value:'A'
@@ -727,6 +752,7 @@ DecodeSingle     parameter[5] member[2]:'m_int' type:'int' value:2
 DecodeSingle     parameter[5] member[3]:'m_char' type:'char' value:'#'
 LES_Test_StructInputParam: parameterDataSize:88
 
+SendRPC functionID:143 paramDataSize:35
 DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:1718
 DecodeSingle   parameter[0] member[1]:'m_float' type:'float' value:271.386993
 DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:14
@@ -741,7 +767,9 @@ DecodeSingle     parameter[5] member[1]:'m_float' type:'float' value:271.386993
 DecodeSingle     parameter[5] member[2]:'m_int' type:'int' value:14
 DecodeSingle     parameter[5] member[3]:'m_char' type:'char' value:'a'
 LES_Test_StructOutputParam: parameterDataSize:35
+Sent bytes 100 (100)
 
+SendRPC functionID:146 paramDataSize:9
 DecodeSingle   parameter[0] member[0]:'m_char' type:'char' value:'5'
 DecodeSingle   parameter[0] member[1]:'m_shortPtr' type:'short*' value:4242
 DecodeSingle   parameter[1] member[0]:'m_short' type:'short' value:-5656
@@ -749,21 +777,29 @@ DecodeSingle     parameter[1] member[0]:'m_char' type:'char' value:'5'
 DecodeSingle     parameter[1] member[1]:'m_shortPtr' type:'short*' value:4242
 DecodeSingle   parameter[1] member[2]:'m_charPtr' type:'char*' value:'6'
 LES_Test_StructInputOutputParam: parameterDataSize:9
+Sent bytes 48 (48)
 
 #### Reference tests ####
+SendRPC functionID:148 paramDataSize:4
 DecodeSingle parameter[0]:'input_0' type:'int&' value:954
 LES_Test_ReferenceInputPODParam: parameterDataSize:4
+Sent bytes 24 (24)
 
+SendRPC functionID:149 paramDataSize:19
 DecodeSingle   parameter[0] member[0]:'m_longlong' type:'long long int' value:162132
 DecodeSingle   parameter[0] member[1]:'m_char' type:'char' value:'1'
 DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:14
 DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:936
 DecodeSingle   parameter[0] member[4]:'m_float' type:'float' value:16.213100
 LES_Test_ReferenceInputStructParam: parameterDataSize:19
+Sent bytes 16 (16)
 
+SendRPC functionID:150 paramDataSize:1
 DecodeSingle parameter[0]:'output_0' type:'char&' value:'R'
 LES_Test_ReferenceOutputPODParam: parameterDataSize:1
+Sent bytes 32 (32)
 
+SendRPC functionID:151 paramDataSize:30
 DecodeSingle   parameter[0] member[0]:'m_float' type:'float' value:2131.159912
 DecodeSingle     parameter[1] member[0]:'m_longlong' type:'long long int' value:162132
 DecodeSingle     parameter[1] member[1]:'m_char' type:'char' value:'1'
@@ -774,22 +810,30 @@ DecodeSingle   parameter[0] member[2]:'m_char' type:'char' value:'Z'
 DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:2526
 DecodeSingle   parameter[0] member[4]:'m_int' type:'int' value:1564
 LES_Test_ReferenceOutputStructParam: parameterDataSize:30
+Sent bytes 16 (16)
 
+SendRPC functionID:152 paramDataSize:9
 DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:936
 DecodeSingle   parameter[0] member[1]:'m_floatRef' type:'float&' value:76.123199
 DecodeSingle   parameter[0] member[2]:'m_char' type:'char' value:'A'
 DecodeSingle   parameter[0] member[3]:'m_charRef' type:'char&' value:'C'
 DecodeSingle   parameter[0] member[4]:'m_charPtr' type:'char*' value:'R'
 LES_Test_ReferenceStructInputParam: parameterDataSize:9
+Sent bytes 44 (44)
 
+SendRPC functionID:153 paramDataSize:6
 DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:2526
 DecodeSingle     parameter[1] member[0]:'m_char' type:'char' value:'5'
 DecodeSingle     parameter[1] member[1]:'m_shortPtr' type:'short*' value:4242
 DecodeSingle   parameter[0] member[2]:'m_charPtr' type:'char*' value:'R'
 LES_Test_ReferenceStructOutputParam: parameterDataSize:6
+Time 4.151000 State:6
+Sent bytes 24 (24)
 
+SendRPC functionID:154 paramDataSize:1
 DecodeSingle parameter[0]:'output_0' type:'char&' value:'C'
 LES_Test_DecodeOutputParameters: parameterDataSize:1
+Sent bytes 20 (20)
 
 #### Array tests ####
 WARNING: AddType 'arrayNotAliasedToNonPtr[4]' hash 0xFEF71683 non-reference array types must be aliased to a non-pointer, non-reference type Alias:'int*' Flags:0x57
@@ -809,7 +853,9 @@ FATAL_ERROR: TEST AddType 'arrayCantFindAlias[1]' NumElements:1 0xED709A25 Alias
 
 WARNING: AddType 'arrayInvalidNumElements[1]' NumELements:0 Invalid number of elements must be > 0
 FATAL_ERROR: TEST AddType 'arrayInvalidNumElements[1]' NumElements:0 0x859E7150 Alias 'int*' failed
+Sent bytes 16 (16)
 
+SendRPC functionID:155 paramDataSize:9
 DecodeSingle   parameter[0] member[0]:'input_0' type:'char' value:'0'
 DecodeSingle   parameter[0] member[1]:'input_0' type:'char' value:'1'
 DecodeSingle   parameter[0] member[2]:'input_0' type:'char' value:'2'
@@ -818,6 +864,7 @@ DecodeSingle   parameter[1] member[1]:'input_1' type:'short' value:3142
 DecodeSingle   parameter[1] member[2]:'input_1' type:'short' value:3143
 LES_Test_DecodeInputArrayPOD: parameterDataSize:9
 
+SendRPC functionID:156 paramDataSize:18
 DecodeSingle   parameter[0] member[0]:'output_0' type:'short' value:2713
 DecodeSingle   parameter[0] member[1]:'output_0' type:'short' value:2714
 DecodeSingle   parameter[0] member[2]:'output_0' type:'short' value:2715
@@ -825,7 +872,9 @@ DecodeSingle   parameter[1] member[0]:'output_1' type:'int' value:-1954
 DecodeSingle   parameter[1] member[1]:'output_1' type:'int' value:-1955
 DecodeSingle   parameter[1] member[2]:'output_1' type:'int' value:-1956
 LES_Test_DecodeOutputArrayPOD: parameterDataSize:18
+Sent bytes 24 (24)
 
+SendRPC functionID:157 paramDataSize:79
 DecodeSingle   parameter[0] member[0]:'m_float' type:'float' value:2137.000000
 DecodeSingle     parameter[1] member[0]:'m_longlong' type:'long long int' value:18
 DecodeSingle     parameter[1] member[1]:'m_char' type:'char' value:'M'
@@ -850,7 +899,9 @@ DecodeSingle   parameter[1] member[2]:'m_int' type:'int' value:230421
 DecodeSingle   parameter[1] member[3]:'m_short' type:'short' value:421
 DecodeSingle   parameter[1] member[4]:'m_float' type:'float' value:1525.000000
 LES_Test_DecodeInputArraySTRUCTA: parameterDataSize:79
+Sent bytes 32 (32)
 
+SendRPC functionID:158 paramDataSize:68
 DecodeSingle   parameter[0] member[0]:'m_longlong' type:'long long int' value:18
 DecodeSingle   parameter[0] member[1]:'m_char' type:'char' value:'M'
 DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:230421
@@ -871,7 +922,9 @@ DecodeSingle   parameter[1] member[2]:'m_char' type:'char' value:'Y'
 DecodeSingle   parameter[1] member[3]:'m_short' type:'short' value:2627
 DecodeSingle   parameter[1] member[4]:'m_int' type:'int' value:21412932
 LES_Test_DecodeInputArraySTRUCTB: parameterDataSize:68
+Sent bytes 92 (92)
 
+SendRPC functionID:159 paramDataSize:46
 DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:1953
 DecodeSingle   parameter[0] member[1]:'m_float' type:'float' value:29.299999
 DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:230810
@@ -890,7 +943,9 @@ DecodeSingle     parameter[5] member[1]:'m_float' type:'float' value:29.400000
 DecodeSingle     parameter[5] member[2]:'m_int' type:'int' value:230811
 DecodeSingle     parameter[5] member[3]:'m_char' type:'char' value:'>'
 LES_Test_DecodeOutputArraySTRUCT: parameterDataSize:46
+Sent bytes 80 (80)
 
+SendRPC functionID:160 paramDataSize:9
 DecodeSingle   parameter[0] member[0]:'input_0' type:'char' value:'0'
 DecodeSingle   parameter[0] member[1]:'input_0' type:'char' value:'1'
 DecodeSingle   parameter[0] member[2]:'input_0' type:'char' value:'2'
@@ -898,7 +953,9 @@ DecodeSingle   parameter[1] member[0]:'input_1' type:'short' value:3141
 DecodeSingle   parameter[1] member[1]:'input_1' type:'short' value:3142
 DecodeSingle   parameter[1] member[2]:'input_1' type:'short' value:3143
 LES_Test_DecodeInputArrayReference: parameterDataSize:9
+Sent bytes 60 (60)
 
+SendRPC functionID:161 paramDataSize:18
 DecodeSingle   parameter[0] member[0]:'output_0' type:'short' value:2713
 DecodeSingle   parameter[0] member[1]:'output_0' type:'short' value:2714
 DecodeSingle   parameter[0] member[2]:'output_0' type:'short' value:2715
@@ -906,12 +963,17 @@ DecodeSingle   parameter[1] member[0]:'output_1' type:'int' value:-1954
 DecodeSingle   parameter[1] member[1]:'output_1' type:'int' value:-1955
 DecodeSingle   parameter[1] member[2]:'output_1' type:'int' value:-1956
 LES_Test_DecodeOutputArrayReference: parameterDataSize:18
+Sent bytes 24 (24)
 
+SendRPC functionID:162 paramDataSize:6
 DecodeSingle     parameter[0] member[0]:'m_short' type:'short' value:2063
 DecodeSingle     parameter[0] member[1]:'m_short' type:'short' value:2064
 DecodeSingle     parameter[0] member[2]:'m_short' type:'short' value:2065
 LES_Test_DecodeInputStructPODArray: parameterDataSize:6
+Time 5.239000 State:6
+Sent bytes 32 (32)
 
+SendRPC functionID:163 paramDataSize:18
 DecodeSingle     parameter[0] member[0]:'m_short' type:'short' value:3435
 DecodeSingle     parameter[0] member[1]:'m_short' type:'short' value:3436
 DecodeSingle     parameter[0] member[2]:'m_short' type:'short' value:3437
@@ -922,7 +984,9 @@ DecodeSingle       parameter[0] member[0]:'m_short' type:'short' value:2071
 DecodeSingle       parameter[0] member[1]:'m_short' type:'short' value:2072
 DecodeSingle       parameter[0] member[2]:'m_short' type:'short' value:2073
 LES_Test_DecodeInputStructStructArray: parameterDataSize:18
+Sent bytes 20 (20)
 
+SendRPC functionID:164 paramDataSize:19
 DecodeSingle     parameter[0] member[0]:'m_short' type:'short' value:2180
 DecodeSingle     parameter[0] member[1]:'m_short' type:'short' value:2181
 DecodeSingle     parameter[0] member[2]:'m_short' type:'short' value:2182
@@ -934,7 +998,9 @@ DecodeSingle     parameter[2] member[2]:'m_char' type:'char' value:'W'
 DecodeSingle     parameter[2] member[3]:'m_char' type:'char' value:'A'
 DecodeSingle     parameter[2] member[4]:'m_char' type:'char' value:'M'
 LES_Test_DecodeInputStructPODArrayReference: parameterDataSize:19
+Sent bytes 32 (32)
 
+SendRPC functionID:165 paramDataSize:37
 DecodeSingle     parameter[0] member[0]:'m_short' type:'short' value:2224
 DecodeSingle     parameter[0] member[1]:'m_short' type:'short' value:2225
 DecodeSingle     parameter[0] member[2]:'m_short' type:'short' value:2226
@@ -955,6 +1021,7 @@ DecodeSingle       parameter[2] member[2]:'m_char' type:'char' value:'Z'
 DecodeSingle       parameter[2] member[3]:'m_char' type:'char' value:'Z'
 DecodeSingle       parameter[2] member[4]:'m_char' type:'char' value:'Y'
 LES_Test_DecodeInputStructStructArrayReference: parameterDataSize:37
+Sent bytes 32 (32)
 
 ERROR: LES_AddStringEntry 'CantAddNewStrings' 0x7EEFE0D7 not found in string table definition file
 ERROR: AddType 'CantAddNewTypes' hash 0xE2A43B36 not found in type data definition file
@@ -966,3 +1033,11 @@ ERROR: AddFunctionDefinition 'CantAddNewFunctions' not found in func data defini
 FATAL_ERROR: TEST function 'CantAddNewFunctions' : ERROR adding function definition
 FATAL_ERROR: TEST function 'CantAddNewFunctions' : ERROR cannot create definition
 sizeof(Jake)=8
+Sent bytes 52 (52)
+Phase:65
+Phase:66
+Phase:67
+Phase:68
+Phase:69
+Phase:70
+LES_TestSetup() finished
