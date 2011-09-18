@@ -334,7 +334,7 @@ void LES_NetworkInit(void)
 	s_numRegisteredMessageHandlers = 0;
 
 	const int ret = LES_CreateThread(&s_networkThreadHandle, LES_NULL, LES_NetworkThreadProcess, &s_networkThreadStartStruct);
-	LES_LOG("Network thread created handle:%d ret:%d", s_networkThreadHandle, ret);
+	LES_LOG("Network thread created handle:0x%X ret:%d", s_networkThreadHandle, ret);
 }
 
 void LES_NetworkTick(void)

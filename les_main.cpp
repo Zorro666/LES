@@ -90,7 +90,7 @@ void JAKE_CreateInputThread(void)
 	static LES_ThreadHandle inputThreadHandle;
 	int ret = LES_CreateThread(&inputThreadHandle, LES_NULL, inputThread, LES_NULL);
 
-	LES_LOG("Input thread created handle:%d ret:%d", inputThreadHandle, ret);
+	LES_LOG("Input thread created handle:0x%X ret:%d", inputThreadHandle, ret);
 }
 
 int main(const int argc, const char* const argv[])
@@ -122,6 +122,7 @@ int main(const int argc, const char* const argv[])
 	LES_Init();
 
 	bool inputThreadAlive = false;
+	bool debugOutputDefinitionFile = false;
 	float lastTime = -10000.0f;
 	while (1)
 	{
@@ -148,18 +149,11 @@ int main(const int argc, const char* const argv[])
 		}
 		if (state == LES_STATE_READY)
 		{
-			static int debugDefFile = 0;
-			if (debugDefFile == 0)
-			{
-				debugDefFile = 1;
-				LES_DebugOutputGlobalDefinitionFile(LES_Logger::GetDefaultChannel(LES_Logger::CHANNEL_LOG));
-			}
 			if (runTests)
 			{
 				if (LES_TestSetup() == LES_RETURN_ERROR)
 				{
 					LES_LOG("LES_TestSetup() finished");
-					runTests = 0;
 					break;
 				}
 			}
@@ -182,17 +176,24 @@ int main(const int argc, const char* const argv[])
 		{
 			LES_FATAL_ERROR("Failed to load test definition file");
 		}
+		debugOutputDefinitionFile = true;
 	}
 
 	if (runTests)
+	{
+		int retVal = 0;
+		do
+		{
+			retVal = LES_TestSetup();
+		}
+		while (retVal == LES_RETURN_OK);
+		LES_jakeInit(666, 123);
+		debugOutputDefinitionFile = true;
+	}
+
+	if (debugOutputDefinitionFile)
 	{
 		LES_DebugOutputGlobalDefinitionFile(LES_Logger::GetDefaultChannel(LES_Logger::CHANNEL_LOG));
-	}
-
-	if (runTests)
-	{
-		LES_TestSetup();
-		LES_jakeInit(666, 123);
 	}
 
 	LES_Logger::SetChannelOutputFileName(LES_Logger::CHANNEL_WARNING, "warning.txt");
