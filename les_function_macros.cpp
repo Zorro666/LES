@@ -300,7 +300,7 @@ int LES_FunctionEnd(const LES_FunctionDefinition* const functionDefinitionPtr,
 	else if (sendReturn == LES_COREENGINE_NOT_READY)
 	{
 		LES_ERROR("Function RPC: '%s' : not ready to send data", functionTempData->functionName);
-		return LES_RETURN_ERROR;
+		return LES_RETURN_OK;
 	}
 
 	return LES_RETURN_OK;
