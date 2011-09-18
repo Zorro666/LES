@@ -128,7 +128,7 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 				s_receivedMessageHandlers[msgType](msgType, msgId, msgPayloadSize, msgPayload)
 			else:
 				les_logger.Warning("Unhandled: type:0x%X id:%d payloadSize:%d" % (msgType, msgId, msgPayloadSize))
-				les_logger.Warning("Unhandled: payload:%s" % (msgPayload))
+				#les_logger.Warning("Unhandled: payload:%s" % (msgPayload))
 
 class ThreadedTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
 	pass
