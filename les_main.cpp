@@ -125,6 +125,16 @@ int main(const int argc, const char* const argv[])
 	float lastTime = -10000.0f;
 	while (1)
 	{
+		const int state = LES_CoreEngineGetState();
+
+		const float logDelta = 1.0f;
+		const float elapsedTime = LES_GetElapsedTimeInSeconds();
+		if ((elapsedTime - lastTime) > logDelta)
+		{
+			LES_LOG("Time %f State:%d", elapsedTime, state);
+			lastTime = elapsedTime;
+		}
+
 		const int ret = LES_CoreEngineTick();
 		if (ret == LES_RETURN_ERROR)
 		{
@@ -136,19 +146,34 @@ int main(const int argc, const char* const argv[])
 			LES_LOG("LES_CoreEngineTick() finished");
 			break;
 		}
+		if (state == LES_STATE_READY)
+		{
+			static int debugDefFile = 0;
+			if (debugDefFile == 0)
+			{
+				debugDefFile = 1;
+				LES_DebugOutputGlobalDefinitionFile(LES_Logger::GetDefaultChannel(LES_Logger::CHANNEL_LOG));
+			}
+			if (runTests)
+			{
+				if (LES_TestSetup() == LES_RETURN_ERROR)
+				{
+					LES_LOG("LES_TestSetup() finished");
+					runTests = 0;
+					break;
+				}
+			}
+			else
+			{
+				break;
+			}
+		}
 		if (inputThreadAlive == false)
 		{
 			JAKE_CreateInputThread();
 			inputThreadAlive = true;
 		}
-		const float logDelta = 1.0f;
-		const float elapsedTime = LES_GetElapsedTimeInSeconds();
-		if ((elapsedTime - lastTime) > logDelta)
-		{
-			LES_LOG("Time %f State:%d", elapsedTime, LES_CoreEngineGetState());
-			lastTime = elapsedTime;
-		}
-		LES_Sleep(0.1f);
+		LES_Sleep(0.033333f);
 	}
 
 	if (LES_IsGlobalDefinitionFileValid() != LES_RETURN_OK)
