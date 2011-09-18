@@ -214,15 +214,14 @@ int LES_CoreEngineGetState(void)
 int LES_CoreEngineSendFunctionRPC(const LES_FunctionDefinition* const pFunctionDefinition, 
 																	const LES_FunctionParameterData* const pFunctionParameterData)
 {
-	if (les_state != LES_STATE_READY)
-	{
-		return LES_COREENGINE_NOT_READY;
-	}
-
 	const LES_uint32 functionNameID = pFunctionDefinition->GetNameID();
 	const int functionParameterDataSize = pFunctionParameterData->GetNumBytesWritten();
 	const char* const pFunctionParameterDataBuffer = pFunctionParameterData->GetBufferPtr();
 	LES_LOG("SendRPC functionID:%d paramDataSize:%d", functionNameID, functionParameterDataSize);
+	if (les_state != LES_STATE_READY)
+	{
+		return LES_COREENGINE_NOT_READY;
+	}
 
 	const LES_uint16 type = LES_NETMESSAGE_SEND_ID_FUNCTIONRPC;
 	const LES_uint16 id = les_functionID;
