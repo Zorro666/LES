@@ -35,7 +35,8 @@ public:
 		return *this;
 	}
 
-	void Create(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payLoadSize, void* const payload);
+	void Create(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payloadSize, void* const payload);
+	void Create(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payloadSize);
 	void Free(void);
 
 private:

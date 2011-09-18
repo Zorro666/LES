@@ -11,9 +11,9 @@
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-static int LES_NetworkMessageSize(const int payLoadSize)
+static int LES_NetworkMessageSize(const int payloadSize)
 {
-	int payloadExtraMemmory = payLoadSize - sizeof(int);
+	int payloadExtraMemmory = payloadSize - sizeof(int);
 	if (payloadExtraMemmory < 0)
 	{
 		payloadExtraMemmory = 0;
@@ -23,14 +23,13 @@ static int LES_NetworkMessageSize(const int payLoadSize)
 	return memorySize;
 }
 
-static LES_NetworkMessage* LES_CreateNetworkMessage(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payLoadSize, 
-																										void* const payload, const int messageSize)
+static LES_NetworkMessage* LES_CreateNetworkMessage(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payloadSize, 
+																										const int messageSize)
 {
 	LES_NetworkMessage* const pNetworkMessage = (LES_NetworkMessage*)malloc(messageSize);
 	pNetworkMessage->m_type = toBigEndian16(type);
 	pNetworkMessage->m_id = toBigEndian16(id);
-	pNetworkMessage->m_payloadSize = toBigEndian32(payLoadSize);
-	memcpy(pNetworkMessage->m_payload, payload, payLoadSize);
+	pNetworkMessage->m_payloadSize = toBigEndian32(payloadSize);
 
 	return pNetworkMessage;
 }
@@ -41,11 +40,17 @@ static LES_NetworkMessage* LES_CreateNetworkMessage(const LES_uint16 type, const
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-void LES_NetworkSendItem::Create(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payLoadSize, void* const payload)
+void LES_NetworkSendItem::Create(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payloadSize)
 {
-	const int messageSize = LES_NetworkMessageSize(payLoadSize);
-	m_message = LES_CreateNetworkMessage(type, id, payLoadSize, payload, messageSize);
+	const int messageSize = LES_NetworkMessageSize(payloadSize);
 	m_messageSize = messageSize;
+	m_message = LES_CreateNetworkMessage(type, id, payloadSize, messageSize);
+}
+
+void LES_NetworkSendItem::Create(const LES_uint16 type, const LES_uint16 id, const LES_uint32 payloadSize, void* const payload)
+{
+	Create(type, id, payloadSize);
+	memcpy(m_message->m_payload, payload, payloadSize);
 }
 
 void LES_NetworkSendItem::Free(void)
