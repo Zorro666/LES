@@ -130,14 +130,16 @@ def runTest():
 	index = this.addString("Jake")
 	les_logger.Log("Index[Jake]= %d", index)
 
-	binFile = les_binaryfile.LES_BinaryFile("stringTableBig.bin")
+	binFile = les_binaryfile.LES_BinaryFile()
 	binFile.setBigEndian()
 	this.write(binFile)
+	binFile.saveToFile("stringTableBig.bin")
 	binFile.close()
 
-	binFile = les_binaryfile.LES_BinaryFile("stringTableLittle.bin")
+	binFile = les_binaryfile.LES_BinaryFile()
 	binFile.setLittleEndian()
 	this.write(binFile)
+	binFile.saveToFile("stringTableLittle.bin")
 	binFile.close()
 
 if __name__ == '__main__':
