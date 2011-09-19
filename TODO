@@ -1,6 +1,4 @@
 High Priority:
-PYTHON: move GetRootType() from structdata.py -> typedata.py
-PYTHON: receive message and decode it - output params and values
 PYTHON: move the tests from C++ to python for testing - should be same output as C++ version
 CLIENT: change to/from BigEndian functions to take an output ptr & input ptr, to save double memcpys
 CLIENT: missing final RPC function send message (it doesn't get sent by network thread)
