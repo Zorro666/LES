@@ -38,21 +38,28 @@ def loadFunctionData(functionData):
 
 class LES_DefinitionFile():
 	def __init__(self):
-		self.chunkDatas = []
-		self.chunkNames = []
-		self.numChunks = len(self.chunkDatas)
+		self.__m_chunkDatas__ = []
+		self.__m_chunkNames__ = []
+		self.__m_numChunks__ = len(self.__m_chunkDatas__)
 
 	def addChunk(self, chunkName, chunkData):
-		self.chunkDatas.append(chunkData)
-		self.chunkNames.append(chunkName)
-		self.numChunks = len(self.chunkDatas)
+		self.__m_chunkDatas__.append(chunkData)
+		self.__m_chunkNames__.append(chunkName)
+		self.__m_numChunks__ = len(self.__m_chunkDatas__)
+
+	def getChunk(self, name):
+		try:
+			index = self.__m_chunkNames__.index(name)
+		except ValueError:
+			return None
+		return self.__m_chunkDatas__[index]
 
 	def makeData(self):
-		chunkFileData = les_chunkfile.LES_ChunkFile("LESD", self.numChunks, bigEndian=True)
+		chunkFileData = les_chunkfile.LES_ChunkFile("LESD", self.__m_numChunks__, bigEndian=True)
 
-		for i in range(self.numChunks):
-			chunkData = self.chunkDatas[i]
-			chunkName = self.chunkNames[i]
+		for i in range(self.__m_numChunks__):
+			chunkData = self.__m_chunkDatas__[i]
+			chunkName = self.__m_chunkNames__[i]
 
 			binFile = chunkFileData.startChunk(chunkName)
 			chunkData.write(binFile)
@@ -78,6 +85,18 @@ class LES_DefinitionFile():
 		self.addChunk("TypeData", typeData)
 		self.addChunk("StructData", structData)
 		self.addChunk("FunctionData", functionData)
+
+	def getStringTable(self):
+		return self.getChunk("StringTable")
+
+	def getTypeData(self):
+		return self.getChunk("TypeData")
+
+	def getStructData(self):
+		return self.getChunk("StructData")
+
+	def getFunctionData(self):
+		return self.getChunk("FunctionData")
 
 def runTest():
 	les_logger.Init()
