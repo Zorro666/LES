@@ -13,6 +13,9 @@ import les_logger
 LES_PARAM_MODE_INPUT 	= les_typedata.LES_TYPE_INPUT
 LES_PARAM_MODE_OUTPUT = les_typedata.LES_TYPE_OUTPUT
 
+LES_RETURN_ERROR = -1
+LES_RETURN_OK = 0
+
 # LES_FunctionParameter
 # {
 #		LES_uint32 m_hash;
@@ -40,6 +43,116 @@ LES_PARAM_MODE_OUTPUT = les_typedata.LES_TYPE_OUTPUT
 #		LES_uint32 m_functionDefinitionOffsets[m_numFunctionDefinitions];				- 4-bytes * m_numFunctionDefinitions
 #		LES_FunctionDefinition m_functionDefinitions[m_numFunctionDefinitions];	- variable 
 # };
+
+def __DecodeSingle__(stringTable, typeData, structData, functionParameterData, parameterIndex, nameID, typeID, parentParameterIndex, depth):
+	nameStr = stringTable.getString(nameID)
+	typeStr = stringTable.getString(typeID)
+	typeEntry = typeData.getTypeData(typeStr)
+
+	les_logger.Log("DecodeSingle: Debug name:'%s' type:'%s' typeID:%d", nameStr, typeStr, typeID)
+
+	if typeEntry == None:
+		les_logger.Warning("DecodeSingle parameter[%d]:'%s' type:'%s' type can't be found", parameterIndex, nameStr, typeStr)
+		return LES_RETURN_ERROR
+
+	numElements = typeEntry.m_numElements
+	aliasedTypeID = typeEntry.m_aliasedTypeID
+
+	typeFlags = typeEntry.m_flags
+
+	typeEntry = les_structdata.GetRootType(typeEntry, stringTable, typeData)
+	aliasedTypeID = typeEntry.m_aliasedTypeID
+	typeFlags = typeEntry.m_flags
+	typeString = stringTable.getString(aliasedTypeID)
+
+	typeDataSize = typeEntry.m_dataSize
+	if typeFlags & les_typedata.LES_TYPE_STRUCT:
+		localNumElements = numElements
+		if localNumElements < 1:
+			localNumElements = 1
+
+		les_logger.Log("DecodeSingle: Debug parameter[%d]:'%s' type:'%s' size:%d ARRAY numELements:%d", 
+								 		parameterIndex, nameStr, typeStr, typeDataSize, numElements)
+		les_logger.Log("DecodeSingle: Debug parameter[%d]:'%s' type:'%s' size:%d STRUCT", parameterIndex, nameStr, typeStr, typeDataSize)
+
+		returnCode = LES_RETURN_OK
+		structDefinition = structData.getStructDefinitionByHash(typeEntry.m_hash)
+		if structDefinition == None:
+			les_logger.Warning("DecodeSingle parameter[%d]:'%s' type:'%s' is a struct but can't be found", parameterIndex, nameStr, typeStr)
+			return LES_RETURN_ERROR
+
+		numMembers = structDefinition.GetNumMembers()
+		newDepth = depth + 1
+		for e in range(localNumElements):
+			for i in range(numMembers):
+				structMember = structDefinition.GetMemberByIndex(i)
+				memberNameID = structMember.m_nameID
+				memberTypeID = structMember.m_typeID
+				returnCode = __DecodeSingle__(stringTable, typeData, structData, functionParameterData, 
+																			i, memberNameID, memberTypeID, parameterIndex, newDepth)
+				if returnCode != LES_RETURN_OK:
+					return LES_RETURN_ERROR
+		return returnCode
+
+	if numElements > 0:
+		returnCode = LES_RETURN_OK
+		les_logger.Log("DecodeSingle: Debug parameter[%d]:'%s' type:'%s' size:%d ARRAY numELements:%d", 
+				 					 parameterIndex, nameStr, typeStr, typeDataSize, numElements)
+
+		elementNameID = nameID
+		elementTypeID = aliasedTypeID
+		newDepth = depth + 1
+		for i in range(numElements):
+			returnCode = __DecodeSingle__(stringTable, typeData, structData, functionParameterData, 
+																		i, elementNameID, elementTypeID, parameterIndex, newDepth)
+			if returnCode != LES_RETURN_OK:
+				return LES_RETURN_ERROR
+		return returnCode
+
+	typeHash = typeEntry.m_hash
+
+	value = None
+	unpackFormat = None
+	output = ""
+
+	if typeHash == les_typedata.s_longlongHash:
+		unpackFormat = ">q"
+	elif typeHash == les_typedata.s_intHash:
+		unpackFormat = ">i"
+	elif typeHash == les_typedata.s_uintHash:
+		unpackFormat = ">I"
+	elif typeHash == les_typedata.s_shortHash:
+		unpackFormat = ">h"
+	elif typeHash == les_typedata.s_ushortHash:
+		unpackFormat = ">H"
+	elif typeHash == les_typedata.s_charHash:
+		unpackFormat = ">b"
+	elif typeHash == les_typedata.s_ucharHash:
+		unpackFormat = ">B"
+	elif (typeHash == les_typedata.s_floatHash):
+		unpackFormat = ">f"
+	else:
+	 	unpackFormat = None
+
+#	(errorCode, value) = functionParameterData.Read(typeStringEntry)
+#	if errorCode != LES_RETURN_OK:
+#		les_logger.Warning("DecodeSingle Read failed for parameter[%d]:%s", parameterIndex, nameStr)
+#		return LES_RETURN_ERROR
+
+	output += "DecodeSingle "
+	for i in range(depth*2):
+		output += " "
+	output += "parameter"
+	if parentParameterIndex >= 0:
+		output += ("[%d] member" % (parentParameterIndex))
+
+	output += ("[%d]:'%s' type:'%s' value:%s" % (parameterIndex, nameStr, typeStr, str(value)))
+
+	if unpackFormat == None:
+		output += (" typeDataSize:%d struct:%d" % (typeDataSize, (typeEntry.m_flags & les_typedata.LES_TYPE_STRUCT)))
+
+	les_logger.Log(output)
+	return LES_RETURN_OK
 
 class LES_FunctionParameter():
 	def __init__(self, hashValue, nameID, typeID, index, mode):
@@ -117,7 +230,7 @@ class LES_FunctionDefinintion():
 												 functionName, self.__m_numAddedOutputs__,  maxNumOutputs, name, typeName)
 				return False
 		
-		nameHash = les_hash.GenerateHashCaseSensitive(name)
+		nameHash = les_hash.LES_GenerateHashCaseSensitive(name)
 		# Test to see if the parameter has already been added
 		if self.GetParameter(nameHash):
 			les_logger.Error("AddParameter function '%s' : parameter '%s' already exists type:'%s'", functionName, name, typeName)
@@ -156,7 +269,7 @@ class LES_FunctionDefinintion():
 			self.__m_numAddedOutputs__ += 1
 
 		les_logger.Log("  Function:'%s' Parameter:'%s' Type:'%s' 0x%X Input:%d mode:0x%X %s index:%d", 
-										functionName, name, typeName, les_hash.GenerateHashCaseSensitive(typeName), 
+										functionName, name, typeName, les_hash.LES_GenerateHashCaseSensitive(typeName), 
 										isInput, paramMode, les_typedata.decodeFlags(paramMode), numAddedParameters)
 
 		return True
@@ -200,6 +313,47 @@ class LES_FunctionDefinintion():
 
 		parameterDataSize = paramDataSize
 		return parameterDataSize
+
+	def DebugOutput(self, loggerChannel, stringTable):
+		functionNameID = self.GetNameID()
+		functionName = stringTable.getString(functionNameID)
+
+		numInputs = self.GetNumInputs()
+		numOutputs = self.GetNumOutputs()
+		numParameters = self.GetNumParameters()
+		returnTypeID = self.GetReturnTypeID()
+		returnTypeName = stringTable.getString(returnTypeID)
+		parameterDataSize = self.GetParameterDataSize()
+		loggerChannel.Print("Function '%s' returnType '%s' numParameters:%d numInputs:%d numOutputs:%d parameterDataSize:%d", 
+												functionName, returnTypeName, numParameters, numInputs, numOutputs, parameterDataSize)
+		for i in range(numParameters):
+			functionParameter = self.GetParameterByIndex(i)
+
+			hashValue = functionParameter.m_hash
+			nameID = functionParameter.m_nameID
+			typeID = functionParameter.m_typeID
+			index = functionParameter.m_index
+			mode = functionParameter.m_mode
+
+			memberName = stringTable.getString(nameID)
+			typeName = stringTable.getString(typeID)
+			paramMode = les_typedata.decodeFlags(mode)
+			loggerChannel.Print("  Function '%s' Member[%d] '%s' 0x%X Type:'%s' index:%d mode:0x%X %s", 
+													functionName, i, memberName, hashValue, typeName, index, mode, paramMode)
+
+	def Decode(self, stringTable, typeData, structData, functionParameterData):
+		functionNameID = self.GetNameID()
+		functionName = stringTable.getString(functionNameID)
+		numParameters = self.GetNumParameters()
+		les_logger.Log("Decode Function '%s' numParams:%d" % (functionName, numParameters))
+		for i in range(numParameters):
+			functionParameter = self.GetParameterByIndex(i)
+			nameID = functionParameter.m_nameID
+			typeID = functionParameter.m_typeID
+			returnCode = __DecodeSingle__(stringTable, typeData, structData, functionParameterData, i, nameID, typeID, -1, 0)
+			if returnCode == False:
+				return False
+
 
 class LES_FunctionData():
 	def __init__(self, stringTable, typeData, structData):
@@ -519,56 +673,56 @@ class LES_FunctionData():
 		les_logger.Log("")
 
 		functionName = "LES_Test_InputNameIDNotFound"
-		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionNameHash = les_hash.LES_GenerateHashCaseSensitive(functionName)
 		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
 		functionParameter = functionDefinition.GetParameterByIndex(0)
 		functionParameter.m_nameID = -1
 
 		functionName = "LES_Test_InputNameHashIsWrong"
-		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionNameHash = les_hash.LES_GenerateHashCaseSensitive(functionName)
 		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
 		functionParameter = functionDefinition.GetParameterByIndex(0)
 		functionParameter.m_nameID = self.__m_stringTable__.addString("wrongHash")
 
 		functionName = "LES_Test_InputTypeIDNotFound"
-		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionNameHash = les_hash.LES_GenerateHashCaseSensitive(functionName)
 		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
 		functionParameter = functionDefinition.GetParameterByIndex(0)
 		functionParameter.m_typeID = -1
 		functionDefinition.__m_parameterDataSize__ = -1
 
 		functionName = "LES_Test_OutputNameIDNotFound"
-		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionNameHash = les_hash.LES_GenerateHashCaseSensitive(functionName)
 		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
 		functionParameter = functionDefinition.GetParameterByIndex(0)
 		functionParameter.m_nameID = -1
 
 		functionName = "LES_Test_OutputNameHashIsWrong"
-		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionNameHash = les_hash.LES_GenerateHashCaseSensitive(functionName)
 		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
 		functionParameter = functionDefinition.GetParameterByIndex(0)
 		functionParameter.m_nameID = self.__m_stringTable__.addString("wrongHash")
 
 		functionName = "LES_Test_OutputTypeIDNotFound"
-		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionNameHash = les_hash.LES_GenerateHashCaseSensitive(functionName)
 		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
 		functionParameter = functionDefinition.GetParameterByIndex(0)
 		functionParameter.m_typeID = -1
 		functionDefinition.__m_parameterDataSize__ = -1
 
 		functionName = "LES_Test_ReturnTypeNotFound"
-		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionNameHash = les_hash.LES_GenerateHashCaseSensitive(functionName)
 		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
-		functionDefinition.__m_returnTypeID__ = -1;
+		functionDefinition.__m_returnTypeID__ = -1
 
 		functionName = "LES_Test_InputParamUsedAsOutput"
-		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionNameHash = les_hash.LES_GenerateHashCaseSensitive(functionName)
 		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
 		functionParameter = functionDefinition.GetParameterByIndex(1)
 		functionParameter.m_typeID = self.__m_stringTable__.addString("unsigned short")
 
 		functionName = "LES_Test_OutputParamUsedAsInput"
-		functionNameHash = les_hash.GenerateHashCaseSensitive(functionName)
+		functionNameHash = les_hash.LES_GenerateHashCaseSensitive(functionName)
 		functionDefinition = self.getFunctionDefinitionByHash(functionNameHash)
 		functionParameter = functionDefinition.GetParameterByIndex(0)
 		functionParameter.m_typeID = self.__m_stringTable__.addString("output_only")
@@ -578,31 +732,7 @@ class LES_FunctionData():
 
 	def DebugOutputFunctions(self, loggerChannel):
 		for functionDefinition in self.__m_functionDefinitions__:
-			functionNameID = functionDefinition.GetNameID()
-			functionName = self.__m_stringTable__.getString(functionNameID)
-
-			numInputs = functionDefinition.GetNumInputs()
-			numOutputs = functionDefinition.GetNumOutputs()
-			numParameters = functionDefinition.GetNumParameters()
-			returnTypeID = functionDefinition.GetReturnTypeID()
-			returnTypeName = self.__m_stringTable__.getString(returnTypeID)
-			parameterDataSize = functionDefinition.GetParameterDataSize()
-			loggerChannel.Print("Function '%s' returnType '%s' numParameters:%d numInputs:%d numOutputs:%d parameterDataSize:%d", 
-													functionName, returnTypeName, numParameters, numInputs, numOutputs, parameterDataSize)
-			for i in range(numParameters):
-				functionParameter = functionDefinition.GetParameterByIndex(i)
-
-				hashValue = functionParameter.m_hash
-				nameID = functionParameter.m_nameID
-				typeID = functionParameter.m_typeID
-				index = functionParameter.m_index
-				mode = functionParameter.m_mode
-
-				memberName = self.__m_stringTable__.getString(nameID)
-				typeName = self.__m_stringTable__.getString(typeID)
-				paramMode = les_typedata.decodeFlags(mode)
-				loggerChannel.Print("  Function '%s' Member[%d] '%s' 0x%X Type:'%s' index:%d mode:0x%X %s", 
-														functionName, i, memberName, hashValue, typeName, index, mode, paramMode)
+			functionDefinition.DebugOutput(loggerChannel, self.__m_stringTable__)
 
 def runTest():
 	les_logger.Init()
@@ -644,9 +774,10 @@ def runTest():
 
 	this.addFunctionDefinition(functionName, functionDefinition)
 
-	binFile = les_binaryfile.LES_BinaryFile("functionDefinitionLittle.bin")
+	binFile = les_binaryfile.LES_BinaryFile()
 	binFile.setLittleEndian()
 	this.write(binFile)
+	binFile.saveToFile("functionDefinitionLittle.bin")
 	binFile.close()
 
 	les_logger.Log("")
