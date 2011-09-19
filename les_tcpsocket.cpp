@@ -1,10 +1,10 @@
 #include <memory.h>
 #include <unistd.h>
-#include <sys/select.h>
 
 #if LES_PLATFORM_LINUX == 1
 #include <errno.h>
 #include <arpa/inet.h>
+#include <sys/select.h>
 #endif // #if LES_PLATFORM_LINUX
 
 #if LES_PLATFORM_WINDOWS == 1
@@ -23,7 +23,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-int GetLastError(void)
+int LES_GetLastError(void)
 {
 #if LES_PLATFORM_LINUX == 1
 	return errno;
@@ -66,7 +66,7 @@ int LES_TCPSocket::Create(void)
 	const int socketHandle = socket(AF_INET, SOCK_STREAM, 0);
 	if (socketHandle == -1)
 	{
-		LES_ERROR("LES_TCPSocket::Create Error initializing socket errno:0x%X",GetLastError());
+		LES_ERROR("LES_TCPSocket::Create Error initializing socket errno:0x%X", LES_GetLastError());
 		return LES_RETURN_ERROR;
 	}
 
@@ -75,7 +75,7 @@ int LES_TCPSocket::Create(void)
 	if ((setsockopt(socketHandle, SOL_SOCKET, SO_REUSEADDR, (char*)&option, sizeof(int)) == -1) ||
 			(setsockopt(socketHandle, SOL_SOCKET, SO_KEEPALIVE, (char*)&option, sizeof(int)) == -1))
 	{
-		LES_ERROR("LES_TCPSocket::Create Error setting options errno:0x%X",GetLastError());
+		LES_ERROR("LES_TCPSocket::Create Error setting options errno:0x%X", LES_GetLastError());
 		close(socketHandle);
 		return LES_RETURN_ERROR;
 	}
@@ -99,7 +99,7 @@ int LES_TCPSocket::Connect(const char* const ip, const short port)
 
 	if (connect(m_socketHandle, (struct sockaddr*)&hostAddr, sizeof(hostAddr)) == -1)
 	{
-		err = GetLastError();
+		err =  LES_GetLastError();
 #if LES_PLATFORM_LINUX == 1
 		if (err != EINPROGRESS)
 #endif // #if LES_PLATFORM_LINUX == 1
@@ -107,7 +107,7 @@ int LES_TCPSocket::Connect(const char* const ip, const short port)
 		if (err != WSAEINPROGRESS)
 #endif // #if LES_PLATFORM_WINDOWS == 1
 		{
-			LES_ERROR("LES_CreateTCPSocket::Error connecting socket errno:0x%X", GetLastError());
+			LES_ERROR("LES_CreateTCPSocket::Error connecting socket errno:0x%X",  LES_GetLastError());
 			Close();
 			return LES_RETURN_ERROR;
 		}
@@ -152,19 +152,19 @@ int LES_TCPSocket::IsValid(void) const
 	return LES_RETURN_OK;
 }
 
-int LES_TCPSocket::Send(const void* const pSendData, const int sendDataSize)
+int LES_TCPSocket::Send(const char* const pSendData, const int sendDataSize)
 {
 	const int socketHandle = m_socketHandle;
 	const int bytesSent = send(socketHandle, pSendData, sendDataSize, 0);
 	if (bytesSent == -1)
 	{
-		LES_ERROR("LES_TCPSocket::Send Error sending data errno:0x%X", GetLastError());
+		LES_ERROR("LES_TCPSocket::Send Error sending data errno:0x%X",  LES_GetLastError());
 		return -1;
 	}
 	return bytesSent;
 }
 
-int LES_TCPSocket::Recv(void* const pReceiveBuffer, const int bufferSize, int* const pNumBytesReceived)
+int LES_TCPSocket::Recv(char* const pReceiveBuffer, const int bufferSize, int* const pNumBytesReceived)
 {
 	const int socketHandle = m_socketHandle;
 	*pNumBytesReceived = 0;
@@ -181,7 +181,7 @@ int LES_TCPSocket::Recv(void* const pReceiveBuffer, const int bufferSize, int* c
 	const int retval = select(socketHandle+1, &readSocketSet, NULL, NULL, &timeOut);
 	if (retval == -1)
 	{
-		LES_ERROR("LES_TCPSocket::Recv select() failed errno:0x%X", GetLastError());
+		LES_ERROR("LES_TCPSocket::Recv select() failed errno:0x%X",  LES_GetLastError());
 		return LES_NETWORK_RECEIVE_ERROR;
 	}
 	else if (retval)
@@ -199,7 +199,7 @@ int LES_TCPSocket::Recv(void* const pReceiveBuffer, const int bufferSize, int* c
 	const int bytesReceived = recv(socketHandle, pReceiveBuffer, bufferSize, 0);
 	if (bytesReceived == -1)
 	{
-		LES_ERROR("LES_TCPSocket::Recv Error receiving data errno:0x%X", GetLastError());
+		LES_ERROR("LES_TCPSocket::Recv Error receiving data errno:0x%X",  LES_GetLastError());
 		return LES_NETWORK_RECEIVE_ERROR;
 	}
 	*pNumBytesReceived = bytesReceived;
