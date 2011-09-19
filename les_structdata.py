@@ -86,7 +86,7 @@ class LES_StructDefinintion():
 											 structName, self.__m_numAddedMembers__,  maxNumMembers, name, typeName)
 			return False
 
-		nameHash = les_hash.GenerateHashCaseSensitive(name)
+		nameHash = les_hash.LES_GenerateHashCaseSensitive(name)
 		# Test to see if the member has already been added
 		if self.GetMember(nameHash):
 			les_logger.Error("AddMember struct '%s' : member '%s' already exists type:'%s'", structName, name, typeName)
@@ -122,7 +122,7 @@ class LES_StructDefinintion():
 		self.__m_totalMemberSizeWithPadding__ += (memberDataSize + alignmentPadding)
 		self.__m_numAddedMembers__ += 1
 		les_logger.Log("  Struct:'%s' Member:'%s' Type:'%s' 0x%X DataSize:%d aligmentPadding:%d", 
-										structName, name, typeName, les_hash.GenerateHashCaseSensitive(typeName), memberDataSize, alignmentPadding)
+										structName, name, typeName, les_hash.LES_GenerateHashCaseSensitive(typeName), memberDataSize, alignmentPadding)
 		return True
 
 	def Finalise(self, structName):

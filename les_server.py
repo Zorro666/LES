@@ -54,11 +54,21 @@ def LES_CreateNetworkMessage(typeValue, idValue, payload):
 
 LES_NETMESSAGE_RECV_ID_CONNECT=0x1
 LES_NETMESSAGE_RECV_ID_GETDEFINITIONFILE=0x3
+LES_NETMESSAGE_RECV_ID_FUNCTIONRPC=0x5
 LES_NETMESSAGE_RECV_ID_TEST=0xF1
 
 LES_NETMESSAGE_SEND_ID_CONNECT_RESPONSE=0x2
 LES_NETMESSAGE_SEND_ID_GETDEFINITIONFILE_RESPONSE=0x4
+LES_NETMESSAGE_SEND_ID_FUNCTIONRPC_RESPONSE=0x6
 LES_NETMESSAGE_SEND_ID_TEST_RESPONSE=0xF2
+
+s_enableDebugSleep = 0
+
+def debugRandomSleep():
+	if s_enableDebugSleep:
+		sleepTime = random.uniform(0.1, 0.5)
+		les_logger.Log("SleepTime:%f" % (sleepTime))
+		time.sleep(sleepTime)
 
 class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 	def LES_HandleTestMessage(self, msgType, msgId, msgPayloadSize, msgPayload):
@@ -67,52 +77,65 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 
 		payload = "%s:%s" % (self.m_threadName, msgPayload)
 		response = LES_CreateNetworkMessage(LES_NETMESSAGE_SEND_ID_TEST_RESPONSE, msgId, payload)
-		sleepTime = random.uniform(0.1, 0.5)
-		les_logger.Log("SleepTime:%f" % (sleepTime))
-		time.sleep(sleepTime)
+		debugRandomSleep()
 		self.request.send(response)
 
 	def LES_HandleConnectMessage(self, msgType, msgId, msgPayloadSize, msgPayload):
 		les_logger.Log("Connect: type:0x%X id:%d payloadSize:%d" % (msgType, msgId, msgPayloadSize))
 		les_logger.Log("Connect: payload:%s" % (msgPayload))
-		hashValue = les_hash.GenerateHashCaseSensitive(msgPayload)
+		hashValue = les_hash.LES_GenerateHashCaseSensitive(msgPayload)
 		les_logger.Log("Connect: connectResponse:0x%X" % (hashValue))
 		payload = packedUint32.pack(hashValue)
 		response = LES_CreateNetworkMessage(LES_NETMESSAGE_SEND_ID_CONNECT_RESPONSE, msgId, payload)
-		sleepTime = random.uniform(0.1, 0.5)
-		les_logger.Log("SleepTime:%f" % (sleepTime))
-		time.sleep(sleepTime)
+		debugRandomSleep()
 		self.request.send(response)
 
 	def LES_HandleGetDefinitionFileMessage(self, msgType, msgId, msgPayloadSize, msgPayload):
 		les_logger.Log("GetDefinitionFile: type:0x%X id:%d payloadSize:%d" % (msgType, msgId, msgPayloadSize))
-		les_logger.Log("GetDefinitionFile: payload:%s" % (msgPayload))
-		definitionFile = les_definitionfile.LES_DefinitionFile()
-		definitionFile.create()
-		chunkFileData = definitionFile.makeData()
+#		les_logger.Log("GetDefinitionFile: payload:%s" % (msgPayload))
+		self.s_definitionFile = les_definitionfile.LES_DefinitionFile()
+		self.s_definitionFile.create()
+		chunkFileData = self.s_definitionFile.makeData()
 		definitionFileData = chunkFileData.getData()
 		payload = definitionFileData
 		response = LES_CreateNetworkMessage(LES_NETMESSAGE_SEND_ID_GETDEFINITIONFILE_RESPONSE, msgId, payload)
 		chunkFileData.close()
 		les_logger.Log("GetDefinitionFile: sending:%d" % (len(payload)))
-		sleepTime = random.uniform(0.1, 0.5)
-		les_logger.Log("SleepTime:%f" % (sleepTime))
-		time.sleep(sleepTime)
+		debugRandomSleep()
 		self.request.send(response)
+
+	def LES_HandleFunctionRPCMessage(self, msgType, msgId, msgPayloadSize, msgPayload):
+		les_logger.Log("FunctionRPC: type:0x%X id:%d payloadSize:%d" % (msgType, msgId, msgPayloadSize))
+		#les_logger.Log("FunctionRPC: payload:%s" % (msgPayload))
+		debugRandomSleep()
+		functionNameID = packedUint32.unpack(msgPayload[0:4])[0]
+		functionParameterData = msgPayload[4:]
+
+		stringTable = self.s_definitionFile.getStringTable()
+		typeData = self.s_definitionFile.getTypeData()
+		structData = self.s_definitionFile.getStructData()
+		functionData = self.s_definitionFile.getFunctionData()
+		functionName = stringTable.getString(functionNameID)
+		les_logger.Log("FunctionRPC: id:%d nameID:%d '%s'" % (msgId, functionNameID, functionName))
+		functionDefinition = functionData.getFunctionDefinition(functionName)
+		functionDefinition.Decode(stringTable, typeData, structData, functionParameterData)
 
 	def handle(self):
 		s_receivedMessageHandlers = {}
 		s_receivedMessageHandlers[LES_NETMESSAGE_RECV_ID_TEST] = self.LES_HandleTestMessage
 		s_receivedMessageHandlers[LES_NETMESSAGE_RECV_ID_CONNECT] = self.LES_HandleConnectMessage
 		s_receivedMessageHandlers[LES_NETMESSAGE_RECV_ID_GETDEFINITIONFILE] = self.LES_HandleGetDefinitionFileMessage
+		s_receivedMessageHandlers[LES_NETMESSAGE_RECV_ID_FUNCTIONRPC] = self.LES_HandleFunctionRPCMessage
 
+		self.s_definitionFile = None
 		self.m_curThread = threading.currentThread()
 		self.m_threadName = self.m_curThread.getName()
+
 		while (1):
  			receivedData = self.request.recv(100*1024)
 			receivedDataLen = len(receivedData)
 			if receivedDataLen == 0:
-				time.sleep(0.01)
+				time.sleep(0.001)
 				continue
 
 			receivedMessage = LES_NetworkMessage()

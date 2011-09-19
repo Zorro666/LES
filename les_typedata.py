@@ -17,6 +17,18 @@ LES_TYPE_REFERENCE 		= (1 << 5)
 LES_TYPE_ALIAS 				= (1 << 6)
 LES_TYPE_ARRAY 				= (1 << 7)
 
+s_longlongHash = les_hash.LES_GenerateHashCaseSensitive("long long int")
+s_longlongHash = les_hash.LES_GenerateHashCaseSensitive("long long int");
+s_intHash = les_hash.LES_GenerateHashCaseSensitive("int");
+s_shortHash = les_hash.LES_GenerateHashCaseSensitive("short");
+s_charHash = les_hash.LES_GenerateHashCaseSensitive("char");
+
+s_uintHash = les_hash.LES_GenerateHashCaseSensitive("unsigned int");
+s_ushortHash = les_hash.LES_GenerateHashCaseSensitive("unsigned short");
+s_ucharHash = les_hash.LES_GenerateHashCaseSensitive("unsigned char");
+
+s_floatHash = les_hash.LES_GenerateHashCaseSensitive("float");
+
 def decodeFlags(flags):
 	# flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY, delimiter is | e.g. "INPUT|POD"
 	flagsArray = []
@@ -62,12 +74,6 @@ class LES_TypeEntry():
 		self.m_flags = flags
 		self.m_aliasedTypeID = aliasedTypeID
 		self.m_numElements = numElements
-
-	def ComputeDataStorageSize(self):
-		return -1
-
-	def ComputeAlignment(self):
-		return -1
 
 class LES_TypeData():
 	def __init__(self, stringTable):
@@ -160,7 +166,7 @@ class LES_TypeData():
 		if aliasedName != None:
 			aliasedTypeID = self.__m_stringTable__.addString(aliasedName)
 
-		nameHash = les_hash.GenerateHashCaseSensitive(name)
+		nameHash = les_hash.LES_GenerateHashCaseSensitive(name)
 
 		typeEntry = LES_TypeEntry(nameHash, dataSize, flags, aliasedTypeID, numElements)
 

@@ -36,7 +36,7 @@ class LES_StringTable():
 		index = len(self.__m_strings__)
 		self.__m_strings__.append(string)
 
-		hashValue = les_hash.GenerateHashCaseSensitive(string)
+		hashValue = les_hash.LES_GenerateHashCaseSensitive(string)
 
 		offset = 0
 		if index > 0:

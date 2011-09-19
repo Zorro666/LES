@@ -4,7 +4,7 @@ import ctypes
 import les_logger
 import sys
 
-def GenerateHashCaseSensitive(string):
+def LES_GenerateHashCaseSensitive(string):
 	hashValue = int(0)
 	for c in string:
 		hashValue += (hashValue << 7)		# hashValue=hashValue+128*hasValue=129*hashValue
@@ -17,9 +17,9 @@ def GenerateHashCaseSensitive(string):
 
 def runTest():
 	les_logger.Init()
-	hash1 = GenerateHashCaseSensitive("jake")
-	hash2 = GenerateHashCaseSensitive("rowan")
-	hash3 = GenerateHashCaseSensitive("Jake")
+	hash1 = LES_GenerateHashCaseSensitive("jake")
+	hash2 = LES_GenerateHashCaseSensitive("rowan")
+	hash3 = LES_GenerateHashCaseSensitive("Jake")
 
 	realHash1 = 1863425725
 	realHash2 = 3756861831
@@ -39,7 +39,7 @@ def runTest():
 		les_logger.Error("hash3 != realHash3")
 
 	for arg in sys.argv[1:]:
-		les_logger.Log("Hash[%s]= 0x%X", arg, GenerateHashCaseSensitive(arg))
+		les_logger.Log("Hash[%s]= 0x%X", arg, LES_GenerateHashCaseSensitive(arg))
 
 if __name__ == '__main__':
 	runTest()
