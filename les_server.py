@@ -9,9 +9,12 @@ import random
 import les_hash
 import les_definitionfile
 import les_logger
+import les_funcdata
 
 packedUint16 = struct.Struct(">H")
 packedUint32 = struct.Struct(">I")
+
+s_DecodeLogChannel = les_logger.CreateChannel("Decode", "", "decode_py.txt", les_logger.LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT)
 
 class LES_NetworkMessage():
 	def __init__(self):
@@ -109,7 +112,7 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 		#les_logger.Log("FunctionRPC: payload:%s" % (msgPayload))
 		debugRandomSleep()
 		functionNameID = packedUint32.unpack(msgPayload[0:4])[0]
-		functionParameterData = msgPayload[4:]
+		functionParameterData = les_funcdata.LES_FunctionParameterData(msgPayload[4:])
 
 		stringTable = self.s_definitionFile.getStringTable()
 		typeData = self.s_definitionFile.getTypeData()
@@ -118,7 +121,7 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 		functionName = stringTable.getString(functionNameID)
 		les_logger.Log("FunctionRPC: id:%d nameID:%d '%s'" % (msgId, functionNameID, functionName))
 		functionDefinition = functionData.getFunctionDefinition(functionName)
-		functionDefinition.Decode(stringTable, typeData, structData, functionParameterData)
+		functionDefinition.Decode(s_DecodeLogChannel, stringTable, typeData, structData, functionParameterData)
 
 	def handle(self):
 		s_receivedMessageHandlers = {}
