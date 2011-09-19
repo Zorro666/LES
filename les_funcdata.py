@@ -2,6 +2,7 @@
 
 import os.path
 import xml.etree.ElementTree
+import struct
 
 import les_hash
 import les_binaryfile
@@ -44,12 +45,57 @@ LES_RETURN_OK = 0
 #		LES_FunctionDefinition m_functionDefinitions[m_numFunctionDefinitions];	- variable 
 # };
 
-def __DecodeSingle__(stringTable, typeData, structData, functionParameterData, parameterIndex, nameID, typeID, parentParameterIndex, depth):
+class LES_FunctionParameterData():
+	def __init__(self, memoryBuffer):
+		self.__m_memoryBuffer__ = memoryBuffer
+		self.__m_readIndex__ = 0
+
+	def Read(self, stringTable, typeData, typeName):
+		value = None
+		typeEntry = typeData.getTypeData(typeName)
+		if typeEntry == None:
+			les_logger.Warning("LES_FunctionParameterData::Read type:'%s' not found", typeName)
+			return (LES_RETURN_ERROR, value)
+
+		aliasedTypeName = stringTable.getString(typeEntry.m_aliasedTypeID)
+		if aliasedTypeName == None:
+			les_logger.Warning("LES_FunctionParameterData::Read type:'%s' aliasedStringEntry:%d not found", typeName, typeEntry.m_aliasedTypeID)
+			return (LES_RETURN_ERROR, value)
+
+		aliasedTypeEntry = typeData.getTypeData(aliasedTypeName)
+		if aliasedTypeEntry == None:
+			les_logger.Warning("LES_FunctionParameterData::Read type:'%s' aliased type:'%s' not found", typeName, aliasedTypeName)
+			return (LES_RETURN_ERROR, value)
+
+		flags = typeEntry.m_flags
+		parameterDataSize = typeEntry.m_dataSize
+		if flags & les_typedata.LES_TYPE_POINTER:
+			parameterDataSize = aliasedTypeEntry.m_dataSize
+
+		if ((flags & les_typedata.LES_TYPE_POD) or (flags & les_typedata.LES_TYPE_STRUCT)):
+#			les_logger.Log("Read type:'%s' size:%d %d", typeName, typeEntry.m_dataSize, self.__m_readIndex__)
+			if parameterDataSize == 2:
+				bigData = self.__m_memoryBuffer__[self.__m_readIndex__:self.__m_readIndex__ + 2]
+				unpackData = struct.unpack(">H", bigData)[0]
+				value = struct.pack("=H", unpackData)
+			elif parameterDataSize == 4:
+				bigData = self.__m_memoryBuffer__[self.__m_readIndex__:self.__m_readIndex__ + 4]
+				unpackData = struct.unpack(">I", bigData)[0]
+				value = struct.pack("=I", unpackData)
+			else:
+				value = self.__m_memoryBuffer__[self.__m_readIndex__:self.__m_readIndex__ + parameterDataSize]
+
+			self.__m_readIndex__ += parameterDataSize
+
+		return (LES_RETURN_OK, value)
+
+def __DecodeSingle__(logChannel, stringTable, typeData, structData, 
+										 functionParameterData, parameterIndex, nameID, typeID, parentParameterIndex, depth):
 	nameStr = stringTable.getString(nameID)
 	typeStr = stringTable.getString(typeID)
 	typeEntry = typeData.getTypeData(typeStr)
 
-	les_logger.Log("DecodeSingle: Debug name:'%s' type:'%s' typeID:%d", nameStr, typeStr, typeID)
+#	les_logger.Log("DecodeSingle: Debug name:'%s' type:'%s' typeID:%d", nameStr, typeStr, typeID)
 
 	if typeEntry == None:
 		les_logger.Warning("DecodeSingle parameter[%d]:'%s' type:'%s' type can't be found", parameterIndex, nameStr, typeStr)
@@ -60,7 +106,7 @@ def __DecodeSingle__(stringTable, typeData, structData, functionParameterData, p
 
 	typeFlags = typeEntry.m_flags
 
-	typeEntry = les_structdata.GetRootType(typeEntry, stringTable, typeData)
+	typeEntry = typeEntry.GetRootType(stringTable, typeData)
 	aliasedTypeID = typeEntry.m_aliasedTypeID
 	typeFlags = typeEntry.m_flags
 	typeString = stringTable.getString(aliasedTypeID)
@@ -71,9 +117,9 @@ def __DecodeSingle__(stringTable, typeData, structData, functionParameterData, p
 		if localNumElements < 1:
 			localNumElements = 1
 
-		les_logger.Log("DecodeSingle: Debug parameter[%d]:'%s' type:'%s' size:%d ARRAY numELements:%d", 
-								 		parameterIndex, nameStr, typeStr, typeDataSize, numElements)
-		les_logger.Log("DecodeSingle: Debug parameter[%d]:'%s' type:'%s' size:%d STRUCT", parameterIndex, nameStr, typeStr, typeDataSize)
+#		les_logger.Log("DecodeSingle: Debug parameter[%d]:'%s' type:'%s' size:%d ARRAY numELements:%d", 
+#								 		parameterIndex, nameStr, typeStr, typeDataSize, numElements)
+#		les_logger.Log("DecodeSingle: Debug parameter[%d]:'%s' type:'%s' size:%d STRUCT", parameterIndex, nameStr, typeStr, typeDataSize)
 
 		returnCode = LES_RETURN_OK
 		structDefinition = structData.getStructDefinitionByHash(typeEntry.m_hash)
@@ -88,7 +134,7 @@ def __DecodeSingle__(stringTable, typeData, structData, functionParameterData, p
 				structMember = structDefinition.GetMemberByIndex(i)
 				memberNameID = structMember.m_nameID
 				memberTypeID = structMember.m_typeID
-				returnCode = __DecodeSingle__(stringTable, typeData, structData, functionParameterData, 
+				returnCode = __DecodeSingle__(logChannel, stringTable, typeData, structData, functionParameterData, 
 																			i, memberNameID, memberTypeID, parameterIndex, newDepth)
 				if returnCode != LES_RETURN_OK:
 					return LES_RETURN_ERROR
@@ -96,14 +142,14 @@ def __DecodeSingle__(stringTable, typeData, structData, functionParameterData, p
 
 	if numElements > 0:
 		returnCode = LES_RETURN_OK
-		les_logger.Log("DecodeSingle: Debug parameter[%d]:'%s' type:'%s' size:%d ARRAY numELements:%d", 
-				 					 parameterIndex, nameStr, typeStr, typeDataSize, numElements)
+#		les_logger.Log("DecodeSingle: Debug parameter[%d]:'%s' type:'%s' size:%d ARRAY numELements:%d", 
+#				 					 parameterIndex, nameStr, typeStr, typeDataSize, numElements)
 
 		elementNameID = nameID
 		elementTypeID = aliasedTypeID
 		newDepth = depth + 1
 		for i in range(numElements):
-			returnCode = __DecodeSingle__(stringTable, typeData, structData, functionParameterData, 
+			returnCode = __DecodeSingle__(logChannel, stringTable, typeData, structData, functionParameterData, 
 																		i, elementNameID, elementTypeID, parameterIndex, newDepth)
 			if returnCode != LES_RETURN_OK:
 				return LES_RETURN_ERROR
@@ -114,30 +160,35 @@ def __DecodeSingle__(stringTable, typeData, structData, functionParameterData, p
 	value = None
 	unpackFormat = None
 	output = ""
+	fmtStr = "%d"
 
 	if typeHash == les_typedata.s_longlongHash:
-		unpackFormat = ">q"
+		unpackFormat = "=q"
 	elif typeHash == les_typedata.s_intHash:
-		unpackFormat = ">i"
+		unpackFormat = "=i"
 	elif typeHash == les_typedata.s_uintHash:
-		unpackFormat = ">I"
+		unpackFormat = "=I"
 	elif typeHash == les_typedata.s_shortHash:
-		unpackFormat = ">h"
+		unpackFormat = "=h"
 	elif typeHash == les_typedata.s_ushortHash:
-		unpackFormat = ">H"
+		unpackFormat = "=H"
 	elif typeHash == les_typedata.s_charHash:
-		unpackFormat = ">b"
+		unpackFormat = "=c"
+		fmtStr = "'%s'"
 	elif typeHash == les_typedata.s_ucharHash:
-		unpackFormat = ">B"
+		unpackFormat = "=c"
+		fmtStr = "'%s'"
 	elif (typeHash == les_typedata.s_floatHash):
-		unpackFormat = ">f"
+		unpackFormat = "=f"
+		fmtStr = "%.3f"
 	else:
 	 	unpackFormat = None
 
-#	(errorCode, value) = functionParameterData.Read(typeStringEntry)
-#	if errorCode != LES_RETURN_OK:
-#		les_logger.Warning("DecodeSingle Read failed for parameter[%d]:%s", parameterIndex, nameStr)
-#		return LES_RETURN_ERROR
+
+	(errorCode, binaryValue) = functionParameterData.Read(stringTable, typeData, typeString)
+	if errorCode != LES_RETURN_OK:
+		les_logger.Warning("DecodeSingle Read failed for parameter[%d]:%s", parameterIndex, nameStr)
+		return LES_RETURN_ERROR
 
 	output += "DecodeSingle "
 	for i in range(depth*2):
@@ -146,12 +197,18 @@ def __DecodeSingle__(stringTable, typeData, structData, functionParameterData, p
 	if parentParameterIndex >= 0:
 		output += ("[%d] member" % (parentParameterIndex))
 
-	output += ("[%d]:'%s' type:'%s' value:%s" % (parameterIndex, nameStr, typeStr, str(value)))
+	output += ("[%d]:'%s' type:'%s' value:" % (parameterIndex, nameStr, typeStr))
+	if unpackFormat != None:
+		value = struct.unpack(unpackFormat, binaryValue)[0]
+		output += (fmtStr % (value))
 
 	if unpackFormat == None:
 		output += (" typeDataSize:%d struct:%d" % (typeDataSize, (typeEntry.m_flags & les_typedata.LES_TYPE_STRUCT)))
 
 	les_logger.Log(output)
+	if logChannel != None:
+		logChannel.Print(output)
+
 	return LES_RETURN_OK
 
 class LES_FunctionParameter():
@@ -341,19 +398,22 @@ class LES_FunctionDefinintion():
 			loggerChannel.Print("  Function '%s' Member[%d] '%s' 0x%X Type:'%s' index:%d mode:0x%X %s", 
 													functionName, i, memberName, hashValue, typeName, index, mode, paramMode)
 
-	def Decode(self, stringTable, typeData, structData, functionParameterData):
+	def Decode(self, logChannel, stringTable, typeData, structData, functionParameterData):
 		functionNameID = self.GetNameID()
 		functionName = stringTable.getString(functionNameID)
 		numParameters = self.GetNumParameters()
 		les_logger.Log("Decode Function '%s' numParams:%d" % (functionName, numParameters))
+		if logChannel != None:
+			logChannel.Print("Decode Function '%s' numParams:%d" % (functionName, numParameters))
 		for i in range(numParameters):
 			functionParameter = self.GetParameterByIndex(i)
 			nameID = functionParameter.m_nameID
 			typeID = functionParameter.m_typeID
-			returnCode = __DecodeSingle__(stringTable, typeData, structData, functionParameterData, i, nameID, typeID, -1, 0)
-			if returnCode == False:
-				return False
+			returnCode = __DecodeSingle__(logChannel, stringTable, typeData, structData, functionParameterData, i, nameID, typeID, -1, 0)
+			if returnCode != LES_RETURN_OK:
+				return LES_RETURN_ERROR
 
+		return LES_RETURN_OK
 
 class LES_FunctionData():
 	def __init__(self, stringTable, typeData, structData):
