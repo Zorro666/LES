@@ -63,7 +63,7 @@ class LES_ChunkFile():
 		currentFileIndex = self.binFile.getIndex()
 		# Make sure a chunk starts on 4-byte boundary
 		alignedIndex = (currentFileIndex + 3) & ~3
-		alignmentPadding = alignedIndex - currentFileIndex;
+		alignmentPadding = alignedIndex - currentFileIndex
 		for i in range(alignmentPadding):
 			self.binFile.writeUint8(0x66)
 		currentFileIndex = self.binFile.getIndex()
