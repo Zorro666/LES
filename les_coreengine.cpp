@@ -10,6 +10,7 @@
 #include "les_core.h"
 #include "les_function.h"
 #include "les_networkmessage.h"
+#include "les_stringentry.h"
 
 static int les_state = LES_STATE_UNKNOWN;
 static LES_uint32 les_correctResponseHash;
@@ -22,6 +23,7 @@ static LES_uint16 les_functionID;
 
 #define LES_NETMESSAGE_RECV_ID_CONNECT_RESPONSE (0x2)
 #define LES_NETMESSAGE_RECV_ID_GETDEFINITIONFILE_RESPONSE (0x4)
+#define LES_NETMESSAGE_RECV_ID_FUNCTIONRPC_RESPONSE (0x6)
 #define LES_NETMESSAGE_RECV_ID_TEST_RESPONSE (0xF2)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -217,17 +219,23 @@ int LES_CoreEngineSendFunctionRPC(const LES_FunctionDefinition* const pFunctionD
 	const LES_uint32 functionNameID = pFunctionDefinition->GetNameID();
 	const int functionParameterDataSize = pFunctionParameterData->GetNumBytesWritten();
 	const char* const pFunctionParameterDataBuffer = pFunctionParameterData->GetBufferPtr();
-	LES_LOG("SendRPC functionID:%d paramDataSize:%d", functionNameID, functionParameterDataSize);
+
+	const LES_uint16 type = LES_NETMESSAGE_SEND_ID_FUNCTIONRPC;
+	const LES_uint16 id = les_functionID;
+	const int payloadSize = functionParameterDataSize + sizeof(LES_uint32);
+	const LES_StringEntry* const pFunctionNameEntry = LES_GetStringEntryForID(functionNameID);
+	const char* const functionName = pFunctionNameEntry? pFunctionNameEntry->m_str : "UNKNOWN";
+
+	LES_LOG("SendRPC functionID:%d '%s' paramDataSize:%d msgID:%d msgPayloadSize:%d", 
+					functionNameID, functionName, functionParameterDataSize, id, payloadSize);
+
 	if (les_state != LES_STATE_READY)
 	{
 		return LES_COREENGINE_NOT_READY;
 	}
 
-	const LES_uint16 type = LES_NETMESSAGE_SEND_ID_FUNCTIONRPC;
-	const LES_uint16 id = les_functionID;
 	les_functionID++;
 	LES_NetworkSendItem sendItem;
-	const int payloadSize = functionParameterDataSize + sizeof(LES_uint32);
 	sendItem.Create(type, id, payloadSize);
 	char* pPayload = (char*)(sendItem.GetMessagePtr()->m_payload);
 	const LES_uint32 bigFunctionNameID = toBigEndian32(functionNameID);
