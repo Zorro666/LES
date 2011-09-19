@@ -233,7 +233,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	int errorCode = functionParameterData->Read(typeStringEntry, valuePtr);
 	if (errorCode != LES_RETURN_OK)
 	{
-		LES_WARNING("DecodeSingle Read failed for parameter[%d]:%s;", parameterIndex, nameStr);
+		LES_WARNING("DecodeSingle Read failed for parameter[%d]:%s", parameterIndex, nameStr);
 		return LES_RETURN_ERROR;
 	}
 	char output[1024];
