@@ -6,6 +6,8 @@
 *.orig
 .cproject
 .project
+decode.txt
+decode_py.txt
 biglog.txt
 jake.txt
 temp.txt
