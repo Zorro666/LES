@@ -12,8 +12,8 @@ public:
 	~LES_TCPSocket(void);
 	int Create(void);
 	int Connect(const char* const ip, const short port);
-	int Send(const void* const pSendData, const int sendDataSize);
-	int Recv(void* const pReceiveBuffer, const int bufferSize, int* const pNumBytesReceived);
+	int Send(const char* const pSendData, const int sendDataSize);
+	int Recv(char* const pReceiveBuffer, const int bufferSize, int* const pNumBytesReceived);
 	void Close(void);
 
 	int IsValid(void) const;
