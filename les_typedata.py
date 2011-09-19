@@ -75,6 +75,28 @@ class LES_TypeEntry():
 		self.m_aliasedTypeID = aliasedTypeID
 		self.m_numElements = numElements
 
+	def GetRootType(self, stringTable, typeData):
+		typeEntry = self
+		flags = typeEntry.m_flags
+		while flags & LES_TYPE_ALIAS:
+			aliasedTypeID = typeEntry.m_aliasedTypeID
+#			les_logger.Log("Type 0x%X alias:%d flags:0x%X", typeEntry.m_hash, aliasedTypeID, flags)
+			aliasedStringType = stringTable.getString(aliasedTypeID)
+			if aliasedStringType == None:
+				les_logger.Error("GetRootType aliased type:%d string can't be found", aliasedTypeID)
+				return None
+			aliasedTypeEntry = typeData.getTypeData(aliasedStringType)
+			if aliasedTypeEntry == None:
+				les_logger.Error("GetRootType aliased type not found aliased type:'%s'", aliasedStringType)
+				return None
+#			les_logger.Log("GetRootType Type 0x%X alias:%s", typeEntry.m_hash, aliasedStringType)
+
+			typeEntry = aliasedTypeEntry
+			flags = typeEntry.m_flags
+#			les_logger.Log("Alias Type 0x%X flags:0x%X", typeEntry.m_hash, flags)
+		return typeEntry
+
+
 class LES_TypeData():
 	def __init__(self, stringTable):
 		self.__m_typeEntries__ = []
@@ -569,9 +591,10 @@ def runTest():
 	index = this.addType("int*", 4, LES_TYPE_INPUT|LES_TYPE_OUTPUT|LES_TYPE_POINTER|LES_TYPE_ALIAS, "int")
 	index = this.addType("int[3]", 4*3, LES_TYPE_INPUT|LES_TYPE_OUTPUT|LES_TYPE_ARRAY|LES_TYPE_ALIAS, "int*", 3)
 
-	binFile = les_binaryfile.LES_BinaryFile("typeDataLittle.bin")
+	binFile = les_binaryfile.LES_BinaryFile()
 	binFile.setLittleEndian()
 	this.write(binFile)
+	binFile.saveToFile("typeDataLittle.bin")
 	binFile.close()
 
 	stringTable = les_stringtable.LES_StringTable()

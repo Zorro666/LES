@@ -441,35 +441,14 @@ class LES_StructData():
 				loggerChannel.Print("  Struct '%s' Member[%d] '%s' 0x%X Type:'%s' size:%d alignmentPadding:%d", 
 														structName, i, memberName, hashValue, typeName, dataSize, alignmentPadding)
 
-# Global helper functions to do with LES_TypeEntry data - could move these to les_typedata.py but only used in this module
-def GetRootType(typeEntry, stringTable, typeData):
-	flags = typeEntry.m_flags
-	while flags & les_typedata.LES_TYPE_ALIAS:
-		aliasedTypeID = typeEntry.m_aliasedTypeID
-#		les_logger.Log("Type 0x%X alias:%d flags:0x%X", typeEntry.m_hash, aliasedTypeID, flags)
-		aliasedStringType = stringTable.getString(aliasedTypeID)
-		if aliasedStringType == None:
-			les_logger.Error("GetRootType aliased type:%d string can't be found", aliasedTypeID)
-			return -1
-		aliasedTypeEntry = typeData.getTypeData(aliasedStringType)
-		if aliasedTypeEntry == None:
-			les_logger.Error("GetRootType aliased type not found aliased type:'%s'", aliasedStringType)
-			return -1
-#		les_logger.Log("GetRootType Type 0x%X alias:%s", typeEntry.m_hash, aliasedStringType)
-
-		typeEntry = aliasedTypeEntry
-		flags = typeEntry.m_flags
-#		les_logger.Log("Alias Type 0x%X flags:0x%X", typeEntry.m_hash, flags)
-	return typeEntry
-
 def ComputeAlignment(typeEntry, stringTable, typeData, structData):
 	flags = typeEntry.m_flags
 	if flags & les_typedata.LES_TYPE_ARRAY:
-		typeEntry = GetRootType(typeEntry, stringTable, typeData)
+		typeEntry = typeEntry.GetRootType(stringTable, typeData)
 		flags = typeEntry.m_flags
 
 	if flags & les_typedata.LES_TYPE_STRUCT:
-		typeEntry = GetRootType(typeEntry, stringTable, typeData)
+		typeEntry = typeEntry.GetRootType(stringTable, typeData)
 		flags = typeEntry.m_flags
 
 		structDefinition = structData.getStructDefinitionByHash(typeEntry.m_hash)
@@ -499,7 +478,7 @@ def ComputeDataStorageSize(typeEntry, stringTable, typeData, structData):
 	this = typeEntry
 	flags = typeEntry.m_flags
 	numElements = typeEntry.m_numElements
-	typeEntry = GetRootType(typeEntry, stringTable, typeData)
+	typeEntry = typeEntry.GetRootType(stringTable, typeData)
 	flags = typeEntry.m_flags
 
 	if flags & les_typedata.LES_TYPE_STRUCT:
@@ -579,9 +558,10 @@ def runTest():
 	structDefinition.AddMember("float", "m_float", stringTable, typeData, this)
 	this.addStructDefinition("PyTestStruct1", structDefinition)
 
-	binFile = les_binaryfile.LES_BinaryFile("structDefinitionLittle.bin")
+	binFile = les_binaryfile.LES_BinaryFile()
 	binFile.setLittleEndian()
 	this.write(binFile)
+	binFile.saveToFile("structDefinitionLittle.bin")
 	binFile.close()
 
 	testStructChan = les_logger.CreateChannel("StructDebug", "", "structDebug_py.txt", les_logger.LES_LOGGERCHANNEL_FLAGS_DEFAULT)
