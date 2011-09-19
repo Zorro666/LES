@@ -1,7 +1,9 @@
 High Priority:
+PYTHON: move GetRootType() from structdata.py -> typedata.py
 PYTHON: receive message and decode it - output params and values
 PYTHON: move the tests from C++ to python for testing - should be same output as C++ version
 CLIENT: change to/from BigEndian functions to take an output ptr & input ptr, to save double memcpys
+CLIENT: missing final RPC function send message (it doesn't get sent by network thread)
 
 Medium Priority:
 CLIENT: support for async function calls, error queue, potential threading issues
@@ -9,10 +11,6 @@ SERVER: support for async function calls, error queue
 
 LES_TYPEDATA.PY: in the future have a global parameters block e.g. pointer data size default
 LES_STRUCTDATA.PY: struct creation have global for packing amount in the XML
-
-FUNCTION: error handling run out of memory when adding new function or new type e.g. array limit reached
-
-CORE: error handling run out of memory when adding new string e.g. array limit reached
 
 LES: need good debugging ability for the packets before sent and at server end
 LES: send packet data to server?
@@ -30,6 +28,4 @@ CORE: memory management for input & output parameter blocks per function
 CORE: hash table with binary search
 
 LES: need to list the data storage that is required by the global data
-LES: server send global test data instead of building it internally?
 LES: might want to save pointer values for later instead of taking the value from them?????????????
-
