@@ -17,6 +17,8 @@ extern int LES_AddStringEntry(const char* const str);
 extern int LES_AddType(const char* const name, const unsigned int dataSize, const unsigned int flags, 
 											 const char* const aliasedName, const int numElements);
 
+static LES_LoggerChannel* s_pDecodeLogChannel = LES_NULL;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Internal test functions
@@ -698,8 +700,8 @@ static void LES_Test_ReadInputOutputParameters(int input_0, short input_1, char 
 	LES_LOG("%s: parameterDataSize:%d", testFuncName, parameterDataSize, testFuncName);
 }
 
-static int LES_Test_GenericDecodeHelper(const char* const testFuncName, LES_FunctionParameterData* parameterData, 
-																				const int realParameterDataSize)
+static int LES_Test_GenericDecodeHelper(const char* const testFuncName, 
+																				LES_FunctionParameterData* parameterData, const int realParameterDataSize)
 {
 	if (parameterData == LES_NULL)
 	{
@@ -720,7 +722,8 @@ static int LES_Test_GenericDecodeHelper(const char* const testFuncName, LES_Func
 		return LES_RETURN_ERROR;
 	}
 
-	if (functionDefinitionPtr->Decode(parameterData) != LES_RETURN_OK)
+	LES_LoggerChannel* const pLogChannel = s_pDecodeLogChannel;
+	if (functionDefinitionPtr->Decode(pLogChannel, parameterData) != LES_RETURN_OK)
 	{
 		LES_FATAL_ERROR("%s: Decode failed", testFuncName);
 		return LES_RETURN_ERROR;
@@ -1263,6 +1266,7 @@ int LES_TestSetup(void)
 	s_testPhase++;
 	if (s_testPhase == 1)
 	{
+		s_pDecodeLogChannel = LES_Logger::CreateChannel("Decode", "", "decode.txt", LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT);
 		/* Sample types for development */
 		LES_TEST_ADD_TYPE_POD(unsigned char);
 		LES_TEST_ADD_TYPE_POD(unsigned short);

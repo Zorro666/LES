@@ -29,7 +29,7 @@ public:
 	int GetNameID(void) const;
 	int GetParameterDataSize(void) const;
 
-	int Decode(const LES_FunctionParameterData* const functionParameterData) const;
+	int Decode(LES_LoggerChannel* const pLogChannel, const LES_FunctionParameterData* const functionParameterData) const;
 
 	friend LES_FunctionDefinition* LES_CreateFunctionDefinition(const int nameID, const int returnTypeID, 
 																															const int numInputs, const int numOutputs);

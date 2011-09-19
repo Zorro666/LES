@@ -94,7 +94,7 @@ static int LES_GetFunctionDefinitionIndex(const char* const name)
 	return -1;
 }
 
-static int DecodeSingle(const LES_FunctionParameterData* const functionParameterData, 
+static int DecodeSingle(LES_LoggerChannel* const pLogChannel, const LES_FunctionParameterData* const functionParameterData, 
 								 				const int parameterIndex, const int nameID, const int typeID, const int parentParameterIndex,
 												const int depth)
 {
@@ -154,7 +154,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 				const LES_StructMember* const structMember = structDefinition->GetMemberByIndex(i);
 				const int memberNameID = structMember->m_nameID;
 				const int memberTypeID = structMember->m_typeID;
-				returnCode = DecodeSingle(functionParameterData, i, memberNameID, memberTypeID, parameterIndex, newDepth);
+				returnCode = DecodeSingle(pLogChannel, functionParameterData, i, memberNameID, memberTypeID, parameterIndex, newDepth);
 				if (returnCode != LES_RETURN_OK)
 				{
 					return LES_RETURN_ERROR;
@@ -175,7 +175,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 		const int newDepth = depth + 1;
 		for (int i = 0; i < numElements; i++)
 		{
-			returnCode = DecodeSingle(functionParameterData, i, elementNameID, elementTypeID, parameterIndex, newDepth);
+			returnCode = DecodeSingle(pLogChannel, functionParameterData, i, elementNameID, elementTypeID, parameterIndex, newDepth);
 			if (returnCode != LES_RETURN_OK)
 			{
 				return LES_RETURN_ERROR;
@@ -218,7 +218,7 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	else if (typeHash == LES_TypeEntry::s_floatHash)
 	{
 		valuePtr = &floatValue;
-		fmtStr = "%f";
+		fmtStr = "%.3f";
 	}
 	// An unknown type just grab it
 	if (valuePtr == LES_NULL)
@@ -277,6 +277,10 @@ static int DecodeSingle(const LES_FunctionParameterData* const functionParameter
 	}
 	sprintf(output, "%s%s", output, tempString);
 	LES_LOG(output);
+	if (pLogChannel)
+	{
+		pLogChannel->Print(output);
+	}
 	return LES_RETURN_OK;
 }
 
@@ -396,16 +400,24 @@ const LES_FunctionParameter* LES_FunctionDefinition::GetParameterByIndex(const i
 	return LES_NULL;
 }
 
-int LES_FunctionDefinition::Decode(const LES_FunctionParameterData* const functionParameterData) const
+int LES_FunctionDefinition::Decode(LES_LoggerChannel* const pLogChannel, 
+																		const LES_FunctionParameterData* const functionParameterData) const
 {
-	const int numParams = GetNumParameters();
 	int returnCode = LES_RETURN_OK;
-	for (int i = 0; i < numParams; i++)
+	const int functionNameID = GetNameID();
+	const char* const functionName = LES_GetStringEntryForID(functionNameID)->m_str;
+	const int numParameters = GetNumParameters();
+	LES_LOG("Decode Function '%s' numParams:%d", functionName, numParameters);
+	if (pLogChannel)
+	{
+		pLogChannel->Print("Decode Function '%s' numParams:%d", functionName, numParameters);
+	}
+	for (int i = 0; i < numParameters; i++)
 	{
 		const LES_FunctionParameter* const functionParameterPtr = GetParameterByIndex(i);
 		const int nameID = functionParameterPtr->m_nameID;
 		const int typeID = functionParameterPtr->m_typeID;
-		returnCode = DecodeSingle(functionParameterData, i, nameID, typeID, -1, 0);
+		returnCode = DecodeSingle(pLogChannel, functionParameterData, i, nameID, typeID, -1, 0);
 		if (returnCode != LES_RETURN_OK)
 		{
 			return LES_RETURN_ERROR;
