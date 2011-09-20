@@ -89,17 +89,18 @@ class LES_FunctionParameterData():
 
 		return (LES_RETURN_OK, value)
 
-def __DecodeSingle__(logChannel, stringTable, typeData, structData, 
+def __DecodeSingle__(logChannel, paramList, stringTable, typeData, structData, 
 										 functionParameterData, parameterIndex, nameID, typeID, parentParameterIndex, depth):
 	nameStr = stringTable.getString(nameID)
 	typeStr = stringTable.getString(typeID)
 	typeEntry = typeData.getTypeData(typeStr)
+	newParamList = paramList
 
 #	les_logger.Log("DecodeSingle: Debug name:'%s' type:'%s' typeID:%d", nameStr, typeStr, typeID)
 
 	if typeEntry == None:
 		les_logger.Warning("DecodeSingle parameter[%d]:'%s' type:'%s' type can't be found", parameterIndex, nameStr, typeStr)
-		return LES_RETURN_ERROR
+		return (LES_RETURN_ERROR, newParamList)
 
 	numElements = typeEntry.m_numElements
 	aliasedTypeID = typeEntry.m_aliasedTypeID
@@ -125,20 +126,28 @@ def __DecodeSingle__(logChannel, stringTable, typeData, structData,
 		structDefinition = structData.getStructDefinitionByHash(typeEntry.m_hash)
 		if structDefinition == None:
 			les_logger.Warning("DecodeSingle parameter[%d]:'%s' type:'%s' is a struct but can't be found", parameterIndex, nameStr, typeStr)
-			return LES_RETURN_ERROR
+			return (LES_RETURN_ERROR, newParamList)
 
 		numMembers = structDefinition.GetNumMembers()
 		newDepth = depth + 1
+		returnParamList = paramList
 		for e in range(localNumElements):
+			newParamList = []
 			for i in range(numMembers):
 				structMember = structDefinition.GetMemberByIndex(i)
 				memberNameID = structMember.m_nameID
 				memberTypeID = structMember.m_typeID
-				returnCode = __DecodeSingle__(logChannel, stringTable, typeData, structData, functionParameterData, 
-																			i, memberNameID, memberTypeID, parameterIndex, newDepth)
+				paramList = newParamList
+				(returnCode, newParamList) = __DecodeSingle__(logChannel, paramList, stringTable, typeData, structData, 
+																											functionParameterData, i, memberNameID, memberTypeID, parameterIndex, newDepth)
 				if returnCode != LES_RETURN_OK:
-					return LES_RETURN_ERROR
-		return returnCode
+					break
+
+ 			returnParamList.append(newParamList)
+			if returnCode != LES_RETURN_OK:
+				break
+
+		return (returnCode, returnParamList)
 
 	if numElements > 0:
 		returnCode = LES_RETURN_OK
@@ -148,12 +157,17 @@ def __DecodeSingle__(logChannel, stringTable, typeData, structData,
 		elementNameID = nameID
 		elementTypeID = aliasedTypeID
 		newDepth = depth + 1
+		returnParamList = paramList
+		newParamList = []
 		for i in range(numElements):
-			returnCode = __DecodeSingle__(logChannel, stringTable, typeData, structData, functionParameterData, 
-																		i, elementNameID, elementTypeID, parameterIndex, newDepth)
+			paramList = newParamList
+			(returnCode, newParamList) = __DecodeSingle__(logChannel, paramList, stringTable, typeData, structData, 
+																										functionParameterData, i, elementNameID, elementTypeID, parameterIndex, newDepth)
 			if returnCode != LES_RETURN_OK:
-				return LES_RETURN_ERROR
-		return returnCode
+				break
+
+	 	returnParamList.append(newParamList)
+		return (returnCode, returnParamList)
 
 	typeHash = typeEntry.m_hash
 
@@ -188,7 +202,7 @@ def __DecodeSingle__(logChannel, stringTable, typeData, structData,
 	(errorCode, binaryValue) = functionParameterData.Read(stringTable, typeData, typeString)
 	if errorCode != LES_RETURN_OK:
 		les_logger.Warning("DecodeSingle Read failed for parameter[%d]:%s", parameterIndex, nameStr)
-		return LES_RETURN_ERROR
+		return (LES_RETURN_ERROR, newParamList)
 
 	output += "DecodeSingle "
 	for i in range(depth*2):
@@ -209,7 +223,8 @@ def __DecodeSingle__(logChannel, stringTable, typeData, structData,
 	if logChannel != None:
 		logChannel.Print(output)
 
-	return LES_RETURN_OK
+	newParamList.append([nameStr, value])
+	return (LES_RETURN_OK, newParamList)
 
 class LES_FunctionParameter():
 	def __init__(self, hashValue, nameID, typeID, index, mode):
@@ -405,15 +420,20 @@ class LES_FunctionDefinintion():
 		les_logger.Log("Decode Function '%s' numParams:%d" % (functionName, numParameters))
 		if logChannel != None:
 			logChannel.Print("Decode Function '%s' numParams:%d" % (functionName, numParameters))
+
+		newParamList = []
 		for i in range(numParameters):
 			functionParameter = self.GetParameterByIndex(i)
 			nameID = functionParameter.m_nameID
 			typeID = functionParameter.m_typeID
-			returnCode = __DecodeSingle__(logChannel, stringTable, typeData, structData, functionParameterData, i, nameID, typeID, -1, 0)
+			paramList = newParamList
+			(returnCode, newParamList) = __DecodeSingle__(logChannel, paramList, stringTable, typeData, structData, 
+																										functionParameterData, i, nameID, typeID, -1, 0)
 			if returnCode != LES_RETURN_OK:
-				return LES_RETURN_ERROR
+				return (LES_RETURN_ERROR, newParamList)
 
-		return LES_RETURN_OK
+		les_logger.Log("newParamList %s", newParamList)
+		return (LES_RETURN_OK, newParamList)
 
 class LES_FunctionData():
 	def __init__(self, stringTable, typeData, structData):
