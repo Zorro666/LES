@@ -95,7 +95,8 @@ static int LES_GetFunctionDefinitionIndex(const char* const name)
 }
 
 static int DecodeSingle(LES_LoggerChannel* const pLogChannel, const LES_FunctionParameterData* const functionParameterData, 
-												const int parameterIndex, const int nameID, const int typeID, const char* const rootParamString)
+												const int parameterIndex, const int nameID, const int typeID, 
+												const char* const rootParamString, const int elementIndex)
 {
 	const LES_StringEntry* const nameEntry = LES_GetStringEntryForID(nameID);
 	const LES_StringEntry* typeStringEntry = LES_GetStringEntryForID(typeID);
@@ -183,7 +184,7 @@ static int DecodeSingle(LES_LoggerChannel* const pLogChannel, const LES_Function
 				const LES_StructMember* const structMember = structDefinition->GetMemberByIndex(i);
 				const int memberNameID = structMember->m_nameID;
 				const int memberTypeID = structMember->m_typeID;
-				returnCode = DecodeSingle(pLogChannel, functionParameterData, parameterIndex, memberNameID, memberTypeID, parentParamString);
+				returnCode = DecodeSingle(pLogChannel, functionParameterData, parameterIndex, memberNameID, memberTypeID, parentParamString, -1);
 				if (returnCode != LES_RETURN_OK)
 				{
 					return LES_RETURN_ERROR;
@@ -210,14 +211,11 @@ static int DecodeSingle(LES_LoggerChannel* const pLogChannel, const LES_Function
 		parentParamString[0] = '\0';
 		if (rootParamString[0] != '\0')
 		{
-			sprintf(parentParamString, "%s.", rootParamString);
+			sprintf(parentParamString, "%s", rootParamString);
 		}
-		sprintf(parentParamString, "%s%s", parentParamString, nameStr);
 		for (int i = 0; i < numElements; i++)
 		{
-			char paramString[1024];
-			sprintf(paramString, "%s[%d]", parentParamString, i);
-			returnCode = DecodeSingle(pLogChannel, functionParameterData, parameterIndex, elementNameID, elementTypeID, paramString);
+			returnCode = DecodeSingle(pLogChannel, functionParameterData, parameterIndex, elementNameID, elementTypeID, parentParamString, i);
 			if (returnCode != LES_RETURN_OK)
 			{
 				return LES_RETURN_ERROR;
@@ -281,16 +279,22 @@ static int DecodeSingle(LES_LoggerChannel* const pLogChannel, const LES_Function
 	char output[1024];
 	output[0] = '\0';
 	sprintf(output, "DecodeSingle parameter[%d]", parameterIndex);
+
 	if (rootParamString[0] != '\0')
 	{
-		sprintf(output, "%s:'%s'", output, rootParamString);
+		sprintf(output, "%s:'%s.%s", output, rootParamString, nameStr);
 	}
 	else
 	{
-		sprintf(output, "%s:'%s'", output, nameStr);
+		sprintf(output, "%s:'%s", output, nameStr);
 	}
 
-	sprintf(output, "%s type:'%s' value:", output, typeStr);
+	if (elementIndex >= 0)
+	{
+		sprintf(output, "%s[%d]", output, elementIndex);
+	}
+
+	sprintf(output, "%s' type:'%s' value:", output, typeStr);
 
 	char tempString[1024];
 	if (typeHash == LES_TypeEntry::s_longlongHash)
@@ -459,7 +463,7 @@ int LES_FunctionDefinition::Decode(LES_LoggerChannel* const pLogChannel,
 		const LES_FunctionParameter* const functionParameterPtr = GetParameterByIndex(i);
 		const int nameID = functionParameterPtr->m_nameID;
 		const int typeID = functionParameterPtr->m_typeID;
-		returnCode = DecodeSingle(pLogChannel, functionParameterData, i, nameID, typeID, "");
+		returnCode = DecodeSingle(pLogChannel, functionParameterData, i, nameID, typeID, "", -1);
 		if (returnCode != LES_RETURN_OK)
 		{
 			return LES_RETURN_ERROR;
