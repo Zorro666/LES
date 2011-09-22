@@ -90,7 +90,7 @@ class LES_FunctionParameterData():
 		return (LES_RETURN_OK, value)
 
 def __DecodeSingle__(logChannel, stringTable, typeData, structData, functionParameterData, 
-										 parameterIndex, nameID, typeID, rootParamString):
+										 parameterIndex, nameID, typeID, rootParamString, elementIndex):
 	nameStr = stringTable.getString(nameID)
 	typeStr = stringTable.getString(typeID)
 	typeEntry = typeData.getTypeData(typeStr)
@@ -156,7 +156,7 @@ def __DecodeSingle__(logChannel, stringTable, typeData, structData, functionPara
 				memberNameID = structMember.m_nameID
 				memberTypeID = structMember.m_typeID
 				(returnCode, memberParamList) = __DecodeSingle__(logChannel, stringTable, typeData, structData, functionParameterData, 
-																											   parameterIndex, memberNameID, memberTypeID, parentParamString)
+																											   parameterIndex, memberNameID, memberTypeID, parentParamString, -1)
 				if returnCode != LES_RETURN_OK:
 					break
 				structParamList.append(memberParamList)
@@ -181,14 +181,12 @@ def __DecodeSingle__(logChannel, stringTable, typeData, structData, functionPara
 
 		parentParamString = ""
 		if len(rootParamString) > 0:
-			parentParamString += ("%s." % (rootParamString))
-		parentParamString += nameStr
+			parentParamString += ("%s" % (rootParamString))
 
 		valueParamList = []
 		for i in range(numElements):
-			paramString = ("%s[%d]" % (parentParamString, i))
 			(returnCode, elementParamList) = __DecodeSingle__(logChannel, stringTable, typeData, structData, functionParameterData, 
-																										    parameterIndex, elementNameID, elementTypeID, paramString)
+																										    parameterIndex, elementNameID, elementTypeID, parentParamString, i)
 			if returnCode != LES_RETURN_OK:
 				break
  			valueParamList.append(elementParamList)
@@ -233,11 +231,14 @@ def __DecodeSingle__(logChannel, stringTable, typeData, structData, functionPara
 	output += ("DecodeSingle parameter[%d]" % (parameterIndex))
 
 	if len(rootParamString) > 0:
-		output += (":'%s'" % (rootParamString))
+		output += (":'%s.%s" % (rootParamString, nameStr))
 	else:
-		output += (":'%s'" % (nameStr))
+		output += (":'%s" % (nameStr))
 
-	output += (" type:'%s' value:" % (typeStr))
+	if elementIndex >= 0:
+		output += ("[%d]" % (elementIndex))
+
+	output += ("' type:'%s' value:" % (typeStr))
 
 	if unpackFormat != None:
 		value = struct.unpack(unpackFormat, binaryValue)[0]
@@ -460,7 +461,7 @@ class LES_FunctionDefinintion():
 			nameID = functionParameter.m_nameID
 			typeID = functionParameter.m_typeID
 			(returnCode, paramList) = __DecodeSingle__(logChannel, stringTable, typeData, structData, functionParameterData, 
-																										i, nameID, typeID, "")
+																										i, nameID, typeID, "", -1)
 			if returnCode != LES_RETURN_OK:
 				return (LES_RETURN_ERROR, functionParamList)
 			functionParamList.append(paramList)
