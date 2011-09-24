@@ -159,13 +159,13 @@ def __DecodeSingle__(logChannel, stringTable, typeData, structData, functionPara
 																											   parameterIndex, memberNameID, memberTypeID, parentParamString, -1)
 				if returnCode != LES_RETURN_OK:
 					break
-				structParamList.append(memberParamList)
+				structParamList += memberParamList
 
 			if returnCode != LES_RETURN_OK:
 				break
 
- 			valueParamList.append(structParamList)
-		returnParamList = [nameStr, localNumElements, valueParamList]
+			valueParamList += structParamList
+		returnParamList = valueParamList
 		return (returnCode, returnParamList)
 
 	if numElements > 0:
@@ -189,9 +189,9 @@ def __DecodeSingle__(logChannel, stringTable, typeData, structData, functionPara
 																										    parameterIndex, elementNameID, elementTypeID, parentParamString, i)
 			if returnCode != LES_RETURN_OK:
 				break
- 			valueParamList.append(elementParamList)
+			valueParamList += elementParamList
 
-		returnParamList = [nameStr, numElements, valueParamList]
+		returnParamList = valueParamList
 		return (returnCode, returnParamList)
 
 	typeHash = typeEntry.m_hash
@@ -228,17 +228,18 @@ def __DecodeSingle__(logChannel, stringTable, typeData, structData, functionPara
 		return (LES_RETURN_ERROR, returnParamList)
 
 	output = ""
-	output += ("DecodeSingle parameter[%d]" % (parameterIndex))
+	output += ("DecodeSingle parameter[%d]:" % (parameterIndex))
+	fullNameStr = ""
 
 	if len(rootParamString) > 0:
-		output += (":'%s.%s" % (rootParamString, nameStr))
+		fullNameStr = ("%s.%s" % (rootParamString, nameStr))
 	else:
-		output += (":'%s" % (nameStr))
+		fullNameStr = ("%s" % (nameStr))
 
 	if elementIndex >= 0:
-		output += ("[%d]" % (elementIndex))
+		fullNameStr += ("[%d]" % (elementIndex))
 
-	output += ("' type:'%s' value:" % (typeStr))
+	output += ("'%s' type:'%s' value:" % (fullNameStr, typeStr))
 
 	if unpackFormat != None:
 		value = struct.unpack(unpackFormat, binaryValue)[0]
@@ -252,10 +253,7 @@ def __DecodeSingle__(logChannel, stringTable, typeData, structData, functionPara
 		logChannel.Print(output)
 
 	returnParamList = []
-	if len(rootParamString) == 0:
-		returnParamList.append(nameStr)
-		returnParamList.append(0)
-
+	returnParamList.append(fullNameStr)
 	returnParamList.append(value)
 	return (LES_RETURN_OK, returnParamList)
 
@@ -466,38 +464,36 @@ class LES_FunctionDefinintion():
 				return (LES_RETURN_ERROR, functionParamList)
 			functionParamList.append(paramList)
 
+		paramDict = {}
 		p = 0
 		for param in functionParamList:
+			numItems = len(param)
 #			les_logger.Log("%s", param)
-			paramName = param[0]
-			numElements = param[1]
-			paramData = param[2]
-			paramDataLen = 0
+			i = 0
+			while i < numItems:
+				elementName = param[i]
+				elementValue = param[i+1]
 
-			if type(paramData) == list:
-				paramDataLen = len(paramData)
+				tokens = elementName.split(".")
+				elementDict = paramDict
+#				les_logger.Log("%s", tokens)
+				numTokens = len(tokens)
+				for t in range(numTokens-1):
+					token = tokens[t]
+					if token not in elementDict:
+						elementDict[token] = {}
+					elementDict = elementDict[token]
 
-			output = ("Param[%d] '%s' num:%d:%d" % (p, paramName, numElements, paramDataLen))
-
-			if numElements != paramDataLen:
-				les_logger.Log("%s", functionParamList)
-				les_logger.Log("%s", param)
-				les_logger.Log("type:%s", type(paramData))
-				les_logger.FatalError("Not the same %d:%d", numElements, paramDataLen)
-
-			if numElements > 1:
-				output += "\n"
-
-			for e in range(numElements):
-				elementData = paramData[e]
-
-			les_logger.Log(output)
-			if logChannel != None:
-				logChannel.Print(output)
-
+				finalToken = tokens[numTokens-1]
+#				les_logger.Log("ft:'%s'", finalToken)
+				elementDict[finalToken] = elementValue
+#				les_logger.Log("param[%d] root:'%s' name:'%s' value:'%s'", p, tokens[0], elementName, elementValue)
+#				les_logger.Log("ed:%s", elementDict[finalToken])
+#				les_logger.Log("pd:%s", paramDict)
+				i += 2
 			p += 1
 
-		return (LES_RETURN_OK, functionParamList)
+		return (LES_RETURN_OK, paramDict)
 
 class LES_FunctionData():
 	def __init__(self, stringTable, typeData, structData):

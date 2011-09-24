@@ -121,7 +121,12 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 		functionName = stringTable.getString(functionNameID)
 		les_logger.Log("FunctionRPC: id:%d nameID:%d '%s'" % (msgId, functionNameID, functionName))
 		functionDefinition = functionData.getFunctionDefinition(functionName)
-		functionDefinition.Decode(s_DecodeLogChannel, stringTable, typeData, structData, functionParameterData)
+		(retVal, paramDict) = functionDefinition.Decode(s_DecodeLogChannel, stringTable, typeData, structData, functionParameterData)
+		if retVal == les_funcdata.LES_RETURN_ERROR:
+			les_logger.Error("FunctionRPC: ERROR during Decode()")
+
+		if retVal == les_funcdata.LES_RETURN_OK:
+			les_logger.Log("ParamDict:%s", paramDict)
 
 	def handle(self):
 		s_receivedMessageHandlers = {}
