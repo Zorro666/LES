@@ -1,6 +1,5 @@
 High Priority:
-PYHTON: debug output the paramDict
-PYTHON: move the tests from C++ to python for testing - should be same output as C++ version
+PYTHON: check the python output from the tests - should be same output as C++ version
 CLIENT: change to/from BigEndian functions to take an output ptr & input ptr, to save double memcpys
 CLIENT: missing final RPC function send message (it doesn't get sent by network thread)
 
