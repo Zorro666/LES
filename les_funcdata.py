@@ -17,6 +17,16 @@ LES_PARAM_MODE_OUTPUT = les_typedata.LES_TYPE_OUTPUT
 LES_RETURN_ERROR = -1
 LES_RETURN_OK = 0
 
+def __DecodeArrayTokenIntoNameIndex__(token):
+	arrayIndexStart = token.find('[') + 1
+	name = token
+	arrayIndex = -1
+	if arrayIndexStart > 0:
+		if token[-1] == ']':
+			arrayIndex = int(token[arrayIndexStart:-1])
+			name = token[0:arrayIndexStart-1]
+	return (name, arrayIndex)
+
 # LES_FunctionParameter
 # {
 #		LES_uint32 m_hash;
@@ -464,34 +474,61 @@ class LES_FunctionDefinintion():
 				return (LES_RETURN_ERROR, functionParamList)
 			functionParamList.append(paramList)
 
+		# Build paramDict
 		paramDict = {}
-		p = 0
 		for param in functionParamList:
 			numItems = len(param)
-#			les_logger.Log("%s", param)
 			i = 0
 			while i < numItems:
 				elementName = param[i]
 				elementValue = param[i+1]
-
+				i += 2
 				tokens = elementName.split(".")
+
 				elementDict = paramDict
-#				les_logger.Log("%s", tokens)
 				numTokens = len(tokens)
 				for t in range(numTokens-1):
 					token = tokens[t]
+					(token, arrayIndex) = __DecodeArrayTokenIntoNameIndex__(token)
 					if token not in elementDict:
 						elementDict[token] = {}
 					elementDict = elementDict[token]
 
-				finalToken = tokens[numTokens-1]
-#				les_logger.Log("ft:'%s'", finalToken)
-				elementDict[finalToken] = elementValue
-#				les_logger.Log("param[%d] root:'%s' name:'%s' value:'%s'", p, tokens[0], elementName, elementValue)
-#				les_logger.Log("ed:%s", elementDict[finalToken])
-#				les_logger.Log("pd:%s", paramDict)
+				token = tokens[numTokens-1]
+				(token, arrayIndex) = __DecodeArrayTokenIntoNameIndex__(token)
+				if arrayIndex >= 0:
+					if token not in elementDict:
+						elementDict[token] = []
+					elementDict[token].append(elementValue)
+				else:
+					elementDict[token] = elementValue
+
+#		les_logger.Log("paramDict:%s", paramDict)
+		# Query paramDict using key entries construct from the functionParamList name entries
+		for param in functionParamList:
+			numItems = len(param)
+			i = 0
+			while i < numItems:
+				elementName = param[i]
+				elementValue = param[i+1]
 				i += 2
-			p += 1
+				tokens = elementName.split(".")
+
+				output = "paramDict"
+				elementDict = paramDict
+				numTokens = len(tokens)
+				for t in range(numTokens-1):
+					token = tokens[t]
+					(token, arrayIndex) = __DecodeArrayTokenIntoNameIndex__(token)
+					elementDict = elementDict[token]
+					output += ("[%s]" % (token))
+
+				token = tokens[numTokens-1]
+				(token, arrayIndex) = __DecodeArrayTokenIntoNameIndex__(token)
+				if arrayIndex > 0:
+					les_logger.Log("%s[%s][%d] value:'%s'", output, token, arrayIndex, elementDict[token][arrayIndex])
+				else:
+					les_logger.Log("%s[%s] value:'%s'", output, token, elementDict[token])
 
 		return (LES_RETURN_OK, paramDict)
 
