@@ -1,18 +1,18 @@
 <?xml version='1.0' ?>
 <LES_TYPES>
 	<LES_TYPE_POD name="unsigned char" dataSize="1" />
-	<LES_TYPE_POD name="unsigned short" dataSize="2" />
-	<LES_TYPE_POD name="unsigned int" dataSize="4" />
-	<LES_TYPE_POD name="unsigned long" dataSize="4" />
+	<LES_TYPE_POD_ENDIANSWAP name="unsigned short" dataSize="2" />
+	<LES_TYPE_POD_ENDIANSWAP name="unsigned int" dataSize="4" />
+	<LES_TYPE_POD_ENDIANSWAP name="unsigned long" dataSize="4" />
 
 	<LES_TYPE_POD name="char" dataSize="1" />
-	<LES_TYPE_POD name="short" dataSize="2" />
-	<LES_TYPE_POD name="int" dataSize="4" />
-	<LES_TYPE_POD name="long" dataSize="4" />
-	<LES_TYPE_POD name="long long int" dataSize="8" />
+	<LES_TYPE_POD_ENDIANSWAP name="short" dataSize="2" />
+	<LES_TYPE_POD_ENDIANSWAP name="int" dataSize="4" />
+	<LES_TYPE_POD_ENDIANSWAP name="long" dataSize="4" />
+	<LES_TYPE_POD_ENDIANSWAP name="long long int" dataSize="8" />
 
-	<LES_TYPE_POD name="float" dataSize="4" />
-	<LES_TYPE_POD name="double" dataSize="8" />
+	<LES_TYPE_POD_ENDIANSWAP name="float" dataSize="4" />
+	<LES_TYPE_POD_ENDIANSWAP name="double" dataSize="8" />
 
 	<LES_TYPE_POD_POINTER name="unsigned char" />
 	<LES_TYPE_POD_POINTER name="unsigned short" />
