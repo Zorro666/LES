@@ -154,6 +154,19 @@ inline void fromBigEndian32(char* const pOutData, const char* const pBigData)
 	pOutData[3] = pBigData[3];
 }
 
+inline void fromBigEndian64(char* const pOutData, const char* const pBigData)
+{
+	// Bytes: input = A:B:C:D:E:F:G:H, output = A:B:C:D:E:F:G:H
+	pOutData[0] = pBigData[0];
+	pOutData[1] = pBigData[1];
+	pOutData[2] = pBigData[2];
+	pOutData[3] = pBigData[3];
+	pOutData[4] = pBigData[4];
+	pOutData[5] = pBigData[5];
+	pOutData[6] = pBigData[6];
+	pOutData[7] = pBigData[7];
+}
+
 // Swap to BigEndian from BigEndian
 inline LES_int16 toBigEndian16(const LES_int16 input)
 {
@@ -189,6 +202,19 @@ inline void toBigEndian32(char* const pBigData, const char* const pInData)
 	pBigData[1] = pInData[1];
 	pBigData[2] = pInData[2];
 	pBigData[3] = pInData[3];
+}
+
+inline void toBigEndian64(char* const pBigData, const char* const pInData)
+{
+	// Bytes: input = A:B:C:D:E:F:G:H, output = A:B:C:D:E:F:G:H
+	pBigData[0] = pInData[0];
+	pBigData[1] = pInData[1];
+	pBigData[2] = pInData[2];
+	pBigData[3] = pInData[3];
+	pBigData[4] = pInData[4];
+	pBigData[5] = pInData[5];
+	pBigData[6] = pInData[6];
+	pBigData[7] = pInData[7];
 }
 
 #else // #if BIG_ENDIAN_MACHINE == 1
@@ -273,6 +299,19 @@ inline void fromBigEndian32(char* const pOutData, const char* const pBigData)
 	pOutData[3] = pBigData[0];
 }
 
+inline void fromBigEndian64(char* const pOutData, const char* const pBigData)
+{
+	// Bytes: input = A:B:C:D:E:F:G:H, output = H:G:F:E:D:C:B:A
+	pOutData[0] = pBigData[7];
+	pOutData[1] = pBigData[6];
+	pOutData[2] = pBigData[5];
+	pOutData[3] = pBigData[4];
+	pOutData[4] = pBigData[3];
+	pOutData[5] = pBigData[2];
+	pOutData[6] = pBigData[1];
+	pOutData[7] = pBigData[0];
+}
+
 // Swap to BigEndian from LittleEndian
 inline LES_int16 toBigEndian16(const LES_int16 input)
 {
@@ -308,6 +347,19 @@ inline void toBigEndian32(char* const pBigData, const char* const pInData)
 	pBigData[1] = pInData[2];
 	pBigData[2] = pInData[1];
 	pBigData[3] = pInData[0];
+}
+
+inline void toBigEndian64(char* const pBigData, const char* const pInData)
+{
+	// Bytes: input = A:B:C:D:E:F:G:H, output = H:G:F:E:D:C:B:A
+	pBigData[0] = pInData[7];
+	pBigData[1] = pInData[6];
+	pBigData[2] = pInData[5];
+	pBigData[3] = pInData[4];
+	pBigData[4] = pInData[3];
+	pBigData[5] = pInData[2];
+	pBigData[6] = pInData[1];
+	pBigData[7] = pInData[0];
 }
 
 #endif // #if BIG_ENDIAN_MACHINE == 1
