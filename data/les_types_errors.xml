@@ -4,8 +4,8 @@
 	<LES_TYPE name="unsigned char" dataSize="1" flags="POINTER|OUTPUT" />
 	<LES_TYPE name="unsigned char*" dataSize="4" flags="POINTER|POD|INPUT|OUTPUT" aliasedName="unsigned int" />
 
-	<LES_TYPE name="arrayNotAliasedToPtr[4]" dataSize="4" flags="ARRAY|INPUT|POD" aliasedName="int*" numElements="4" />
-	<LES_TYPE name="arrayNotAliasedToRef[4]" dataSize="4" flags="ARRAY|INPUT|POD" aliasedName="int&amp;" numElements="4" />
+	<LES_TYPE name="arrayNotAliasedToNonPtr[4]" dataSize="4" flags="ARRAY|INPUT|POD" aliasedName="int*" numElements="4" />
+	<LES_TYPE name="arrayNotAliasedToNonReference[4]" dataSize="4" flags="ARRAY|INPUT|POD" aliasedName="int&amp;" numElements="4" />
 	<LES_TYPE name="arrayNotAliased[5]" dataSize="4" flags="ARRAY|INPUT|POD" aliasedName="arrayNotAliased[5]" numElements="4" />
 	<LES_TYPE name="arrayExistsWrongNumberOfElements[1]" dataSize="4" flags="ARRAY|INPUT|POD" aliasedName="int" numElements="1" />
 	<LES_TYPE name="arrayExistsWrongNumberOfElements[1]" dataSize="4" flags="ARRAY|INPUT|POD" aliasedName="int" numElements="2" />
