@@ -409,7 +409,7 @@ static void LES_Test_ReadInputParameters(int input_0, short input_1, char input_
 		LES_FATAL_ERROR("%s: Read failed for input_3", testFuncName);
 		return;
 	}
-	if (fabsf(input_3-value_3) > 1.0e-6f)
+	if (fabsf(input_3-value_3) > 1.0e-5f)
 	{
 		LES_FATAL_ERROR("%s: parameter data is wrong input_3:%f value_3:%f", testFuncName, input_3, value_3);
 	}
@@ -504,7 +504,7 @@ static void LES_Test_ReadOutputParameters(unsigned int* output_0, unsigned short
 		LES_FATAL_ERROR("%s: Read failed for output_3", testFuncName);
 		return;
 	}
-	if (fabsf(*output_3-value_3) > 1.0e-6f)
+	if (fabsf(*output_3-value_3) > 1.0e-5f)
 	{
 		LES_FATAL_ERROR("%s: parameter data is wrong output_3:%f value_3:%f", testFuncName, *output_3, value_3);
 		return;
