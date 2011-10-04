@@ -1269,18 +1269,18 @@ int LES_TestSetup(void)
 		s_pDecodeLogChannel = LES_Logger::CreateChannel("Decode", "", "decode.txt", LES_LOGGERCHANNEL_FLAGS_FILE_OUTPUT);
 		/* Sample types for development */
 		LES_TEST_ADD_TYPE_POD(unsigned char);
-		LES_TEST_ADD_TYPE_POD(unsigned short);
-		LES_TEST_ADD_TYPE_POD(unsigned int);
-		LES_TEST_ADD_TYPE_POD(unsigned long);
+		LES_TEST_ADD_TYPE_POD_ENDIANSWAP(unsigned short);
+		LES_TEST_ADD_TYPE_POD_ENDIANSWAP(unsigned int);
+		LES_TEST_ADD_TYPE_POD_ENDIANSWAP(unsigned long);
 
 		LES_TEST_ADD_TYPE_POD(char);
-		LES_TEST_ADD_TYPE_POD(short);
-		LES_TEST_ADD_TYPE_POD(int);
-		LES_TEST_ADD_TYPE_POD(long);
-		LES_TEST_ADD_TYPE_POD(long long int);
+		LES_TEST_ADD_TYPE_POD_ENDIANSWAP(short);
+		LES_TEST_ADD_TYPE_POD_ENDIANSWAP(int);
+		LES_TEST_ADD_TYPE_POD_ENDIANSWAP(long);
+		LES_TEST_ADD_TYPE_POD_ENDIANSWAP(long long int);
 
-		LES_TEST_ADD_TYPE_POD(float);
-		LES_TEST_ADD_TYPE_POD(double);
+		LES_TEST_ADD_TYPE_POD_ENDIANSWAP(float);
+		LES_TEST_ADD_TYPE_POD_ENDIANSWAP(double);
 
 		LES_TEST_ADD_TYPE_POD_POINTER(unsigned char, LES_TYPE_INPUT_OUTPUT);
 		LES_TEST_ADD_TYPE_POD_POINTER(unsigned short, LES_TYPE_INPUT_OUTPUT);

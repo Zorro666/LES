@@ -16,6 +16,7 @@ class LES_LoggerChannel;
 #define LES_TYPE_REFERENCE 		(1 << 5)
 #define LES_TYPE_ALIAS 				(1 << 6)
 #define LES_TYPE_ARRAY 				(1 << 7)
+#define LES_TYPE_ENDIANSWAP		(1 << 8)
 
 struct LES_TypeEntry
 {

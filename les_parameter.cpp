@@ -57,11 +57,12 @@ int LES_FunctionParameterData::Read(const LES_StringEntry* const typeStringEntry
 	}
 
 	const void* valueAddress = parameterDataPtr;
-	const unsigned int flags = typeEntryPtr->m_flags;
+	unsigned int flags = typeEntryPtr->m_flags;
 	unsigned int parameterDataSize = typeEntryPtr->m_dataSize;
 	if (flags & LES_TYPE_POINTER)
 	{
 		parameterDataSize = aliasedTypeEntryPtr->m_dataSize;
+		flags = aliasedTypeEntryPtr->m_flags;
 	}
 	if (valueAddress == LES_NULL)
 	{
@@ -74,13 +75,24 @@ int LES_FunctionParameterData::Read(const LES_StringEntry* const typeStringEntry
 #if LES_PARAMETER_DEBUG
 		LES_LOG("Read type:'%s' size:%d %p -> %p", typeStringEntry->m_str, typeEntryPtr->m_dataSize, m_currentReadBufferPtr, parameterDataPtr);
 #endif // #if LES_PARAMETER_DEBUG
-		if (parameterDataSize == 2)
+		if (flags & LES_TYPE_ENDIANSWAP)
 		{
-			fromBigEndian16((char* const)parameterDataPtr, m_currentReadBufferPtr);
-		}
-		else if (parameterDataSize == 4)
-		{
-			fromBigEndian32((char* const)parameterDataPtr, m_currentReadBufferPtr);
+			if (parameterDataSize == 2)
+			{
+				fromBigEndian16((char* const)parameterDataPtr, m_currentReadBufferPtr);
+			}
+			else if (parameterDataSize == 4)
+			{
+				fromBigEndian32((char* const)parameterDataPtr, m_currentReadBufferPtr);
+			}
+			else if (parameterDataSize == 8)
+			{
+				fromBigEndian64((char* const)parameterDataPtr, m_currentReadBufferPtr);
+			}
+			else
+			{
+				LES_FATAL_ERROR("Read type:'%s' marked for ENDIANSWAP but unknown size to swap:%d", typeStringEntry->m_str, parameterDataSize);
+			}
 		}
 		else
 		{
@@ -311,13 +323,24 @@ int LES_FunctionParameterData::WriteItem(const LES_StringEntry* const typeString
 #if LES_PARAMETER_DEBUG
 		LES_LOG("Write type:'%s' size:%d %p -> %p", typeStringEntry->m_str, typeEntryPtr->m_dataSize, valueAddress, m_currentWriteBufferPtr);
 #endif // #if LES_PARAMETER_DEBUG
-		if (parameterDataSize == 2)
+		if (typeFlags & LES_TYPE_ENDIANSWAP)
 		{
-			toBigEndian16(m_currentWriteBufferPtr, (const char*)valueAddress);
-		}
-		else if (parameterDataSize == 4)
-		{
-			toBigEndian32(m_currentWriteBufferPtr, (const char*)valueAddress);
+			if (parameterDataSize == 2)
+			{
+				toBigEndian16(m_currentWriteBufferPtr, (const char*)valueAddress);
+			}
+			else if (parameterDataSize == 4)
+			{
+				toBigEndian32(m_currentWriteBufferPtr, (const char*)valueAddress);
+			}
+			else if (parameterDataSize == 8)
+			{
+				toBigEndian64(m_currentWriteBufferPtr, (const char*)valueAddress);
+			}
+			else
+			{
+				LES_FATAL_ERROR("Write type:'%s' marked for ENDIANSWAP but unknown size to swap:%d", typeStringEntry->m_str, parameterDataSize);
+			}
 		}
 		else
 		{

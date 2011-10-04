@@ -308,6 +308,15 @@ void LES_Type_DecodeFlags(char* const flagsDecoded, const LES_uint flags)
 		strcat(flagsDecoded, "ARRAY");
 		needsPipe = true;
 	}
+	if (flags & LES_TYPE_ENDIANSWAP)
+	{
+		if (needsPipe)
+		{
+			strcat(flagsDecoded, "|");
+		}
+		strcat(flagsDecoded, "ENDIANSWAP");
+		needsPipe = true;
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -451,8 +460,12 @@ int LES_AddType(const char* const name, const unsigned int dataSize, const unsig
 		}
 		if (typeEntryPtr->m_flags != flags)
 		{
-			LES_WARNING("AddType '%s' hash 0x%X already in list and flags doesn't match Existing:0x%X New:0x%X",
-									name, hash, typeEntryPtr->m_flags, flags);
+			char flagsDecoded[1024];
+			LES_Type_DecodeFlags(flagsDecoded, typeEntryPtr->m_flags);
+			char newFlagsDecoded[1024];
+			LES_Type_DecodeFlags(newFlagsDecoded, flags);
+			LES_WARNING("AddType '%s' hash 0x%X already in list and flags doesn't match Existing:0x%X '%s' New:0x%X '%s'",
+									name, hash, typeEntryPtr->m_flags, flagsDecoded, flags, newFlagsDecoded);
 			return LES_RETURN_ERROR;
 		}
 		if (typeEntryPtr->m_aliasedTypeID != aliasedTypeID)
