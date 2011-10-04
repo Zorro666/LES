@@ -1,7 +1,7 @@
-Network thread created handle:0xB75DFB70 ret:0
 LES_NetworkThreadProcess Started
-Time 0.001000 State:1
-Input thread created handle:0xB6DDEB70 ret:0
+Network thread created handle:0xB74CDB70 ret:0
+Time 0.000000 State:1
+Input thread created handle:0xB6CCCB70 ret:0
 Enter some text to send to the server (press enter)
 connectHash:0x5FC8095E
 Sent bytes 24 (24)
@@ -66,7 +66,7 @@ FATAL_ERROR: 'LES_Test_InputTypeHashIsWrong' : Error adding Input parameter 0 'i
 
 WARNING: 'LES_Test_InputTypeStringIsWrong' : Adding parameter 'input_0' type string doesn't match for ID:36 'input_brokenString' != 'brokenString' 0xB423831B : 0xB423831B
 FATAL_ERROR: 'LES_Test_InputTypeStringIsWrong' : Error adding Input parameter 0 'input_0' type:'input_brokenString'
-Time 1.039000 State:6
+Time 1.010000 State:6
 
 #### Output parameter tests ####
 WARNING: 'LES_Test_TooManyOutputParameters' : Too many Output parameters index:2 max:2 parameter:'output_2' type:'unsigned char*'
@@ -125,7 +125,7 @@ FATAL_ERROR: TEST function 'LES_Test_ParameterAlreadyExists' : ERROR cannot crea
 SendRPC functionID:131 'LES_Test_InputOutputMixture' paramDataSize:9 msgID:0 msgPayloadSize:13
 LES_Test_InputOutputMixture: success if no error output
 
-WARNING: LES_FunctionParameterData::Write type:'unsigned short' flags incorrect for parameter mode typeFlags:0x5 INPUT|POD paramMode:0x2 OUTPUT
+WARNING: LES_FunctionParameterData::Write type:'unsigned short' flags incorrect for parameter mode typeFlags:0x105 INPUT|POD|ENDIANSWAP paramMode:0x2 OUTPUT
 WARNING: 'LES_Test_InputParamUsedAsOutput' : Write parameter:'output_0' type:'unsigned short' failed
 FATAL_ERROR: 'LES_Test_InputParamUsedAsOutput' : Error adding Output parameter 0 'output_0' type:'unsigned short'
 Sent bytes 24 (24)
@@ -138,7 +138,7 @@ FATAL_ERROR: 'LES_Test_OutputParamUsedAsInput' : Error adding Input parameter 0 
 WARNING: AddType 'unsigned char' hash 0x6E40A25D already in list and dataSize doesn't match Existing:1 New:2
 FATAL_ERROR: TEST AddType 'unsigned char' NumElements:0 0x6E40A25D Alias 'unsigned char' failed
 
-WARNING: AddType 'unsigned char' hash 0x6E40A25D already in list and flags doesn't match Existing:0x5 New:0x12
+WARNING: AddType 'unsigned char' hash 0x6E40A25D already in list and flags doesn't match Existing:0x5 'INPUT|POD' New:0x12 'OUTPUT|POINTER'
 FATAL_ERROR: TEST AddType 'unsigned char' NumElements:0 0x6E40A25D Alias 'unsigned char' failed
 
 WARNING: AddType 'unsigned char*' hash 0xABB572C1 already in list and aliasedTypeID doesn't match Existing:0 New:2
@@ -186,7 +186,6 @@ DecodeSingle parameter[8]:'input_4' type:'int*' value:12345
 DecodeSingle parameter[9]:'input_5' type:'short*' value:8989
 DecodeSingle parameter[10]:'input_6' type:'char*' value:'6'
 LES_Test_DecodeInputOutputParameters: parameterDataSize:29
-Time 2.065000 State:6
 Sent bytes 40 (40)
 
 #### Struct tests ####
@@ -198,6 +197,7 @@ FATAL_ERROR: TEST struct 'LES_Struct_MemberAlreadyExists' : ERROR cannot create 
 
 FATAL_ERROR: TEST struct 'LES_Struct_NotEnoughMembers' : ERROR not the right number of members Added:2 Should be:3
 FATAL_ERROR: TEST struct 'LES_Struct_NotEnoughMembers' : ERROR cannot create definition
+Time 2.077000 State:6
 Sent bytes 44 (44)
 
 SendRPC functionID:142 'LES_Test_StructInputParam' paramDataSize:88 msgID:5 msgPayloadSize:92
@@ -333,13 +333,13 @@ DecodeSingle parameter[0]:'output_0.m_testStruct5Ref.m_char' type:'char' value:'
 DecodeSingle parameter[0]:'output_0.m_testStruct5Ref.m_shortPtr' type:'short*' value:4242
 DecodeSingle parameter[0]:'output_0.m_charPtr' type:'char*' value:'R'
 LES_Test_ReferenceStructOutputParam: parameterDataSize:6
-Time 3.154000 State:6
 Sent bytes 24 (24)
 
 SendRPC functionID:154 'LES_Test_DecodeOutputParameters' paramDataSize:1 msgID:14 msgPayloadSize:5
 Decode Function 'LES_Test_DecodeOutputParameters' numParams:1
 DecodeSingle parameter[0]:'output_0' type:'char&' value:'C'
 LES_Test_DecodeOutputParameters: parameterDataSize:1
+Time 3.164000 State:6
 Sent bytes 20 (20)
 
 #### Array tests ####
@@ -505,7 +505,6 @@ DecodeSingle parameter[0]:'input_0.m_short[0]' type:'short' value:2063
 DecodeSingle parameter[0]:'input_0.m_short[1]' type:'short' value:2064
 DecodeSingle parameter[0]:'input_0.m_short[2]' type:'short' value:2065
 LES_Test_DecodeInputStructPODArray: parameterDataSize:6
-Time 4.240000 State:6
 Sent bytes 32 (32)
 
 SendRPC functionID:163 'LES_Test_DecodeInputStructStructArray' paramDataSize:18 msgID:23 msgPayloadSize:22
@@ -525,6 +524,7 @@ DecodeSingle parameter[0]:'input_0.m_testStruct9[1].m_short[0]' type:'short' val
 DecodeSingle parameter[0]:'input_0.m_testStruct9[1].m_short[1]' type:'short' value:2072
 DecodeSingle parameter[0]:'input_0.m_testStruct9[1].m_short[2]' type:'short' value:2073
 LES_Test_DecodeInputStructStructArray: parameterDataSize:18
+Time 4.251000 State:6
 Sent bytes 20 (20)
 
 SendRPC functionID:164 'LES_Test_DecodeInputStructPODArrayReference' paramDataSize:19 msgID:24 msgPayloadSize:23
@@ -596,6 +596,17 @@ Phase:67
 Phase:68
 Phase:69
 Phase:70
+Phase:71
+Phase:72
+Phase:73
+Phase:74
+Phase:75
+Phase:76
+Phase:77
+Phase:78
+Phase:79
+Phase:80
+Time 5.282000 State:6
 LES_TestSetup() finished
 SendRPC functionID:100 'jakeInit' paramDataSize:10 msgID:26 msgPayloadSize:14
 
@@ -790,16 +801,16 @@ String[183] name:'CantAddNewFunctions' hash:0x2AF98C0C
 
 numTypes:79
 Type[0] name:'unsigned char' hash:0x6E40A25D size:1 flags:0x5 INPUT|POD aliasedName:'unsigned char' aliasedID:0 numElements:0
-Type[1] name:'unsigned short' hash:0x3B779699 size:2 flags:0x5 INPUT|POD aliasedName:'unsigned short' aliasedID:1 numElements:0
-Type[2] name:'unsigned int' hash:0xA31138D4 size:4 flags:0x5 INPUT|POD aliasedName:'unsigned int' aliasedID:2 numElements:0
-Type[3] name:'unsigned long' hash:0x8D6862AB size:4 flags:0x5 INPUT|POD aliasedName:'unsigned long' aliasedID:3 numElements:0
+Type[1] name:'unsigned short' hash:0x3B779699 size:2 flags:0x105 INPUT|POD|ENDIANSWAP aliasedName:'unsigned short' aliasedID:1 numElements:0
+Type[2] name:'unsigned int' hash:0xA31138D4 size:4 flags:0x105 INPUT|POD|ENDIANSWAP aliasedName:'unsigned int' aliasedID:2 numElements:0
+Type[3] name:'unsigned long' hash:0x8D6862AB size:4 flags:0x105 INPUT|POD|ENDIANSWAP aliasedName:'unsigned long' aliasedID:3 numElements:0
 Type[4] name:'char' hash:0x56F2B2AE size:1 flags:0x5 INPUT|POD aliasedName:'char' aliasedID:4 numElements:0
-Type[5] name:'short' hash:0xA6410C size:2 flags:0x5 INPUT|POD aliasedName:'short' aliasedID:5 numElements:0
-Type[6] name:'int' hash:0xF09B6F size:4 flags:0x5 INPUT|POD aliasedName:'int' aliasedID:6 numElements:0
-Type[7] name:'long' hash:0x761A72FC size:4 flags:0x5 INPUT|POD aliasedName:'long' aliasedID:7 numElements:0
-Type[8] name:'long long int' hash:0x82108C1F size:8 flags:0x5 INPUT|POD aliasedName:'long long int' aliasedID:8 numElements:0
-Type[9] name:'float' hash:0x29C40BA8 size:4 flags:0x5 INPUT|POD aliasedName:'float' aliasedID:9 numElements:0
-Type[10] name:'double' hash:0x9EC4F5FD size:8 flags:0x5 INPUT|POD aliasedName:'double' aliasedID:10 numElements:0
+Type[5] name:'short' hash:0xA6410C size:2 flags:0x105 INPUT|POD|ENDIANSWAP aliasedName:'short' aliasedID:5 numElements:0
+Type[6] name:'int' hash:0xF09B6F size:4 flags:0x105 INPUT|POD|ENDIANSWAP aliasedName:'int' aliasedID:6 numElements:0
+Type[7] name:'long' hash:0x761A72FC size:4 flags:0x105 INPUT|POD|ENDIANSWAP aliasedName:'long' aliasedID:7 numElements:0
+Type[8] name:'long long int' hash:0x82108C1F size:8 flags:0x105 INPUT|POD|ENDIANSWAP aliasedName:'long long int' aliasedID:8 numElements:0
+Type[9] name:'float' hash:0x29C40BA8 size:4 flags:0x105 INPUT|POD|ENDIANSWAP aliasedName:'float' aliasedID:9 numElements:0
+Type[10] name:'double' hash:0x9EC4F5FD size:8 flags:0x105 INPUT|POD|ENDIANSWAP aliasedName:'double' aliasedID:10 numElements:0
 Type[11] name:'unsigned char*' hash:0xABB572C1 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned char' aliasedID:0 numElements:0
 Type[12] name:'unsigned short*' hash:0xE5C8A975 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned short' aliasedID:1 numElements:0
 Type[13] name:'unsigned int*' hash:0x8308E8A6 size:4 flags:0x57 INPUT|OUTPUT|POD|POINTER|ALIAS aliasedName:'unsigned int' aliasedID:2 numElements:0
