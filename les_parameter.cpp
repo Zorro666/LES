@@ -76,17 +76,11 @@ int LES_FunctionParameterData::Read(const LES_StringEntry* const typeStringEntry
 #endif // #if LES_PARAMETER_DEBUG
 		if (parameterDataSize == 2)
 		{
-			LES_uint16 bigData;
-			memcpy(&bigData, m_currentReadBufferPtr, 2);
-			const LES_uint16 swapData = fromBigEndian16(bigData);
-			memcpy(parameterDataPtr, &swapData, 2);
+			fromBigEndian16((char* const)parameterDataPtr, m_currentReadBufferPtr);
 		}
 		else if (parameterDataSize == 4)
 		{
-			LES_uint32 bigData;
-			memcpy(&bigData, m_currentReadBufferPtr, 4);
-			const LES_uint32 swapData = fromBigEndian32(bigData);
-			memcpy(parameterDataPtr, &swapData, 4);
+			fromBigEndian32((char* const)parameterDataPtr, m_currentReadBufferPtr);
 		}
 		else
 		{
@@ -319,17 +313,11 @@ int LES_FunctionParameterData::WriteItem(const LES_StringEntry* const typeString
 #endif // #if LES_PARAMETER_DEBUG
 		if (parameterDataSize == 2)
 		{
-			LES_uint16 rawData;
-			memcpy(&rawData, valueAddress, 2);
-			const LES_uint16 bigData = fromBigEndian16(rawData);
-			memcpy(m_currentWriteBufferPtr, &bigData, 2);
+			toBigEndian16(m_currentWriteBufferPtr, (const char*)valueAddress);
 		}
 		else if (parameterDataSize == 4)
 		{
-			LES_uint32 rawData;
-			memcpy(&rawData, valueAddress, 4);
-			const LES_uint32 bigData = fromBigEndian32(rawData);
-			memcpy(m_currentWriteBufferPtr, &bigData, 4);
+			toBigEndian32(m_currentWriteBufferPtr, (const char*)valueAddress);
 		}
 		else
 		{
