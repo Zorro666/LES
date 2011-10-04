@@ -1,7 +1,7 @@
-Network thread created handle:0xB7430B70 ret:0
+Network thread created handle:0xB75DFB70 ret:0
 LES_NetworkThreadProcess Started
 Time 0.001000 State:1
-Input thread created handle:0xB6C2FB70 ret:0
+Input thread created handle:0xB6DDEB70 ret:0
 Enter some text to send to the server (press enter)
 connectHash:0x5FC8095E
 Sent bytes 24 (24)
@@ -63,10 +63,10 @@ FATAL_ERROR: 'LES_Test_InputTypeIDNotFound' : Error adding Input parameter 0 'in
 
 WARNING: 'LES_Test_InputTypeHashIsWrong' : parameter:0 'input_0' (Input) type hash doesn't match for ID:34 0xF09B6F != 0x261B6E5A Code:'int' Definition:'input_wrongHash'
 FATAL_ERROR: 'LES_Test_InputTypeHashIsWrong' : Error adding Input parameter 0 'input_0' type:'int'
-Time 1.041000 State:6
 
 WARNING: 'LES_Test_InputTypeStringIsWrong' : Adding parameter 'input_0' type string doesn't match for ID:36 'input_brokenString' != 'brokenString' 0xB423831B : 0xB423831B
 FATAL_ERROR: 'LES_Test_InputTypeStringIsWrong' : Error adding Input parameter 0 'input_0' type:'input_brokenString'
+Time 1.039000 State:6
 
 #### Output parameter tests ####
 WARNING: 'LES_Test_TooManyOutputParameters' : Too many Output parameters index:2 max:2 parameter:'output_2' type:'unsigned char*'
@@ -173,19 +173,20 @@ LES_Test_ReadInputOutputParameters: parameterDataSize:26
 Sent bytes 24 (24)
 
 SendRPC functionID:139 'LES_Test_DecodeInputOutputParameters' paramDataSize:29 msgID:4 msgPayloadSize:33
+Decode Function 'LES_Test_DecodeInputOutputParameters' numParams:11
 DecodeSingle parameter[0]:'input_0' type:'int' value:201
 DecodeSingle parameter[1]:'output_0' type:'unsigned int*' value:1
 DecodeSingle parameter[2]:'input_1' type:'short' value:12863
 DecodeSingle parameter[3]:'output_1' type:'unsigned short*' value:2
 DecodeSingle parameter[4]:'input_2' type:'char' value:';'
 DecodeSingle parameter[5]:'output_2' type:'unsigned char*' value:'O'
-DecodeSingle parameter[6]:'input_3' type:'float' value:-8.983200
-DecodeSingle parameter[7]:'output_3' type:'float*' value:-123.456001
+DecodeSingle parameter[6]:'input_3' type:'float' value:-8.983
+DecodeSingle parameter[7]:'output_3' type:'float*' value:-123.456
 DecodeSingle parameter[8]:'input_4' type:'int*' value:12345
 DecodeSingle parameter[9]:'input_5' type:'short*' value:8989
 DecodeSingle parameter[10]:'input_6' type:'char*' value:'6'
 LES_Test_DecodeInputOutputParameters: parameterDataSize:29
-Time 2.066000 State:6
+Time 2.065000 State:6
 Sent bytes 40 (40)
 
 #### Struct tests ####
@@ -200,115 +201,143 @@ FATAL_ERROR: TEST struct 'LES_Struct_NotEnoughMembers' : ERROR cannot create def
 Sent bytes 44 (44)
 
 SendRPC functionID:142 'LES_Test_StructInputParam' paramDataSize:88 msgID:5 msgPayloadSize:92
-DecodeSingle   parameter[0] member[0]:'m_float' type:'float' value:666.987000
-DecodeSingle     parameter[1] member[0]:'m_longlong' type:'long long int' value:-100048
-DecodeSingle     parameter[1] member[1]:'m_char' type:'char' value:'A'
-DecodeSingle     parameter[1] member[2]:'m_int' type:'int' value:65
-DecodeSingle     parameter[1] member[3]:'m_short' type:'short' value:-123
-DecodeSingle     parameter[1] member[4]:'m_float' type:'float' value:666.987000
-DecodeSingle   parameter[0] member[2]:'m_char' type:'char' value:'B'
-DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:-123
-DecodeSingle   parameter[0] member[4]:'m_int' type:'int' value:65
+Decode Function 'LES_Test_StructInputParam' numParams:5
+DecodeSingle parameter[0]:'input_0' type:'TestStruct2'
+DecodeSingle parameter[0]:'input_0.m_float' type:'float' value:666.987
+DecodeSingle parameter[0]:'input_0.m_testStruct1' type:'TestStruct1'
+DecodeSingle parameter[0]:'input_0.m_testStruct1.m_longlong' type:'long long int' value:-100048
+DecodeSingle parameter[0]:'input_0.m_testStruct1.m_char' type:'char' value:'A'
+DecodeSingle parameter[0]:'input_0.m_testStruct1.m_int' type:'int' value:65
+DecodeSingle parameter[0]:'input_0.m_testStruct1.m_short' type:'short' value:-123
+DecodeSingle parameter[0]:'input_0.m_testStruct1.m_float' type:'float' value:666.987
+DecodeSingle parameter[0]:'input_0.m_char' type:'char' value:'B'
+DecodeSingle parameter[0]:'input_0.m_short' type:'short' value:-123
+DecodeSingle parameter[0]:'input_0.m_int' type:'int' value:65
 DecodeSingle parameter[1]:'input_1' type:'int' value:7243
-DecodeSingle   parameter[2] member[0]:'m_longlong' type:'long long int' value:-100048
-DecodeSingle   parameter[2] member[1]:'m_char' type:'char' value:'A'
-DecodeSingle   parameter[2] member[2]:'m_int' type:'int' value:65
-DecodeSingle   parameter[2] member[3]:'m_short' type:'short' value:-123
-DecodeSingle   parameter[2] member[4]:'m_float' type:'float' value:666.987000
-DecodeSingle   parameter[3] member[0]:'m_short' type:'short' value:209
-DecodeSingle   parameter[3] member[1]:'m_float' type:'float' value:2.173000
-DecodeSingle   parameter[3] member[2]:'m_int' type:'int' value:-542
-DecodeSingle   parameter[3] member[3]:'m_char' type:'char' value:'J'
-DecodeSingle   parameter[4] member[0]:'m_float' type:'float' value:987.122986
-DecodeSingle   parameter[4] member[1]:'m_int' type:'int' value:12
-DecodeSingle   parameter[4] member[2]:'m_char' type:'char' value:'L'
-DecodeSingle   parameter[4] member[3]:'m_short' type:'short' value:321
-DecodeSingle   parameter[4] member[4]:'m_short2' type:'short' value:322
-DecodeSingle     parameter[5] member[0]:'m_short' type:'short' value:3
-DecodeSingle     parameter[5] member[1]:'m_float' type:'float' value:3.141000
-DecodeSingle     parameter[5] member[2]:'m_int' type:'int' value:2
-DecodeSingle     parameter[5] member[3]:'m_char' type:'char' value:'#'
+DecodeSingle parameter[2]:'input_2' type:'TestStruct1'
+DecodeSingle parameter[2]:'input_2.m_longlong' type:'long long int' value:-100048
+DecodeSingle parameter[2]:'input_2.m_char' type:'char' value:'A'
+DecodeSingle parameter[2]:'input_2.m_int' type:'int' value:65
+DecodeSingle parameter[2]:'input_2.m_short' type:'short' value:-123
+DecodeSingle parameter[2]:'input_2.m_float' type:'float' value:666.987
+DecodeSingle parameter[3]:'input_3' type:'TestStruct3'
+DecodeSingle parameter[3]:'input_3.m_short' type:'short' value:209
+DecodeSingle parameter[3]:'input_3.m_float' type:'float' value:2.173
+DecodeSingle parameter[3]:'input_3.m_int' type:'int' value:-542
+DecodeSingle parameter[3]:'input_3.m_char' type:'char' value:'J'
+DecodeSingle parameter[4]:'input_4' type:'TestStruct4*'
+DecodeSingle parameter[4]:'input_4.m_float' type:'float' value:987.123
+DecodeSingle parameter[4]:'input_4.m_int' type:'int' value:12
+DecodeSingle parameter[4]:'input_4.m_char' type:'char' value:'L'
+DecodeSingle parameter[4]:'input_4.m_short' type:'short' value:321
+DecodeSingle parameter[4]:'input_4.m_short2' type:'short' value:322
+DecodeSingle parameter[4]:'input_4.m_testStruct3' type:'TestStruct3'
+DecodeSingle parameter[4]:'input_4.m_testStruct3.m_short' type:'short' value:3
+DecodeSingle parameter[4]:'input_4.m_testStruct3.m_float' type:'float' value:3.141
+DecodeSingle parameter[4]:'input_4.m_testStruct3.m_int' type:'int' value:2
+DecodeSingle parameter[4]:'input_4.m_testStruct3.m_char' type:'char' value:'#'
 LES_Test_StructInputParam: parameterDataSize:88
 
 SendRPC functionID:143 'LES_Test_StructOutputParam' paramDataSize:35 msgID:6 msgPayloadSize:39
-DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:1718
-DecodeSingle   parameter[0] member[1]:'m_float' type:'float' value:271.386993
-DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:14
-DecodeSingle   parameter[0] member[3]:'m_char' type:'char' value:'a'
-DecodeSingle   parameter[1] member[0]:'m_float' type:'float' value:1414.987061
-DecodeSingle   parameter[1] member[1]:'m_int' type:'int' value:-2713
-DecodeSingle   parameter[1] member[2]:'m_char' type:'char' value:'Z'
-DecodeSingle   parameter[1] member[3]:'m_short' type:'short' value:321
-DecodeSingle   parameter[1] member[4]:'m_short2' type:'short' value:322
-DecodeSingle     parameter[5] member[0]:'m_short' type:'short' value:1718
-DecodeSingle     parameter[5] member[1]:'m_float' type:'float' value:271.386993
-DecodeSingle     parameter[5] member[2]:'m_int' type:'int' value:14
-DecodeSingle     parameter[5] member[3]:'m_char' type:'char' value:'a'
+Decode Function 'LES_Test_StructOutputParam' numParams:2
+DecodeSingle parameter[0]:'out_0' type:'TestStruct3*'
+DecodeSingle parameter[0]:'out_0.m_short' type:'short' value:1718
+DecodeSingle parameter[0]:'out_0.m_float' type:'float' value:271.387
+DecodeSingle parameter[0]:'out_0.m_int' type:'int' value:14
+DecodeSingle parameter[0]:'out_0.m_char' type:'char' value:'a'
+DecodeSingle parameter[1]:'out_1' type:'TestStruct4*'
+DecodeSingle parameter[1]:'out_1.m_float' type:'float' value:1414.987
+DecodeSingle parameter[1]:'out_1.m_int' type:'int' value:-2713
+DecodeSingle parameter[1]:'out_1.m_char' type:'char' value:'Z'
+DecodeSingle parameter[1]:'out_1.m_short' type:'short' value:321
+DecodeSingle parameter[1]:'out_1.m_short2' type:'short' value:322
+DecodeSingle parameter[1]:'out_1.m_testStruct3' type:'TestStruct3'
+DecodeSingle parameter[1]:'out_1.m_testStruct3.m_short' type:'short' value:1718
+DecodeSingle parameter[1]:'out_1.m_testStruct3.m_float' type:'float' value:271.387
+DecodeSingle parameter[1]:'out_1.m_testStruct3.m_int' type:'int' value:14
+DecodeSingle parameter[1]:'out_1.m_testStruct3.m_char' type:'char' value:'a'
 LES_Test_StructOutputParam: parameterDataSize:35
 Sent bytes 100 (100)
 
 SendRPC functionID:146 'LES_Test_StructInputOutputParam' paramDataSize:9 msgID:7 msgPayloadSize:13
-DecodeSingle   parameter[0] member[0]:'m_char' type:'char' value:'5'
-DecodeSingle   parameter[0] member[1]:'m_shortPtr' type:'short*' value:4242
-DecodeSingle   parameter[1] member[0]:'m_short' type:'short' value:-5656
-DecodeSingle     parameter[1] member[0]:'m_char' type:'char' value:'5'
-DecodeSingle     parameter[1] member[1]:'m_shortPtr' type:'short*' value:4242
-DecodeSingle   parameter[1] member[2]:'m_charPtr' type:'char*' value:'6'
+Decode Function 'LES_Test_StructInputOutputParam' numParams:2
+DecodeSingle parameter[0]:'in_0' type:'TestStruct5*'
+DecodeSingle parameter[0]:'in_0.m_char' type:'char' value:'5'
+DecodeSingle parameter[0]:'in_0.m_shortPtr' type:'short*' value:4242
+DecodeSingle parameter[1]:'out_0' type:'TestStruct6*'
+DecodeSingle parameter[1]:'out_0.m_short' type:'short' value:-5656
+DecodeSingle parameter[1]:'out_0.m_testStructPtr' type:'TestStruct5*'
+DecodeSingle parameter[1]:'out_0.m_testStructPtr.m_char' type:'char' value:'5'
+DecodeSingle parameter[1]:'out_0.m_testStructPtr.m_shortPtr' type:'short*' value:4242
+DecodeSingle parameter[1]:'out_0.m_charPtr' type:'char*' value:'6'
 LES_Test_StructInputOutputParam: parameterDataSize:9
 Sent bytes 48 (48)
 
 #### Reference tests ####
 SendRPC functionID:148 'LES_Test_ReferenceInputPODParam' paramDataSize:4 msgID:8 msgPayloadSize:8
+Decode Function 'LES_Test_ReferenceInputPODParam' numParams:1
 DecodeSingle parameter[0]:'input_0' type:'int&' value:954
 LES_Test_ReferenceInputPODParam: parameterDataSize:4
 Sent bytes 24 (24)
 
 SendRPC functionID:149 'LES_Test_ReferenceInputStructParam' paramDataSize:19 msgID:9 msgPayloadSize:23
-DecodeSingle   parameter[0] member[0]:'m_longlong' type:'long long int' value:162132
-DecodeSingle   parameter[0] member[1]:'m_char' type:'char' value:'1'
-DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:14
-DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:936
-DecodeSingle   parameter[0] member[4]:'m_float' type:'float' value:16.213100
+Decode Function 'LES_Test_ReferenceInputStructParam' numParams:1
+DecodeSingle parameter[0]:'input_0' type:'TestStruct1&'
+DecodeSingle parameter[0]:'input_0.m_longlong' type:'long long int' value:162132
+DecodeSingle parameter[0]:'input_0.m_char' type:'char' value:'1'
+DecodeSingle parameter[0]:'input_0.m_int' type:'int' value:14
+DecodeSingle parameter[0]:'input_0.m_short' type:'short' value:936
+DecodeSingle parameter[0]:'input_0.m_float' type:'float' value:16.213
 LES_Test_ReferenceInputStructParam: parameterDataSize:19
 Sent bytes 16 (16)
 
 SendRPC functionID:150 'LES_Test_ReferenceOutputPODParam' paramDataSize:1 msgID:10 msgPayloadSize:5
+Decode Function 'LES_Test_ReferenceOutputPODParam' numParams:1
 DecodeSingle parameter[0]:'output_0' type:'char&' value:'R'
 LES_Test_ReferenceOutputPODParam: parameterDataSize:1
 Sent bytes 32 (32)
 
 SendRPC functionID:151 'LES_Test_ReferenceOutputStructParam' paramDataSize:30 msgID:11 msgPayloadSize:34
-DecodeSingle   parameter[0] member[0]:'m_float' type:'float' value:2131.159912
-DecodeSingle     parameter[1] member[0]:'m_longlong' type:'long long int' value:162132
-DecodeSingle     parameter[1] member[1]:'m_char' type:'char' value:'1'
-DecodeSingle     parameter[1] member[2]:'m_int' type:'int' value:14
-DecodeSingle     parameter[1] member[3]:'m_short' type:'short' value:936
-DecodeSingle     parameter[1] member[4]:'m_float' type:'float' value:16.213100
-DecodeSingle   parameter[0] member[2]:'m_char' type:'char' value:'Z'
-DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:2526
-DecodeSingle   parameter[0] member[4]:'m_int' type:'int' value:1564
+Decode Function 'LES_Test_ReferenceOutputStructParam' numParams:1
+DecodeSingle parameter[0]:'output_0' type:'TestStruct2&'
+DecodeSingle parameter[0]:'output_0.m_float' type:'float' value:2131.160
+DecodeSingle parameter[0]:'output_0.m_testStruct1' type:'TestStruct1'
+DecodeSingle parameter[0]:'output_0.m_testStruct1.m_longlong' type:'long long int' value:162132
+DecodeSingle parameter[0]:'output_0.m_testStruct1.m_char' type:'char' value:'1'
+DecodeSingle parameter[0]:'output_0.m_testStruct1.m_int' type:'int' value:14
+DecodeSingle parameter[0]:'output_0.m_testStruct1.m_short' type:'short' value:936
+DecodeSingle parameter[0]:'output_0.m_testStruct1.m_float' type:'float' value:16.213
+DecodeSingle parameter[0]:'output_0.m_char' type:'char' value:'Z'
+DecodeSingle parameter[0]:'output_0.m_short' type:'short' value:2526
+DecodeSingle parameter[0]:'output_0.m_int' type:'int' value:1564
 LES_Test_ReferenceOutputStructParam: parameterDataSize:30
 Sent bytes 16 (16)
 
 SendRPC functionID:152 'LES_Test_ReferenceStructInputParam' paramDataSize:9 msgID:12 msgPayloadSize:13
-DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:936
-DecodeSingle   parameter[0] member[1]:'m_floatRef' type:'float&' value:76.123199
-DecodeSingle   parameter[0] member[2]:'m_char' type:'char' value:'A'
-DecodeSingle   parameter[0] member[3]:'m_charRef' type:'char&' value:'C'
-DecodeSingle   parameter[0] member[4]:'m_charPtr' type:'char*' value:'R'
+Decode Function 'LES_Test_ReferenceStructInputParam' numParams:1
+DecodeSingle parameter[0]:'input_0' type:'TestStruct7&'
+DecodeSingle parameter[0]:'input_0.m_short' type:'short' value:936
+DecodeSingle parameter[0]:'input_0.m_floatRef' type:'float&' value:76.123
+DecodeSingle parameter[0]:'input_0.m_char' type:'char' value:'A'
+DecodeSingle parameter[0]:'input_0.m_charRef' type:'char&' value:'C'
+DecodeSingle parameter[0]:'input_0.m_charPtr' type:'char*' value:'R'
 LES_Test_ReferenceStructInputParam: parameterDataSize:9
 Sent bytes 44 (44)
 
 SendRPC functionID:153 'LES_Test_ReferenceStructOutputParam' paramDataSize:6 msgID:13 msgPayloadSize:10
-DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:2526
-DecodeSingle     parameter[1] member[0]:'m_char' type:'char' value:'5'
-DecodeSingle     parameter[1] member[1]:'m_shortPtr' type:'short*' value:4242
-DecodeSingle   parameter[0] member[2]:'m_charPtr' type:'char*' value:'R'
+Decode Function 'LES_Test_ReferenceStructOutputParam' numParams:1
+DecodeSingle parameter[0]:'output_0' type:'TestStruct8&'
+DecodeSingle parameter[0]:'output_0.m_short' type:'short' value:2526
+DecodeSingle parameter[0]:'output_0.m_testStruct5Ref' type:'TestStruct5&'
+DecodeSingle parameter[0]:'output_0.m_testStruct5Ref.m_char' type:'char' value:'5'
+DecodeSingle parameter[0]:'output_0.m_testStruct5Ref.m_shortPtr' type:'short*' value:4242
+DecodeSingle parameter[0]:'output_0.m_charPtr' type:'char*' value:'R'
 LES_Test_ReferenceStructOutputParam: parameterDataSize:6
-Time 3.151000 State:6
+Time 3.154000 State:6
 Sent bytes 24 (24)
 
 SendRPC functionID:154 'LES_Test_DecodeOutputParameters' paramDataSize:1 msgID:14 msgPayloadSize:5
+Decode Function 'LES_Test_DecodeOutputParameters' numParams:1
 DecodeSingle parameter[0]:'output_0' type:'char&' value:'C'
 LES_Test_DecodeOutputParameters: parameterDataSize:1
 Sent bytes 20 (20)
@@ -334,170 +363,219 @@ FATAL_ERROR: TEST AddType 'arrayInvalidNumElements[1]' NumElements:0 0x859E7150 
 Sent bytes 16 (16)
 
 SendRPC functionID:155 'LES_Test_DecodeInputArrayPOD' paramDataSize:9 msgID:15 msgPayloadSize:13
-DecodeSingle   parameter[0] member[0]:'input_0' type:'char' value:'0'
-DecodeSingle   parameter[0] member[1]:'input_0' type:'char' value:'1'
-DecodeSingle   parameter[0] member[2]:'input_0' type:'char' value:'2'
-DecodeSingle   parameter[1] member[0]:'input_1' type:'short' value:3141
-DecodeSingle   parameter[1] member[1]:'input_1' type:'short' value:3142
-DecodeSingle   parameter[1] member[2]:'input_1' type:'short' value:3143
+Decode Function 'LES_Test_DecodeInputArrayPOD' numParams:2
+DecodeSingle parameter[0]:'input_0' type:'char[3]'
+DecodeSingle parameter[0]:'input_0[0]' type:'char' value:'0'
+DecodeSingle parameter[0]:'input_0[1]' type:'char' value:'1'
+DecodeSingle parameter[0]:'input_0[2]' type:'char' value:'2'
+DecodeSingle parameter[1]:'input_1' type:'short[3]'
+DecodeSingle parameter[1]:'input_1[0]' type:'short' value:3141
+DecodeSingle parameter[1]:'input_1[1]' type:'short' value:3142
+DecodeSingle parameter[1]:'input_1[2]' type:'short' value:3143
 LES_Test_DecodeInputArrayPOD: parameterDataSize:9
 
 SendRPC functionID:156 'LES_Test_DecodeOutputArrayPOD' paramDataSize:18 msgID:16 msgPayloadSize:22
-DecodeSingle   parameter[0] member[0]:'output_0' type:'short' value:2713
-DecodeSingle   parameter[0] member[1]:'output_0' type:'short' value:2714
-DecodeSingle   parameter[0] member[2]:'output_0' type:'short' value:2715
-DecodeSingle   parameter[1] member[0]:'output_1' type:'int' value:-1954
-DecodeSingle   parameter[1] member[1]:'output_1' type:'int' value:-1955
-DecodeSingle   parameter[1] member[2]:'output_1' type:'int' value:-1956
+Decode Function 'LES_Test_DecodeOutputArrayPOD' numParams:2
+DecodeSingle parameter[0]:'output_0' type:'short[3]'
+DecodeSingle parameter[0]:'output_0[0]' type:'short' value:2713
+DecodeSingle parameter[0]:'output_0[1]' type:'short' value:2714
+DecodeSingle parameter[0]:'output_0[2]' type:'short' value:2715
+DecodeSingle parameter[1]:'output_1' type:'int[3]'
+DecodeSingle parameter[1]:'output_1[0]' type:'int' value:-1954
+DecodeSingle parameter[1]:'output_1[1]' type:'int' value:-1955
+DecodeSingle parameter[1]:'output_1[2]' type:'int' value:-1956
 LES_Test_DecodeOutputArrayPOD: parameterDataSize:18
 Sent bytes 24 (24)
 
 SendRPC functionID:157 'LES_Test_DecodeInputArraySTRUCTA' paramDataSize:79 msgID:17 msgPayloadSize:83
-DecodeSingle   parameter[0] member[0]:'m_float' type:'float' value:2137.000000
-DecodeSingle     parameter[1] member[0]:'m_longlong' type:'long long int' value:18
-DecodeSingle     parameter[1] member[1]:'m_char' type:'char' value:'M'
-DecodeSingle     parameter[1] member[2]:'m_int' type:'int' value:230421
-DecodeSingle     parameter[1] member[3]:'m_short' type:'short' value:421
-DecodeSingle     parameter[1] member[4]:'m_float' type:'float' value:1525.000000
-DecodeSingle   parameter[0] member[2]:'m_char' type:'char' value:'Y'
-DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:2627
-DecodeSingle   parameter[0] member[4]:'m_int' type:'int' value:21412932
-DecodeSingle   parameter[0] member[0]:'m_float' type:'float' value:2138.000000
-DecodeSingle     parameter[1] member[0]:'m_longlong' type:'long long int' value:18
-DecodeSingle     parameter[1] member[1]:'m_char' type:'char' value:'M'
-DecodeSingle     parameter[1] member[2]:'m_int' type:'int' value:230421
-DecodeSingle     parameter[1] member[3]:'m_short' type:'short' value:421
-DecodeSingle     parameter[1] member[4]:'m_float' type:'float' value:1525.000000
-DecodeSingle   parameter[0] member[2]:'m_char' type:'char' value:'Z'
-DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:2628
-DecodeSingle   parameter[0] member[4]:'m_int' type:'int' value:21412933
-DecodeSingle   parameter[1] member[0]:'m_longlong' type:'long long int' value:18
-DecodeSingle   parameter[1] member[1]:'m_char' type:'char' value:'M'
-DecodeSingle   parameter[1] member[2]:'m_int' type:'int' value:230421
-DecodeSingle   parameter[1] member[3]:'m_short' type:'short' value:421
-DecodeSingle   parameter[1] member[4]:'m_float' type:'float' value:1525.000000
+Decode Function 'LES_Test_DecodeInputArraySTRUCTA' numParams:2
+DecodeSingle parameter[0]:'input_0' type:'TestStruct2[2]'
+DecodeSingle parameter[0]:'input_0[0].m_float' type:'float' value:2137.000
+DecodeSingle parameter[0]:'input_0[0].m_testStruct1' type:'TestStruct1'
+DecodeSingle parameter[0]:'input_0[0].m_testStruct1.m_longlong' type:'long long int' value:18
+DecodeSingle parameter[0]:'input_0[0].m_testStruct1.m_char' type:'char' value:'M'
+DecodeSingle parameter[0]:'input_0[0].m_testStruct1.m_int' type:'int' value:230421
+DecodeSingle parameter[0]:'input_0[0].m_testStruct1.m_short' type:'short' value:421
+DecodeSingle parameter[0]:'input_0[0].m_testStruct1.m_float' type:'float' value:1525.000
+DecodeSingle parameter[0]:'input_0[0].m_char' type:'char' value:'Y'
+DecodeSingle parameter[0]:'input_0[0].m_short' type:'short' value:2627
+DecodeSingle parameter[0]:'input_0[0].m_int' type:'int' value:21412932
+DecodeSingle parameter[0]:'input_0[1].m_float' type:'float' value:2138.000
+DecodeSingle parameter[0]:'input_0[1].m_testStruct1' type:'TestStruct1'
+DecodeSingle parameter[0]:'input_0[1].m_testStruct1.m_longlong' type:'long long int' value:18
+DecodeSingle parameter[0]:'input_0[1].m_testStruct1.m_char' type:'char' value:'M'
+DecodeSingle parameter[0]:'input_0[1].m_testStruct1.m_int' type:'int' value:230421
+DecodeSingle parameter[0]:'input_0[1].m_testStruct1.m_short' type:'short' value:421
+DecodeSingle parameter[0]:'input_0[1].m_testStruct1.m_float' type:'float' value:1525.000
+DecodeSingle parameter[0]:'input_0[1].m_char' type:'char' value:'Z'
+DecodeSingle parameter[0]:'input_0[1].m_short' type:'short' value:2628
+DecodeSingle parameter[0]:'input_0[1].m_int' type:'int' value:21412933
+DecodeSingle parameter[1]:'input_1' type:'TestStruct1[1]'
+DecodeSingle parameter[1]:'input_1.m_longlong' type:'long long int' value:18
+DecodeSingle parameter[1]:'input_1.m_char' type:'char' value:'M'
+DecodeSingle parameter[1]:'input_1.m_int' type:'int' value:230421
+DecodeSingle parameter[1]:'input_1.m_short' type:'short' value:421
+DecodeSingle parameter[1]:'input_1.m_float' type:'float' value:1525.000
 LES_Test_DecodeInputArraySTRUCTA: parameterDataSize:79
 Sent bytes 32 (32)
 
 SendRPC functionID:158 'LES_Test_DecodeInputArraySTRUCTB' paramDataSize:68 msgID:18 msgPayloadSize:72
-DecodeSingle   parameter[0] member[0]:'m_longlong' type:'long long int' value:18
-DecodeSingle   parameter[0] member[1]:'m_char' type:'char' value:'M'
-DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:230421
-DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:421
-DecodeSingle   parameter[0] member[4]:'m_float' type:'float' value:1525.000000
-DecodeSingle   parameter[0] member[0]:'m_longlong' type:'long long int' value:19
-DecodeSingle   parameter[0] member[1]:'m_char' type:'char' value:'N'
-DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:230422
-DecodeSingle   parameter[0] member[3]:'m_short' type:'short' value:422
-DecodeSingle   parameter[0] member[4]:'m_float' type:'float' value:1526.000000
-DecodeSingle   parameter[1] member[0]:'m_float' type:'float' value:2137.000000
-DecodeSingle     parameter[1] member[0]:'m_longlong' type:'long long int' value:19
-DecodeSingle     parameter[1] member[1]:'m_char' type:'char' value:'N'
-DecodeSingle     parameter[1] member[2]:'m_int' type:'int' value:230422
-DecodeSingle     parameter[1] member[3]:'m_short' type:'short' value:422
-DecodeSingle     parameter[1] member[4]:'m_float' type:'float' value:1526.000000
-DecodeSingle   parameter[1] member[2]:'m_char' type:'char' value:'Y'
-DecodeSingle   parameter[1] member[3]:'m_short' type:'short' value:2627
-DecodeSingle   parameter[1] member[4]:'m_int' type:'int' value:21412932
+Decode Function 'LES_Test_DecodeInputArraySTRUCTB' numParams:2
+DecodeSingle parameter[0]:'input_0' type:'TestStruct1[2]'
+DecodeSingle parameter[0]:'input_0[0].m_longlong' type:'long long int' value:18
+DecodeSingle parameter[0]:'input_0[0].m_char' type:'char' value:'M'
+DecodeSingle parameter[0]:'input_0[0].m_int' type:'int' value:230421
+DecodeSingle parameter[0]:'input_0[0].m_short' type:'short' value:421
+DecodeSingle parameter[0]:'input_0[0].m_float' type:'float' value:1525.000
+DecodeSingle parameter[0]:'input_0[1].m_longlong' type:'long long int' value:19
+DecodeSingle parameter[0]:'input_0[1].m_char' type:'char' value:'N'
+DecodeSingle parameter[0]:'input_0[1].m_int' type:'int' value:230422
+DecodeSingle parameter[0]:'input_0[1].m_short' type:'short' value:422
+DecodeSingle parameter[0]:'input_0[1].m_float' type:'float' value:1526.000
+DecodeSingle parameter[1]:'input_1' type:'TestStruct2[1]'
+DecodeSingle parameter[1]:'input_1.m_float' type:'float' value:2137.000
+DecodeSingle parameter[1]:'input_1.m_testStruct1' type:'TestStruct1'
+DecodeSingle parameter[1]:'input_1.m_testStruct1.m_longlong' type:'long long int' value:19
+DecodeSingle parameter[1]:'input_1.m_testStruct1.m_char' type:'char' value:'N'
+DecodeSingle parameter[1]:'input_1.m_testStruct1.m_int' type:'int' value:230422
+DecodeSingle parameter[1]:'input_1.m_testStruct1.m_short' type:'short' value:422
+DecodeSingle parameter[1]:'input_1.m_testStruct1.m_float' type:'float' value:1526.000
+DecodeSingle parameter[1]:'input_1.m_char' type:'char' value:'Y'
+DecodeSingle parameter[1]:'input_1.m_short' type:'short' value:2627
+DecodeSingle parameter[1]:'input_1.m_int' type:'int' value:21412932
 LES_Test_DecodeInputArraySTRUCTB: parameterDataSize:68
 Sent bytes 92 (92)
 
 SendRPC functionID:159 'LES_Test_DecodeOutputArraySTRUCT' paramDataSize:46 msgID:19 msgPayloadSize:50
-DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:1953
-DecodeSingle   parameter[0] member[1]:'m_float' type:'float' value:29.299999
-DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:230810
-DecodeSingle   parameter[0] member[3]:'m_char' type:'char' value:'<'
-DecodeSingle   parameter[0] member[0]:'m_short' type:'short' value:1954
-DecodeSingle   parameter[0] member[1]:'m_float' type:'float' value:29.400000
-DecodeSingle   parameter[0] member[2]:'m_int' type:'int' value:230811
-DecodeSingle   parameter[0] member[3]:'m_char' type:'char' value:'>'
-DecodeSingle   parameter[1] member[0]:'m_float' type:'float' value:19.629999
-DecodeSingle   parameter[1] member[1]:'m_int' type:'int' value:1963
-DecodeSingle   parameter[1] member[2]:'m_char' type:'char' value:'#'
-DecodeSingle   parameter[1] member[3]:'m_short' type:'short' value:2930
-DecodeSingle   parameter[1] member[4]:'m_short2' type:'short' value:2931
-DecodeSingle     parameter[5] member[0]:'m_short' type:'short' value:1954
-DecodeSingle     parameter[5] member[1]:'m_float' type:'float' value:29.400000
-DecodeSingle     parameter[5] member[2]:'m_int' type:'int' value:230811
-DecodeSingle     parameter[5] member[3]:'m_char' type:'char' value:'>'
+Decode Function 'LES_Test_DecodeOutputArraySTRUCT' numParams:2
+DecodeSingle parameter[0]:'output_0' type:'TestStruct3[2]'
+DecodeSingle parameter[0]:'output_0[0].m_short' type:'short' value:1953
+DecodeSingle parameter[0]:'output_0[0].m_float' type:'float' value:29.300
+DecodeSingle parameter[0]:'output_0[0].m_int' type:'int' value:230810
+DecodeSingle parameter[0]:'output_0[0].m_char' type:'char' value:'<'
+DecodeSingle parameter[0]:'output_0[1].m_short' type:'short' value:1954
+DecodeSingle parameter[0]:'output_0[1].m_float' type:'float' value:29.400
+DecodeSingle parameter[0]:'output_0[1].m_int' type:'int' value:230811
+DecodeSingle parameter[0]:'output_0[1].m_char' type:'char' value:'>'
+DecodeSingle parameter[1]:'output_1' type:'TestStruct4[1]'
+DecodeSingle parameter[1]:'output_1.m_float' type:'float' value:19.630
+DecodeSingle parameter[1]:'output_1.m_int' type:'int' value:1963
+DecodeSingle parameter[1]:'output_1.m_char' type:'char' value:'#'
+DecodeSingle parameter[1]:'output_1.m_short' type:'short' value:2930
+DecodeSingle parameter[1]:'output_1.m_short2' type:'short' value:2931
+DecodeSingle parameter[1]:'output_1.m_testStruct3' type:'TestStruct3'
+DecodeSingle parameter[1]:'output_1.m_testStruct3.m_short' type:'short' value:1954
+DecodeSingle parameter[1]:'output_1.m_testStruct3.m_float' type:'float' value:29.400
+DecodeSingle parameter[1]:'output_1.m_testStruct3.m_int' type:'int' value:230811
+DecodeSingle parameter[1]:'output_1.m_testStruct3.m_char' type:'char' value:'>'
 LES_Test_DecodeOutputArraySTRUCT: parameterDataSize:46
 Sent bytes 80 (80)
 
 SendRPC functionID:160 'LES_Test_DecodeInputArrayReference' paramDataSize:9 msgID:20 msgPayloadSize:13
-DecodeSingle   parameter[0] member[0]:'input_0' type:'char' value:'0'
-DecodeSingle   parameter[0] member[1]:'input_0' type:'char' value:'1'
-DecodeSingle   parameter[0] member[2]:'input_0' type:'char' value:'2'
-DecodeSingle   parameter[1] member[0]:'input_1' type:'short' value:3141
-DecodeSingle   parameter[1] member[1]:'input_1' type:'short' value:3142
-DecodeSingle   parameter[1] member[2]:'input_1' type:'short' value:3143
+Decode Function 'LES_Test_DecodeInputArrayReference' numParams:2
+DecodeSingle parameter[0]:'input_0' type:'char&[3]'
+DecodeSingle parameter[0]:'input_0[0]' type:'char' value:'0'
+DecodeSingle parameter[0]:'input_0[1]' type:'char' value:'1'
+DecodeSingle parameter[0]:'input_0[2]' type:'char' value:'2'
+DecodeSingle parameter[1]:'input_1' type:'short&[3]'
+DecodeSingle parameter[1]:'input_1[0]' type:'short' value:3141
+DecodeSingle parameter[1]:'input_1[1]' type:'short' value:3142
+DecodeSingle parameter[1]:'input_1[2]' type:'short' value:3143
 LES_Test_DecodeInputArrayReference: parameterDataSize:9
 Sent bytes 60 (60)
 
 SendRPC functionID:161 'LES_Test_DecodeOutputArrayReference' paramDataSize:18 msgID:21 msgPayloadSize:22
-DecodeSingle   parameter[0] member[0]:'output_0' type:'short' value:2713
-DecodeSingle   parameter[0] member[1]:'output_0' type:'short' value:2714
-DecodeSingle   parameter[0] member[2]:'output_0' type:'short' value:2715
-DecodeSingle   parameter[1] member[0]:'output_1' type:'int' value:-1954
-DecodeSingle   parameter[1] member[1]:'output_1' type:'int' value:-1955
-DecodeSingle   parameter[1] member[2]:'output_1' type:'int' value:-1956
+Decode Function 'LES_Test_DecodeOutputArrayReference' numParams:2
+DecodeSingle parameter[0]:'output_0' type:'short&[3]'
+DecodeSingle parameter[0]:'output_0[0]' type:'short' value:2713
+DecodeSingle parameter[0]:'output_0[1]' type:'short' value:2714
+DecodeSingle parameter[0]:'output_0[2]' type:'short' value:2715
+DecodeSingle parameter[1]:'output_1' type:'int&[3]'
+DecodeSingle parameter[1]:'output_1[0]' type:'int' value:-1954
+DecodeSingle parameter[1]:'output_1[1]' type:'int' value:-1955
+DecodeSingle parameter[1]:'output_1[2]' type:'int' value:-1956
 LES_Test_DecodeOutputArrayReference: parameterDataSize:18
 Sent bytes 24 (24)
 
 SendRPC functionID:162 'LES_Test_DecodeInputStructPODArray' paramDataSize:6 msgID:22 msgPayloadSize:10
-DecodeSingle     parameter[0] member[0]:'m_short' type:'short' value:2063
-DecodeSingle     parameter[0] member[1]:'m_short' type:'short' value:2064
-DecodeSingle     parameter[0] member[2]:'m_short' type:'short' value:2065
+Decode Function 'LES_Test_DecodeInputStructPODArray' numParams:1
+DecodeSingle parameter[0]:'input_0' type:'TestStruct9'
+DecodeSingle parameter[0]:'input_0.m_short' type:'short[3]'
+DecodeSingle parameter[0]:'input_0.m_short[0]' type:'short' value:2063
+DecodeSingle parameter[0]:'input_0.m_short[1]' type:'short' value:2064
+DecodeSingle parameter[0]:'input_0.m_short[2]' type:'short' value:2065
 LES_Test_DecodeInputStructPODArray: parameterDataSize:6
-Time 4.237000 State:6
+Time 4.240000 State:6
 Sent bytes 32 (32)
 
 SendRPC functionID:163 'LES_Test_DecodeInputStructStructArray' paramDataSize:18 msgID:23 msgPayloadSize:22
-DecodeSingle     parameter[0] member[0]:'m_short' type:'short' value:3435
-DecodeSingle     parameter[0] member[1]:'m_short' type:'short' value:3436
-DecodeSingle     parameter[0] member[2]:'m_short' type:'short' value:3437
-DecodeSingle       parameter[0] member[0]:'m_short' type:'short' value:2063
-DecodeSingle       parameter[0] member[1]:'m_short' type:'short' value:2064
-DecodeSingle       parameter[0] member[2]:'m_short' type:'short' value:2065
-DecodeSingle       parameter[0] member[0]:'m_short' type:'short' value:2071
-DecodeSingle       parameter[0] member[1]:'m_short' type:'short' value:2072
-DecodeSingle       parameter[0] member[2]:'m_short' type:'short' value:2073
+Decode Function 'LES_Test_DecodeInputStructStructArray' numParams:1
+DecodeSingle parameter[0]:'input_0' type:'TestStruct10'
+DecodeSingle parameter[0]:'input_0.m_short' type:'short[3]'
+DecodeSingle parameter[0]:'input_0.m_short[0]' type:'short' value:3435
+DecodeSingle parameter[0]:'input_0.m_short[1]' type:'short' value:3436
+DecodeSingle parameter[0]:'input_0.m_short[2]' type:'short' value:3437
+DecodeSingle parameter[0]:'input_0.m_testStruct9' type:'TestStruct9[2]'
+DecodeSingle parameter[0]:'input_0.m_testStruct9[0].m_short' type:'short[3]'
+DecodeSingle parameter[0]:'input_0.m_testStruct9[0].m_short[0]' type:'short' value:2063
+DecodeSingle parameter[0]:'input_0.m_testStruct9[0].m_short[1]' type:'short' value:2064
+DecodeSingle parameter[0]:'input_0.m_testStruct9[0].m_short[2]' type:'short' value:2065
+DecodeSingle parameter[0]:'input_0.m_testStruct9[1].m_short' type:'short[3]'
+DecodeSingle parameter[0]:'input_0.m_testStruct9[1].m_short[0]' type:'short' value:2071
+DecodeSingle parameter[0]:'input_0.m_testStruct9[1].m_short[1]' type:'short' value:2072
+DecodeSingle parameter[0]:'input_0.m_testStruct9[1].m_short[2]' type:'short' value:2073
 LES_Test_DecodeInputStructStructArray: parameterDataSize:18
 Sent bytes 20 (20)
 
 SendRPC functionID:164 'LES_Test_DecodeInputStructPODArrayReference' paramDataSize:19 msgID:24 msgPayloadSize:23
-DecodeSingle     parameter[0] member[0]:'m_short' type:'short' value:2180
-DecodeSingle     parameter[0] member[1]:'m_short' type:'short' value:2181
-DecodeSingle     parameter[0] member[2]:'m_short' type:'short' value:2182
-DecodeSingle     parameter[1] member[0]:'m_int' type:'int' value:2098
-DecodeSingle     parameter[1] member[1]:'m_int' type:'int' value:2099
-DecodeSingle     parameter[2] member[0]:'m_char' type:'char' value:'R'
-DecodeSingle     parameter[2] member[1]:'m_char' type:'char' value:'O'
-DecodeSingle     parameter[2] member[2]:'m_char' type:'char' value:'W'
-DecodeSingle     parameter[2] member[3]:'m_char' type:'char' value:'A'
-DecodeSingle     parameter[2] member[4]:'m_char' type:'char' value:'M'
+Decode Function 'LES_Test_DecodeInputStructPODArrayReference' numParams:1
+DecodeSingle parameter[0]:'input_0' type:'TestStruct11'
+DecodeSingle parameter[0]:'input_0.m_short' type:'short&[3]'
+DecodeSingle parameter[0]:'input_0.m_short[0]' type:'short' value:2180
+DecodeSingle parameter[0]:'input_0.m_short[1]' type:'short' value:2181
+DecodeSingle parameter[0]:'input_0.m_short[2]' type:'short' value:2182
+DecodeSingle parameter[0]:'input_0.m_int' type:'int&[2]'
+DecodeSingle parameter[0]:'input_0.m_int[0]' type:'int' value:2098
+DecodeSingle parameter[0]:'input_0.m_int[1]' type:'int' value:2099
+DecodeSingle parameter[0]:'input_0.m_char' type:'char&[5]'
+DecodeSingle parameter[0]:'input_0.m_char[0]' type:'char' value:'R'
+DecodeSingle parameter[0]:'input_0.m_char[1]' type:'char' value:'O'
+DecodeSingle parameter[0]:'input_0.m_char[2]' type:'char' value:'W'
+DecodeSingle parameter[0]:'input_0.m_char[3]' type:'char' value:'A'
+DecodeSingle parameter[0]:'input_0.m_char[4]' type:'char' value:'M'
 LES_Test_DecodeInputStructPODArrayReference: parameterDataSize:19
 Sent bytes 32 (32)
 
 SendRPC functionID:165 'LES_Test_DecodeInputStructStructArrayReference' paramDataSize:37 msgID:25 msgPayloadSize:41
-DecodeSingle     parameter[0] member[0]:'m_short' type:'short' value:2224
-DecodeSingle     parameter[0] member[1]:'m_short' type:'short' value:2225
-DecodeSingle     parameter[0] member[2]:'m_short' type:'short' value:2226
-DecodeSingle       parameter[0] member[0]:'m_short' type:'short' value:2063
-DecodeSingle       parameter[0] member[1]:'m_short' type:'short' value:2064
-DecodeSingle       parameter[0] member[2]:'m_short' type:'short' value:2065
-DecodeSingle       parameter[0] member[0]:'m_short' type:'short' value:24705
-DecodeSingle       parameter[0] member[1]:'m_short' type:'short' value:24706
-DecodeSingle       parameter[0] member[2]:'m_short' type:'short' value:24707
-DecodeSingle       parameter[0] member[0]:'m_short' type:'short' value:2224
-DecodeSingle       parameter[0] member[1]:'m_short' type:'short' value:2225
-DecodeSingle       parameter[0] member[2]:'m_short' type:'short' value:2226
-DecodeSingle       parameter[1] member[0]:'m_int' type:'int' value:2198
-DecodeSingle       parameter[1] member[1]:'m_int' type:'int' value:2199
-DecodeSingle       parameter[2] member[0]:'m_char' type:'char' value:'L'
-DecodeSingle       parameter[2] member[1]:'m_char' type:'char' value:'I'
-DecodeSingle       parameter[2] member[2]:'m_char' type:'char' value:'Z'
-DecodeSingle       parameter[2] member[3]:'m_char' type:'char' value:'Z'
-DecodeSingle       parameter[2] member[4]:'m_char' type:'char' value:'Y'
+Decode Function 'LES_Test_DecodeInputStructStructArrayReference' numParams:1
+DecodeSingle parameter[0]:'input_0' type:'TestStruct12'
+DecodeSingle parameter[0]:'input_0.m_short' type:'short&[3]'
+DecodeSingle parameter[0]:'input_0.m_short[0]' type:'short' value:2224
+DecodeSingle parameter[0]:'input_0.m_short[1]' type:'short' value:2225
+DecodeSingle parameter[0]:'input_0.m_short[2]' type:'short' value:2226
+DecodeSingle parameter[0]:'input_0.m_testStruct9' type:'TestStruct9&[2]'
+DecodeSingle parameter[0]:'input_0.m_testStruct9[0].m_short' type:'short[3]'
+DecodeSingle parameter[0]:'input_0.m_testStruct9[0].m_short[0]' type:'short' value:2063
+DecodeSingle parameter[0]:'input_0.m_testStruct9[0].m_short[1]' type:'short' value:2064
+DecodeSingle parameter[0]:'input_0.m_testStruct9[0].m_short[2]' type:'short' value:2065
+DecodeSingle parameter[0]:'input_0.m_testStruct9[1].m_short' type:'short[3]'
+DecodeSingle parameter[0]:'input_0.m_testStruct9[1].m_short[0]' type:'short' value:24705
+DecodeSingle parameter[0]:'input_0.m_testStruct9[1].m_short[1]' type:'short' value:24706
+DecodeSingle parameter[0]:'input_0.m_testStruct9[1].m_short[2]' type:'short' value:24707
+DecodeSingle parameter[0]:'input_0.m_testStruct11' type:'TestStruct11&[1]'
+DecodeSingle parameter[0]:'input_0.m_testStruct11.m_short' type:'short&[3]'
+DecodeSingle parameter[0]:'input_0.m_testStruct11.m_short[0]' type:'short' value:2224
+DecodeSingle parameter[0]:'input_0.m_testStruct11.m_short[1]' type:'short' value:2225
+DecodeSingle parameter[0]:'input_0.m_testStruct11.m_short[2]' type:'short' value:2226
+DecodeSingle parameter[0]:'input_0.m_testStruct11.m_int' type:'int&[2]'
+DecodeSingle parameter[0]:'input_0.m_testStruct11.m_int[0]' type:'int' value:2198
+DecodeSingle parameter[0]:'input_0.m_testStruct11.m_int[1]' type:'int' value:2199
+DecodeSingle parameter[0]:'input_0.m_testStruct11.m_char' type:'char&[5]'
+DecodeSingle parameter[0]:'input_0.m_testStruct11.m_char[0]' type:'char' value:'L'
+DecodeSingle parameter[0]:'input_0.m_testStruct11.m_char[1]' type:'char' value:'I'
+DecodeSingle parameter[0]:'input_0.m_testStruct11.m_char[2]' type:'char' value:'Z'
+DecodeSingle parameter[0]:'input_0.m_testStruct11.m_char[3]' type:'char' value:'Z'
+DecodeSingle parameter[0]:'input_0.m_testStruct11.m_char[4]' type:'char' value:'Y'
 LES_Test_DecodeInputStructStructArrayReference: parameterDataSize:37
 Sent bytes 32 (32)
 
