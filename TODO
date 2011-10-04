@@ -1,6 +1,6 @@
 High Priority:
-CLIENT: change to/from BigEndian functions to take an output ptr & input ptr, to save double memcpys
 CLIENT: missing final RPC function send message (it doesn't get sent by network thread)
+TYPE: mark if the type needs endian swapping (default is NO)
 
 Medium Priority:
 CLIENT: support for async function calls, error queue, potential threading issues
