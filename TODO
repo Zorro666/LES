@@ -1,5 +1,4 @@
 High Priority:
-TYPE: mark if the type needs endian swapping (default is NO)
 
 Medium Priority:
 CLIENT: support for async function calls, error queue, potential threading issues
@@ -9,7 +8,6 @@ LES_TYPEDATA.PY: in the future have a global parameters block e.g. pointer data 
 LES_STRUCTDATA.PY: struct creation have global for packing amount in the XML
 
 LES: need good debugging ability for the packets before sent and at server end
-LES: send packet data to server?
 
 Low Priority:
 MUTEX: put thread ID into it, then lock on same thread is ignored?
