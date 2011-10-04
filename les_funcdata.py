@@ -81,17 +81,27 @@ class LES_FunctionParameterData():
 		parameterDataSize = typeEntry.m_dataSize
 		if flags & les_typedata.LES_TYPE_POINTER:
 			parameterDataSize = aliasedTypeEntry.m_dataSize
+			flags = aliasedTypeEntry.m_flags
 
 		if ((flags & les_typedata.LES_TYPE_POD) or (flags & les_typedata.LES_TYPE_STRUCT)):
 #			les_logger.Log("Read type:'%s' size:%d %d", typeName, typeEntry.m_dataSize, self.__m_readIndex__)
-			if parameterDataSize == 2:
-				bigData = self.__m_memoryBuffer__[self.__m_readIndex__:self.__m_readIndex__ + 2]
-				unpackData = struct.unpack(">H", bigData)[0]
-				value = struct.pack("=H", unpackData)
-			elif parameterDataSize == 4:
-				bigData = self.__m_memoryBuffer__[self.__m_readIndex__:self.__m_readIndex__ + 4]
-				unpackData = struct.unpack(">I", bigData)[0]
-				value = struct.pack("=I", unpackData)
+			if flags & les_typedata.LES_TYPE_ENDIANSWAP:
+				if parameterDataSize == 2:
+					bigData = self.__m_memoryBuffer__[self.__m_readIndex__:self.__m_readIndex__ + 2]
+					unpackData = struct.unpack(">H", bigData)[0]
+					value = struct.pack("=H", unpackData)
+				elif parameterDataSize == 4:
+					bigData = self.__m_memoryBuffer__[self.__m_readIndex__:self.__m_readIndex__ + 4]
+					unpackData = struct.unpack(">I", bigData)[0]
+					value = struct.pack("=I", unpackData)
+				elif parameterDataSize == 8:
+					bigData = self.__m_memoryBuffer__[self.__m_readIndex__:self.__m_readIndex__ + 8]
+					unpackData = struct.unpack(">Q", bigData)[0]
+					value = struct.pack("=Q", unpackData)
+				else:
+					les_logger.Error("LES_FunctionParameterData::Read type:'%s' marked for ENDIANSWAP but unknown size to swap:%d", 
+													 typeName, parameterDataSize)
+					return (LES_RETURN_ERROR, value)
 			else:
 				value = self.__m_memoryBuffer__[self.__m_readIndex__:self.__m_readIndex__ + parameterDataSize]
 

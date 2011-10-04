@@ -16,6 +16,7 @@ LES_TYPE_POINTER 			= (1 << 4)
 LES_TYPE_REFERENCE 		= (1 << 5)
 LES_TYPE_ALIAS 				= (1 << 6)
 LES_TYPE_ARRAY 				= (1 << 7)
+LES_TYPE_ENDIANSWAP		= (1 << 8)
 
 s_longlongHash = les_hash.LES_GenerateHashCaseSensitive("long long int")
 s_longlongHash = les_hash.LES_GenerateHashCaseSensitive("long long int");
@@ -30,7 +31,7 @@ s_ucharHash = les_hash.LES_GenerateHashCaseSensitive("unsigned char");
 s_floatHash = les_hash.LES_GenerateHashCaseSensitive("float");
 
 def decodeFlags(flags):
-	# flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY, delimiter is | e.g. "INPUT|POD"
+	# flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY, ENDIANSWAP delimiter is | e.g. "INPUT|POD"
 	flagsArray = []
 	if flags & LES_TYPE_INPUT:
 		flagsArray.append("INPUT")
@@ -48,6 +49,8 @@ def decodeFlags(flags):
 		flagsArray.append("ALIAS")
 	if flags & LES_TYPE_ARRAY:
 		flagsArray.append("ARRAY")
+	if flags & LES_TYPE_ENDIANSWAP:
+		flagsArray.append("ENDIANSWAP")
 	flagsString = "|".join(flagsArray)
 	return flagsString
 
@@ -253,15 +256,23 @@ class LES_TypeData():
 		#<?xml version='1.0' ?>
 		#<LES_TYPES>
 		#
-		#	<LES_TYPE name="int*" dataSize="4" flags="INPUT|OUTPUT|POD|ARRAY" aliasedName="int" numElements="2" />
-		# 	flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY
+		#	<LES_TYPE name="int*" dataSize="4" flags="INPUT|OUTPUT|POD|ARRAY" aliasedName="int" numElements="2" endianSwap="true" />
+		# 	flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY, ENDIANSWAP
 		#		aliasedName is optional, default is value of name
 		#		numElements is optional, default is 0
-		#
+		#		endianSwap is optional, default is false
+
 		# <LES_TYPE_POD name="unsigned char" dataSize="1" />
 		#		flags = INPUT|POD, fixed can't be specified
 		#		aliasedName = input_name, fixed can't be specified
 		#		numElements = 0, fixed can't be specified
+		#		endianSwap = false, fixed can't be specified
+
+		# <LES_TYPE_POD_ENDIANSWAP name="unsigned char" dataSize="1" />
+		#		flags = INPUT|POD, fixed can't be specified
+		#		aliasedName = input_name, fixed can't be specified
+		#		numElements = 0, fixed can't be specified
+		#		endianSwap = true, fixed can't be specified
 
 		# <LES_TYPE_POD_POINTER name="unsigned char" />
 		#		name = input_name + "*"
@@ -331,9 +342,12 @@ class LES_TypeData():
 			needsFlags = False
 			needsAlias = False
 			needsNumElements = False
+			needsEndianSwap = False
 
 			dataSizeData = ""
 			dataSizeDataDefault = None
+			endianSwapData = ""
+			endianSwapDataDefault = "false"
 			flagsData = ""
 			nameSuffix = ""
 			aliasSuffix = ""
@@ -343,8 +357,11 @@ class LES_TypeData():
 				needsFlags = True
 				needsAlias = True
 				needsNumElements = True
+				needsEndianSwap = True
 			elif typeXML.tag == "LES_TYPE_POD":
 				flagsData = "INPUT|POD"
+			elif typeXML.tag == "LES_TYPE_POD_ENDIANSWAP":
+				flagsData = "INPUT|POD|ENDIANSWAP"
 			elif typeXML.tag == "LES_TYPE_POD_POINTER":
 				flagsData = "INPUT|OUTPUT|POD|POINTER"
 				nameSuffix = "*"
@@ -396,7 +413,7 @@ class LES_TypeData():
 				aliasSuffix = "*"
 				needsNumElements = True
 			else:
-				les_logger.Error("LES_TypeData::parseXML invalid node tag should be LES_TYPE, LES_TYPE_POD, LES_TYPE_POD_POINTER, LES_TYPE_POD_REFERENCE, LES_TYPE_POD_ARRAY, LES_TYPE_POD_REFERENCE_ARRAY, LES_TYPE_STRUCT, LES_TYPE_STRUCT_POINTER, LES_TYPE_STRUCT_REFERENCE, LES_TYPE_STRUCT_ARRAY, LES_TYPE_STRUCT_REFERNCE_ARRAY found %s", typeXML.tag)
+				les_logger.Error("LES_TypeData::parseXML invalid node tag should be LES_TYPE, LES_TYPE_POD, LES_TYPE_POD_ENDIANSWAP, LES_TYPE_POD_POINTER, LES_TYPE_POD_REFERENCE, LES_TYPE_POD_ARRAY, LES_TYPE_POD_REFERENCE_ARRAY, LES_TYPE_STRUCT, LES_TYPE_STRUCT_POINTER, LES_TYPE_STRUCT_REFERENCE, LES_TYPE_STRUCT_ARRAY, LES_TYPE_STRUCT_REFERNCE_ARRAY found %s", typeXML.tag)
 				numErrors += 1
 				continue
 
@@ -456,6 +473,15 @@ class LES_TypeData():
 					continue
 				numElementsData = "0"
 					
+			if needsEndianSwap:
+				endianSwapData = typeXML.get("endianSwap", endianSwapDataDefault)
+			else:
+				if typeXML.get("endianSwap") != None:
+					les_logger.Error("LES_TypeData::parseXML '%s' 'endianSwap' attribute not allowed for this type definition:%s", name, xml.etree.ElementTree.tostring(typeXML))
+					numErrors += 1
+					continue
+				endianSwapData = "false"
+
 			aliasedName = aliasedNameData
 			name = nameData + nameSuffix
 
@@ -492,7 +518,16 @@ class LES_TypeData():
 						typeData = self.getTypeData(typeNameForDataSize)
 						dataSize = typeData.m_dataSize
 
-			# flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY, delimiter is | e.g. "INPUT|POD"
+			if endianSwapData == "true":
+				endianSwap = True
+			elif endianSwapData == "false":
+				endianSwap = False
+			else:
+				les_logger.Error("LES_TypeData::parseXML '%s' invalid endianSwap:'%s' expected 'true' or 'false'", name, endianSwapData)
+				numErrors += 1
+				continue
+
+			# flags = INPUT, OUTPUT, POD, STRUCT, POINTER, STRUCT, REFERENCE, ALIAS, ARRAY, ENDIANSWAP delimiter is | e.g. "INPUT|POD"
 			flagsArray = flagsData.split('|')
 			flags = int(0)
 			for flag in flagsArray:
@@ -512,10 +547,15 @@ class LES_TypeData():
 					flags |= LES_TYPE_ALIAS
 				elif flag == "ARRAY":
 					flags |= LES_TYPE_ARRAY
+				elif flag == "ENDIANSWAP":
+					flags |= LES_TYPE_ENDIANSWAP
 				else:
 					les_logger.Error("LES_TypeData::parseXML '%s' invalid flag:'%s' flags:'%s'", name, flag, flagsData)
 					numErrors += 1
 					continue
+
+			if endianSwap:
+				flags |= LES_TYPE_ENDIANSWAP
 
 			try:
 				numElements = int(numElementsData)
