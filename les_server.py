@@ -5,6 +5,7 @@ import threading
 import SocketServer
 import struct
 import random
+import math
 
 import les_hash
 import les_definitionfile
@@ -127,6 +128,136 @@ class ThreadedTCPRequestHandler(SocketServer.BaseRequestHandler):
 
 		if retVal == les_funcdata.LES_RETURN_OK:
 			les_logger.Log("ParamDict:%s", paramDict)
+
+		if functionName == "LES_Test_ReadInputParameters":
+			testFuncName = functionName
+
+			input_value_0 = 102
+			input_value_1 = 23453
+			input_value_2 = 'n'
+			input_value_3 = -4.0332
+			input_value_4 = 12345
+
+			input_0 = int(paramDict['input_0'])
+			input_1 = int(paramDict['input_1'])
+			input_2 = paramDict['input_2']
+			input_3 = float(paramDict['input_3'])
+			input_4 = int(paramDict['input_4'])
+
+			if input_0 != input_value_0:
+				les_logger.Warning("%s: parameter data is wrong input_0:%d input_value_0:%d", testFuncName, input_0, input_value_0)
+
+			if input_1 != input_value_1:
+				les_logger.Warning("%s: parameter data is wrong input_1:%d input_value_1:%d", testFuncName, input_1, input_value_1)
+
+			if input_2 != input_value_2:
+				les_logger.Warning("%s: parameter data is wrong input_2:%c input_value_2:%c", testFuncName, input_2, input_value_2)
+
+			if math.fabs(input_3 - input_value_3) > 1.0e-4:
+				les_logger.Warning("%s: parameter data is wrong input_3:%f input_value_3:%f", testFuncName, input_3, input_value_3)
+
+			if input_4 != input_value_4:
+				les_logger.Warning("%s: parameter data is wrong input_4:%d input_value_4:%d", testFuncName, input_4, input_value_4)
+					
+			les_logger.Log("%s: input_0:%d input_value_0:%d", testFuncName, input_0, input_value_0);
+			les_logger.Log("%s: input_1:%d input_value_1:%d", testFuncName, input_1, input_value_1);
+			les_logger.Log("%s: input_2:%c input_value_2:%c", testFuncName, input_2, input_value_2);
+			les_logger.Log("%s: input_3:%f input_value_3:%f", testFuncName, input_3, input_value_3);
+			les_logger.Log("%s: input_4:%d input_value_4:%d", testFuncName, input_4, input_value_4);
+
+
+		if functionName == "LES_Test_ReadOutputParameters":
+			testFuncName = functionName
+
+			output_value_0 = 1
+			output_value_1 = 2
+			output_value_2 = 'O'
+			output_value_3 = -123.456
+
+			output_0 = int(paramDict['output_0'])
+			output_1 = int(paramDict['output_1'])
+			output_2 = paramDict['output_2']
+			output_3 = float(paramDict['output_3'])
+
+			if output_0 != output_value_0:
+				les_logger.Warning("%s: parameter data is wrong output_0:%d output_value_0:%d", testFuncName, output_0, output_value_0)
+
+			if output_1 != output_value_1:
+				les_logger.Warning("%s: parameter data is wrong output_1:%d output_value_1:%d", testFuncName, output_1, output_value_1)
+
+			if output_2 != output_value_2:
+				les_logger.Warning("%s: parameter data is wrong output_2:%c output_value_2:%c", testFuncName, output_2, output_value_2)
+
+			if math.fabs(output_3 - output_value_3) > 1.0e-4:
+				les_logger.Warning("%s: parameter data is wrong output_3:%f output_value_3:%f", testFuncName, output_3, output_value_3)
+
+			les_logger.Log("%s: output_0:%d output_value_0:%d", testFuncName, output_0, output_value_0);
+			les_logger.Log("%s: output_1:%d output_value_1:%d", testFuncName, output_1, output_value_1);
+			les_logger.Log("%s: output_2:%c output_value_2:%c", testFuncName, output_2, output_value_2);
+			les_logger.Log("%s: output_3:%f output_value_3:%f", testFuncName, output_3, output_value_3);
+
+		if functionName == "LES_Test_ReadInputOutputParameters":
+			testFuncName = functionName
+
+			input_value_0 = 102
+			input_value_1 = 23453
+			input_value_2 = '*'
+			input_value_3 = -4.0332
+			input_value_4 = 12345
+
+			output_value_0 = 1
+			output_value_1 = 2
+			output_value_2 = 'O'
+			output_value_3 = -123.456
+
+			input_0 = int(paramDict['input_0'])
+			input_1 = int(paramDict['input_1'])
+			input_2 = paramDict['input_2']
+			input_3 = float(paramDict['input_3'])
+			input_4 = int(paramDict['input_4'])
+
+			output_0 = int(paramDict['output_0'])
+			output_1 = int(paramDict['output_1'])
+			output_2 = paramDict['output_2']
+			output_3 = float(paramDict['output_3'])
+
+			if input_0 != input_value_0:
+				les_logger.Warning("%s: parameter data is wrong input_0:%d input_value_0:%d", testFuncName, input_0, input_value_0)
+
+			if input_1 != input_value_1:
+				les_logger.Warning("%s: parameter data is wrong input_1:%d input_value_1:%d", testFuncName, input_1, input_value_1)
+
+			if input_2 != input_value_2:
+				les_logger.Warning("%s: parameter data is wrong input_2:%c input_value_2:%c", testFuncName, input_2, input_value_2)
+
+			if math.fabs(input_3 - input_value_3) > 1.0e-4:
+				les_logger.Warning("%s: parameter data is wrong input_3:%f input_value_3:%f", testFuncName, input_3, input_value_3)
+
+			if input_4 != input_value_4:
+				les_logger.Warning("%s: parameter data is wrong input_4:%d input_value_4:%d", testFuncName, input_4, input_value_4)
+					
+			if output_0 != output_value_0:
+				les_logger.Warning("%s: parameter data is wrong output_0:%d output_value_0:%d", testFuncName, output_0, output_value_0)
+
+			if output_1 != output_value_1:
+				les_logger.Warning("%s: parameter data is wrong output_1:%d output_value_1:%d", testFuncName, output_1, output_value_1)
+
+			if output_2 != output_value_2:
+				les_logger.Warning("%s: parameter data is wrong output_2:%c output_value_2:%c", testFuncName, output_2, output_value_2)
+
+			if math.fabs(output_3 - output_value_3) > 1.0e-4:
+				les_logger.Warning("%s: parameter data is wrong output_3:%f output_value_3:%f", testFuncName, output_3, output_value_3)
+
+			les_logger.Log("%s: input_0:%d input_value_0:%d", testFuncName, input_0, input_value_0);
+			les_logger.Log("%s: input_1:%d input_value_1:%d", testFuncName, input_1, input_value_1);
+			les_logger.Log("%s: input_2:%c input_value_2:%c", testFuncName, input_2, input_value_2);
+			les_logger.Log("%s: input_3:%f input_value_3:%f", testFuncName, input_3, input_value_3);
+			les_logger.Log("%s: input_4:%d input_value_4:%d", testFuncName, input_4, input_value_4);
+
+			les_logger.Log("%s: output_0:%d output_value_0:%d", testFuncName, output_0, output_value_0);
+			les_logger.Log("%s: output_1:%d output_value_1:%d", testFuncName, output_1, output_value_1);
+			les_logger.Log("%s: output_2:%c output_value_2:%c", testFuncName, output_2, output_value_2);
+			les_logger.Log("%s: output_3:%f output_value_3:%f", testFuncName, output_3, output_value_3);
 
 	def handle(self):
 		s_receivedMessageHandlers = {}
