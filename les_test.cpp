@@ -2640,7 +2640,7 @@ int LES_TestSetup(void)
 		LES_LOG("sizeof(Jake)=%d",sizeof(Jake));
 		return LES_RETURN_OK;
 	}
-	if (s_testPhase > 70)
+	if (s_testPhase > 80)
 	{
 		return LES_RETURN_ERROR;
 	}
