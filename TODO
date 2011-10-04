@@ -1,5 +1,4 @@
 High Priority:
-CLIENT: missing final RPC function send message (it doesn't get sent by network thread)
 TYPE: mark if the type needs endian swapping (default is NO)
 
 Medium Priority:
