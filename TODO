@@ -1,4 +1,10 @@
 High Priority:
+CLIENT: queue for results from sent function - type (0x1000+functionID), ID = entry sent
+SERVER: send reply about result from function - type (0x1000+functionID), ID = entry sent
+CLIENT: query function to ask for results OR just process the result
+
+ERROR queue - server sends to client an error, client stores in a queue
+game polls error queue to get error structure
 
 Medium Priority:
 CLIENT: support for async function calls, error queue, potential threading issues
