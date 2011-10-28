@@ -171,17 +171,10 @@ int LES_FunctionParameterData::WriteInternal(const LES_StringEntry* const typeSt
 	}
 
 	// Loop over the elements of the array writing each item 1 by 1
-	unsigned int typeFlags = inputTypeFlags;
 	const int numElements = inputTypeEntryPtr->m_numElements;
-	const LES_StringEntry* aliasedTypeStringEntry = LES_NULL;
 	const LES_TypeEntry* typeEntryPtr = inputTypeEntryPtr;
-	const char* typeNameStr = typeStringEntry->m_str;
 
 	typeEntryPtr = typeEntryPtr->GetRootType();
-	typeFlags = typeEntryPtr->m_flags;
-	const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
-	aliasedTypeStringEntry = LES_GetStringEntryForID(aliasedTypeID);
-	typeNameStr = (const char*)aliasedTypeStringEntry->m_str;
 
 	unsigned int parameterDataSize = inputTypeEntryPtr->m_dataSize;
 	parameterDataSize = typeEntryPtr->m_dataSize;
@@ -224,13 +217,8 @@ int LES_FunctionParameterData::WriteItem(const LES_StringEntry* const typeString
 	const LES_TypeEntry* typeEntryPtr = inputTypeEntryPtr;
 	unsigned int typeFlags = typeEntryPtr->m_flags;
 
-	const char* typeNameStr = typeStringEntry->m_str;
-
 	typeEntryPtr = typeEntryPtr->GetRootType();
 	typeFlags = typeEntryPtr->m_flags;
-	const int aliasedTypeID = typeEntryPtr->m_aliasedTypeID;
-	const LES_StringEntry* const aliasedTypeStringEntry = LES_GetStringEntryForID(aliasedTypeID);
-	typeNameStr = (const char*)aliasedTypeStringEntry->m_str;
 
 	const void* valueAddress = parameterDataPtr;
 #if 0
